@@ -1,0 +1,1 @@
+sqlmetal /dbml:"Correspondence.dbml" "Correspondence.sdf"
