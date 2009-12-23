@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Memory;
 using GameModel;
+using Predassert;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -27,15 +28,17 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             GameQueue gameQueue = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
             GameQueue gameQueueAgain = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
-            Assert.AreSame(gameQueue, gameQueueAgain);
+
+            Pred.Assert(gameQueueAgain, Is.SameAs(gameQueue));
         }
 
         [TestMethod]
         public void GameQueueIsDifferentiatedByIdentifier()
         {
             GameQueue gameQueue = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
-            GameQueue gameQueueAgain = _community.AddFact(new GameQueue("http://mydomain.com/myothergamequeue"));
-            Assert.AreNotSame(gameQueue, gameQueueAgain);
+            GameQueue gameQueueOther = _community.AddFact(new GameQueue("http://mydomain.com/myothergamequeue"));
+
+            Pred.Assert(gameQueueOther, Is.NotSameAs(gameQueue));
         }
     }
 }

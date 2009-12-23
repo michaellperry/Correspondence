@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{659D7839-99B0-46C4-A7AB-4B9721428E76}</ProjectGuid>
+    <ProjectGuid>{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameModel</RootNamespace>
-    <AssemblyName>GameModel</AssemblyName>
+    <RootNamespace>Predassert</RootNamespace>
+    <AssemblyName>Predassert</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -49,17 +50,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
-    <Compile Include="GameQueue.cs" />
-    <Compile Include="GameRequest.cs" />
-    <Compile Include="Person.cs" />
+    <Compile Include="Contains.cs" />
+    <Compile Include="Expectation.cs" />
+    <Compile Include="Is.cs" />
+    <Compile Include="Pred.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
-      <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>
-      <Name>UpdateControls.Correspondence</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

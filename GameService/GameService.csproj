@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{659D7839-99B0-46C4-A7AB-4B9721428E76}</ProjectGuid>
+    <ProjectGuid>{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GameModel</RootNamespace>
-    <AssemblyName>GameModel</AssemblyName>
+    <RootNamespace>GameService</RootNamespace>
+    <AssemblyName>GameService</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -49,13 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game.cs" />
-    <Compile Include="GameQueue.cs" />
-    <Compile Include="GameRequest.cs" />
-    <Compile Include="Person.cs" />
+    <Compile Include="GameQueueService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GameModel\GameModel.csproj">
+      <Project>{659D7839-99B0-46C4-A7AB-4B9721428E76}</Project>
+      <Name>GameModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>
       <Name>UpdateControls.Correspondence</Name>

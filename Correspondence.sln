@@ -23,9 +23,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameModel", "GameModel\GameModel.csproj", "{659D7839-99B0-46C4-A7AB-4B9721428E76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameService", "GameService\GameService.csproj", "{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Predassert", "Predassert\Predassert.csproj", "{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -47,6 +51,12 @@ Global
 		SccProjectUniqueName6 = GameModel\\GameModel.csproj
 		SccProjectName6 = GameModel
 		SccLocalPath6 = GameModel
+		SccProjectUniqueName7 = GameService\\GameService.csproj
+		SccProjectName7 = GameService
+		SccLocalPath7 = GameService
+		SccProjectUniqueName8 = Predassert\\Predassert.csproj
+		SccProjectName8 = Predassert
+		SccLocalPath8 = Predassert
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -80,6 +90,14 @@ Global
 		{659D7839-99B0-46C4-A7AB-4B9721428E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{659D7839-99B0-46C4-A7AB-4B9721428E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{659D7839-99B0-46C4-A7AB-4B9721428E76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
