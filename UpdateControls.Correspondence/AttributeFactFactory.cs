@@ -42,7 +42,7 @@ namespace UpdateControls.Correspondence
                 .ToList();
         }
 
-        public CorrespondenceFact CreateFact(Memento memento)
+        public CorrespondenceFact CreateFact(FactMemento memento)
         {
             CorrespondenceFact newFact = (CorrespondenceFact)_mementoConstructor.Invoke(new object[] { memento });
 

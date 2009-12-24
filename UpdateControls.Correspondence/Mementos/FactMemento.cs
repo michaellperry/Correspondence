@@ -5,13 +5,13 @@ namespace UpdateControls.Correspondence.Mementos
 {
     /// <summary>
 	/// </summary>
-	public class Memento
+	public class FactMemento
 	{
         private CorrespondenceFactType _factType;
 		private List<PredecessorMemento> _predecessors = new List<PredecessorMemento>();
 		private byte[] _data;
 
-		public Memento(CorrespondenceFactType factType)
+		public FactMemento(CorrespondenceFactType factType)
 		{
             _factType = factType;
 		}
@@ -66,7 +66,7 @@ namespace UpdateControls.Correspondence.Mementos
 				return false;
 			if ( obj.GetType() != this.GetType() )
 				return false;
-			Memento that = (Memento)obj;
+			FactMemento that = (FactMemento)obj;
 			if ( !this._factType.Equals(that._factType) )
 				return false;
             if ( !this._predecessors.SequenceEqual(that._predecessors) )

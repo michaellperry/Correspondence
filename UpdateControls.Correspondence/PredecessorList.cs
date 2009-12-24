@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence
 		public PredecessorList(
 			CorrespondenceFact subject,
 			Role<FactType> role,
-			Memento memento ) :
+			FactMemento memento ) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;

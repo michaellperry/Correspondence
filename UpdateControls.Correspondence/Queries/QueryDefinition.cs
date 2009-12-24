@@ -46,7 +46,7 @@ namespace UpdateControls.Correspondence.Queries
             }
         }
 
-        public List<FactID> ExecuteFromMemento(Memento memento)
+        public List<FactID> ExecuteFromMemento(FactMemento memento)
         {
             RoleMemento predecessorRole = _joins[0].Role;
             return memento.Predecessors

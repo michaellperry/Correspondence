@@ -38,7 +38,7 @@ namespace GameModel
             _unique = Guid.NewGuid();
         }
 
-        public GameRequest(Memento memento)
+        public GameRequest(FactMemento memento)
             : this()
         {
             _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, memento);

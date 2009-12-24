@@ -9,7 +9,9 @@ namespace UpdateControls.Correspondence.Memory
 {
     public class MemoryStorageStrategy : IStorageStrategy
     {
-        private List<IdentifiedMemento> _factTable = new List<IdentifiedMemento>();
+        private List<IdentifiedFactMemento> _factTable = new List<IdentifiedFactMemento>();
+        private List<MessageMemento> _messageTable = new List<MessageMemento>();
+        private IDictionary<PeerIdentifier, TimestampID> _timestampByPeer = new Dictionary<PeerIdentifier,TimestampID>();
 
         public IDisposable BeginUnitOfWork()
         {
@@ -26,24 +28,24 @@ namespace UpdateControls.Correspondence.Memory
             throw new NotImplementedException();
         }
 
-        public Memento Load(FactID id)
+        public FactMemento Load(FactID id)
         {
-            IdentifiedMemento fact = _factTable.FirstOrDefault(o => o.Id.Equals(id));
+            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Id.Equals(id));
             if (fact != null)
                 return fact.Memento;
             else
                 throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
 
-        public bool Save(Memento memento, out FactID id)
+        public bool Save(FactMemento memento, out FactID id)
         {
             // See if the fact already exists.
-            IdentifiedMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
+            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
             if (fact == null)
             {
                 // It doesn't, so create it.
                 id = new FactID() { key = _factTable.Count };
-                fact = new IdentifiedMemento(id, memento);
+                fact = new IdentifiedFactMemento(id, memento);
                 _factTable.Add(fact);
                 return true;
             }
@@ -54,10 +56,10 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public bool FindExistingFact(Memento memento, out FactID id)
+        public bool FindExistingFact(FactMemento memento, out FactID id)
         {
             // See if the fact already exists.
-            IdentifiedMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
+            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
             if (fact == null)
             {
                 id = new FactID();
@@ -70,7 +72,7 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public IEnumerable<IdentifiedMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             return new QueryExecutor(_factTable).ExecuteQuery(queryDefinition, startingId, options).Reverse();
         }
@@ -86,7 +88,35 @@ namespace UpdateControls.Correspondence.Memory
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IdentifiedMemento> LoadAllFacts()
+        public TimestampID LoadTimestamp(string protocolName, string peerName)
+        {
+            TimestampID timestamp;
+            if (_timestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
+                return timestamp;
+            else
+                return new TimestampID();
+        }
+
+        public void SaveTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        {
+            _timestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
+        }
+
+        public IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp)
+        {
+            TimestampID startingTimestamp = timestamp;
+            List<MessageMemento> messages = _messageTable
+                .Where(message => message.FactId.key > startingTimestamp.key)
+                .ToList();
+            if (messages.Any())
+            {
+                long maxKey = messages.Max(message => message.FactId.key);
+                timestamp = new TimestampID() { key = maxKey };
+            }
+            return messages;
+        }
+
+        public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
         {
             throw new NotImplementedException();
         }

@@ -43,11 +43,12 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public void ServiceQueueContainsGameRequest()
         {
-            GameRequest bobsGameRequest = _gameQueue.CreateGameRequest(_bob);
+            _gameQueue.CreateGameRequest(_bob);
 
             IEnumerable<GameRequest> queue = _service.Queue;
 
-            Pred.Assert(queue, Contains<GameRequest>.That(Is.SameAs(bobsGameRequest)));
+            Pred.Assert(queue, Contains<GameRequest>.That(Has<GameRequest>.Property(
+                request => request.Person, Is.SameAs(_bob))));
         }
 
         [TestMethod]

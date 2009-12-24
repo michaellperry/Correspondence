@@ -22,7 +22,7 @@ namespace GameModel
             _gameRequest = new PredecessorList<GameRequest>(this, RoleGameRequest, new List<GameRequest> { first, second });
         }
 
-        public Game(Memento memento)
+        public Game(FactMemento memento)
             : this()
         {
             _gameRequest = new PredecessorList<GameRequest>(this, RoleGameRequest, memento);

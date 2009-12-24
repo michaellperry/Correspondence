@@ -81,9 +81,9 @@ namespace UpdateControls.Correspondence.Rebuild
 
         private static void CopyFacts(IStorageStrategy source, IStorageStrategy destination, int peerId)
         {
-            foreach (IdentifiedMemento sourceFact in source.LoadAllFacts())
+            foreach (IdentifiedFactMemento sourceFact in source.LoadAllFacts())
             {
-                Memento destinationFact = new Memento(
+                FactMemento destinationFact = new FactMemento(
                     new CorrespondenceFactType(
                         sourceFact.Memento.FactType.TypeName,
                         sourceFact.Memento.FactType.Version));

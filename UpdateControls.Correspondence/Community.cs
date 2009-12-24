@@ -34,7 +34,7 @@ namespace UpdateControls.Correspondence
 
         public Community AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
         {
-            communicationStrategy.AttachFactRepository(_model);
+            communicationStrategy.AttachMessageRepository(_model);
             return this;
         }
 

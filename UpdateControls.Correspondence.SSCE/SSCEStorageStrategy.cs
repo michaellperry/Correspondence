@@ -51,7 +51,7 @@ namespace UpdateControls.Correspondence.SSCE
 			command.Parameters.Add(param);
 		}
 
-		private static void ReadBinary(IDataReader reader, Memento memento, int columnIndex)
+		private static void ReadBinary(IDataReader reader, FactMemento memento, int columnIndex)
 		{
 			byte[] buffer = new byte[1024];
 			int length = (int)reader.GetBytes(columnIndex, 0, buffer, 0, buffer.Length);
@@ -108,9 +108,9 @@ namespace UpdateControls.Correspondence.SSCE
 			}
 		}
 
-		public Memento Load(FactID id)
+		public FactMemento Load(FactID id)
 		{
-			IdentifiedMemento identifiedMemento = null;
+			IdentifiedFactMemento identifiedMemento = null;
 
 			using (var session = new Session(_connectionString))
 			{
@@ -132,7 +132,7 @@ namespace UpdateControls.Correspondence.SSCE
 			return identifiedMemento.Memento;
 		}
 
-		public bool Save(Memento memento, out FactID id)
+		public bool Save(FactMemento memento, out FactID id)
 		{
 			using (var session = new Session(_connectionString))
 			{
@@ -170,7 +170,7 @@ namespace UpdateControls.Correspondence.SSCE
 			}
 		}
 
-        public bool FindExistingFact(Memento memento, out FactID id)
+        public bool FindExistingFact(FactMemento memento, out FactID id)
         {
 			using (var session = new Session(_connectionString))
 			{
@@ -179,7 +179,7 @@ namespace UpdateControls.Correspondence.SSCE
 			}
         }
 
-        public IEnumerable<IdentifiedMemento> QueryForFacts(QueryDefinition queryDefinition, FactID id, QueryOptions options)
+        public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID id, QueryOptions options)
         {
             using (var session = new Session(_connectionString))
             {
@@ -225,10 +225,10 @@ namespace UpdateControls.Correspondence.SSCE
                 {
                     session.Command.Parameters.Clear();
 
-                    IEnumerable<IdentifiedMemento> mementos = LoadMementosFromReader(factReader);
+                    IEnumerable<IdentifiedFactMemento> mementos = LoadMementosFromReader(factReader);
                     if (options != null)
                         mementos = mementos.Take(options.Limit);
-                    List<IdentifiedMemento> result = mementos.ToList();
+                    List<IdentifiedFactMemento> result = mementos.ToList();
                     //DateTime stop = DateTime.Now;
                     //System.Diagnostics.Debug.WriteLine(stop - start);
                     return result;
@@ -307,6 +307,21 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
+        public TimestampID LoadTimestamp(string protocolName, string peerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp)
+        {
+            throw new NotImplementedException();
+        }
+
         public int SavePeer(string protocolName, string peerName)
         {
             using (var session = new Session(_connectionString))
@@ -346,7 +361,7 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
-        public IEnumerable<IdentifiedMemento> LoadAllFacts()
+        public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
         {
             using (var session = new Session(_connectionString))
             {
@@ -360,7 +375,7 @@ namespace UpdateControls.Correspondence.SSCE
                 {
                     session.Command.Parameters.Clear();
 
-                    List<IdentifiedMemento> result = LoadMementosFromReader(factReader).ToList();
+                    List<IdentifiedFactMemento> result = LoadMementosFromReader(factReader).ToList();
                     //DateTime stop = DateTime.Now;
                     //System.Diagnostics.Debug.WriteLine(stop - start);
                     return result;
@@ -511,9 +526,9 @@ namespace UpdateControls.Correspondence.SSCE
 			return roleId;
         }
 
-		private IEnumerable<IdentifiedMemento> LoadMementosFromReader(IDataReader factReader)
+		private IEnumerable<IdentifiedFactMemento> LoadMementosFromReader(IDataReader factReader)
 		{
-			IdentifiedMemento current = null;
+			IdentifiedFactMemento current = null;
 
 			while (factReader.Read())
 			{
@@ -531,9 +546,9 @@ namespace UpdateControls.Correspondence.SSCE
 					int typeVersion = factReader.GetInt32(4);
 
 					// Create the memento.
-					current = new IdentifiedMemento(
+					current = new IdentifiedFactMemento(
 						new FactID() { key = factId },
-						new Memento(GetTypeMemento(typeId, typeName, typeVersion)));
+						new FactMemento(GetTypeMemento(typeId, typeName, typeVersion)));
 					ReadBinary(factReader, current.Memento, 1);
 				}
 
@@ -603,7 +618,7 @@ namespace UpdateControls.Correspondence.SSCE
 			return type;
 		}
 
-		private bool FindExistingFact(Memento memento, out FactID id, Session session)
+		private bool FindExistingFact(FactMemento memento, out FactID id, Session session)
 		{
 			int typeId = SaveType(session, memento.FactType);
 
@@ -617,7 +632,7 @@ namespace UpdateControls.Correspondence.SSCE
 			IDataReader factReader = session.Command.ExecuteReader();
 			session.Command.Parameters.Clear();
 
-            List<IdentifiedMemento> existingFact = LoadMementosFromReader(factReader)
+            List<IdentifiedFactMemento> existingFact = LoadMementosFromReader(factReader)
 				.Where(im => im.Memento.Equals(memento))
 				.ToList();
 			if (existingFact.Count > 1)

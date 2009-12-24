@@ -10,18 +10,18 @@ namespace UpdateControls.Correspondence.Memory
 {
     public class QueryExecutor : IConditionVisitor
     {
-        private IEnumerable<IdentifiedMemento> _facts;
+        private IEnumerable<IdentifiedFactMemento> _facts;
 
-        private IEnumerable<IdentifiedMemento> _match;
-        public QueryExecutor(IEnumerable<IdentifiedMemento> facts)
+        private IEnumerable<IdentifiedFactMemento> _match;
+        public QueryExecutor(IEnumerable<IdentifiedFactMemento> facts)
         {
             _facts = facts;
         }
 
-        public IEnumerable<IdentifiedMemento> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public IEnumerable<IdentifiedFactMemento> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             // Push.
-            IEnumerable<IdentifiedMemento> pushMatch = _match;
+            IEnumerable<IdentifiedFactMemento> pushMatch = _match;
 
             // Start with the initial id.
             _match = _facts.Where(m => m.Id.Equals(startingId));

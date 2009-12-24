@@ -5,7 +5,7 @@ namespace UpdateControls.Correspondence.Strategy
 {
     public interface ICorrespondenceFactFactory
     {
-        CorrespondenceFact CreateFact(Memento memento);
+        CorrespondenceFact CreateFact(FactMemento memento);
         void WriteFactData(CorrespondenceFact obj, BinaryWriter output);
     }
 }

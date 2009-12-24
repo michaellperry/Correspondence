@@ -17,7 +17,7 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             network.AttachServer(this);
         }
 
-        public void AttachFactRepository(IFactRepository repository)
+        public void AttachMessageRepository(IMessageRepository repository)
         {
         }
     }

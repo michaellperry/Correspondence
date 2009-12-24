@@ -46,7 +46,7 @@ namespace UpdateControls.Correspondence
 
         private static ConstructorInfo GetMementoConstructor(Type type)
         {
-            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(Memento) });
+            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(FactMemento) });
             if (constructorInfo != null)
                 return constructorInfo;
             else

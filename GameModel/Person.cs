@@ -15,7 +15,7 @@ namespace GameModel
             _unique = Guid.NewGuid();
         }
 
-        public Person(Memento memento)
+        public Person(FactMemento memento)
         {
         }
     }

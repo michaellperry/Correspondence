@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Contains.cs" />
     <Compile Include="Expectation.cs" />
+    <Compile Include="Has.cs" />
     <Compile Include="Is.cs" />
     <Compile Include="Pred.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

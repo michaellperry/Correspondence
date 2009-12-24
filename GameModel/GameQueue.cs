@@ -28,7 +28,7 @@ namespace GameModel
             _identifier = identifier;
         }
 
-        public GameQueue(Memento memento)
+        public GameQueue(FactMemento memento)
             : this()
         {
         }

@@ -8,7 +8,7 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence
 {
-    class Model : IFactRepository
+    class Model : IMessageRepository
     {
         private Community _community;
 		private IStorageStrategy _storageStrategy;
@@ -19,7 +19,7 @@ namespace UpdateControls.Correspondence
             new Dictionary<CorrespondenceFactType, List<QueryInvalidator>>();
 
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
-		private IDictionary<Memento, CorrespondenceFact> _factByMemento = new Dictionary<Memento, CorrespondenceFact>();
+		private IDictionary<FactMemento, CorrespondenceFact> _factByMemento = new Dictionary<FactMemento, CorrespondenceFact>();
 
         public Model(Community community, IStorageStrategy storageStrategy, ITypeStrategy typeStrategy)
 		{
@@ -66,7 +66,7 @@ namespace UpdateControls.Correspondence
                 if (prototype.Community != null)
                     throw new CorrespondenceException("A fact may only belong to one community");
 
-                Memento memento = CreateMementoFromFact(prototype);
+                FactMemento memento = CreateMementoFromFact(prototype);
 
                 // See if we already have the fact in memory.
                 CorrespondenceFact fact;
@@ -126,7 +126,7 @@ namespace UpdateControls.Correspondence
                 if (prototype.Community != null)
                     throw new CorrespondenceException("A fact may only belong to one community");
 
-                Memento memento = CreateMementoFromFact(prototype);
+                FactMemento memento = CreateMementoFromFact(prototype);
 
                 // See if we already have the fact in memory.
                 CorrespondenceFact fact;
@@ -165,6 +165,26 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SetID(factName, obj.ID);
         }
 
+        public TimestampID LoadTimestamp(string protocolName, string peerName)
+        {
+            return _storageStrategy.LoadTimestamp(protocolName, peerName);
+        }
+
+        public void SaveTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        {
+            _storageStrategy.SaveTimestamp(protocolName, peerName, timestamp);
+        }
+
+        public IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp)
+        {
+            return _storageStrategy.LoadRecentMessages(ref timestamp);
+        }
+
+        public FactMemento LoadFact(FactID factId)
+        {
+            return CreateMementoFromFact(GetFactByID(factId));
+        }
+
         internal CorrespondenceFact GetFactByID(FactID id)
         {
             // Check for null.
@@ -179,7 +199,7 @@ namespace UpdateControls.Correspondence
                     return obj;
 
                 // If not, load it from storage.
-                Memento memento = _storageStrategy.Load(id);
+                FactMemento memento = _storageStrategy.Load(id);
                 return CreateFactFromMemento(id, memento);
             }
         }
@@ -188,12 +208,12 @@ namespace UpdateControls.Correspondence
         {
             lock (this)
             {
-                List<IdentifiedMemento> facts = _storageStrategy.QueryForFacts(queryDefinition, startingId, options).ToList();
+                List<IdentifiedFactMemento> facts = _storageStrategy.QueryForFacts(queryDefinition, startingId, options).ToList();
                 return facts.Select(m => GetFactByIdAndMemento(m.Id, m.Memento)).ToList();
             }
         }
 
-        private CorrespondenceFact GetFactByIdAndMemento(FactID id, Memento memento)
+        private CorrespondenceFact GetFactByIdAndMemento(FactID id, FactMemento memento)
         {
             // Check for null.
             if (id.key == 0)
@@ -208,7 +228,7 @@ namespace UpdateControls.Correspondence
             return CreateFactFromMemento(id, memento);
         }
 
-        private CorrespondenceFact CreateFactFromMemento(FactID id, Memento memento)
+        private CorrespondenceFact CreateFactFromMemento(FactID id, FactMemento memento)
         {
             System.Diagnostics.Debug.Assert(
                 !_factByMemento.ContainsKey(memento),
@@ -233,7 +253,7 @@ namespace UpdateControls.Correspondence
             return fact;
         }
 
-        private Memento CreateMementoFromFact(CorrespondenceFact prototype)
+        private FactMemento CreateMementoFromFact(CorrespondenceFact prototype)
         {
             // Get the type of the object.
             CorrespondenceFactType type = _typeStrategy.GetTypeOfFact(prototype);
@@ -244,7 +264,7 @@ namespace UpdateControls.Correspondence
                 throw new CorrespondenceException(string.Format("Add the type {0} or the assembly that contains it to the community.", type));
 
             // Create the memento.
-            Memento memento = new Memento(type);
+            FactMemento memento = new FactMemento(type);
             foreach (RoleMemento role in prototype.PredecessorRoles)
             {
                 PredecessorBase predecessor = prototype.GetPredecessor(role);
