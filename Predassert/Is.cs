@@ -13,6 +13,13 @@ namespace Predassert
                 actual => string.Format("The collection should be empty, but instead contains {0} elements.", actual.Count()));
         }
 
+        public static Expectation<T> EqualTo<T>(T expected)
+        {
+            return new Expectation<T>(
+                actual => Object.Equals(actual, expected),
+                actual => string.Format("Expected {0}, actual {1}.", expected, actual));
+        }
+
         public static Expectation<T> SameAs<T>(T other)
         {
             return new Expectation<T>(

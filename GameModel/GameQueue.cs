@@ -38,6 +38,11 @@ namespace GameModel
             return Community.AddFact(new GameRequest(this, person));
         }
 
+        public string Identifier
+        {
+            get { return _identifier; }
+        }
+
         public IEnumerable<GameRequest> OutstandingGameRequests
         {
             get { return _outstandingGameRequests; }

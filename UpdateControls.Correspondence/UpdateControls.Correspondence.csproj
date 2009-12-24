@@ -81,7 +81,9 @@
     <Compile Include="Role.cs" />
     <Compile Include="RoleBase.cs" />
     <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
+    <Compile Include="Strategy\IFactRepository.cs" />
     <Compile Include="Strategy\IFieldSerializer.cs" />
+    <Compile Include="Strategy\ICommunicationStrategy.cs" />
     <Compile Include="Strategy\IStorageStrategy.cs" />
     <Compile Include="Queries\Join.cs" />
     <Compile Include="Mementos\Memento.cs" />

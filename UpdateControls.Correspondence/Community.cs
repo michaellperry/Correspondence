@@ -32,6 +32,12 @@ namespace UpdateControls.Correspondence
         {
         }
 
+        public Community AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
+        {
+            communicationStrategy.AttachFactRepository(_model);
+            return this;
+        }
+
         public Community AddFieldSerializer<T>(IFieldSerializer fieldSerializer)
         {
             _fieldSerializerByType.Add(typeof(T), fieldSerializer);

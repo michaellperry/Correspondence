@@ -5,11 +5,10 @@ using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
-using UpdateControls.Correspondence.Conditions;
 
 namespace UpdateControls.Correspondence
 {
-    class Model
+    class Model : IFactRepository
     {
         private Community _community;
 		private IStorageStrategy _storageStrategy;
