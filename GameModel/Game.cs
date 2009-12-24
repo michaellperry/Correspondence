@@ -8,29 +8,34 @@ namespace GameModel
     [CorrespondenceType]
     public class Game : CorrespondenceFact
     {
-        public static Role<GameQueue> RoleGameQueue = new Role<GameQueue>("gameQueue");
+        public static Role<GameRequest> RoleGameRequest = new Role<GameRequest>("gameRequest");
 
-        private PredecessorObj<GameQueue> _gameQueue;
+        private PredecessorList<GameRequest> _gameRequest;
 
         private Game()
         {
         }
 
-        public Game(GameQueue gameQueue)
+        public Game(GameRequest first, GameRequest second)
             : this()
         {
-            _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, gameQueue);
+            _gameRequest = new PredecessorList<GameRequest>(this, RoleGameRequest, new List<GameRequest> { first, second });
         }
 
         public Game(Memento memento)
             : this()
         {
-            _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, memento);
+            _gameRequest = new PredecessorList<GameRequest>(this, RoleGameRequest, memento);
         }
 
-        public GameQueue GameQueue
+        public GameRequest First
         {
-            get { return _gameQueue.Fact; }
+            get { return _gameRequest.ElementAt(0); }
+        }
+
+        public GameRequest Second
+        {
+            get { return _gameRequest.ElementAt(1); }
         }
     }
 }

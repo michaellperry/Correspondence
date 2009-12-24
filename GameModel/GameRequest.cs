@@ -13,18 +13,21 @@ namespace GameModel
         public static Role<Person> RolePerson = new Role<Person>("person");
 
         private static Query QueryGame = new Query()
-            .JoinSuccessors(Game.RoleGameQueue);
+            .JoinSuccessors(Game.RoleGameRequest);
 
         public static Condition IsOutstanding = Condition.WhereIsEmpty(QueryGame);
 
         private PredecessorObj<GameQueue> _gameQueue;
         private PredecessorObj<Person> _person;
 
+        private Result<Game> _game;
+
         [CorrespondenceField]
         private Guid _unique;
 
         private GameRequest()
         {
+            _game = new Result<Game>(this, QueryGame);
         }
 
         public GameRequest(GameQueue gameQueue, Person person)
@@ -50,6 +53,16 @@ namespace GameModel
         public Person Person
         {
             get { return _person.Fact; }
+        }
+
+        public Game CreateGame(GameRequest second)
+        {
+            return Community.AddFact(new Game(this, second));
+        }
+
+        public Game Game
+        {
+            get { return _game.FirstOrDefault(); }
         }
     }
 }

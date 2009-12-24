@@ -44,9 +44,48 @@ namespace UpdateControls.Correspondence.UnitTest
         public void ServiceQueueContainsGameRequest()
         {
             GameRequest bobsGameRequest = _gameQueue.CreateGameRequest(_bob);
+
             IEnumerable<GameRequest> queue = _service.Queue;
 
             Pred.Assert(queue, Contains<GameRequest>.That(Is.SameAs(bobsGameRequest)));
+        }
+
+        [TestMethod]
+        public void ServiceWaitsForSecondGameRequest()
+        {
+            GameRequest alicesGameRequest = _gameQueue.CreateGameRequest(_alice);
+
+            _service.Process(_service.Queue.ToList());
+            Game alicesGame = alicesGameRequest.Game;
+
+            Pred.Assert(alicesGame, Is.Null<Game>());
+        }
+
+        [TestMethod]
+        public void ServicePairsTwoGameRequests()
+        {
+            GameRequest alicesGameRequest = _gameQueue.CreateGameRequest(_alice);
+            GameRequest bobsGameRequest = _gameQueue.CreateGameRequest(_bob);
+
+            _service.Process(_service.Queue.ToList());
+            Game alicesGame = alicesGameRequest.Game;
+            Game bobsGame = bobsGameRequest.Game;
+
+            Pred.Assert(alicesGame, Is.NotNull<Game>());
+            Pred.Assert(bobsGame, Is.NotNull<Game>());
+            Pred.Assert(alicesGame, Is.SameAs(bobsGame));
+        }
+
+        [TestMethod]
+        public void AfterGameRequestsArePairedQueueIsEmpty()
+        {
+            GameRequest alicesGameRequest = _gameQueue.CreateGameRequest(_alice);
+            GameRequest bobsGameRequest = _gameQueue.CreateGameRequest(_bob);
+
+            _service.Process(_service.Queue.ToList());
+            IEnumerable<GameRequest> queue = _service.Queue;
+
+            Pred.Assert(queue, Is.Empty<GameRequest>());
         }
     }
 }

@@ -19,5 +19,17 @@ namespace GameService
         {
             get { return _queue.OutstandingGameRequests; }
         }
+
+        public void Process(List<GameRequest> queue)
+        {
+            int pairs = queue.Count / 2;
+            for (int i = 0; i < pairs; i++)
+            {
+                GameRequest first = queue[i * 2];
+                GameRequest second = queue[i * 2 + 1];
+
+                first.CreateGame(second);
+            }
+        }
     }
 }
