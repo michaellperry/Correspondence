@@ -6,7 +6,7 @@ using System;
 
 namespace GameModel
 {
-    [CorrespondenceType]
+    [CorrespondenceType(Pivot=true)]
     public class GameQueue : CorrespondenceFact
     {
         private static Query QueryOutstandingGameRequests = new Query()

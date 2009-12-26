@@ -18,6 +18,7 @@ namespace UpdateControls.Correspondence
         internal abstract IEnumerable<FactID> InternalFactIds { get; }
         protected abstract void PopulateCache(Community community);
         protected abstract void EmptyCache();
+        internal abstract Type FactType { get; }
 
         protected void OnGet()
         {

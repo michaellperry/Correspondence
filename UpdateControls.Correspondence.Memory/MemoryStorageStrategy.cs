@@ -37,16 +37,20 @@ namespace UpdateControls.Correspondence.Memory
                 throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
 
-        public bool Save(FactMemento memento, out FactID id)
+        public bool Save(FactMemento memento, List<FactID> pivots, out FactID id)
         {
             // See if the fact already exists.
             IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
             if (fact == null)
             {
                 // It doesn't, so create it.
-                id = new FactID() { key = _factTable.Count };
+                FactID newFactID = new FactID() { key = _factTable.Count + 1 };
+                id = newFactID;
                 fact = new IdentifiedFactMemento(id, memento);
                 _factTable.Add(fact);
+
+                // Store a message for each pivot.
+                _messageTable.AddRange(pivots.Select(pivot => new MessageMemento(pivot, newFactID)));
                 return true;
             }
             else

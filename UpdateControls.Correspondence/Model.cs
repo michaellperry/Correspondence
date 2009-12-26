@@ -75,7 +75,7 @@ namespace UpdateControls.Correspondence
 
                 // Set the ID and add the object to the community.
                 FactID id;
-                bool saved = _storageStrategy.Save(memento, out id);
+                bool saved = _storageStrategy.Save(memento, FindPivots(prototype).ToList(), out id);
                 prototype.ID = id;
                 prototype.SetCommunity(_community);
                 _factByID.Add(prototype.ID, prototype);
@@ -185,7 +185,7 @@ namespace UpdateControls.Correspondence
             return CreateMementoFromFact(GetFactByID(factId));
         }
 
-        internal CorrespondenceFact GetFactByID(FactID id)
+        public CorrespondenceFact GetFactByID(FactID id)
         {
             // Check for null.
             if (id.key == 0)
@@ -202,6 +202,11 @@ namespace UpdateControls.Correspondence
                 FactMemento memento = _storageStrategy.Load(id);
                 return CreateFactFromMemento(id, memento);
             }
+        }
+
+        public FactID IDOfFact(CorrespondenceFact fact)
+        {
+            return fact.ID;
         }
 
         internal IEnumerable<CorrespondenceFact> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
@@ -238,6 +243,17 @@ namespace UpdateControls.Correspondence
             if (memento == null)
                 throw new CorrespondenceException("Failed to load fact");
 
+            CorrespondenceFact fact = HydrateFact(memento);
+
+            fact.ID = id;
+            fact.SetCommunity(_community);
+            _factByID.Add(fact.ID, fact);
+            _factByMemento.Add(memento, fact);
+            return fact;
+        }
+
+        public CorrespondenceFact HydrateFact(FactMemento memento)
+        {
             ICorrespondenceFactFactory factory;
             if (!_factoryByType.TryGetValue(memento.FactType, out factory))
                 throw new CorrespondenceException(string.Format("Unknown type: {0}", memento.FactType));
@@ -245,11 +261,6 @@ namespace UpdateControls.Correspondence
             CorrespondenceFact fact = factory.CreateFact(memento);
             if (fact == null)
                 throw new CorrespondenceException("Failed to create fact");
-
-            fact.ID = id;
-            fact.SetCommunity(_community);
-            _factByID.Add(fact.ID, fact);
-            _factByMemento.Add(memento, fact);
             return fact;
         }
 
@@ -281,6 +292,14 @@ namespace UpdateControls.Correspondence
             }
 
             return memento;
+        }
+
+        private IEnumerable<FactID> FindPivots(CorrespondenceFact prototype)
+        {
+            return prototype.PredecessorRoles
+                .Select(role => prototype.GetPredecessor(role))
+                .Where(predecessor => AttributeTypeStrategy.IsPivot(predecessor.FactType))
+                .SelectMany(predecessor => predecessor.InternalFactIds);
         }
     }
 }

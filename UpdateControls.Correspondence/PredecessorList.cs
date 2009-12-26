@@ -6,17 +6,17 @@ using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence
 {
-    public class PredecessorList<FactType> : PredecessorBase, IEnumerable<FactType>
-        where FactType : CorrespondenceFact
+    public class PredecessorList<TFact> : PredecessorBase, IEnumerable<TFact>
+        where TFact : CorrespondenceFact
     {
 		private RoleMemento _role;
         private List<FactID> _factIds;
-		private List<FactType> _facts;
+		private List<TFact> _facts;
 
 		public PredecessorList(
 			CorrespondenceFact subject,
-			Role<FactType> role,
-			IEnumerable<FactType> facts ) :
+			Role<TFact> role,
+			IEnumerable<TFact> facts ) :
             base(subject, true)
 		{
             if (facts.Any(o => o == null))
@@ -31,7 +31,7 @@ namespace UpdateControls.Correspondence
 
 		public PredecessorList(
 			CorrespondenceFact subject,
-			Role<FactType> role,
+			Role<TFact> role,
 			FactMemento memento ) :
             base(subject, false)
 		{
@@ -43,7 +43,7 @@ namespace UpdateControls.Correspondence
 
         #region IEnumerable<FactType> Members
 
-        public IEnumerator<FactType> GetEnumerator()
+        public IEnumerator<TFact> GetEnumerator()
         {
             OnGet();
             return _facts.GetEnumerator();
@@ -71,13 +71,18 @@ namespace UpdateControls.Correspondence
             // Resolve each ID to an object.
             _facts = _factIds
                 .Select(id => community.GetFactByID(id))
-                .Cast<FactType>()
+                .Cast<TFact>()
                 .ToList();
         }
 
         protected override void EmptyCache()
         {
             _facts = null;
+        }
+
+        internal override Type FactType
+        {
+            get { return typeof(TFact); }
         }
     }
 }

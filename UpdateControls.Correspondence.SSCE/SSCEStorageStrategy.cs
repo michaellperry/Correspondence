@@ -132,7 +132,7 @@ namespace UpdateControls.Correspondence.SSCE
 			return identifiedMemento.Memento;
 		}
 
-		public bool Save(FactMemento memento, out FactID id)
+        public bool Save(FactMemento memento, List<FactID> pivots, out FactID id)
 		{
 			using (var session = new Session(_connectionString))
 			{

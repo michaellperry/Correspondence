@@ -65,6 +65,7 @@
     <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
     <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
     <Compile Include="IQueryResult.cs" />
+    <Compile Include="Mementos\MessageBodyMemento.cs" />
     <Compile Include="Mementos\MessageMemento.cs" />
     <Compile Include="Mementos\IdentifiedFactMemento.cs" />
     <Compile Include="Mementos\NamedFactMemento.cs" />

@@ -19,7 +19,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(new SimulatedClient(network)
                     .Post<GameQueue>(gameQueue => gameQueue.Identifier)
                 );
-            _gameQueue = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
+            _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _person = _community.AddFact(new Person());
         }
 

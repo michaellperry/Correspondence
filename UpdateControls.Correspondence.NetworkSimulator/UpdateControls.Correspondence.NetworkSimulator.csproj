@@ -41,7 +41,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientEndpoint.cs" />
     <Compile Include="NetworkSimulatorException.cs" />
+    <Compile Include="ServerEndpoint.cs" />
     <Compile Include="SimulatedClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulatedNetwork.cs" />

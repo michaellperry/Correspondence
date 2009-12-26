@@ -33,15 +33,24 @@ namespace UpdateControls.Correspondence
 
         public static CorrespondenceFactType GetTypeFromCLRType(Type type)
         {
-            // Find the CorrespondenceType attribute.
+            return FactTypeFromAttribute(type, GetCorrespondenceTypeAttribute(type));
+        }
+
+        public static bool IsPivot(Type type)
+        {
+            return GetCorrespondenceTypeAttribute(type).Pivot;
+        }
+
+        private static CorrespondenceTypeAttribute GetCorrespondenceTypeAttribute(Type type)
+        {
             CorrespondenceTypeAttribute attribute = (CorrespondenceTypeAttribute)type
                 .GetCustomAttributes(typeof(CorrespondenceTypeAttribute), false).FirstOrDefault();
 
-            if (attribute != null)
-                return FactTypeFromAttribute(type, attribute);
-            else
+            if (attribute == null)
                 throw new CorrespondenceException(string.Format(
                     "Please add the CorrespondenceType attribute to the class {0}.", type.FullName));
+
+            return attribute;
         }
 
         private static CorrespondenceFactType FactTypeFromAttribute(Type type, CorrespondenceTypeAttribute attribute)

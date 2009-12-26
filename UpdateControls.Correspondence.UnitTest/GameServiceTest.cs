@@ -28,7 +28,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 .RegisterAssembly(typeof(GameQueue));
             _alice = _community.AddFact(new Person());
             _bob = _community.AddFact(new Person());
-            _gameQueue = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
+            _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _service = new GameQueueService(_gameQueue);
         }
 

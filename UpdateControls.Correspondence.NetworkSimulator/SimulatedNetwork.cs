@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
+using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence.NetworkSimulator
 {
@@ -33,6 +34,11 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             {
                 client.Synchronize();
             }
+        }
+
+        public void SendToServer(string url, MessageBodyMemento messageBody)
+        {
+            _server.Receive(url, messageBody);
         }
     }
 }

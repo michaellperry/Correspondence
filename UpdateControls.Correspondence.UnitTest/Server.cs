@@ -18,8 +18,10 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))
-                .AddCommunicationStrategy(new SimulatedServer(network));
-            _gameQueue = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
+                .AddCommunicationStrategy(new SimulatedServer(network)
+                    .Post<GameQueue>((repository, url) => repository.AddFact(new GameQueue(url)))
+                );
+            _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _service = new GameQueueService(_gameQueue);
         }
 

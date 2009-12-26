@@ -26,8 +26,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public void GameQueueIsIdentifiedByIdentifier()
         {
-            GameQueue gameQueue = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
-            GameQueue gameQueueAgain = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
+            GameQueue gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
+            GameQueue gameQueueAgain = _community.AddFact(new GameQueue("mygamequeue"));
 
             Pred.Assert(gameQueueAgain, Is.SameAs(gameQueue));
         }
@@ -35,8 +35,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public void GameQueueIsDifferentiatedByIdentifier()
         {
-            GameQueue gameQueue = _community.AddFact(new GameQueue("http://mydomain.com/mygamequeue"));
-            GameQueue gameQueueOther = _community.AddFact(new GameQueue("http://mydomain.com/myothergamequeue"));
+            GameQueue gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
+            GameQueue gameQueueOther = _community.AddFact(new GameQueue("myothergamequeue"));
 
             Pred.Assert(gameQueueOther, Is.NotSameAs(gameQueue));
         }

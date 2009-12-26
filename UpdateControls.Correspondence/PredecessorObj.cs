@@ -7,17 +7,17 @@ namespace UpdateControls.Correspondence
 {
 	/// <summary>
 	/// </summary>
-	public class PredecessorObj<FactType> : PredecessorBase
-        where FactType : CorrespondenceFact
+	public class PredecessorObj<TFact> : PredecessorBase
+        where TFact : CorrespondenceFact
 	{
 		private RoleMemento _role;
         private FactID _factId;
-		private FactType _fact;
+		private TFact _fact;
 
 		public PredecessorObj(
 			CorrespondenceFact subject,
-			Role<FactType> role,
-			FactType obj ) :
+			Role<TFact> role,
+			TFact obj ) :
             base(subject, true)
 		{
             if (obj == null)
@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence
 
 		public PredecessorObj(
 			CorrespondenceFact subject,
-			Role<FactType> role,
+			Role<TFact> role,
 			FactMemento memento ) :
             base(subject, false)
 		{
@@ -47,7 +47,7 @@ namespace UpdateControls.Correspondence
             subject.SetPredecessor(_role, this);
 		}
 
-		public FactType Fact
+		public TFact Fact
 		{
             get { OnGet(); return _fact; }
 		}
@@ -60,12 +60,17 @@ namespace UpdateControls.Correspondence
         protected override void PopulateCache(Community community)
         {
             // Resovle the ID to an object.
-            _fact = (FactType)community.GetFactByID(_factId);
+            _fact = (TFact)community.GetFactByID(_factId);
         }
 
         protected override void EmptyCache()
         {
             _fact = null;
+        }
+
+        internal override Type FactType
+        {
+            get { return typeof(TFact); }
         }
 	}
 }
