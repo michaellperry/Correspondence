@@ -264,6 +264,13 @@ namespace UpdateControls.Correspondence
             return fact;
         }
 
+        public FactID SaveFact(FactMemento translatedMemento)
+        {
+            CorrespondenceFact fact = HydrateFact(translatedMemento);
+            fact = AddFact(fact);
+            return fact.ID;
+        }
+
         private FactMemento CreateMementoFromFact(CorrespondenceFact prototype)
         {
             // Get the type of the object.

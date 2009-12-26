@@ -50,9 +50,7 @@ namespace UpdateControls.Correspondence.NetworkSimulator
                             identifiedFact.Memento.Predecessors
                                 .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID]))
                             );
-                        CorrespondenceFact fact = _repository.HydrateFact(translatedMemento);
-                        fact = _repository.AddFact(fact);
-                        FactID localId = _repository.IDOfFact(fact);
+                        FactID localId = _repository.SaveFact(translatedMemento);
                         localIdByRemoteId.Add(identifiedFact.Id, localId);
                     }
                 }

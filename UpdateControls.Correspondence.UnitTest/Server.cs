@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using GameModel;
-using UpdateControls.Correspondence.Memory;
 using GameService;
 using Predassert;
+using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.NetworkSimulator;
 
 namespace UpdateControls.Correspondence.UnitTest
@@ -19,11 +19,15 @@ namespace UpdateControls.Correspondence.UnitTest
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))
                 .AddCommunicationStrategy(new SimulatedServer(network)
-                    .Post<GameQueue>((repository, url) => repository.AddFact(new GameQueue(url)))
+                    .Post<GameQueue>(UrlPattern.Create(
+                        "gamequeue/([_a-zA-Z0-9]+)",
+                        (repository, values) => repository.AddFact(new GameQueue(values[0]))
+                    ).UrlToFact)
                 );
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _service = new GameQueueService(_gameQueue);
         }
+
 
         public void AssertQueueCount(int count)
         {

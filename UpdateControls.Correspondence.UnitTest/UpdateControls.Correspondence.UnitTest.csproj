@@ -48,6 +48,7 @@
     <Compile Include="GameQueueTest.cs" />
     <Compile Include="RemoteGameServiceTest.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="UrlPattern.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameModel\GameModel.csproj">

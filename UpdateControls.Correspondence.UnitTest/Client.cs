@@ -17,7 +17,7 @@ namespace UpdateControls.Correspondence.UnitTest
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))
                 .AddCommunicationStrategy(new SimulatedClient(network)
-                    .Post<GameQueue>(gameQueue => gameQueue.Identifier)
+                    .Post<GameQueue>(gameQueue => string.Format("gamequeue/{0}", gameQueue.Identifier))
                 );
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _person = _community.AddFact(new Person());
