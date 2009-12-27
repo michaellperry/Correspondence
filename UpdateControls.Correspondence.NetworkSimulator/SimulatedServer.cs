@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence.NetworkSimulator
 {
-    public class SimulatedServer : ICommunicationStrategy
+    public class SimulatedServer : SimulatedMachine
     {
         private SimulatedNetwork _network;
-        private IMessageRepository _repository;
 
         private List<ServerEndpoint> _postEndpoints = new List<ServerEndpoint>();
+        private List<ServerEndpoint> _getEndpoints = new List<ServerEndpoint>();
 
         public SimulatedServer(SimulatedNetwork network)
         {
@@ -21,40 +19,50 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             network.AttachServer(this);
         }
 
-        public void AttachMessageRepository(IMessageRepository repository)
-        {
-            _repository = repository;
-        }
-
-        public SimulatedServer Post<TFact>(Func<IMessageRepository, string, TFact> urlToFact)
+        public SimulatedServer Post<TFact>(Func<IMessageRepository, string, TFact> pathToFact)
             where TFact : CorrespondenceFact
         {
-            _postEndpoints.Add(new ServerEndpoint(typeof(TFact), (repository, url) => urlToFact(repository, url)));
+            _postEndpoints.Add(new ServerEndpoint(typeof(TFact), (repository, path) => pathToFact(repository, path)));
             return this;
         }
 
-        public void Receive(string url, MessageBodyMemento messageBody)
+        public SimulatedServer Get<TFact>(Func<IMessageRepository, string, TFact> pathToFact)
+            where TFact : CorrespondenceFact
+        {
+            _getEndpoints.Add(new ServerEndpoint(typeof(TFact), (repository, path) => pathToFact(repository, path)));
+            return this;
+        }
+
+        public void Receive(string path, MessageBodyMemento messageBody)
         {
             foreach (ServerEndpoint postEndpoint in _postEndpoints)
             {
-                CorrespondenceFact pivot = postEndpoint.GetFact(_repository, url);
+                CorrespondenceFact pivot = postEndpoint.GetFact(_repository, path);
                 if (pivot != null)
                 {
-                    IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-                    localIdByRemoteId.Add(messageBody.PivotId, _repository.IDOfFact(pivot));
-                    foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
-                    {
-                        FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
-                        translatedMemento.Data = identifiedFact.Memento.Data;
-                        translatedMemento.AddPredecessors(
-                            identifiedFact.Memento.Predecessors
-                                .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID]))
-                            );
-                        FactID localId = _repository.SaveFact(translatedMemento);
-                        localIdByRemoteId.Add(identifiedFact.Id, localId);
-                    }
+                    ReceiveMessage(messageBody, pivot);
                 }
             }
+        }
+
+        public MessageBodyMemento Get(string path, TimestampID timestamp)
+        {
+            foreach (ServerEndpoint getEndpoint in _getEndpoints)
+            {
+                CorrespondenceFact pivot = getEndpoint.GetFact(_repository, path);
+                if (pivot != null)
+                {
+                    FactID pivotId = _repository.IDOfFact(pivot);
+                    IEnumerable<FactID> recentMessages = _repository.LoadRecentMessages(pivotId, timestamp);
+                    MessageBodyMemento messageBody = new MessageBodyMemento(pivotId);
+                    foreach (FactID recentMessage in recentMessages)
+                        AddFactTree(messageBody, recentMessage);
+
+                    return messageBody;
+                }
+            }
+
+            throw new NetworkSimulatorException(string.Format("No server Get found for path {0}.", path));
         }
     }
 }

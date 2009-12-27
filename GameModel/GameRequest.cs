@@ -6,7 +6,7 @@ using System;
 
 namespace GameModel
 {
-    [CorrespondenceType]
+    [CorrespondenceType(Pivot=true)]
     public class GameRequest : CorrespondenceFact
     {
         public static Role<GameQueue> RoleGameQueue = new Role<GameQueue>("gameQueue");
@@ -30,12 +30,17 @@ namespace GameModel
             _game = new Result<Game>(this, QueryGame);
         }
 
-        public GameRequest(GameQueue gameQueue, Person person)
+        public GameRequest(GameQueue gameQueue, Person person, Guid unique)
             : this()
         {
             _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, gameQueue);
             _person = new PredecessorObj<Person>(this, RolePerson, person);
-            _unique = Guid.NewGuid();
+            _unique = unique;
+        }
+
+        public GameRequest(GameQueue gameQueue, Person person)
+            : this(gameQueue, person, Guid.NewGuid())
+        {
         }
 
         public GameRequest(FactMemento memento)
@@ -63,6 +68,11 @@ namespace GameModel
         public Game Game
         {
             get { return _game.FirstOrDefault(); }
+        }
+
+        public Guid Unique
+        {
+            get { return _unique; }
         }
     }
 }

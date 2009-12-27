@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence.NetworkSimulator
 {
-    public class SimulatedClient : ICommunicationStrategy
+    public class SimulatedClient : SimulatedMachine
     {
         private const string PROTOCOL_NAME = "simulator";
         private const string PEER_NAME = "client";
 
         private SimulatedNetwork _network;
-        private IMessageRepository _repository;
-        private List<ClientEndpoint> _postEndpoints = new List<ClientEndpoint>();
+        private List<ClientPostEndpoint> _postEndpoints = new List<ClientPostEndpoint>();
+        private List<ClientGetEndpoint> _getEndpoints = new List<ClientGetEndpoint>();
 
         public SimulatedClient(SimulatedNetwork network)
         {
@@ -23,24 +21,55 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             network.AttachClient(this);
         }
 
-        public SimulatedClient Post<FactType>(Func<FactType, string> factToUrl)
+        public SimulatedClient Post<FactType>(Func<FactType, string> factToPath)
             where FactType : CorrespondenceFact
         {
-            _postEndpoints.Add(new ClientEndpoint(typeof(FactType), fact => factToUrl((FactType)fact)));
+            _postEndpoints.Add(new ClientPostEndpoint(
+                typeof(FactType),
+                fact => factToPath((FactType)fact)));
             return this;
         }
 
-        public void AttachMessageRepository(IMessageRepository repository)
+        public SimulatedClient Get<FactType>(Func<IEnumerable<FactType>> pivots, Func<FactType, string> factToPath)
+            where FactType : CorrespondenceFact
         {
-            _repository = repository;
+            _getEndpoints.Add(new ClientGetEndpoint(
+                typeof(FactType),
+                () => pivots().OfType<CorrespondenceFact>(),
+                fact => factToPath((FactType)fact)));
+            return this;
         }
 
         public void Synchronize()
         {
-            TimestampID timestamp = _repository.LoadTimestamp(PROTOCOL_NAME, PEER_NAME);
+            SynchronizeOutgoing();
+            SynchronizeIncoming();
+        }
+
+        private void SynchronizeOutgoing()
+        {
+            TimestampID timestamp = _repository.LoadOutgoingTimestamp(PROTOCOL_NAME, PEER_NAME);
             IEnumerable<MessageBodyMemento> messageBodies = GetMessageBodies(ref timestamp);
             SendMessageBodiesToServer(messageBodies);
-            _repository.SaveTimestamp(PROTOCOL_NAME, PEER_NAME, timestamp);
+            _repository.SaveOutgoingTimestamp(PROTOCOL_NAME, PEER_NAME, timestamp);
+        }
+
+        private void SynchronizeIncoming()
+        {
+            foreach (ClientGetEndpoint getEndpoint in _getEndpoints)
+            {
+                foreach (CorrespondenceFact pivot in getEndpoint.Pivots)
+                {
+                    string path = getEndpoint.GetPath(pivot);
+                    TimestampID timestamp = _repository.LoadIncomingTimestamp(PROTOCOL_NAME, PEER_NAME);
+                    MessageBodyMemento messageBody = _network.GetFromServer(path, timestamp);
+                    if (messageBody.Facts.Any())
+                    {
+                        timestamp = ReceiveMessage(messageBody, pivot);
+                        _repository.SaveIncomingTimestamp(PROTOCOL_NAME, PEER_NAME, timestamp);
+                    }
+                }
+            }
         }
 
         private IEnumerable<MessageBodyMemento> GetMessageBodies(ref TimestampID timestamp)
@@ -60,17 +89,6 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             return messageBodiesByPivotId.Values;
         }
 
-        private void AddFactTree(MessageBodyMemento messageBody, FactID factId)
-        {
-            if (!factId.Equals(messageBody.PivotId) && !messageBody.Contains(factId))
-            {
-                FactMemento fact = _repository.LoadFact(factId);
-                foreach (PredecessorMemento predecessor in fact.Predecessors)
-                    AddFactTree(messageBody, predecessor.ID);
-                messageBody.Add(new IdentifiedFactMemento(factId, fact));
-            }
-        }
-
         private void SendMessageBodiesToServer(IEnumerable<MessageBodyMemento> messageBodies)
         {
             foreach (MessageBodyMemento messageBody in messageBodies)
@@ -80,7 +98,7 @@ namespace UpdateControls.Correspondence.NetworkSimulator
                 {
                     if (postEndpoint.IsCompatibleWith(pivot))
                     {
-                        string url = postEndpoint.GetUrl(pivot);
+                        string url = postEndpoint.GetPath(pivot);
                         _network.SendToServer(url, messageBody);
                     }
                 }

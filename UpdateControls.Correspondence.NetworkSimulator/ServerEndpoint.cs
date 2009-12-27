@@ -6,17 +6,17 @@ namespace UpdateControls.Correspondence.NetworkSimulator
     public class ServerEndpoint
     {
         private Type _factType;
-        private Func<IMessageRepository, string, CorrespondenceFact> _urlToFact;
+        private Func<IMessageRepository, string, CorrespondenceFact> _pathToFact;
 
-        public ServerEndpoint(Type factType, Func<IMessageRepository, string, CorrespondenceFact> urlToFact)
+        public ServerEndpoint(Type factType, Func<IMessageRepository, string, CorrespondenceFact> pathToFact)
         {
             _factType = factType;
-            _urlToFact = urlToFact;
+            _pathToFact = pathToFact;
         }
 
-        public CorrespondenceFact GetFact(IMessageRepository repository, string url)
+        public CorrespondenceFact GetFact(IMessageRepository repository, string path)
         {
-            return _urlToFact(repository, url);
+            return _pathToFact(repository, path);
         }
     }
 }

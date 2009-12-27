@@ -1,19 +1,17 @@
-using System.Collections.Generic;
-using UpdateControls.Correspondence.Mementos;
-using UpdateControls.Correspondence;
 using System;
+using UpdateControls.Correspondence;
 
 namespace UpdateControls.Correspondence.NetworkSimulator
 {
-    public class ClientEndpoint
+    public abstract class ClientEndpoint
     {
         private Type _factType;
-        private Func<CorrespondenceFact, string> _factToUrl;
+        private Func<CorrespondenceFact, string> _factToPath;
 
-        public ClientEndpoint(Type factType, Func<CorrespondenceFact, string> factToUrl)
+        public ClientEndpoint(Type factType, Func<CorrespondenceFact, string> factToPath)
         {
             _factType = factType;
-            _factToUrl = factToUrl;
+            _factToPath = factToPath;
         }
 
         public bool IsCompatibleWith(CorrespondenceFact fact)
@@ -21,9 +19,9 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             return _factType.IsAssignableFrom(fact.GetType());
         }
 
-        public string GetUrl(CorrespondenceFact fact)
+        public string GetPath(CorrespondenceFact fact)
         {
-            return _factToUrl(fact);
+            return _factToPath(fact);
         }
     }
 }

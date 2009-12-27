@@ -42,10 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientEndpoint.cs" />
+    <Compile Include="ClientGetEndpoint.cs" />
+    <Compile Include="ClientPostEndpoint.cs" />
     <Compile Include="NetworkSimulatorException.cs" />
     <Compile Include="ServerEndpoint.cs" />
     <Compile Include="SimulatedClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimulatedMachine.cs" />
     <Compile Include="SimulatedNetwork.cs" />
     <Compile Include="SimulatedServer.cs" />
   </ItemGroup>

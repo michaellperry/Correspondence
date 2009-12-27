@@ -23,6 +23,14 @@ namespace UpdateControls.Correspondence.UnitTest
                         "gamequeue/([_a-zA-Z0-9]+)",
                         (repository, values) => repository.AddFact(new GameQueue(values[0]))
                     ).UrlToFact)
+                    .Get<GameRequest>(UrlPattern.Create(
+                        "gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)",
+                        (repository, values) => repository.AddFact(new GameRequest(
+                            repository.AddFact(new GameQueue(values[0])),
+                            repository.AddFact(new Person(new Guid(values[1]))),
+                            new Guid(values[2])
+                        ))
+                    ).UrlToFact)
                 );
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _service = new GameQueueService(_gameQueue);
@@ -32,6 +40,11 @@ namespace UpdateControls.Correspondence.UnitTest
         public void AssertQueueCount(int count)
         {
             Pred.Assert(_service.Queue.Count(), Is.EqualTo(count));
+        }
+
+        public void RunService()
+        {
+            _service.Process(_service.Queue.ToList());
         }
     }
 }

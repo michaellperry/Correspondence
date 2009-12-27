@@ -307,17 +307,32 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
-        public TimestampID LoadTimestamp(string protocolName, string peerName)
+        public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
         {
             throw new NotImplementedException();
         }
 
-        public void SaveTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveIncomingTimestamp(string protocolName, string peerName, TimestampID timestamp)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
         {
             throw new NotImplementedException();
         }

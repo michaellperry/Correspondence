@@ -11,7 +11,8 @@ namespace UpdateControls.Correspondence.Memory
     {
         private List<IdentifiedFactMemento> _factTable = new List<IdentifiedFactMemento>();
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
-        private IDictionary<PeerIdentifier, TimestampID> _timestampByPeer = new Dictionary<PeerIdentifier,TimestampID>();
+        private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier,TimestampID>();
+        private IDictionary<PeerIdentifier, TimestampID> _incomingTimestampByPeer = new Dictionary<PeerIdentifier, TimestampID>();
 
         public IDisposable BeginUnitOfWork()
         {
@@ -92,18 +93,32 @@ namespace UpdateControls.Correspondence.Memory
             throw new NotImplementedException();
         }
 
-        public TimestampID LoadTimestamp(string protocolName, string peerName)
+        public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
         {
             TimestampID timestamp;
-            if (_timestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
+            if (_outgoingTimestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
                 return timestamp;
             else
                 return new TimestampID();
         }
 
-        public void SaveTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp)
         {
-            _timestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
+            _outgoingTimestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
+        }
+
+        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName)
+        {
+            TimestampID timestamp;
+            if (_incomingTimestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
+                return timestamp;
+            else
+                return new TimestampID();
+        }
+
+        public void SaveIncomingTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        {
+            _incomingTimestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
         }
 
         public IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp)
@@ -118,6 +133,13 @@ namespace UpdateControls.Correspondence.Memory
                 timestamp = new TimestampID() { key = maxKey };
             }
             return messages;
+        }
+
+        public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
+        {
+            return _messageTable
+                .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.key)
+                .Select(message => message.FactId);
         }
 
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()

@@ -22,9 +22,12 @@ namespace UpdateControls.Correspondence.Strategy
         IEnumerable<IdentifiedFactMemento> LoadAllFacts();
 
         // Messages.
-        TimestampID LoadTimestamp(string protocolName, string peerName);
-        void SaveTimestamp(string protocolName, string peerName, TimestampID timestamp);
+        TimestampID LoadOutgoingTimestamp(string protocolName, string peerName);
+        void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp);
+        TimestampID LoadIncomingTimestamp(string protocolName, string peerName);
+        void SaveIncomingTimestamp(string protocolName, string peerName, TimestampID timestamp);
         IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp);
+        IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp);
 
         // Networking.
         int SavePeer(string protocolName, string peerName);

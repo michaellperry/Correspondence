@@ -36,9 +36,14 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             }
         }
 
-        public void SendToServer(string url, MessageBodyMemento messageBody)
+        public void SendToServer(string path, MessageBodyMemento messageBody)
         {
-            _server.Receive(url, messageBody);
+            _server.Receive(path, messageBody);
+        }
+
+        public MessageBodyMemento GetFromServer(string path, TimestampID timestamp)
+        {
+            return _server.Get(path, timestamp);
         }
     }
 }
