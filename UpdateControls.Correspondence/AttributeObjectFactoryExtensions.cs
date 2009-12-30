@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UpdateControls.Correspondence.Mementos;
@@ -19,9 +20,7 @@ namespace UpdateControls.Correspondence
                     type.GetCustomAttributes(typeof(CorrespondenceTypeAttribute), false))
                 {
                     // Get the correspondence type from the attribute.
-                    CorrespondenceFactType typeName = (correspondenceAttribute.TypeName == null) ?
-                        new CorrespondenceFactType(type.FullName, correspondenceAttribute.Version) :
-                        new CorrespondenceFactType(correspondenceAttribute.TypeName, correspondenceAttribute.Version);
+                    CorrespondenceFactType typeName = GetFactType(type, correspondenceAttribute);
 
                     // Get the memento constructor for this type.
                     ConstructorInfo mementoConstructor = GetMementoConstructor(type);
@@ -30,11 +29,13 @@ namespace UpdateControls.Correspondence
                     community.AddType(
                         typeName,
                         new AttributeFactFactory(type, mementoConstructor, community.FieldSerializerByType),
-                        new FactMetadata(type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                            .Select(field => field.GetValue(null))
-                            .OfType<RoleBase>()
-                            .Where(role => role.Metadata == RoleRelationship.Pivot)
-                            .Select(role => role.RoleMemento)));
+                        new FactMetadata(
+                            GetConvertableTypes(type),
+                            type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+                                .Select(field => field.GetValue(null))
+                                .OfType<RoleBase>()
+                                .Where(role => role.Metadata == RoleRelationship.Pivot)
+                                .Select(role => role.RoleMemento)));
 
                     // Find all queries defined within the type.
                     foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic)
@@ -58,6 +59,29 @@ namespace UpdateControls.Correspondence
                 // No appropriate constructor found.
                 throw new CorrespondenceException(string.Format(
                     "Add a constructor to the class {0} taking a Memento as a parameter", type.FullName));
+        }
+
+        private static CorrespondenceFactType GetFactType(Type type, CorrespondenceTypeAttribute correspondenceAttribute)
+        {
+            return (correspondenceAttribute.TypeName == null) ?
+                new CorrespondenceFactType(type.FullName, correspondenceAttribute.Version) :
+                new CorrespondenceFactType(correspondenceAttribute.TypeName, correspondenceAttribute.Version);
+        }
+
+        private static IEnumerable<CorrespondenceFactType> GetConvertableTypes(Type type)
+        {
+            // Traverse the base class hierarchy.
+            while (type != null)
+            {
+                // Traverse the CorrespondenceType attributes.
+                foreach (CorrespondenceTypeAttribute attribute in type
+                    .GetCustomAttributes(typeof(CorrespondenceTypeAttribute), false))
+                {
+                    yield return GetFactType(type, attribute);
+                }
+
+                type = type.BaseType;
+            }
         }
     }
 }
