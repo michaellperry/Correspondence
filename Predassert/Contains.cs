@@ -10,17 +10,30 @@ namespace Predassert
         {
             return new Expectation<IEnumerable<T>>(
                 collection => collection.Any(expected.Test),
-                collection => string.Format("The collection does not contain any matching elements.\r\n  {0}",
-                    Reasons(collection, expected))
+                collection => string.Format("The collection contains no matching element.\r\n  {0}",
+                    ReasonsFalse(collection, expected)),
+                collection => string.Format("The collection contains matching elements.\r\n  {0}",
+                    ReasonsTrue(collection, expected))
                 );
         }
 
-        private static string Reasons(IEnumerable<T> collection, Expectation<T> expected)
+        private static string ReasonsTrue(IEnumerable<T> collection, Expectation<T> expected)
+        {
+            return string.Join("\r\n  ", collection
+                .Where(actual => expected.Test(actual))
+                .Select(actual => actual.ToString())
+                .ToArray());
+        }
+
+        private static string ReasonsFalse(IEnumerable<T> collection, Expectation<T> expected)
         {
             if (!collection.Any())
                 return "The collection is empty.";
             else
-                return string.Join("\r\n  ", collection.Select(actual => expected.Message(actual)).ToArray());
+                return string.Join("\r\n  ", collection
+                    .Where(actual => !expected.Test(actual))
+                    .Select(actual => expected.ReasonFalse(actual))
+                    .ToArray());
         }
     }
 }

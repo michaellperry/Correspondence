@@ -24,9 +24,9 @@ namespace UpdateControls.Correspondence.Strategy
         // Messages.
         TimestampID LoadOutgoingTimestamp(string protocolName, string peerName);
         void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp);
-        TimestampID LoadIncomingTimestamp(string protocolName, string peerName);
-        void SaveIncomingTimestamp(string protocolName, string peerName, TimestampID timestamp);
-        IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp);
+        TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId);
+        void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp);
+        IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp);
         IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp);
 
         // Networking.

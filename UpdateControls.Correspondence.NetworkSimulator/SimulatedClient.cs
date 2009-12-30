@@ -61,12 +61,12 @@ namespace UpdateControls.Correspondence.NetworkSimulator
                 foreach (CorrespondenceFact pivot in getEndpoint.Pivots)
                 {
                     string path = getEndpoint.GetPath(pivot);
-                    TimestampID timestamp = _repository.LoadIncomingTimestamp(PROTOCOL_NAME, PEER_NAME);
+                    TimestampID timestamp = _repository.LoadIncomingTimestamp(PROTOCOL_NAME, PEER_NAME, pivot);
                     MessageBodyMemento messageBody = _network.GetFromServer(path, timestamp);
                     if (messageBody.Facts.Any())
                     {
                         timestamp = ReceiveMessage(messageBody, pivot);
-                        _repository.SaveIncomingTimestamp(PROTOCOL_NAME, PEER_NAME, timestamp);
+                        _repository.SaveIncomingTimestamp(PROTOCOL_NAME, PEER_NAME, pivot, timestamp);
                     }
                 }
             }
@@ -75,9 +75,11 @@ namespace UpdateControls.Correspondence.NetworkSimulator
         private IEnumerable<MessageBodyMemento> GetMessageBodies(ref TimestampID timestamp)
         {
             IDictionary<FactID, MessageBodyMemento> messageBodiesByPivotId = new Dictionary<FactID, MessageBodyMemento>();
-            IEnumerable<MessageMemento> recentMessages = _repository.LoadRecentMessages(ref timestamp);
+            IEnumerable<MessageMemento> recentMessages = _repository.LoadRecentMessages(timestamp);
             foreach (MessageMemento message in recentMessages)
             {
+                if (message.FactId.key > timestamp.key)
+                    timestamp.key = message.FactId.key;
                 MessageBodyMemento messageBody;
                 if (!messageBodiesByPivotId.TryGetValue(message.PivotId, out messageBody))
                 {

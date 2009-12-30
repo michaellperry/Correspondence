@@ -175,19 +175,19 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
         }
 
-        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName)
+        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, CorrespondenceFact pivot)
         {
-            return _storageStrategy.LoadIncomingTimestamp(protocolName, peerName);
+            return _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, pivot.ID);
         }
 
-        public void SaveIncomingTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        public void SaveIncomingTimestamp(string protocolName, string peerName, CorrespondenceFact pivot, TimestampID timestamp)
         {
-            _storageStrategy.SaveIncomingTimestamp(protocolName, peerName, timestamp);
+            _storageStrategy.SaveIncomingTimestamp(protocolName, peerName, pivot.ID, timestamp);
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp)
+        public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
         {
-            return _storageStrategy.LoadRecentMessages(ref timestamp);
+            return _storageStrategy.LoadRecentMessages(timestamp);
         }
 
         public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)

@@ -8,7 +8,7 @@ namespace Predassert
         {
             if (!expected.Test(actual))
                 Microsoft.VisualStudio.TestTools.UnitTesting.Assert.Fail(
-                    expected.Message(actual));
+                    expected.ReasonFalse(actual));
         }
     }
 }

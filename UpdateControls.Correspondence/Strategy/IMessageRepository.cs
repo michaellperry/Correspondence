@@ -9,9 +9,9 @@ namespace UpdateControls.Correspondence.Strategy
         T AddFact<T>(T prototype) where T : CorrespondenceFact;
         TimestampID LoadOutgoingTimestamp(string protocolName, string peerName);
         void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp);
-        TimestampID LoadIncomingTimestamp(string protocolName, string peerName);
-        void SaveIncomingTimestamp(string protocolName, string peerName, TimestampID timestamp);
-        IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp);
+        TimestampID LoadIncomingTimestamp(string protocolName, string peerName, CorrespondenceFact pivot);
+        void SaveIncomingTimestamp(string protocolName, string peerName, CorrespondenceFact pivot, TimestampID timestamp);
+        IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp);
         IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp);
         FactMemento LoadFact(FactID factId);
         CorrespondenceFact GetFactByID(FactID factId);

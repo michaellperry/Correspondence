@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Predassert
 {
@@ -14,7 +11,10 @@ namespace Predassert
                 actual => expected.Test(property.Compile()(actual)),
                 actual => string.Format("The property {0} is not correct. {1}",
                     ((MemberExpression)property.Body).Member.Name,
-                    expected.Message(property.Compile()(actual)))
+                    expected.ReasonFalse(property.Compile()(actual))),
+                actual => string.Format("The property {0} is correct. {1}",
+                    ((MemberExpression)property.Body).Member.Name,
+                    expected.ReasonTrue(property.Compile()(actual)))
                 );
         }
     }

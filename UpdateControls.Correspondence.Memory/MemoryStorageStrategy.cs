@@ -12,7 +12,7 @@ namespace UpdateControls.Correspondence.Memory
         private List<IdentifiedFactMemento> _factTable = new List<IdentifiedFactMemento>();
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
         private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier,TimestampID>();
-        private IDictionary<PeerIdentifier, TimestampID> _incomingTimestampByPeer = new Dictionary<PeerIdentifier, TimestampID>();
+        private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
 
         public IDisposable BeginUnitOfWork()
         {
@@ -107,32 +107,25 @@ namespace UpdateControls.Correspondence.Memory
             _outgoingTimestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
         }
 
-        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName)
+        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId)
         {
             TimestampID timestamp;
-            if (_incomingTimestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
+            if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId), out timestamp))
                 return timestamp;
             else
                 return new TimestampID();
         }
 
-        public void SaveIncomingTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        public void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp)
         {
-            _incomingTimestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
+            _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId)] = timestamp;
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessages(ref TimestampID timestamp)
+        public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
         {
-            TimestampID startingTimestamp = timestamp;
-            List<MessageMemento> messages = _messageTable
-                .Where(message => message.FactId.key > startingTimestamp.key)
+            return _messageTable
+                .Where(message => message.FactId.key > timestamp.key)
                 .ToList();
-            if (messages.Any())
-            {
-                long maxKey = messages.Max(message => message.FactId.key);
-                timestamp = new TimestampID() { key = maxKey };
-            }
-            return messages;
         }
 
         public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
