@@ -44,9 +44,9 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
-        public Community AddType(CorrespondenceFactType type, ICorrespondenceFactFactory factory)
+        public Community AddType(CorrespondenceFactType type, ICorrespondenceFactFactory factory, FactMetadata factMetadata)
         {
-            _model.AddType(type, factory);
+            _model.AddType(type, factory, factMetadata);
             return this;
         }
 

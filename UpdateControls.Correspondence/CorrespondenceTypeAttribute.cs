@@ -6,7 +6,6 @@ namespace UpdateControls.Correspondence
     {
         private string _typeName = null;
         private int _version = 1;
-        private bool _pivot = false;
 
         public CorrespondenceTypeAttribute()
         {
@@ -31,12 +30,6 @@ namespace UpdateControls.Correspondence
         public int Version
         {
             get { return _version; }
-        }
-
-        public bool Pivot
-        {
-            get { return _pivot; }
-            set { _pivot = value; }
         }
     }
 }

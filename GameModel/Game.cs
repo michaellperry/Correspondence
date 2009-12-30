@@ -8,7 +8,7 @@ namespace GameModel
     [CorrespondenceType]
     public class Game : CorrespondenceFact
     {
-        public static Role<GameRequest> RoleGameRequest = new Role<GameRequest>("gameRequest");
+        public static Role<GameRequest> RoleGameRequest = new Role<GameRequest>("gameRequest", RoleRelationship.Pivot);
 
         private PredecessorList<GameRequest> _gameRequest;
 

@@ -6,6 +6,8 @@ namespace UpdateControls.Correspondence.Strategy
 {
     public interface IMessageRepository
     {
+        T FindFact<T>(T prototype)
+        where T : CorrespondenceFact;
         T AddFact<T>(T prototype) where T : CorrespondenceFact;
         TimestampID LoadOutgoingTimestamp(string protocolName, string peerName);
         void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp);

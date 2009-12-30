@@ -17,6 +17,7 @@ namespace UpdateControls.Correspondence
             new Dictionary<CorrespondenceFactType, ICorrespondenceFactFactory>();
         private IDictionary<CorrespondenceFactType, List<QueryInvalidator>> _queryInvalidatorsByType =
             new Dictionary<CorrespondenceFactType, List<QueryInvalidator>>();
+        private IDictionary<RoleMemento, RoleMemento> _pivotRoles = new Dictionary<RoleMemento, RoleMemento>();
 
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
 		private IDictionary<FactMemento, CorrespondenceFact> _factByMemento = new Dictionary<FactMemento, CorrespondenceFact>();
@@ -28,9 +29,11 @@ namespace UpdateControls.Correspondence
             _typeStrategy = typeStrategy;
 		}
 
-        public void AddType(CorrespondenceFactType type, ICorrespondenceFactFactory factory)
+        public void AddType(CorrespondenceFactType type, ICorrespondenceFactFactory factory, FactMetadata factMetadata)
         {
             _factoryByType[type] = factory;
+            foreach (RoleMemento pivotRole in factMetadata.PivotRoles)
+                _pivotRoles.Add(pivotRole, pivotRole);
         }
 
         public void AddQuery(CorrespondenceFactType type, QueryDefinition query)
@@ -75,7 +78,7 @@ namespace UpdateControls.Correspondence
 
                 // Set the ID and add the object to the community.
                 FactID id;
-                bool saved = _storageStrategy.Save(memento, FindPivots(prototype).ToList(), out id);
+                bool saved = _storageStrategy.Save(memento, FindPivots(memento).ToList(), out id);
                 prototype.ID = id;
                 prototype.SetCommunity(_community);
                 _factByID.Add(prototype.ID, prototype);
@@ -119,7 +122,8 @@ namespace UpdateControls.Correspondence
             return prototype;
         }
 
-        public T FindFact<T>(T prototype) where T : CorrespondenceFact
+        public T FindFact<T>(T prototype)
+                where T : CorrespondenceFact
         {
             lock (this)
             {
@@ -316,12 +320,11 @@ namespace UpdateControls.Correspondence
             return memento;
         }
 
-        private IEnumerable<FactID> FindPivots(CorrespondenceFact prototype)
+        private IEnumerable<FactID> FindPivots(FactMemento memento)
         {
-            return prototype.PredecessorRoles
-                .Select(role => prototype.GetPredecessor(role))
-                .Where(predecessor => AttributeTypeStrategy.IsPivot(predecessor.FactType))
-                .SelectMany(predecessor => predecessor.InternalFactIds);
+            return memento.Predecessors
+                .Where(predecessor => _pivotRoles.ContainsKey(predecessor.Role))
+                .Select(predecessor => predecessor.ID);
         }
     }
 }

@@ -6,10 +6,10 @@ using System;
 
 namespace GameModel
 {
-    [CorrespondenceType(Pivot=true)]
+    [CorrespondenceType]
     public class GameRequest : CorrespondenceFact
     {
-        public static Role<GameQueue> RoleGameQueue = new Role<GameQueue>("gameQueue");
+        public static Role<GameQueue> RoleGameQueue = new Role<GameQueue>("gameQueue", RoleRelationship.Pivot);
         public static Role<Person> RolePerson = new Role<Person>("person");
 
         private static Query QueryGame = new Query()

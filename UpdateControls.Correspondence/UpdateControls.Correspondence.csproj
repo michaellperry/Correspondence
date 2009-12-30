@@ -59,6 +59,7 @@
     <Compile Include="CorrespondenceFieldAttribute.cs" />
     <Compile Include="CorrespondenceFact.cs" />
     <Compile Include="CorrespondenceTypeAttribute.cs" />
+    <Compile Include="FactMetadata.cs" />
     <Compile Include="FieldSerializer\DateTimeFieldSerializer.cs" />
     <Compile Include="FieldSerializer\DecimalFieldSerializer.cs" />
     <Compile Include="FieldSerializer\IntFieldSerializer.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Result.cs" />
     <Compile Include="Role.cs" />
     <Compile Include="RoleBase.cs" />
+    <Compile Include="RoleRelationship.cs" />
     <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
     <Compile Include="Strategy\IMessageRepository.cs" />
     <Compile Include="Strategy\IFieldSerializer.cs" />

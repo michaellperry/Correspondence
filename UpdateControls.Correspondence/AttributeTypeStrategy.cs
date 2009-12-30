@@ -36,11 +36,6 @@ namespace UpdateControls.Correspondence
             return FactTypeFromAttribute(type, GetCorrespondenceTypeAttribute(type));
         }
 
-        public static bool IsPivot(Type type)
-        {
-            return GetCorrespondenceTypeAttribute(type).Pivot;
-        }
-
         private static CorrespondenceTypeAttribute GetCorrespondenceTypeAttribute(Type type)
         {
             CorrespondenceTypeAttribute attribute = (CorrespondenceTypeAttribute)type
