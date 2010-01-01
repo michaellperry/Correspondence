@@ -27,9 +27,21 @@ namespace UpdateControls.Correspondence.UnitTest
                             gameRequest.Unique
                         )
                     )
+                    .Post<Game>(
+                        game => UrlOfGame(game)
+                    )
+                    .Get<Game>(
+                        () => _person.UnfinishedGames,
+                        game => UrlOfGame(game)
+                    )
                 );
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _person = _community.AddFact(new Person());
+        }
+
+        public Person Person
+        {
+            get { return _person; }
         }
 
         public void CreateGameRequest()
@@ -37,9 +49,32 @@ namespace UpdateControls.Correspondence.UnitTest
             _gameRequest = _gameQueue.CreateGameRequest(_person);
         }
 
+        public void MakeMove(int index)
+        {
+            _gameRequest.CreateMove(index);
+        }
+
         public void AssertHasGame()
         {
             Pred.Assert(_gameRequest.Game, Is.NotNull<Game>());
+        }
+
+        public void AssertHasMove(int index, Guid personId)
+        {
+            Pred.Assert(_gameRequest.Game.Moves, Contains<Move>.That(
+                Has<Move>.Property(move => move.Index, Is.EqualTo(index))
+                .And(Has<Move>.Property(move => move.GameRequest.Person.Unique, Is.EqualTo(personId)))));
+        }
+
+        private static string UrlOfGame(Game game)
+        {
+            return string.Format("gamequeue/{0}/{1}/{2}/{3}/{4}",
+                game.First.GameQueue.Identifier,
+                game.First.Person.Unique,
+                game.First.Unique,
+                game.Second.Person.Unique,
+                game.Second.Unique
+            );
         }
     }
 }

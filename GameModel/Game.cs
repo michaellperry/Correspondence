@@ -2,6 +2,7 @@
 using UpdateControls.Correspondence.Mementos;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace GameModel
 {
@@ -9,11 +10,19 @@ namespace GameModel
     public class Game : CorrespondenceFact
     {
         public static Role<GameRequest> RoleGameRequest = new Role<GameRequest>("gameRequest", RoleRelationship.Pivot);
+        private static Query QueryMoves = new Query()
+            .JoinSuccessors(Move.RoleGame);
+        private static Query QueryOutcome = new Query()
+            .JoinSuccessors(Outcome.RoleGame);
+        public static Condition IsUnfinished = Condition.WhereIsEmpty(QueryOutcome);
 
         private PredecessorList<GameRequest> _gameRequest;
 
+        private Result<Move> _moves;
+
         private Game()
         {
+            _moves = new Result<Move>(this, QueryMoves);
         }
 
         public Game(GameRequest first, GameRequest second)
@@ -36,6 +45,11 @@ namespace GameModel
         public GameRequest Second
         {
             get { return _gameRequest.ElementAt(1); }
+        }
+
+        public IEnumerable<Move> Moves
+        {
+            get { return _moves; }
         }
     }
 }

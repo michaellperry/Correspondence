@@ -40,22 +40,32 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             return this;
         }
 
-        public void Synchronize()
+        public bool Synchronize()
         {
-            SynchronizeOutgoing();
-            SynchronizeIncoming();
+            bool any = false;
+            if (SynchronizeOutgoing())
+                any = true;
+            if (SynchronizeIncoming())
+                any = true;
+            return any;
         }
 
-        private void SynchronizeOutgoing()
+        private bool SynchronizeOutgoing()
         {
             TimestampID timestamp = _repository.LoadOutgoingTimestamp(PROTOCOL_NAME, PEER_NAME);
             IEnumerable<MessageBodyMemento> messageBodies = GetMessageBodies(ref timestamp);
-            SendMessageBodiesToServer(messageBodies);
-            _repository.SaveOutgoingTimestamp(PROTOCOL_NAME, PEER_NAME, timestamp);
+            if (messageBodies.Any())
+            {
+                SendMessageBodiesToServer(messageBodies);
+                _repository.SaveOutgoingTimestamp(PROTOCOL_NAME, PEER_NAME, timestamp);
+                return true;
+            }
+            return false;
         }
 
-        private void SynchronizeIncoming()
+        private bool SynchronizeIncoming()
         {
+            bool any = false;
             foreach (ClientGetEndpoint getEndpoint in _getEndpoints)
             {
                 foreach (CorrespondenceFact pivot in getEndpoint.Pivots)
@@ -67,9 +77,11 @@ namespace UpdateControls.Correspondence.NetworkSimulator
                     {
                         timestamp = ReceiveMessage(messageBody, pivot);
                         _repository.SaveIncomingTimestamp(PROTOCOL_NAME, PEER_NAME, pivot, timestamp);
+                        any = true;
                     }
                 }
             }
+            return any;
         }
 
         private IEnumerable<MessageBodyMemento> GetMessageBodies(ref TimestampID timestamp)

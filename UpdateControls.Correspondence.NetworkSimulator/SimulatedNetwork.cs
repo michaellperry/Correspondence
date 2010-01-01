@@ -30,10 +30,14 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             if (_server == null)
                 throw new NetworkSimulatorException("The network simulator must have one simulated server.");
 
-            foreach (SimulatedClient client in _clients)
+            bool any;
+            do
             {
-                client.Synchronize();
-            }
+                any = false;
+                foreach (SimulatedClient client in _clients)
+                    if (client.Synchronize())
+                        any = true;
+            } while (any);
         }
 
         public void SendToServer(string path, MessageBodyMemento messageBody)

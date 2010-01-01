@@ -22,12 +22,20 @@ namespace UpdateControls.Correspondence.UnitTest
                 .RegisterAssembly(typeof(GameQueue))
                 .AddCommunicationStrategy(new SimulatedServer(network)
                     .Post<GameQueue>(new UrlPatternImpl<GameQueue>(
-                        "gamequeue/([_a-zA-Z0-9]+)",
+                        "^gamequeue/([_a-zA-Z0-9]+)$",
                         MatchGameQueue
                     ).UrlToFact)
                     .Get<GameRequest>(new UrlPatternImpl<GameRequest>(
-                        "gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)",
+                        "^gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)$",
                         MatchGameRequest
+                    ).UrlToFact)
+                    .Post<Game>(new UrlPatternImpl<Game>(
+                        "^gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)$",
+                        MatchGame
+                    ).UrlToFact)
+                    .Get<Game>(new UrlPatternImpl<Game>(
+                        "^gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)$",
+                        MatchGame
                     ).UrlToFact)
                 );
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
@@ -44,10 +52,30 @@ namespace UpdateControls.Correspondence.UnitTest
             GameQueue gameQueue = MatchGameQueue(repository, values);
             if (gameQueue == null)
                 return null;
-            Person person = repository.FindFact(new Person(new Guid(values[1])));
+            return MatchGameRequest(repository, gameQueue, values[1], values[2]);
+        }
+
+        private static GameRequest MatchGameRequest(IMessageRepository repository, GameQueue gameQueue, string personId, string requestId)
+        {
+            Person person = repository.FindFact(new Person(new Guid(personId)));
             if (person == null)
                 return null;
-            return repository.FindFact(new GameRequest(gameQueue, person, new Guid(values[2])));
+            GameRequest firstRequest = repository.FindFact(new GameRequest(gameQueue, person, new Guid(requestId)));
+            return firstRequest;
+        }
+
+        private static Game MatchGame(IMessageRepository repository, List<string> values)
+        {
+            GameQueue gameQueue = MatchGameQueue(repository, values);
+            if (gameQueue == null)
+                return null;
+            GameRequest firstRequest = MatchGameRequest(repository, gameQueue, values[1], values[2]);
+            if (firstRequest == null)
+                return null;
+            GameRequest secondRequest = MatchGameRequest(repository, gameQueue, values[3], values[4]);
+            if (secondRequest == null)
+                return null;
+            return repository.FindFact(new Game(firstRequest, secondRequest));
         }
 
         public void AssertQueueCount(int count)

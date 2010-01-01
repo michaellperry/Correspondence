@@ -48,6 +48,7 @@
     <Compile Include="GameQueueTest.cs" />
     <Compile Include="RemoteGameServiceTest.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="TwoPlayerGameTest.cs" />
     <Compile Include="UrlPattern.cs" />
   </ItemGroup>
   <ItemGroup>
