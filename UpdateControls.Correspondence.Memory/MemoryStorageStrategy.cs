@@ -51,7 +51,22 @@ namespace UpdateControls.Correspondence.Memory
                 _factTable.Add(fact);
 
                 // Store a message for each pivot.
-                _messageTable.AddRange(pivots.Select(pivot => new MessageMemento(pivot, newFactID)));
+                _messageTable.AddRange(pivots
+                    .Select(pivot => new MessageMemento(pivot, newFactID)));
+
+                // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
+                List<FactID> nonPivots = memento.Predecessors
+                    .Select(predecessor => predecessor.ID)
+                    .Where(predecessorId => !pivots.Contains(predecessorId))
+                    .ToList();
+                List<FactID> predecessorsPivots = _messageTable
+                    .Where(message => nonPivots.Contains(message.FactId))
+                    .Select(message => message.PivotId)
+                    .Distinct()
+                    .ToList();
+                _messageTable.AddRange(predecessorsPivots
+                    .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID)));
+
                 return true;
             }
             else

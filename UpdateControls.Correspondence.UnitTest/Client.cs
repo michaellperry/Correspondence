@@ -49,9 +49,9 @@ namespace UpdateControls.Correspondence.UnitTest
             _gameRequest = _gameQueue.CreateGameRequest(_person);
         }
 
-        public void MakeMove(int index)
+        public Move MakeMove(int index)
         {
-            _gameRequest.CreateMove(index);
+            return _gameRequest.Game.CreateMove(_person, index);
         }
 
         public void AssertHasGame()
@@ -61,9 +61,16 @@ namespace UpdateControls.Correspondence.UnitTest
 
         public void AssertHasMove(int index, Guid personId)
         {
+            AssertHasMove(index, personId, 0);
+        }
+
+        public void AssertHasMove(int index, Guid personId, int result)
+        {
             Pred.Assert(_gameRequest.Game.Moves, Contains<Move>.That(
                 Has<Move>.Property(move => move.Index, Is.EqualTo(index))
-                .And(Has<Move>.Property(move => move.GameRequest.Person.Unique, Is.EqualTo(personId)))));
+                .And(Has<Move>.Property(move => move.Person.Unique, Is.EqualTo(personId)))
+                .And(Has<Move>.Property(move => move.Result, Is.EqualTo(result)))
+                ));
         }
 
         private static string UrlOfGame(Game game)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.NetworkSimulator;
+using GameModel;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -71,6 +72,25 @@ namespace UpdateControls.Correspondence.UnitTest
             _context.Synchronize();
 
             _bob.AssertHasMove(1, _alice.Person.Unique);
+        }
+
+        [TestMethod]
+        public void BobsMoveHasAResult()
+        {
+            Move bobsMove = _bob.MakeMove(0);
+            bobsMove.Result = 3;
+
+            _bob.AssertHasMove(0, _bob.Person.Unique, 3);
+        }
+
+        [TestMethod]
+        public void AliceSeesBobsResult()
+        {
+            Move bobsMove = _bob.MakeMove(0);
+            bobsMove.Result = 3;
+            _context.Synchronize();
+
+            _alice.AssertHasMove(0, _bob.Person.Unique, 3);
         }
     }
 }

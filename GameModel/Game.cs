@@ -47,6 +47,11 @@ namespace GameModel
             get { return _gameRequest.ElementAt(1); }
         }
 
+        public Move CreateMove(Person person, int index)
+        {
+            return Community.AddFact(new Move(person, this, index));
+        }
+
         public IEnumerable<Move> Moves
         {
             get { return _moves; }

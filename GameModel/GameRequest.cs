@@ -65,11 +65,6 @@ namespace GameModel
             return Community.AddFact(new Game(this, second));
         }
 
-        public Move CreateMove(int index)
-        {
-            return Community.AddFact(new Move(this, Game, index));
-        }
-
         public Game Game
         {
             get { return _game.FirstOrDefault(); }
