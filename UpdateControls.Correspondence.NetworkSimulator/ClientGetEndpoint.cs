@@ -3,14 +3,20 @@ using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.NetworkSimulator
 {
-    public class ClientGetEndpoint : ClientEndpoint
+    public class ClientGetEndpoint
     {
+        private Type _factType;
         private Func<IEnumerable<CorrespondenceFact>> _pivots;
 
-        public ClientGetEndpoint(Type factType, Func<IEnumerable<CorrespondenceFact>> pivots, Func<CorrespondenceFact, string> factToPath)
-            : base(factType, factToPath)
+        public ClientGetEndpoint(Type factType, Func<IEnumerable<CorrespondenceFact>> pivots)
         {
+            _factType = factType;
             _pivots = pivots;
+        }
+
+        public bool IsCompatibleWith(CorrespondenceFact fact)
+        {
+            return _factType.IsAssignableFrom(fact.GetType());
         }
 
         public IEnumerable<CorrespondenceFact> Pivots

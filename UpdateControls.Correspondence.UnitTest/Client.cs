@@ -18,21 +18,11 @@ namespace UpdateControls.Correspondence.UnitTest
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))
                 .AddCommunicationStrategy(new SimulatedClient(network)
-                    .Post<GameQueue>(gameQueue => string.Format("gamequeue/{0}", gameQueue.Identifier))
                     .Get<GameRequest>(
-                        () => _person.OutstandingGameRequests,
-                        gameRequest => string.Format("gamequeue/{0}/{1}/{2}",
-                            gameRequest.GameQueue.Identifier,
-                            gameRequest.Person.Unique,
-                            gameRequest.Unique
-                        )
-                    )
-                    .Post<Game>(
-                        game => UrlOfGame(game)
+                        () => _person.OutstandingGameRequests
                     )
                     .Get<Game>(
-                        () => _person.UnfinishedGames,
-                        game => UrlOfGame(game)
+                        () => _person.UnfinishedGames
                     )
                 );
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
@@ -71,17 +61,6 @@ namespace UpdateControls.Correspondence.UnitTest
                 .And(Has<Move>.Property(move => move.Person.Unique, Is.EqualTo(personId)))
                 .And(Has<Move>.Property(move => move.Result, Is.EqualTo(result)))
                 ));
-        }
-
-        private static string UrlOfGame(Game game)
-        {
-            return string.Format("gamequeue/{0}/{1}/{2}/{3}/{4}",
-                game.First.GameQueue.Identifier,
-                game.First.Person.Unique,
-                game.First.Unique,
-                game.Second.Person.Unique,
-                game.Second.Unique
-            );
         }
     }
 }

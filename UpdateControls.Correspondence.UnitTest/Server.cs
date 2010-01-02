@@ -20,24 +20,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))
-                .AddCommunicationStrategy(new SimulatedServer(network)
-                    .Post<GameQueue>(new UrlPatternImpl<GameQueue>(
-                        "^gamequeue/([_a-zA-Z0-9]+)$",
-                        MatchGameQueue
-                    ).UrlToFact)
-                    .Get<GameRequest>(new UrlPatternImpl<GameRequest>(
-                        "^gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)$",
-                        MatchGameRequest
-                    ).UrlToFact)
-                    .Post<Game>(new UrlPatternImpl<Game>(
-                        "^gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)$",
-                        MatchGame
-                    ).UrlToFact)
-                    .Get<Game>(new UrlPatternImpl<Game>(
-                        "^gamequeue/([_a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)/([-a-zA-Z0-9]+)$",
-                        MatchGame
-                    ).UrlToFact)
-                );
+                .AddCommunicationStrategy(new SimulatedServer(network));
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _service = new GameQueueService(_gameQueue);
         }

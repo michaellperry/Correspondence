@@ -9,9 +9,6 @@ namespace UpdateControls.Correspondence.NetworkSimulator
     {
         private SimulatedNetwork _network;
 
-        private List<ServerEndpoint> _postEndpoints = new List<ServerEndpoint>();
-        private List<ServerEndpoint> _getEndpoints = new List<ServerEndpoint>();
-
         public SimulatedServer(SimulatedNetwork network)
         {
             _network = network;
@@ -19,50 +16,20 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             network.AttachServer(this);
         }
 
-        public SimulatedServer Post<TFact>(Func<IMessageRepository, string, TFact> pathToFact)
-            where TFact : CorrespondenceFact
+        public void Receive(FactTreeMemento messageBody)
         {
-            _postEndpoints.Add(new ServerEndpoint(typeof(TFact), (repository, path) => pathToFact(repository, path)));
-            return this;
+            ReceiveMessage(messageBody);
         }
 
-        public SimulatedServer Get<TFact>(Func<IMessageRepository, string, TFact> pathToFact)
-            where TFact : CorrespondenceFact
+        public FactTreeMemento Get(FactTreeMemento rootTree, FactID remoteRootId, TimestampID timestamp)
         {
-            _getEndpoints.Add(new ServerEndpoint(typeof(TFact), (repository, path) => pathToFact(repository, path)));
-            return this;
-        }
+            FactID localRootId = FindExistingFact(remoteRootId, rootTree);
+            IEnumerable<FactID> recentMessages = _repository.LoadRecentMessages(localRootId, timestamp);
+            FactTreeMemento messageBody = new FactTreeMemento();
+            foreach (FactID recentMessage in recentMessages)
+                AddToFactTree(messageBody, recentMessage);
 
-        public void Receive(string path, MessageBodyMemento messageBody)
-        {
-            foreach (ServerEndpoint postEndpoint in _postEndpoints)
-            {
-                CorrespondenceFact pivot = postEndpoint.GetFact(_repository, path);
-                if (pivot != null)
-                {
-                    ReceiveMessage(messageBody, pivot);
-                }
-            }
-        }
-
-        public MessageBodyMemento Get(string path, TimestampID timestamp)
-        {
-            foreach (ServerEndpoint getEndpoint in _getEndpoints)
-            {
-                CorrespondenceFact pivot = getEndpoint.GetFact(_repository, path);
-                if (pivot != null)
-                {
-                    FactID pivotId = _repository.IDOfFact(pivot);
-                    IEnumerable<FactID> recentMessages = _repository.LoadRecentMessages(pivotId, timestamp);
-                    MessageBodyMemento messageBody = new MessageBodyMemento(pivotId);
-                    foreach (FactID recentMessage in recentMessages)
-                        AddFactTree(messageBody, recentMessage);
-
-                    return messageBody;
-                }
-            }
-
-            throw new NetworkSimulatorException(string.Format("No server Get found for path {0}.", path));
+            return messageBody;
         }
     }
 }

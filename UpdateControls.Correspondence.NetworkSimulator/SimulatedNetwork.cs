@@ -40,14 +40,14 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             } while (any);
         }
 
-        public void SendToServer(string path, MessageBodyMemento messageBody)
+        public void SendToServer(FactTreeMemento messageBody)
         {
-            _server.Receive(path, messageBody);
+            _server.Receive(messageBody);
         }
 
-        public MessageBodyMemento GetFromServer(string path, TimestampID timestamp)
+        public FactTreeMemento GetFromServer(FactTreeMemento rootTree, FactID remoteRootId, TimestampID timestamp)
         {
-            return _server.Get(path, timestamp);
+            return _server.Get(rootTree, remoteRootId, timestamp);
         }
     }
 }

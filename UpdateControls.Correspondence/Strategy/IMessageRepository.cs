@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence.Strategy
     public interface IMessageRepository
     {
         T FindFact<T>(T prototype)
-        where T : CorrespondenceFact;
+            where T : CorrespondenceFact;
         T AddFact<T>(T prototype) where T : CorrespondenceFact;
         TimestampID LoadOutgoingTimestamp(string protocolName, string peerName);
         void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp);
@@ -19,5 +19,6 @@ namespace UpdateControls.Correspondence.Strategy
         CorrespondenceFact GetFactByID(FactID factId);
         FactID IDOfFact(CorrespondenceFact fact);
         FactID SaveFact(FactMemento translatedMemento);
+        bool FindExistingFact(FactMemento memento, out FactID id);
     }
 }

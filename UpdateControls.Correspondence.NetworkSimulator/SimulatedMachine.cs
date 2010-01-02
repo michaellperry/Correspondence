@@ -16,27 +16,27 @@ namespace UpdateControls.Correspondence.NetworkSimulator
             _repository = repository;
         }
 
-        protected void AddFactTree(MessageBodyMemento messageBody, FactID factId)
+        protected void AddToFactTree(FactTreeMemento messageBody, FactID factId)
         {
-            if (!factId.Equals(messageBody.PivotId) && !messageBody.Contains(factId))
+            if (!messageBody.Contains(factId))
             {
                 FactMemento fact = _repository.LoadFact(factId);
                 foreach (PredecessorMemento predecessor in fact.Predecessors)
-                    AddFactTree(messageBody, predecessor.ID);
+                    AddToFactTree(messageBody, predecessor.ID);
                 messageBody.Add(new IdentifiedFactMemento(factId, fact));
             }
         }
 
-        protected TimestampID ReceiveMessage(MessageBodyMemento messageBody, CorrespondenceFact pivot)
+        protected TimestampID ReceiveMessage(FactTreeMemento messageBody)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-            localIdByRemoteId.Add(messageBody.PivotId, _repository.IDOfFact(pivot));
-            long maxRemoteId = messageBody.PivotId.key;
+            long maxRemoteId = 0;
             foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
             {
                 FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
                 translatedMemento.Data = identifiedFact.Memento.Data;
-                translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors.Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
+                translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
+                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
                 FactID localId = _repository.SaveFact(translatedMemento);
                 FactID remoteId = identifiedFact.Id;
                 localIdByRemoteId.Add(remoteId, localId);
@@ -45,6 +45,24 @@ namespace UpdateControls.Correspondence.NetworkSimulator
                     maxRemoteId = remoteId.key;
             }
             return new TimestampID() { key = maxRemoteId };
+        }
+
+        protected FactID FindExistingFact(FactID remoteRootId, FactTreeMemento messageBody)
+        {
+            IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
+            foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+            {
+                FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
+                translatedMemento.Data = identifiedFact.Memento.Data;
+                translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
+                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
+                FactID localId;
+                if (!_repository.FindExistingFact(translatedMemento, out localId))
+                    throw new NetworkSimulatorException("The message does not refer to an existing fact.");
+                FactID remoteId = identifiedFact.Id;
+                localIdByRemoteId.Add(remoteId, localId);
+            }
+            return localIdByRemoteId[remoteRootId];
         }
     }
 }

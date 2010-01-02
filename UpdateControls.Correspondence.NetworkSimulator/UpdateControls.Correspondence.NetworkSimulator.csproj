@@ -41,9 +41,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientEndpoint.cs" />
     <Compile Include="ClientGetEndpoint.cs" />
-    <Compile Include="ClientPostEndpoint.cs" />
     <Compile Include="NetworkSimulatorException.cs" />
     <Compile Include="ServerEndpoint.cs" />
     <Compile Include="SimulatedClient.cs" />

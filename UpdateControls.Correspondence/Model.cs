@@ -327,5 +327,19 @@ namespace UpdateControls.Correspondence
                 .Where(predecessor => _pivotRoles.ContainsKey(predecessor.Role))
                 .Select(predecessor => predecessor.ID);
         }
+
+        public bool FindExistingFact(FactMemento memento, out FactID id)
+        {
+            // First try the cache.
+            CorrespondenceFact existingFact;
+            if (_factByMemento.TryGetValue(memento, out existingFact))
+            {
+                id = existingFact.ID;
+                return true;
+            }
+
+            // Then try the storage.
+            return _storageStrategy.FindExistingFact(memento, out id);
+        }
     }
 }
