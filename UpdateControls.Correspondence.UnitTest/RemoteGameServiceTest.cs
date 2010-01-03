@@ -9,18 +9,16 @@ namespace UpdateControls.Correspondence.UnitTest
     {
         public TestContext TestContext { get; set; }
 
-        private SimulatedNetwork _context;
+        private Server _server;
         private Client _alice;
         private Client _bob;
-        private Server _server;
 
         [TestInitialize]
         public void Initialize()
         {
-            _context = new SimulatedNetwork();
-            _alice = new Client(_context);
-            _bob = new Client(_context);
-            _server = new Server(_context);
+            _server = new Server();
+            _alice = new Client(_server.SimulatedServer);
+            _bob = new Client(_server.SimulatedServer);
         }
 
         [TestMethod]
@@ -33,7 +31,7 @@ namespace UpdateControls.Correspondence.UnitTest
         public void RemoteServiceReceivesGameRequest()
         {
             _alice.CreateGameRequest();
-            _context.Synchronize();
+            Synchronize();
             _server.AssertQueueCount(1);
         }
 
@@ -42,7 +40,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             _alice.CreateGameRequest();
             _bob.CreateGameRequest();
-            _context.Synchronize();
+            Synchronize();
             _server.AssertQueueCount(2);
         }
 
@@ -51,7 +49,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             _alice.CreateGameRequest();
             _bob.CreateGameRequest();
-            _context.Synchronize();
+            Synchronize();
             _server.RunService();
             _server.AssertQueueCount(0);
         }
@@ -61,11 +59,24 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             _alice.CreateGameRequest();
             _bob.CreateGameRequest();
-            _context.Synchronize();
+            Synchronize();
             _server.RunService();
-            _context.Synchronize();
+            Synchronize();
             _alice.AssertHasGame();
             _bob.AssertHasGame();
+        }
+
+        private void Synchronize()
+        {
+            bool any;
+            do
+            {
+                any = false;
+                if (_alice.Synchronize())
+                    any = true;
+                if (_bob.Synchronize())
+                    any = true;
+            } while (any);
         }
     }
 }

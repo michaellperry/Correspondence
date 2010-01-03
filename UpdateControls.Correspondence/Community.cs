@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UpdateControls.Correspondence.FieldSerializer;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
@@ -12,11 +13,13 @@ namespace UpdateControls.Correspondence
 	public class Community
 	{
         private Model _model;
+        private Network _network;
         private IDictionary<Type, IFieldSerializer> _fieldSerializerByType = new Dictionary<Type, IFieldSerializer>();
 
         public Community(IStorageStrategy storageStrategy, ITypeStrategy typeStrategy)
         {
             _model = new Model(this, storageStrategy, typeStrategy);
+            _network = new Network(_model, storageStrategy);
 
             // Register the default types.
             this
@@ -38,6 +41,12 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
+        public Community AddCommunicationStrategy(ICommunicationStrategy2 communicationStrategy)
+        {
+            _network.AddCommunicationStrategy(communicationStrategy);
+            return this;
+        }
+
         public Community AddFieldSerializer<T>(IFieldSerializer fieldSerializer)
         {
             _fieldSerializerByType.Add(typeof(T), fieldSerializer);
@@ -53,6 +62,13 @@ namespace UpdateControls.Correspondence
         public Community AddQuery(CorrespondenceFactType type, QueryDefinition query)
         {
             _model.AddQuery(type, query);
+            return this;
+        }
+
+        public Community AddInterest<T>(Func<IEnumerable<T>> roots)
+            where T : CorrespondenceFact
+        {
+            _network.AddInterest(new Interest(() => roots().OfType<CorrespondenceFact>()));
             return this;
         }
 
@@ -83,6 +99,11 @@ namespace UpdateControls.Correspondence
 		{
             _model.SetFact(objectName, fact);
 		}
+
+        public bool Synchronize()
+        {
+            return _network.Synchronize();
+        }
 
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
         {

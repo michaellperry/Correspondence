@@ -6,59 +6,29 @@ using Predassert;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.NetworkSimulator;
 using UpdateControls.Correspondence.Strategy;
-using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
     public class Server
     {
+        private SimulatedServer _simulatedServer;
         private Community _community;
         private GameQueue _gameQueue;
         private GameQueueService _service;
 
-        public Server(SimulatedNetwork network)
+        public Server()
         {
+            _simulatedServer = new SimulatedServer();
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))
-                .AddCommunicationStrategy(new SimulatedServer(network));
+                .AddCommunicationStrategy((ICommunicationStrategy)_simulatedServer);
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _service = new GameQueueService(_gameQueue);
         }
 
-        private static GameQueue MatchGameQueue(IMessageRepository repository, List<string> values)
+        public SimulatedServer SimulatedServer
         {
-            return repository.FindFact(new GameQueue(values[0]));
-        }
-
-        private static GameRequest MatchGameRequest(IMessageRepository repository, List<string> values)
-        {
-            GameQueue gameQueue = MatchGameQueue(repository, values);
-            if (gameQueue == null)
-                return null;
-            return MatchGameRequest(repository, gameQueue, values[1], values[2]);
-        }
-
-        private static GameRequest MatchGameRequest(IMessageRepository repository, GameQueue gameQueue, string personId, string requestId)
-        {
-            Person person = repository.FindFact(new Person(new Guid(personId)));
-            if (person == null)
-                return null;
-            GameRequest firstRequest = repository.FindFact(new GameRequest(gameQueue, person, new Guid(requestId)));
-            return firstRequest;
-        }
-
-        private static Game MatchGame(IMessageRepository repository, List<string> values)
-        {
-            GameQueue gameQueue = MatchGameQueue(repository, values);
-            if (gameQueue == null)
-                return null;
-            GameRequest firstRequest = MatchGameRequest(repository, gameQueue, values[1], values[2]);
-            if (firstRequest == null)
-                return null;
-            GameRequest secondRequest = MatchGameRequest(repository, gameQueue, values[3], values[4]);
-            if (secondRequest == null)
-                return null;
-            return repository.FindFact(new Game(firstRequest, secondRequest));
+            get { return _simulatedServer; }
         }
 
         public void AssertQueueCount(int count)

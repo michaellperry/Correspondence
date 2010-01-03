@@ -16,24 +16,22 @@ namespace UpdateControls.Correspondence.UnitTest
     {
         public TestContext TestContext { get; set; }
 
-        private SimulatedNetwork _context;
+        private Server _server;
         private Client _alice;
         private Client _bob;
-        private Server _server;
 
         [TestInitialize]
         public void Initialize()
         {
-            _context = new SimulatedNetwork();
-            _alice = new Client(_context);
-            _bob = new Client(_context);
-            _server = new Server(_context);
+            _server = new Server();
+            _alice = new Client(_server.SimulatedServer);
+            _bob = new Client(_server.SimulatedServer);
 
             _alice.CreateGameRequest();
             _bob.CreateGameRequest();
-            _context.Synchronize();
+            Synchronize();
             _server.RunService();
-            _context.Synchronize();
+            Synchronize();
         }
 
         [TestMethod]
@@ -48,7 +46,7 @@ namespace UpdateControls.Correspondence.UnitTest
         public void AliceSeesBobsMove()
         {
             _bob.MakeMove(0);
-            _context.Synchronize();
+            Synchronize();
 
             _alice.AssertHasMove(0, _bob.Person.Unique);
         }
@@ -57,7 +55,7 @@ namespace UpdateControls.Correspondence.UnitTest
         public void AliceMakesAMoveInResponse()
         {
             _bob.MakeMove(0);
-            _context.Synchronize();
+            Synchronize();
             _alice.MakeMove(1);
 
             _alice.AssertHasMove(1, _alice.Person.Unique);
@@ -67,9 +65,9 @@ namespace UpdateControls.Correspondence.UnitTest
         public void BobSeesAlicesResponse()
         {
             _bob.MakeMove(0);
-            _context.Synchronize();
+            Synchronize();
             _alice.MakeMove(1);
-            _context.Synchronize();
+            Synchronize();
 
             _bob.AssertHasMove(1, _alice.Person.Unique);
         }
@@ -88,9 +86,22 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Move bobsMove = _bob.MakeMove(0);
             bobsMove.Result = 3;
-            _context.Synchronize();
+            Synchronize();
 
             _alice.AssertHasMove(0, _bob.Person.Unique, 3);
+        }
+
+        private void Synchronize()
+        {
+            bool any;
+            do
+            {
+                any = false;
+                if (_alice.Synchronize())
+                    any = true;
+                if (_bob.Synchronize())
+                    any = true;
+            } while (any);
         }
     }
 }

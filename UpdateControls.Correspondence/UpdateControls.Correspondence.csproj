@@ -74,6 +74,7 @@
     <Compile Include="Mementos\RoleMemento.cs" />
     <Compile Include="Mementos\TimestampID.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="Network.cs" />
     <Compile Include="PredecessorObj.cs" />
     <Compile Include="Mementos\CorrespondenceFactType.cs" />
     <Compile Include="PredecessorBase.cs" />

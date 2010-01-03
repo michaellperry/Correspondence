@@ -5,18 +5,19 @@ using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence.NetworkSimulator
 {
-    public class SimulatedServer : SimulatedMachine
+    public class SimulatedServer : SimulatedMachine, ICommunicationStrategy2
     {
-        private SimulatedNetwork _network;
-
-        public SimulatedServer(SimulatedNetwork network)
+        public string ProtocolName
         {
-            _network = network;
-
-            network.AttachServer(this);
+            get { return "simulation"; }
         }
 
-        public void Receive(FactTreeMemento messageBody)
+        public string PeerName
+        {
+            get { return "server"; }
+        }
+
+        public void Post(FactTreeMemento messageBody)
         {
             ReceiveMessage(messageBody);
         }

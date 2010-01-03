@@ -13,18 +13,17 @@ namespace UpdateControls.Correspondence.UnitTest
         private Person _person;
         private GameRequest _gameRequest;
 
-        public Client(SimulatedNetwork network)
+        public Client(ICommunicationStrategy2 communicationStrategy)
         {
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))
-                .AddCommunicationStrategy(new SimulatedClient(network)
-                    .Get<GameRequest>(
-                        () => _person.OutstandingGameRequests
-                    )
-                    .Get<Game>(
-                        () => _person.UnfinishedGames
-                    )
-                );
+                .AddInterest(
+                    () => _person.OutstandingGameRequests
+                )
+                .AddInterest(
+                    () => _person.UnfinishedGames
+                )
+                .AddCommunicationStrategy(communicationStrategy);
             _gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
             _person = _community.AddFact(new Person());
         }
@@ -42,6 +41,11 @@ namespace UpdateControls.Correspondence.UnitTest
         public Move MakeMove(int index)
         {
             return _gameRequest.Game.CreateMove(_person, index);
+        }
+
+        public bool Synchronize()
+        {
+            return _community.Synchronize();
         }
 
         public void AssertHasGame()
