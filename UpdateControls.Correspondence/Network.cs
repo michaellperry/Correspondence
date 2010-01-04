@@ -1,38 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence
 {
-    class Interest
-    {
-        private Func<IEnumerable<CorrespondenceFact>> _roots;
-
-        public Interest(Func<IEnumerable<CorrespondenceFact>> roots)
-        {
-            _roots = roots;
-        }
-
-        public IEnumerable<CorrespondenceFact> Roots
-        {
-            get { return _roots(); }
-        }
-    }
-    public interface ICommunicationStrategy2
-    {
-        string ProtocolName { get; }
-        string PeerName { get; }
-        FactTreeMemento Get(FactTreeMemento rootTree, FactID rootId, TimestampID timestamp);
-        void Post(FactTreeMemento messageBody);
-    }
     class Network
     {
         private Model _model;
         private IStorageStrategy _storageStrategy;
         private List<Interest> _interests = new List<Interest>();
-        private List<ICommunicationStrategy2> _communicationStrategies = new List<ICommunicationStrategy2>();
+        private List<ICommunicationStrategy> _communicationStrategies = new List<ICommunicationStrategy>();
 
         public Network(Model model, IStorageStrategy storageStrategy)
         {
@@ -45,7 +23,7 @@ namespace UpdateControls.Correspondence
             _interests.Add(interest);
         }
 
-        public void AddCommunicationStrategy(ICommunicationStrategy2 communicationStrategy)
+        public void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
         {
             _communicationStrategies.Add(communicationStrategy);
         }
@@ -63,7 +41,7 @@ namespace UpdateControls.Correspondence
         private bool SynchronizeOutgoing()
         {
             bool any = false;
-            foreach (ICommunicationStrategy2 communicationStrategy in _communicationStrategies)
+            foreach (ICommunicationStrategy communicationStrategy in _communicationStrategies)
             {
                 string protocolName = communicationStrategy.ProtocolName;
                 string peerName = communicationStrategy.PeerName;
@@ -85,7 +63,7 @@ namespace UpdateControls.Correspondence
         private bool SynchronizeIncoming()
         {
             bool any = false;
-            foreach (ICommunicationStrategy2 communicationStrategy in _communicationStrategies)
+            foreach (ICommunicationStrategy communicationStrategy in _communicationStrategies)
             {
                 string protocolName = communicationStrategy.ProtocolName;
                 string peerName = communicationStrategy.PeerName;

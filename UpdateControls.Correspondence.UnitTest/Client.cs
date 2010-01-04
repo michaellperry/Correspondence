@@ -1,8 +1,8 @@
 using System;
 using GameModel;
-using UpdateControls.Correspondence.Memory;
-using UpdateControls.Correspondence.NetworkSimulator;
 using Predassert;
+using UpdateControls.Correspondence.Memory;
+using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -13,7 +13,7 @@ namespace UpdateControls.Correspondence.UnitTest
         private Person _person;
         private GameRequest _gameRequest;
 
-        public Client(ICommunicationStrategy2 communicationStrategy)
+        public Client(ICommunicationStrategy communicationStrategy)
         {
             _community = new Community(new MemoryStorageStrategy())
                 .RegisterAssembly(typeof(GameQueue))

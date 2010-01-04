@@ -8,7 +8,7 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence
 {
-    class Model : IMessageRepository
+    class Model
     {
         private Community _community;
 		private IStorageStrategy _storageStrategy;
@@ -170,39 +170,16 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SetID(factName, obj.ID);
         }
 
-        public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
-        {
-            return _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
-        }
-
-        public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp)
-        {
-            _storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
-        }
-
-        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID rootId)
-        {
-            return _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, rootId);
-        }
-
-        public void SaveIncomingTimestamp(string protocolName, string peerName, FactID rootId, TimestampID timestamp)
-        {
-            _storageStrategy.SaveIncomingTimestamp(protocolName, peerName, rootId, timestamp);
-        }
-
-        public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
-        {
-            return _storageStrategy.LoadRecentMessages(timestamp);
-        }
-
-        public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
-        {
-            return _storageStrategy.LoadRecentMessages(pivotId, timestamp);
-        }
-
         public FactMemento LoadFact(FactID factId)
         {
             return CreateMementoFromFact(GetFactByID(factId));
+        }
+
+        public FactID SaveFact(FactMemento translatedMemento)
+        {
+            CorrespondenceFact fact = HydrateFact(translatedMemento);
+            fact = AddFact(fact);
+            return fact.ID;
         }
 
         public CorrespondenceFact GetFactByID(FactID id)
@@ -222,11 +199,6 @@ namespace UpdateControls.Correspondence
                 FactMemento memento = _storageStrategy.Load(id);
                 return CreateFactFromMemento(id, memento);
             }
-        }
-
-        public FactID IDOfFact(CorrespondenceFact fact)
-        {
-            return fact.ID;
         }
 
         internal IEnumerable<CorrespondenceFact> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
@@ -272,7 +244,7 @@ namespace UpdateControls.Correspondence
             return fact;
         }
 
-        public CorrespondenceFact HydrateFact(FactMemento memento)
+        private CorrespondenceFact HydrateFact(FactMemento memento)
         {
             ICorrespondenceFactFactory factory;
             if (!_factoryByType.TryGetValue(memento.FactType, out factory))
@@ -282,13 +254,6 @@ namespace UpdateControls.Correspondence
             if (fact == null)
                 throw new CorrespondenceException("Failed to create fact");
             return fact;
-        }
-
-        public FactID SaveFact(FactMemento translatedMemento)
-        {
-            CorrespondenceFact fact = HydrateFact(translatedMemento);
-            fact = AddFact(fact);
-            return fact.ID;
         }
 
         private FactMemento CreateMementoFromFact(CorrespondenceFact prototype)
@@ -326,20 +291,6 @@ namespace UpdateControls.Correspondence
             return memento.Predecessors
                 .Where(predecessor => _pivotRoles.ContainsKey(predecessor.Role))
                 .Select(predecessor => predecessor.ID);
-        }
-
-        public bool FindExistingFact(FactMemento memento, out FactID id)
-        {
-            // First try the cache.
-            CorrespondenceFact existingFact;
-            if (_factByMemento.TryGetValue(memento, out existingFact))
-            {
-                id = existingFact.ID;
-                return true;
-            }
-
-            // Then try the storage.
-            return _storageStrategy.FindExistingFact(memento, out id);
         }
     }
 }

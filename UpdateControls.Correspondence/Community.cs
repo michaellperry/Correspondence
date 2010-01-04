@@ -37,12 +37,6 @@ namespace UpdateControls.Correspondence
 
         public Community AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
         {
-            communicationStrategy.AttachMessageRepository(_model);
-            return this;
-        }
-
-        public Community AddCommunicationStrategy(ICommunicationStrategy2 communicationStrategy)
-        {
             _network.AddCommunicationStrategy(communicationStrategy);
             return this;
         }
@@ -69,6 +63,13 @@ namespace UpdateControls.Correspondence
             where T : CorrespondenceFact
         {
             _network.AddInterest(new Interest(() => roots().OfType<CorrespondenceFact>()));
+            return this;
+        }
+
+        public Community AddInterest<T>(Func<T> root)
+            where T : CorrespondenceFact
+        {
+            _network.AddInterest(new Interest(() => Enumerable.Repeat(root(), 1).OfType<CorrespondenceFact>()));
             return this;
         }
 

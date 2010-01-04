@@ -65,6 +65,7 @@
     <Compile Include="FieldSerializer\IntFieldSerializer.cs" />
     <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
     <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
+    <Compile Include="Interest.cs" />
     <Compile Include="IQueryResult.cs" />
     <Compile Include="Mementos\FactTreeMemento.cs" />
     <Compile Include="Mementos\MessageMemento.cs" />
@@ -86,10 +87,9 @@
     <Compile Include="Role.cs" />
     <Compile Include="RoleBase.cs" />
     <Compile Include="RoleRelationship.cs" />
-    <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
-    <Compile Include="Strategy\IMessageRepository.cs" />
-    <Compile Include="Strategy\IFieldSerializer.cs" />
     <Compile Include="Strategy\ICommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
+    <Compile Include="Strategy\IFieldSerializer.cs" />
     <Compile Include="Strategy\IStorageStrategy.cs" />
     <Compile Include="Queries\Join.cs" />
     <Compile Include="Mementos\FactMemento.cs" />
