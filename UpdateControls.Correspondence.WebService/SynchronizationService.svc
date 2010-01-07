@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="UpdateControls.Correspondence.WebService.SynchronizationService" CodeBehind="SynchronizationService.svc.cs" %>
