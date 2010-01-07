@@ -2,7 +2,7 @@
 
 namespace UpdateControls.Correspondence.Mementos
 {
-    public class TimestampID
+    public struct TimestampID
     {
         public Int64 key;
 
