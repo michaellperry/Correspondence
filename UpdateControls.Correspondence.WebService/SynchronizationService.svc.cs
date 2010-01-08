@@ -10,33 +10,25 @@ namespace UpdateControls.Correspondence.WebService
 {
     public class SynchronizationService : ISynchronizationService
     {
-        private IStorageStrategy _storageStrategy = new MemoryStorageStrategy();
-        private List<RoleMemento> _pivotRoles = new List<RoleMemento>();
-
-        public SynchronizationService()
+        private static IStorageStrategy _storageStrategy = new MemoryStorageStrategy();
+        private static List<RoleMemento> _pivotRoles = new List<RoleMemento>()
         {
-            _pivotRoles.Add(
-                new RoleMemento(
-                    new CorrespondenceFactType("GameModel.GameRequest", 1),
-                    "gameQueue",
-                    new CorrespondenceFactType("GameModel.GameQueue", 1)
-                )
-            );
-            _pivotRoles.Add(
-                new RoleMemento(
-                    new CorrespondenceFactType("GameModel.Game", 1),
-                    "gameRequest",
-                    new CorrespondenceFactType("GameModel.GameRequest", 1)
-                )
-            );
-            _pivotRoles.Add(
-                new RoleMemento(
-                    new CorrespondenceFactType("GameModel.Move", 1),
-                    "game",
-                    new CorrespondenceFactType("GameModel.Game", 1)
-                )
-            );
-        }
+            new RoleMemento(
+                new CorrespondenceFactType("GameModel.GameRequest", 1),
+                "gameQueue",
+                new CorrespondenceFactType("GameModel.GameQueue", 1)
+            ),
+            new RoleMemento(
+                new CorrespondenceFactType("GameModel.Game", 1),
+                "gameRequest",
+                new CorrespondenceFactType("GameModel.GameRequest", 1)
+            ),
+            new RoleMemento(
+                new CorrespondenceFactType("GameModel.Move", 1),
+                "game",
+                new CorrespondenceFactType("GameModel.Game", 1)
+            )
+        };
 
         public FactTree Get(FactTree rootTree, long rootId, long timestamp)
         {
