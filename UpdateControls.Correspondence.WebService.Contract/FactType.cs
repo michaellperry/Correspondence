@@ -7,9 +7,9 @@ namespace UpdateControls.Correspondence.WebService.Contract
     public class FactType
     {
         [DataMember]
-        string TypeName { get; set; }
+        public string TypeName { get; set; }
 
         [DataMember]
-        int Version { get; set; }
+        public int Version { get; set; }
     }
 }

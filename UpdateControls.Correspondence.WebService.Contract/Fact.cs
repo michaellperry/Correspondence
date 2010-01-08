@@ -14,6 +14,9 @@ namespace UpdateControls.Correspondence.WebService.Contract
         public FactType FactType { get; set; }
 
         [DataMember]
+        public byte[] Data { get; set; }
+
+        [DataMember]
         public List<Predecessor> Predecessors { get; set; }
     }
 }
