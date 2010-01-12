@@ -46,9 +46,7 @@
     <Compile Include="GameServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameQueueTest.cs" />
-    <Compile Include="RemoteGameServiceTest.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="TwoPlayerGameTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GameModel\GameModel.csproj">
@@ -66,10 +64,6 @@
     <ProjectReference Include="..\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj">
       <Project>{E318C58A-0EB8-4FFB-9547-DD5F73760989}</Project>
       <Name>UpdateControls.Correspondence.Memory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UpdateControls.Correspondence.NetworkSimulator\UpdateControls.Correspondence.NetworkSimulator.csproj">
-      <Project>{B4F4F652-3AB8-4F8C-97DC-7FB7887E1F54}</Project>
-      <Name>UpdateControls.Correspondence.NetworkSimulator</Name>
     </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>
