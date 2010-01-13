@@ -6,6 +6,24 @@ namespace Predassert
 {
     public static class Is
     {
+        public static Expectation<bool> True()
+        {
+            return new Expectation<bool>(
+                actual => actual,
+                actual => "The value is false.",
+                actual => "The value is true."
+            );
+        }
+
+        public static Expectation<bool> False()
+        {
+            return new Expectation<bool>(
+                actual => !actual,
+                actual => "The value is true.",
+                actual => "The value is false."
+            );
+        }
+
         public static Expectation<IEnumerable<T>> Empty<T>()
         {
             return new Expectation<IEnumerable<T>>(
