@@ -644,24 +644,24 @@ namespace UpdateControls.Correspondence.SSCE
                 "ORDER BY ff.FactID, p.PredecessorID";
 			AddParameter(session.Command, "@TypeID", typeId);
 			AddParameter(session.Command, "@Hashcode", memento.GetHashCode());
-			IDataReader factReader = session.Command.ExecuteReader();
-			session.Command.Parameters.Clear();
+            using (IDataReader factReader = session.Command.ExecuteReader())
+            {
+                session.Command.Parameters.Clear();
 
-            List<IdentifiedFactMemento> existingFact = LoadMementosFromReader(factReader)
-				.Where(im => im.Memento.Equals(memento))
-				.ToList();
-			if (existingFact.Count > 1)
-				throw new CorrespondenceException(string.Format("More than one fact matched the given {0}.", memento.FactType));
-			if (existingFact.Count == 1)
-			{
-				id = existingFact[0].Id;
-				return true;
-			}
-			else
-			{
-				id = new FactID();
-				return false;
-			}
+                List<IdentifiedFactMemento> existingFact = LoadMementosFromReader(factReader).Where(im => im.Memento.Equals(memento)).ToList();
+                if (existingFact.Count > 1)
+                    throw new CorrespondenceException(string.Format("More than one fact matched the given {0}.", memento.FactType));
+                if (existingFact.Count == 1)
+                {
+                    id = existingFact[0].Id;
+                    return true;
+                }
+                else
+                {
+                    id = new FactID();
+                    return false;
+                }
+            }
 		}
 
         private int SaveProtocol(Session session, string protocolName)
