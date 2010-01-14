@@ -1,8 +1,7 @@
-﻿using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.Mementos;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System;
+using UpdateControls.Correspondence;
+using UpdateControls.Correspondence.Mementos;
 
 namespace GameModel
 {
@@ -10,19 +9,19 @@ namespace GameModel
     public class Game : CorrespondenceFact
     {
         public static Role<GameRequest> RoleGameRequest = new Role<GameRequest>("gameRequest", RoleRelationship.Pivot);
-        private static Query QueryMoves = new Query()
-            .JoinSuccessors(Move.RoleGame);
+        private static Query QueryPlayers = new Query()
+            .JoinSuccessors(Player.RoleGame);
         private static Query QueryOutcome = new Query()
             .JoinSuccessors(Outcome.RoleGame);
         public static Condition IsUnfinished = Condition.WhereIsEmpty(QueryOutcome);
 
         private PredecessorList<GameRequest> _gameRequest;
 
-        private Result<Move> _moves;
+        private Result<Player> _players;
 
         private Game()
         {
-            _moves = new Result<Move>(this, QueryMoves);
+            _players = new Result<Player>(this, QueryPlayers);
         }
 
         public Game(GameRequest first, GameRequest second)
@@ -47,14 +46,14 @@ namespace GameModel
             get { return _gameRequest.ElementAt(1); }
         }
 
-        public Move CreateMove(Person person, int index)
-        {
-            return Community.AddFact(new Move(person, this, index));
-        }
+		public Player CreatePlayer(Person person)
+		{
+			return Community.AddFact(new Player(person, this));
+		}
 
-        public IEnumerable<Move> Moves
+        public IEnumerable<Player> Players
         {
-            get { return _moves; }
+            get { return _players; }
         }
     }
 }

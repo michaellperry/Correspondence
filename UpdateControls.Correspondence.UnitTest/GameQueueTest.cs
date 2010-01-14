@@ -1,11 +1,7 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using GameModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UpdateControls.Correspondence.Memory;
-using GameModel;
 using Predassert;
+using UpdateControls.Correspondence.Memory;
 
 namespace UpdateControls.Correspondence.UnitTest
 {

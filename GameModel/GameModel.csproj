@@ -52,8 +52,8 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameQueue.cs" />
     <Compile Include="GameRequest.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Move.cs" />
-    <Compile Include="MoveResult.cs" />
     <Compile Include="Outcome.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

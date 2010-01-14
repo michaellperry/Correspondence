@@ -1,12 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GameModel;
-using UpdateControls.Correspondence.Memory;
 using GameService;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Predassert;
+using UpdateControls.Correspondence.Memory;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
