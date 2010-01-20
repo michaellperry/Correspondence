@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.WebService.Contract;
 using UpdateControls.Correspondence.Mementos;
@@ -24,7 +23,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
         public FactTreeMemento Get(FactTreeMemento rootTree, FactID rootId, TimestampID timestamp)
         {
             FactTree root = Translate.MementoToFactTree(rootTree);
-            FactTree result = _synchronizationService.CallService(service => service.Get(root, rootId.key, timestamp.key));
+            FactTree result = _synchronizationService.CallService(service => service.Get(root, rootId.key, timestamp.Key));
             return Translate.FactTreeToMemento(result);
         }
 

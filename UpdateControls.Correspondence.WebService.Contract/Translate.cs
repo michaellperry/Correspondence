@@ -9,7 +9,7 @@ namespace UpdateControls.Correspondence.WebService.Contract
     {
         public static FactTreeMemento FactTreeToMemento(FactTree tree)
         {
-            FactTreeMemento memento = new FactTreeMemento();
+            FactTreeMemento memento = new FactTreeMemento(tree.DatabaseId);
             foreach (Fact fact in tree.Facts)
                 memento.Add(FactToMemento(fact));
             return memento;
@@ -51,15 +51,11 @@ namespace UpdateControls.Correspondence.WebService.Contract
             return new FactID() { key = id };
         }
 
-        public static TimestampID LongToTimestampID(long timestamp)
-        {
-            return new TimestampID() { key = timestamp };
-        }
-
         public static FactTree MementoToFactTree(FactTreeMemento memento)
         {
             FactTree root = new FactTree()
             {
+                DatabaseId = memento.DatabaseId,
                 Facts = memento.Facts
                     .Select(fact => MementoToFact(fact))
                     .ToList()

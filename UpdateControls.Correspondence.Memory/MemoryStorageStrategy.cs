@@ -139,14 +139,14 @@ namespace UpdateControls.Correspondence.Memory
         public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
         {
             return _messageTable
-                .Where(message => message.FactId.key > timestamp.key)
+                .Where(message => message.FactId.key > timestamp.Key)
                 .ToList();
         }
 
         public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
         {
             return _messageTable
-                .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.key)
+                .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.Key)
                 .Select(message => message.FactId);
         }
 

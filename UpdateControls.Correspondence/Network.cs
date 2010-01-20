@@ -7,6 +7,8 @@ namespace UpdateControls.Correspondence
 {
     class Network
     {
+        private const long ClientDatabasId = 0;
+
         private Model _model;
         private IStorageStrategy _storageStrategy;
         private List<Interest> _interests = new List<Interest>();
@@ -72,7 +74,7 @@ namespace UpdateControls.Correspondence
                 {
                     foreach (CorrespondenceFact root in interest.Roots)
                     {
-                        FactTreeMemento rootTree = new FactTreeMemento();
+                        FactTreeMemento rootTree = new FactTreeMemento(ClientDatabasId);
                         FactID rootId = root.ID;
                         AddToFactTree(rootTree, rootId);
                         TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, rootId);
@@ -96,12 +98,12 @@ namespace UpdateControls.Correspondence
             IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessages(timestamp);
             foreach (MessageMemento message in recentMessages)
             {
-                if (message.FactId.key > timestamp.key)
-                    timestamp.key = message.FactId.key;
+                if (message.FactId.key > timestamp.Key)
+                    timestamp = new TimestampID(ClientDatabasId, message.FactId.key);
                 FactTreeMemento messageBody;
                 if (!messageBodiesByPivotId.TryGetValue(message.PivotId, out messageBody))
                 {
-                    messageBody = new FactTreeMemento();
+                    messageBody = new FactTreeMemento(ClientDatabasId);
                     messageBodiesByPivotId.Add(message.PivotId, messageBody);
                 }
                 AddToFactTree(messageBody, message.FactId);
@@ -137,7 +139,7 @@ namespace UpdateControls.Correspondence
                 if (remoteId.key > maxRemoteId)
                     maxRemoteId = remoteId.key;
             }
-            return new TimestampID() { key = maxRemoteId };
+            return new TimestampID(messageBody.DatabaseId, maxRemoteId);
         }
     }
 }

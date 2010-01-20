@@ -6,7 +6,18 @@ namespace UpdateControls.Correspondence.Mementos
 {
     public class FactTreeMemento
     {
+        private long _databaseId;
         private List<IdentifiedFactMemento> _facts = new List<IdentifiedFactMemento>();
+
+        public FactTreeMemento(long databaseId)
+        {
+            _databaseId = databaseId;
+        }
+
+        public long DatabaseId
+        {
+            get { return _databaseId; }
+        }
 
         public IEnumerable<IdentifiedFactMemento> Facts
         {

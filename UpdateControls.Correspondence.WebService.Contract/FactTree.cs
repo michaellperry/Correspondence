@@ -8,6 +8,9 @@ namespace UpdateControls.Correspondence.WebService.Contract
     public class FactTree
     {
         [DataMember]
+        public long DatabaseId { get; set; }
+
+        [DataMember]
         public List<Fact> Facts { get; set; }
     }
 }
