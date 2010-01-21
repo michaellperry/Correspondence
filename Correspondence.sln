@@ -31,9 +31,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.WebService.Contract", "UpdateControls.Correspondence.WebService.Contract\UpdateControls.Correspondence.WebService.Contract.csproj", "{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameLogic.UnitTest", "Reversi.GameLogic.UnitTest\Reversi.GameLogic.UnitTest.csproj", "{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameLogic", "Reversi.GameLogic\Reversi.GameLogic.csproj", "{15C2C87D-3996-480B-8576-1E04C20B1D09}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 13
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -67,6 +71,12 @@ Global
 		SccProjectUniqueName10 = UpdateControls.Correspondence.WebService.Contract\\UpdateControls.Correspondence.WebService.Contract.csproj
 		SccProjectName10 = UpdateControls.Correspondence.WebService.Contract
 		SccLocalPath10 = UpdateControls.Correspondence.WebService.Contract
+		SccProjectUniqueName11 = Reversi.GameLogic\\Reversi.GameLogic.csproj
+		SccProjectName11 = Reversi.GameLogic
+		SccLocalPath11 = Reversi.GameLogic
+		SccProjectUniqueName12 = Reversi.GameLogic.UnitTest\\Reversi.GameLogic.UnitTest.csproj
+		SccProjectName12 = Reversi.GameLogic.UnitTest
+		SccLocalPath12 = Reversi.GameLogic.UnitTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -116,6 +126,14 @@ Global
 		{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
