@@ -42,6 +42,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImmutabilityTest.cs" />
     <Compile Include="FirstMoveTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GameStartTest.cs" />
