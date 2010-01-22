@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Reversi.GameLogic
 {
@@ -29,7 +28,7 @@ namespace Reversi.GameLogic
                 position._pieces[new Square(4, 3).Index] = PieceColor.Black;
                 position._pieces[new Square(4, 4).Index] = PieceColor.White;
                 position._toMove = PieceColor.Black;
-                position._legalMoves = position.EvaluateLegalMoves().ToList();
+                position.UpdateLegalMoves();
                 return position;
             }
         }
@@ -49,6 +48,27 @@ namespace Reversi.GameLogic
             get { return _legalMoves; }
         }
 
+        public GameBoard AfterMove(Square square)
+        {
+            GameBoard nextPosition = new GameBoard();
+            nextPosition._pieces = new PieceColor[NumberOfSquares];
+            Array.Copy(_pieces, nextPosition._pieces, NumberOfSquares);
+            List<Square> capturedPieces = FlankedSquares(square).ToList();
+            foreach (Square capturedPiece in capturedPieces)
+                nextPosition._pieces[capturedPiece.Index] = _toMove;
+            nextPosition._pieces[square.Index] = _toMove;
+
+            nextPosition._toMove = GetOpposite();
+            nextPosition.UpdateLegalMoves();
+
+            return nextPosition;
+        }
+
+        private void UpdateLegalMoves()
+        {
+            _legalMoves = EvaluateLegalMoves().ToList();
+        }
+
         private IEnumerable<Square> EvaluateLegalMoves()
         {
             for (int row = 0; row < Square.NumberOfRows; row++)
@@ -64,42 +84,57 @@ namespace Reversi.GameLogic
 
         private bool IsLegalMove(Square square)
         {
-            if (_pieces[square.Index] == PieceColor.Empty)
+            return FlankedSquares(square).Any();
+        }
+
+        private IEnumerable<Square> FlankedSquares(Square center)
+        {
+            if (_pieces[center.Index] == PieceColor.Empty)
             {
                 for (int direction = 0; direction < 9; direction++)
                 {
                     int deltaRow = (direction / 3) - 1;
                     int deltaColumn = (direction % 3) - 1;
-                    if ((deltaRow != 0 || deltaColumn != 0))
-                        if (IsFlank(square, deltaRow, deltaColumn))
-                            return true;
+                    if (deltaRow != 0 || deltaColumn != 0)
+                        foreach (Square square in FlankedSquaresInDirection(center, deltaRow, deltaColumn))
+                            yield return square;
                 }
             }
-            return false;
         }
 
-        private bool IsFlank(Square square, int deltaRow, int deltaColumn)
+        private IEnumerable<Square> FlankedSquaresInDirection(Square square, int deltaRow, int deltaColumn)
         {
             Square step = NextSquare(square, deltaRow, deltaColumn);
-            PieceColor opposite = _toMove == PieceColor.Black ? PieceColor.White : PieceColor.Black;
-            if (!step.IsOnBoard || _pieces[step.Index] != opposite)
-                return false;
+            PieceColor opposite = GetOpposite();
 
-            step = NextSquare(step, deltaRow, deltaColumn);
-            while (step.IsOnBoard)
+            if (step.IsOnBoard && _pieces[step.Index] == opposite)
             {
-                if (_pieces[step.Index] == _toMove)
-                    return true;
-                if (_pieces[step.Index] == PieceColor.Empty)
-                    return false;
+                List<Square> flankedPieces = new List<Square>();
+                flankedPieces.Add(step);
                 step = NextSquare(step, deltaRow, deltaColumn);
+
+                while (step.IsOnBoard)
+                {
+                    if (_pieces[step.Index] == _toMove)
+                        return flankedPieces;
+                    if (_pieces[step.Index] == PieceColor.Empty)
+                        return Enumerable.Empty<Square>();
+                    step = NextSquare(step, deltaRow, deltaColumn);
+                }
+                return Enumerable.Empty<Square>();
             }
-            return false;
+
+            return Enumerable.Empty<Square>();
         }
 
         private static Square NextSquare(Square from, int deltaRow, int deltaColumn)
         {
             return new Square(from.Row + deltaRow, from.Column + deltaColumn);
+        }
+
+        private PieceColor GetOpposite()
+        {
+            return _toMove == PieceColor.Black ? PieceColor.White : PieceColor.Black;
         }
     }
 }
