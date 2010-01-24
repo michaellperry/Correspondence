@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
+using System.Text;
 
 namespace Reversi.GameLogic
 {
@@ -50,6 +52,8 @@ namespace Reversi.GameLogic
 
         public GameBoard AfterMove(Square square)
         {
+            Debug.Assert(_legalMoves.Contains(square));
+
             GameBoard nextPosition = new GameBoard();
             nextPosition._pieces = new PieceColor[NumberOfSquares];
             Array.Copy(_pieces, nextPosition._pieces, NumberOfSquares);
@@ -67,6 +71,13 @@ namespace Reversi.GameLogic
         private void UpdateLegalMoves()
         {
             _legalMoves = EvaluateLegalMoves().ToList();
+            if (!_legalMoves.Any())
+            {
+                _toMove = GetOpposite();
+                _legalMoves = EvaluateLegalMoves().ToList();
+                if (!_legalMoves.Any())
+                    _toMove = PieceColor.Empty;
+            }
         }
 
         private IEnumerable<Square> EvaluateLegalMoves()
@@ -119,6 +130,7 @@ namespace Reversi.GameLogic
                         return flankedPieces;
                     if (_pieces[step.Index] == PieceColor.Empty)
                         return Enumerable.Empty<Square>();
+                    flankedPieces.Add(step);
                     step = NextSquare(step, deltaRow, deltaColumn);
                 }
                 return Enumerable.Empty<Square>();
@@ -135,6 +147,25 @@ namespace Reversi.GameLogic
         private PieceColor GetOpposite()
         {
             return _toMove == PieceColor.Black ? PieceColor.White : PieceColor.Black;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder boardPosition = new StringBuilder();
+            for (int row = 0; row < Square.NumberOfRows; row++)
+            {
+                for (int column = 0; column < Square.NumberOfColumns; column++)
+                {
+                    Square square = new Square(row, column);
+                    var piece = _pieces[square.Index];
+                    boardPosition.Append(
+                        piece == PieceColor.Black ? "B" :
+                        piece == PieceColor.White ? "W" : ".");
+                }
+                boardPosition.AppendLine();
+            }
+             
+            return boardPosition.ToString();
         }
     }
 }

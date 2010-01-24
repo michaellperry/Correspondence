@@ -42,6 +42,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EdgeOfBoardTest.cs" />
+    <Compile Include="FindShortGameTest.cs" />
+    <Compile Include="ForcedPassTest.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="GameOverTest.cs" />
     <Compile Include="ImmutabilityTest.cs" />
     <Compile Include="FirstMoveTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
