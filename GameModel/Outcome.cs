@@ -7,21 +7,21 @@ namespace GameModel
     public class Outcome : CorrespondenceFact
     {
         public static Role<Game> RoleGame = new Role<Game>("game");
-        public static Role<GameRequest> RoleWinner = new Role<GameRequest>("winner");
+        public static Role<Player> RoleWinner = new Role<Player>("winner");
 
         private PredecessorObj<Game> _game;
-        private PredecessorObj<GameRequest> _winner;
+        private PredecessorObj<Player> _winner;
 
-        public Outcome(Game game, GameRequest winner)
+        public Outcome(Game game, Player winner)
         {
             _game = new PredecessorObj<Game>(this, RoleGame, game);
-            _winner = new PredecessorObj<GameRequest>(this, RoleWinner, winner);
+            _winner = new PredecessorObj<Player>(this, RoleWinner, winner);
         }
 
         public Outcome(FactMemento memento)
         {
             _game = new PredecessorObj<Game>(this, RoleGame, memento);
-            _winner = new PredecessorObj<GameRequest>(this, RoleWinner, memento);
+            _winner = new PredecessorObj<Player>(this, RoleWinner, memento);
         }
 
         public Game Game
@@ -29,7 +29,7 @@ namespace GameModel
             get { return _game.Fact; }
         }
 
-        public GameRequest Winner
+        public Player Winner
         {
             get { return _winner.Fact; }
         }

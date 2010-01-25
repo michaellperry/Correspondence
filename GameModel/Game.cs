@@ -2,6 +2,7 @@
 using System.Linq;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
+using System;
 
 namespace GameModel
 {
@@ -16,17 +17,22 @@ namespace GameModel
             .JoinSuccessors(Move.RolePlayer);
         private static Query QueryOutcome = new Query()
             .JoinSuccessors(Outcome.RoleGame);
+        private static Query QueryWinner = new Query()
+            .JoinSuccessors(Outcome.RoleGame)
+            .JoinPredecessors(Outcome.RoleWinner);
         public static Condition IsUnfinished = Condition.WhereIsEmpty(QueryOutcome);
 
         private PredecessorList<GameRequest> _gameRequest;
 
         private Result<Player> _players;
         private Result<Move> _moves;
+        private Result<Player> _winner;
 
         private Game()
         {
             _players = new Result<Player>(this, QueryPlayers);
             _moves = new Result<Move>(this, QueryMoves);
+            _winner = new Result<Player>(this, QueryWinner);
         }
 
         public Game(GameRequest first, GameRequest second)
@@ -64,6 +70,11 @@ namespace GameModel
         public IEnumerable<Move> Moves
         {
             get { return _moves; }
+        }
+
+        public Player Winner
+        {
+            get { return _winner.FirstOrDefault(); }
         }
     }
 }

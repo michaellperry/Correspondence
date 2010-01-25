@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
+using System;
 
 namespace GameModel
 {
@@ -53,6 +54,11 @@ namespace GameModel
         public IEnumerable<Move> Moves
         {
             get { return _moves; }
+        }
+
+        public void DeclareWinner()
+        {
+            Community.AddFact(new Outcome(Game, this));
         }
     }
 }

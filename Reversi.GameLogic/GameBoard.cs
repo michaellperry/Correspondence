@@ -51,6 +51,16 @@ namespace Reversi.GameLogic
             get { return _toMove; }
         }
 
+        public int BlackCount
+        {
+            get { return _pieces.Count(piece => piece == PieceColor.Black); }
+        }
+
+        public int WhiteCount
+        {
+            get { return _pieces.Count(piece => piece == PieceColor.White); }
+        }
+
         public IEnumerable<Square> LegalMoves
         {
             get { return _legalMoves; }

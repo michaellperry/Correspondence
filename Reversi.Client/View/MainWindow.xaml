@@ -1,8 +1,54 @@
 ﻿<Window x:Class="Reversi.Client.View.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Correspondence Reversi" Height="300" Width="300">
+    Title="Correspondence Reversi" Height="600" Width="600">
     <Window.Resources>
+        <Style x:Key="JoinButton" TargetType="Button">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MyColor}" Value="Empty">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BlackLabel" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MyColor}" Value="Black">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="WhiteLabel" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MyColor}" Value="White">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="WinnerLabel" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="FontSize" Value="50"/>
+            <Setter Property="Foreground" Value="DarkBlue"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IWon}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="LooserLabel" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="FontSize" Value="50"/>
+            <Setter Property="Foreground" Value="DarkRed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ILost}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="BlackCircle" TargetType="Ellipse">
             <Setter Property="Visibility" Value="Hidden"/>
             <Style.Triggers>
@@ -19,53 +65,68 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="Veil" TargetType="Rectangle">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MyTurn}" Value="False">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Viewbox>
         <StackPanel Orientation="Vertical" Background="Green">
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Join Game" Command="{Binding JoinGame}"/>
+            <StackPanel Orientation="Horizontal" Height="30" Margin="3">
+                <Button Content="Join Game" Command="{Binding JoinGame}" Style="{StaticResource JoinButton}"/>
+                <TextBlock Text="Black" Style="{StaticResource BlackLabel}"/>
+                <TextBlock Text="White" Foreground="White" Style="{StaticResource WhiteLabel}"/>
             </StackPanel>
             <Border BorderBrush="Black" BorderThickness="0.5">
-                <ItemsControl ItemsSource="{Binding Rows}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding Squares}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Border BorderBrush="Black" BorderThickness="0.5">
-                                            <Grid Width="40" Height="40" MouseDown="Square_MouseDown" Background="Green">
-                                                <Ellipse 
+                <Grid>
+                    <ItemsControl ItemsSource="{Binding Rows}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ItemsControl ItemsSource="{Binding Squares}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderBrush="Black" BorderThickness="0.5">
+                                                <Grid Width="40" Height="40" MouseDown="Square_MouseDown" Background="Green">
+                                                    <Ellipse 
                                                     Width="32" 
                                                     Height="32" 
                                                     HorizontalAlignment="Center" 
                                                     VerticalAlignment="Center" 
                                                     Fill="Black" 
                                                     Style="{StaticResource BlackCircle}"/>
-                                                <Ellipse 
+                                                    <Ellipse 
                                                     Width="32" 
                                                     Height="32" 
                                                     HorizontalAlignment="Center" 
                                                     VerticalAlignment="Center" 
                                                     Fill="White" 
                                                     Style="{StaticResource WhiteCircle}"/>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Rectangle Width="328" Height="328" Fill="Black" Opacity="0.2" Style="{StaticResource Veil}"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="You Won!" Style="{StaticResource WinnerLabel}"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="You Lost!" Style="{StaticResource LooserLabel}"/>
+                </Grid>
             </Border>
         </StackPanel>
     </Viewbox>

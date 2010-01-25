@@ -26,12 +26,40 @@ namespace Reversi.Client.ViewModel
             _depGameBoard = new Dependent(UpdateGameBoard);
         }
 
+        public PieceColor MyColor
+        {
+            get
+            {
+                bool gameIsOngoing = _player != null && _player.Game.Winner == null;
+                return gameIsOngoing ? _myColor : PieceColor.Empty;
+            }
+        }
+
         public bool MyTurn
         {
             get
             {
                 _depGameBoard.OnGet();
                 return _gameBoard != null && _gameBoard.ToMove == _myColor;
+            }
+        }
+
+        public bool IWon
+        {
+            get { return _player != null && _player.Game.Winner == _player; }
+        }
+
+        public bool ILost
+        {
+            get
+            {
+                if (_player != null)
+                {
+                    Player winner = _player.Game.Winner;
+                    return winner != null && winner != _player;
+                }
+                else
+                    return false;
             }
         }
 
@@ -47,6 +75,15 @@ namespace Reversi.Client.ViewModel
             if (MyTurn && _gameBoard.LegalMoves.Contains(square))
             {
                 _player.MakeMove(_gameBoard.MoveIndex, square.Index);
+
+                _depGameBoard.OnGet();
+                if (_gameBoard.ToMove == PieceColor.Empty)
+                {
+                    if (_gameBoard.BlackCount > _gameBoard.WhiteCount)
+                        _player.Game.Players.ElementAt(0).DeclareWinner();
+                    else
+                        _player.Game.Players.ElementAt(1).DeclareWinner();
+                }
             }
         }
 
