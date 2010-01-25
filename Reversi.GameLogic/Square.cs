@@ -10,6 +10,11 @@ namespace Reversi.GameLogic
         private int _row;
         private int _column;
 
+        public static Square FromIndex(int index)
+        {
+            return new Square(index / NumberOfColumns, index % NumberOfColumns);
+        }
+
         public Square(int row, int column)
         {
             _row = row;

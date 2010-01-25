@@ -45,10 +45,10 @@ namespace GameModel
             get { return _game.Fact; }
         }
 
-		public void MakeMove(int index)
-		{
-			Community.AddFact(new Move(this, index));
-		}
+        public void MakeMove(int index, int square)
+        {
+            Community.AddFact(new Move(this, index, square));
+        }
 
         public IEnumerable<Move> Moves
         {

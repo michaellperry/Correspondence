@@ -15,10 +15,14 @@ namespace GameModel
         [CorrespondenceField]
         private int _index;
 
-        public Move(Player player, int index)
+        [CorrespondenceField]
+        private int _square;
+
+        public Move(Player player, int index, int square)
         {
             _player = new PredecessorObj<Player>(this, RolePlayer, player);
             _index = index;
+            _square = square;
         }
 
         public Move(FactMemento memento)
@@ -34,6 +38,11 @@ namespace GameModel
         public int Index
         {
             get { return _index; }
+        }
+
+        public int Square
+        {
+            get { return _square; }
         }
     }
 }

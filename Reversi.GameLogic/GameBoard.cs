@@ -10,6 +10,7 @@ namespace Reversi.GameLogic
     {
         private const int NumberOfSquares = Square.NumberOfRows * Square.NumberOfColumns;
 
+        private int _moveIndex;
         private PieceColor[] _pieces = new PieceColor[NumberOfSquares];
         private PieceColor _toMove;
         private List<Square> _legalMoves = new List<Square>();
@@ -35,6 +36,11 @@ namespace Reversi.GameLogic
             }
         }
 
+        public int MoveIndex
+        {
+            get { return _moveIndex; }
+        }
+
         public PieceColor PieceAt(Square square)
         {
             return _pieces[square.Index];
@@ -55,6 +61,8 @@ namespace Reversi.GameLogic
             Debug.Assert(_legalMoves.Contains(square));
 
             GameBoard nextPosition = new GameBoard();
+            nextPosition._moveIndex = _moveIndex + 1;
+
             nextPosition._pieces = new PieceColor[NumberOfSquares];
             Array.Copy(_pieces, nextPosition._pieces, NumberOfSquares);
             List<Square> capturedPieces = FlankedSquares(square).ToList();

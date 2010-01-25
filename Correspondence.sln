@@ -35,9 +35,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameLogic.UnitTest"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameLogic", "Reversi.GameLogic\Reversi.GameLogic.csproj", "{15C2C87D-3996-480B-8576-1E04C20B1D09}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.Client", "Reversi.Client\Reversi.Client.csproj", "{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 13
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -77,6 +79,9 @@ Global
 		SccProjectUniqueName12 = Reversi.GameLogic.UnitTest\\Reversi.GameLogic.UnitTest.csproj
 		SccProjectName12 = Reversi.GameLogic.UnitTest
 		SccLocalPath12 = Reversi.GameLogic.UnitTest
+		SccProjectUniqueName13 = Reversi.Client\\Reversi.Client.csproj
+		SccProjectName13 = Reversi.Client
+		SccLocalPath13 = Reversi.Client
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -134,6 +139,10 @@ Global
 		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

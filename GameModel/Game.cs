@@ -11,6 +11,9 @@ namespace GameModel
         public static Role<GameRequest> RoleGameRequest = new Role<GameRequest>("gameRequest", RoleRelationship.Pivot);
         private static Query QueryPlayers = new Query()
             .JoinSuccessors(Player.RoleGame);
+        private static Query QueryMoves = new Query()
+            .JoinSuccessors(Player.RoleGame)
+            .JoinSuccessors(Move.RolePlayer);
         private static Query QueryOutcome = new Query()
             .JoinSuccessors(Outcome.RoleGame);
         public static Condition IsUnfinished = Condition.WhereIsEmpty(QueryOutcome);
@@ -18,10 +21,12 @@ namespace GameModel
         private PredecessorList<GameRequest> _gameRequest;
 
         private Result<Player> _players;
+        private Result<Move> _moves;
 
         private Game()
         {
             _players = new Result<Player>(this, QueryPlayers);
+            _moves = new Result<Move>(this, QueryMoves);
         }
 
         public Game(GameRequest first, GameRequest second)
@@ -54,6 +59,11 @@ namespace GameModel
         public IEnumerable<Player> Players
         {
             get { return _players; }
+        }
+
+        public IEnumerable<Move> Moves
+        {
+            get { return _moves; }
         }
     }
 }

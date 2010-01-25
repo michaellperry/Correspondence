@@ -31,7 +31,7 @@ namespace UpdateControls.Correspondence.UnitTest
 
 		public void MakeMove(int index)
 		{
-			CreatePlayer().MakeMove(index);
+			CreatePlayer().MakeMove(index, 0);
 		}
 
 		private Player CreatePlayer()
