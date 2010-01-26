@@ -80,6 +80,7 @@
     <Compile Include="Mementos\CorrespondenceFactType.cs" />
     <Compile Include="PredecessorBase.cs" />
     <Compile Include="PredecessorList.cs" />
+    <Compile Include="PredecessorOpt.cs" />
     <Compile Include="Queries\QueryInvalidator.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="QueryInverter.cs" />

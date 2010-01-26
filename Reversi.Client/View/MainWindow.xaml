@@ -11,6 +11,15 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="ResignButton" TargetType="Button">
+            <Setter Property="Margin" Value="3,0,3,0"/>
+            <Setter Property="Visibility" Value="Visible"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding MyColor}" Value="Empty">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="BlackLabel" TargetType="TextBlock">
             <Setter Property="Visibility" Value="Collapsed"/>
             <Setter Property="FontSize" Value="24"/>
@@ -49,6 +58,16 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="DrawLabel" TargetType="TextBlock">
+            <Setter Property="Visibility" Value="Hidden"/>
+            <Setter Property="FontSize" Value="50"/>
+            <Setter Property="Foreground" Value="DarkViolet"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IDrew}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style x:Key="BlackCircle" TargetType="Ellipse">
             <Setter Property="Visibility" Value="Hidden"/>
             <Style.Triggers>
@@ -76,11 +95,12 @@
     </Window.Resources>
     <Viewbox>
         <StackPanel Orientation="Vertical" Background="Green">
-            <StackPanel Orientation="Horizontal" Height="30" Margin="3">
-                <Button Content="Join Game" Command="{Binding JoinGame}" Style="{StaticResource JoinButton}"/>
-                <TextBlock Text="Black" Style="{StaticResource BlackLabel}"/>
-                <TextBlock Text="White" Foreground="White" Style="{StaticResource WhiteLabel}"/>
-            </StackPanel>
+            <DockPanel Height="30" Margin="3" LastChildFill="False">
+                <Button DockPanel.Dock="Left" Content="Join Game" Command="{Binding JoinGame}" Style="{StaticResource JoinButton}"/>
+                <TextBlock DockPanel.Dock="Left" Text="Black" Style="{StaticResource BlackLabel}"/>
+                <TextBlock DockPanel.Dock="Left" Text="White" Foreground="White" Style="{StaticResource WhiteLabel}"/>
+                <Button DockPanel.Dock="Right" Content="Resign" Command="{Binding Resign}" Style="{StaticResource ResignButton}"/>
+            </DockPanel>
             <Border BorderBrush="Black" BorderThickness="0.5">
                 <Grid>
                     <ItemsControl ItemsSource="{Binding Rows}">
@@ -126,6 +146,7 @@
                     <Rectangle Width="328" Height="328" Fill="Black" Opacity="0.2" Style="{StaticResource Veil}"/>
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="You Won!" Style="{StaticResource WinnerLabel}"/>
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="You Lost!" Style="{StaticResource LooserLabel}"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Draw!" Style="{StaticResource DrawLabel}"/>
                 </Grid>
             </Border>
         </StackPanel>

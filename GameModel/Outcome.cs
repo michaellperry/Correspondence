@@ -10,18 +10,18 @@ namespace GameModel
         public static Role<Player> RoleWinner = new Role<Player>("winner");
 
         private PredecessorObj<Game> _game;
-        private PredecessorObj<Player> _winner;
+        private PredecessorOpt<Player> _winner;
 
         public Outcome(Game game, Player winner)
         {
             _game = new PredecessorObj<Game>(this, RoleGame, game);
-            _winner = new PredecessorObj<Player>(this, RoleWinner, winner);
+            _winner = new PredecessorOpt<Player>(this, RoleWinner, winner);
         }
 
         public Outcome(FactMemento memento)
         {
             _game = new PredecessorObj<Game>(this, RoleGame, memento);
-            _winner = new PredecessorObj<Player>(this, RoleWinner, memento);
+            _winner = new PredecessorOpt<Player>(this, RoleWinner, memento);
         }
 
         public Game Game

@@ -38,6 +38,17 @@ namespace Reversi.Client.ViewModel
             }
         }
 
+        public ICommand Resign
+        {
+            get
+            {
+                return MakeCommand
+                    .When(() => _person.UnfinishedGames.Any())
+                    .Do(() => _person.UnfinishedGames.First()
+                        .Players.First(player => player.Person != _person).DeclareWinner());
+            }
+        }
+
         public PieceColor MyColor
         {
             get
@@ -71,6 +82,15 @@ namespace Reversi.Client.ViewModel
             {
                 _depGameState.OnGet();
                 return _gameState.ILost;
+            }
+        }
+
+        public bool IDrew
+        {
+            get
+            {
+                _depGameState.OnGet();
+                return _gameState.IDrew;
             }
         }
 

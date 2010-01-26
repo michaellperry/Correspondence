@@ -30,7 +30,7 @@ namespace Reversi.Client.ViewModel
         {
             get
             {
-                bool gameIsOngoing = _player != null && _player.Game.Winner == null;
+                bool gameIsOngoing = _player != null && _player.Game.Outcome == null;
                 return gameIsOngoing ? _myColor : PieceColor.Empty;
             }
         }
@@ -46,20 +46,37 @@ namespace Reversi.Client.ViewModel
 
         public bool IWon
         {
-            get { return _player != null && _player.Game.Winner == _player; }
+            get
+            {
+                return
+                    _player != null &&
+                    _player.Game.Outcome != null &&
+                    _player.Game.Outcome.Winner == _player;
+            }
         }
 
         public bool ILost
         {
             get
             {
-                if (_player != null)
+                if (_player != null && _player.Game.Outcome != null)
                 {
-                    Player winner = _player.Game.Winner;
+                    Player winner = _player.Game.Outcome.Winner;
                     return winner != null && winner != _player;
                 }
                 else
                     return false;
+            }
+        }
+
+        public bool IDrew
+        {
+            get
+            {
+                return
+                    _player != null &&
+                    _player.Game.Outcome != null &&
+                    _player.Game.Outcome.Winner == null;
             }
         }
 
@@ -79,10 +96,14 @@ namespace Reversi.Client.ViewModel
                 _depGameBoard.OnGet();
                 if (_gameBoard.ToMove == PieceColor.Empty)
                 {
-                    if (_gameBoard.BlackCount > _gameBoard.WhiteCount)
+                    int blackCount = _gameBoard.BlackCount;
+                    int whiteCount = _gameBoard.WhiteCount;
+                    if (blackCount > whiteCount)
                         _player.Game.Players.ElementAt(0).DeclareWinner();
-                    else
+                    else if (blackCount < whiteCount)
                         _player.Game.Players.ElementAt(1).DeclareWinner();
+                    else
+                        _player.Game.DeclareDraw();
                 }
             }
         }
