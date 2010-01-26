@@ -99,11 +99,11 @@ namespace Reversi.Client.ViewModel
                     int blackCount = _gameBoard.BlackCount;
                     int whiteCount = _gameBoard.WhiteCount;
                     if (blackCount > whiteCount)
-                        _player.Game.Players.ElementAt(0).DeclareWinner();
+                        _player.Game.DeclareWinner(_player.Game.First);
                     else if (blackCount < whiteCount)
-                        _player.Game.Players.ElementAt(1).DeclareWinner();
+                        _player.Game.DeclareWinner(_player.Game.Second);
                     else
-                        _player.Game.DeclareDraw();
+                        _player.Game.DeclareWinner(null);
                 }
             }
         }

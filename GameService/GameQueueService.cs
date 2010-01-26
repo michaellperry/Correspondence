@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using GameModel;
+using UpdateControls.Correspondence.Service;
 
 namespace GameService
 {
-    public class GameQueueService
+    public class GameQueueService : IService<GameRequest>
     {
         private GameQueue _queue;
 
@@ -22,13 +20,16 @@ namespace GameService
 
         public void Process(List<GameRequest> queue)
         {
-            int pairs = queue.Count / 2;
-            for (int i = 0; i < pairs; i++)
+            GameRequest firstRequest = null;
+            foreach (GameRequest request in queue)
             {
-                GameRequest first = queue[i * 2];
-                GameRequest second = queue[i * 2 + 1];
-
-                first.CreateGame(second);
+                if (firstRequest == null)
+                    firstRequest = request;
+                else if (firstRequest.Person != request.Person)
+                {
+                    firstRequest.CreateGame(request);
+                    firstRequest = null;
+                }
             }
         }
     }

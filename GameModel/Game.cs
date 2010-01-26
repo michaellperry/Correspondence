@@ -44,6 +44,11 @@ namespace GameModel
             _gameRequest = new PredecessorList<GameRequest>(this, RoleGameRequest, memento);
         }
 
+        public IEnumerable<GameRequest> GameRequests
+        {
+            get { return _gameRequest; }
+        }
+
         public GameRequest First
         {
             get { return _gameRequest.ElementAt(0); }
@@ -74,9 +79,10 @@ namespace GameModel
             get { return _outcome.FirstOrDefault(); }
         }
 
-        public void DeclareDraw()
+        public void DeclareWinner(GameRequest winnersRequest)
         {
-            Community.AddFact(new Outcome(this, null));
+            var winner = Players.FirstOrDefault(player => player.Person == winnersRequest.Person);
+            Community.AddFact(new Outcome(this, winner));
         }
     }
 }

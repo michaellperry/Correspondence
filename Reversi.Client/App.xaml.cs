@@ -1,17 +1,19 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Threading;
 using GameModel;
+using GameService;
 using Reversi.Client.View;
 using Reversi.Client.ViewModel;
+using UpdateControls;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.XAML;
-using GameService;
-using System.Threading;
-using System.Linq;
-using System.Collections.Generic;
-using System.Windows.Threading;
-using UpdateControls;
-using System;
+using UpdateControls.Correspondence.Service;
+using UpdateControls.Correspondence.WebServiceClient;
+using Reversi.Client.Synchronization;
 
 namespace Reversi.Client
 {
@@ -20,39 +22,37 @@ namespace Reversi.Client
     /// </summary>
     public partial class App : Application
     {
-        private GameQueueService _service;
-        private Dependent _depService;
+        private Person _person;
+        private SynchronizationThread _synchronizationThread;
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             Community community = new Community(new MemoryStorageStrategy())
-                .RegisterAssembly(typeof(GameQueue));
+                .AddCommunicationStrategy(new WebServiceCommunicationStrategy())
+                .RegisterAssembly(typeof(GameQueue))
+                .AddInterest(() => _person.OutstandingGameRequests)
+                .AddInterest(() => _person.UnfinishedGames);
 
-            GameQueue gameQueue = community.AddFact(new GameQueue("http://correspondence.azure.com/reversi/1"));
+            _synchronizationThread = new SynchronizationThread(community);
+
+            GameQueue gameQueue = community.AddFact(new GameQueue("http://correspondence.cloudapp.net/reversi/1"));
+            _person = community.AddFact(new Person());
             GameViewModel gameViewModel = new GameViewModel(
-                community.AddFact(new Person()),
-                gameQueue);
+                _person,
+                gameQueue,
+                _synchronizationThread);
 
             MainWindow = new MainWindow();
             MainWindow.DataContext = ForView.Wrap(gameViewModel);
+            MainWindow.Closed += new EventHandler(MainWindow_Closed);
             MainWindow.Show();
 
-            Window otherWindow = new MainWindow();
-            otherWindow.DataContext = ForView.Wrap(new GameViewModel(community.AddFact(new Person()), gameQueue));
-            otherWindow.Show();
-
-            _service = new GameQueueService(gameQueue);
-            _depService = new Dependent(RunService);
-            _depService.Invalidated += () => Dispatcher.BeginInvoke(new Action(() => _depService.OnGet()));
-            _depService.OnGet();
+            _synchronizationThread.Start();
         }
 
-
-        private void RunService()
+        void MainWindow_Closed(object sender, EventArgs e)
         {
-            List<GameRequest> queue = _service.Queue.ToList();
-            queue.Reverse();
-            _service.Process(queue);
+            _synchronizationThread.Stop();
         }
     }
 }

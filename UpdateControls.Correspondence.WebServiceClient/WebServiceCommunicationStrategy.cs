@@ -12,12 +12,12 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         public string ProtocolName
         {
-            get { throw new NotImplementedException(); }
+            get { return "http://correspondence.updatecontrols.net"; }
         }
 
         public string PeerName
         {
-            get { throw new NotImplementedException(); }
+            get { return "http://correspondence.cloudapp.net/SynchronizationService.svc"; }
         }
 
         public FactTreeMemento Get(FactTreeMemento rootTree, FactID rootId, TimestampID timestamp)

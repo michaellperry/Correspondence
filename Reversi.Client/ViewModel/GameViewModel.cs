@@ -5,6 +5,8 @@ using GameModel;
 using Reversi.GameLogic;
 using UpdateControls.XAML;
 using UpdateControls;
+using System;
+using Reversi.Client.Synchronization;
 
 namespace Reversi.Client.ViewModel
 {
@@ -12,14 +14,17 @@ namespace Reversi.Client.ViewModel
     {
         private Person _person;
         private GameQueue _gameQueue;
+        private SynchronizationThread _synchronizationThread;
 
         private GameState _gameState;
         private Dependent _depGameState;
 
-        public GameViewModel(Person person, GameQueue gameQueue)
+        public GameViewModel(Person person, GameQueue gameQueue, SynchronizationThread synchronizationThread)
         {
             _person = person;
             _gameQueue = gameQueue;
+            _synchronizationThread = synchronizationThread;
+
             _depGameState = new Dependent(UpdateGameState);
 
             _gameState = new GameState(null);
@@ -44,8 +49,13 @@ namespace Reversi.Client.ViewModel
             {
                 return MakeCommand
                     .When(() => _person.UnfinishedGames.Any())
-                    .Do(() => _person.UnfinishedGames.First()
-                        .Players.First(player => player.Person != _person).DeclareWinner());
+                    .Do(delegate
+                        {
+                            Game game = _person.UnfinishedGames.First();
+                            GameRequest otherRequest = game.GameRequests.FirstOrDefault(
+                                request => request.Person != _person);
+                            game.DeclareWinner(otherRequest);
+                        });
             }
         }
 
@@ -101,6 +111,14 @@ namespace Reversi.Client.ViewModel
                 _depGameState.OnGet();
                 for (int row = 0; row < Square.NumberOfRows; row++)
                     yield return new RowViewModel(_gameState, row);
+            }
+        }
+
+        public string LastError
+        {
+            get
+            {
+                return _synchronizationThread.LastError;
             }
         }
 

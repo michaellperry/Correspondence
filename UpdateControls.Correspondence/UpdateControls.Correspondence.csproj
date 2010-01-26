@@ -88,6 +88,7 @@
     <Compile Include="Role.cs" />
     <Compile Include="RoleBase.cs" />
     <Compile Include="RoleRelationship.cs" />
+    <Compile Include="Service\IService.cs" />
     <Compile Include="Strategy\ICommunicationStrategy.cs" />
     <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
     <Compile Include="Strategy\IFieldSerializer.cs" />

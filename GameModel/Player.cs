@@ -55,10 +55,5 @@ namespace GameModel
         {
             get { return _moves; }
         }
-
-        public void DeclareWinner()
-        {
-            Community.AddFact(new Outcome(Game, this));
-        }
     }
 }

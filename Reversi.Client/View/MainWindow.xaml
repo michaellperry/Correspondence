@@ -149,6 +149,7 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Draw!" Style="{StaticResource DrawLabel}"/>
                 </Grid>
             </Border>
+            <TextBlock Text="{Binding LastError}" Height="20" Width="328" TextTrimming="CharacterEllipsis"/> 
         </StackPanel>
     </Viewbox>
 </Window>
