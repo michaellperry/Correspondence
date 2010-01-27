@@ -32,13 +32,21 @@ namespace Reversi.GameQueueService
                 .AddInterest(() => _gameQueue.OutstandingGameRequests);
 
             _gameQueue = community.AddFact(new GameQueue("http://correspondence.cloudapp.net/reversi/1"));
+            Service service = community.AddFact(new Service(_gameQueue));
 
             _service = new GameService.GameQueueService(_gameQueue);
             _depService = new Dependent(RunService);
             while (true)
             {
-                community.Synchronize();
-                _depService.OnGet();
+                try
+                {
+                    community.Synchronize();
+                    _depService.OnGet();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
                 Thread.Sleep(1000);
             }
         }

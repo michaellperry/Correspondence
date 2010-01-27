@@ -93,6 +93,9 @@ namespace UpdateControls.Correspondence.WebService.Contract
 
         public static FactType MementoToType(CorrespondenceFactType memento)
         {
+            if (memento == null)
+                return new FactType();
+
             return new FactType()
             {
                 TypeName = memento.TypeName,
