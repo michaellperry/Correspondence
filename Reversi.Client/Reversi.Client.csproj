@@ -115,10 +115,6 @@
       <Project>{659D7839-99B0-46C4-A7AB-4B9721428E76}</Project>
       <Name>GameModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GameService\GameService.csproj">
-      <Project>{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}</Project>
-      <Name>GameService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Reversi.GameLogic\Reversi.GameLogic.csproj">
       <Project>{15C2C87D-3996-480B-8576-1E04C20B1D09}</Project>
       <Name>Reversi.GameLogic</Name>

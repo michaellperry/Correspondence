@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
 using GameModel;
-using GameService;
+using Reversi.Client.Synchronization;
 using Reversi.Client.View;
 using Reversi.Client.ViewModel;
-using UpdateControls;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Memory;
-using UpdateControls.XAML;
-using UpdateControls.Correspondence.Service;
 using UpdateControls.Correspondence.WebServiceClient;
-using Reversi.Client.Synchronization;
+using UpdateControls.XAML;
 
 namespace Reversi.Client
 {
