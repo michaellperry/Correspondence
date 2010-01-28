@@ -101,6 +101,12 @@ namespace UpdateControls.Correspondence
             _model.SetFact(objectName, fact);
 		}
 
+        public event Action FactAdded
+        {
+            add { _model.FactAdded += value; }
+            remove { _model.FactAdded -= value; }
+        }
+
         public bool Synchronize()
         {
             return _network.Synchronize();

@@ -23,6 +23,8 @@ namespace UpdateControls.Correspondence
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
 		private IDictionary<FactMemento, CorrespondenceFact> _factByMemento = new Dictionary<FactMemento, CorrespondenceFact>();
 
+        public event Action FactAdded;
+
         public Model(Community community, IStorageStrategy storageStrategy, ITypeStrategy typeStrategy)
 		{
             _community = community;
@@ -119,6 +121,9 @@ namespace UpdateControls.Correspondence
 
             foreach (Action invalidateAction in invalidateActions)
                 invalidateAction();
+
+            if (FactAdded != null)
+                FactAdded();
 
             return prototype;
         }

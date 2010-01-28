@@ -41,6 +41,7 @@ namespace Reversi.Client
             MainWindow.Closed += new EventHandler(MainWindow_Closed);
             MainWindow.Show();
 
+            community.FactAdded += () => _synchronizationThread.Wake();
             _synchronizationThread.Start();
         }
 
