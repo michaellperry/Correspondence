@@ -13,6 +13,7 @@ namespace UpdateControls.Correspondence.Memory
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
         private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier,TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
+        private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
 
         public IDisposable BeginUnitOfWork()
         {
@@ -21,12 +22,12 @@ namespace UpdateControls.Correspondence.Memory
 
         public bool GetID(string factName, out FactID id)
         {
-            throw new NotImplementedException();
+            return _namedFacts.TryGetValue(factName, out id);
         }
 
         public void SetID(string factName, FactID id)
         {
-            throw new NotImplementedException();
+            _namedFacts[factName] = id;
         }
 
         public FactMemento Load(FactID id)
