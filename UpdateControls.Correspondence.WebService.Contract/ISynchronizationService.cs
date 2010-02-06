@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence.WebService.Contract
     public interface ISynchronizationService
     {
         [OperationContract]
-        FactTree Get(FactTree rootTree, long rootId, long timestamp);
+        FactTree Get(FactTree pivotTree, long pivotId, long timestamp);
 
         [OperationContract]
         void Post(FactTree messageBody);

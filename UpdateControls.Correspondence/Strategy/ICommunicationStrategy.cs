@@ -6,7 +6,7 @@ namespace UpdateControls.Correspondence.Strategy
     {
         string ProtocolName { get; }
         string PeerName { get; }
-        FactTreeMemento Get(FactTreeMemento rootTree, FactID rootId, TimestampID timestamp);
+        FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp);
         void Post(FactTreeMemento messageBody);
     }
 }

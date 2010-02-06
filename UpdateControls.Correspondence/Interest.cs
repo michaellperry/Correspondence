@@ -5,16 +5,16 @@ namespace UpdateControls.Correspondence
 {
     class Interest
     {
-        private Func<IEnumerable<CorrespondenceFact>> _roots;
+        private Func<IEnumerable<CorrespondenceFact>> _pivots;
 
-        public Interest(Func<IEnumerable<CorrespondenceFact>> roots)
+        public Interest(Func<IEnumerable<CorrespondenceFact>> pivots)
         {
-            _roots = roots;
+            _pivots = pivots;
         }
 
-        public IEnumerable<CorrespondenceFact> Roots
+        public IEnumerable<CorrespondenceFact> Pivots
         {
-            get { return _roots(); }
+            get { return _pivots(); }
         }
     }
 }

@@ -72,17 +72,17 @@ namespace UpdateControls.Correspondence
 
                 foreach (Interest interest in _interests)
                 {
-                    foreach (CorrespondenceFact root in interest.Roots)
+                    foreach (CorrespondenceFact pivot in interest.Pivots)
                     {
-                        FactTreeMemento rootTree = new FactTreeMemento(ClientDatabasId);
-                        FactID rootId = root.ID;
-                        AddToFactTree(rootTree, rootId);
-                        TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, rootId);
-                        FactTreeMemento messageBody = communicationStrategy.Get(rootTree, rootId, timestamp);
+                        FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
+                        FactID pivotId = pivot.ID;
+                        AddToFactTree(pivotTree, pivotId);
+                        TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, pivotId);
+                        FactTreeMemento messageBody = communicationStrategy.Get(pivotTree, pivotId, timestamp);
                         if (messageBody.Facts.Any())
                         {
                             timestamp = ReceiveMessage(messageBody);
-                            _storageStrategy.SaveIncomingTimestamp(protocolName, peerName, rootId, timestamp);
+                            _storageStrategy.SaveIncomingTimestamp(protocolName, peerName, pivotId, timestamp);
                             any = true;
                         }
                     }

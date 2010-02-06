@@ -181,7 +181,7 @@ namespace UpdateControls.Correspondence.SSCE
                 {
                     string nonPivotGroup = string.Join(",", nonPivots);
                     session.Command.CommandText = string.Format(
-                        "SELECT DISTINCT RootId FROM Message WHERE FactId IN ({0})",
+                        "SELECT DISTINCT PivotId FROM Message WHERE FactId IN ({0})",
                         nonPivotGroup);
                     List<FactID> predecessorsPivots;
                     using (IDataReader predecessorPivotReader = session.Command.ExecuteReader())
@@ -359,7 +359,7 @@ namespace UpdateControls.Correspondence.SSCE
         {
             using (var session = new Session(_connectionString))
             {
-                session.Command.CommandText = "SELECT TOP (20) RootId, FactId FROM Message WHERE FactId > @Timestamp ORDER BY FactId";
+                session.Command.CommandText = "SELECT TOP (20) PivotId, FactId FROM Message WHERE FactId > @Timestamp ORDER BY FactId";
                 AddParameter(session.Command, "@Timestamp", timestamp.Key);
                 using (IDataReader messageReader = session.Command.ExecuteReader())
                 {
@@ -374,8 +374,8 @@ namespace UpdateControls.Correspondence.SSCE
         {
             using (var session = new Session(_connectionString))
             {
-                session.Command.CommandText = "SELECT TOP (20) FactId FROM Message WHERE RootId = @RootId AND FactId > @Timestamp ORDER BY FactId";
-                AddParameter(session.Command, "@RootId", pivotId.key);
+                session.Command.CommandText = "SELECT TOP (20) FactId FROM Message WHERE PivotId = @PivotId AND FactId > @Timestamp ORDER BY FactId";
+                AddParameter(session.Command, "@PivotId", pivotId.key);
                 AddParameter(session.Command, "@Timestamp", timestamp.Key);
                 using (IDataReader messageReader = session.Command.ExecuteReader())
                 {
@@ -592,11 +592,11 @@ namespace UpdateControls.Correspondence.SSCE
 
         private void SaveMessages(Session session, IEnumerable<MessageMemento> messages)
         {
-            session.Command.CommandText = "INSERT INTO Message (FactId, RootId) VALUES (@FactId, @RootId)";
+            session.Command.CommandText = "INSERT INTO Message (FactId, PivotId) VALUES (@FactId, @PivotId)";
             foreach (MessageMemento message in messages)
             {
                 AddParameter(session.Command, "@FactId", message.FactId.key);
-                AddParameter(session.Command, "@RootId", message.PivotId.key);
+                AddParameter(session.Command, "@PivotId", message.PivotId.key);
                 session.Command.ExecuteNonQuery();
                 session.Command.Parameters.Clear();
             }
@@ -658,11 +658,11 @@ namespace UpdateControls.Correspondence.SSCE
         {
             while (messageReader.Read())
             {
-                long rootId = messageReader.GetInt64(0);
+                long pivotId = messageReader.GetInt64(0);
                 long factId = messageReader.GetInt64(1);
 
                 yield return new MessageMemento(
-                    new FactID() { key = rootId },
+                    new FactID() { key = pivotId },
                     new FactID() { key = factId });
             }
         }
@@ -774,15 +774,15 @@ namespace UpdateControls.Correspondence.SSCE
 			return protocolId;
         }
 
-        private TimestampID LoadTimestamp(string protocolName, string peerName, long rootId)
+        private TimestampID LoadTimestamp(string protocolName, string peerName, long pivotId)
         {
             int peerId = SavePeer(protocolName, peerName);
 
             using (var session = new Session(_connectionString))
             {
-                session.Command.CommandText = "SELECT DatabaseId, FactId FROM Timestamp WHERE FKPeerId=@PeerId AND RootId=@RootId";
+                session.Command.CommandText = "SELECT DatabaseId, FactId FROM Timestamp WHERE FKPeerId=@PeerId AND PivotId=@PivotId";
                 AddParameter(session.Command, "@PeerId", peerId);
-                AddParameter(session.Command, "@RootId", rootId);
+                AddParameter(session.Command, "@PivotId", pivotId);
                 using (IDataReader timestampReader = session.Command.ExecuteReader())
                 {
                     session.Command.Parameters.Clear();
@@ -799,29 +799,29 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
-        private void SaveTimestamp(string protocolName, string peerName, long rootId, TimestampID timestamp)
+        private void SaveTimestamp(string protocolName, string peerName, long pivotId, TimestampID timestamp)
         {
             int peerId = SavePeer(protocolName, peerName);
 
             using (var session = new Session(_connectionString))
             {
                 // First try an update.
-                session.Command.CommandText = "UPDATE Timestamp SET DatabaseId=@DatabaseId, FactId=@FactId WHERE FKPeerId=@PeerId AND RootId=@RootId";
+                session.Command.CommandText = "UPDATE Timestamp SET DatabaseId=@DatabaseId, FactId=@FactId WHERE FKPeerId=@PeerId AND PivotId=@PivotId";
                 AddParameter(session.Command, "@PeerId", peerId);
                 AddParameter(session.Command, "@DatabaseId", timestamp.DatabaseId);
                 AddParameter(session.Command, "@FactId", timestamp.Key);
-                AddParameter(session.Command, "@RootId", rootId);
+                AddParameter(session.Command, "@PivotId", pivotId);
                 int count = session.Command.ExecuteNonQuery();
                 session.Command.Parameters.Clear();
                 if (count > 0)
                     return;
 
                 // No rows affected, so it's safe to insert.
-                session.Command.CommandText = "INSERT INTO Timestamp (FKPeerId, RootId, DatabaseId, FactId) VALUES (@PeerId, 0, @DatabaseId, @FactId)";
+                session.Command.CommandText = "INSERT INTO Timestamp (FKPeerId, PivotId, DatabaseId, FactId) VALUES (@PeerId, 0, @DatabaseId, @FactId)";
                 AddParameter(session.Command, "@PeerId", peerId);
                 AddParameter(session.Command, "@DatabaseId", timestamp.DatabaseId);
                 AddParameter(session.Command, "@FactId", timestamp.Key);
-                AddParameter(session.Command, "@RootId", rootId);
+                AddParameter(session.Command, "@PivotId", pivotId);
                 session.Command.ExecuteNonQuery();
                 session.Command.Parameters.Clear();
             }

@@ -20,10 +20,10 @@ namespace UpdateControls.Correspondence.WebServiceClient
             get { return "http://correspondence.cloudapp.net/SynchronizationService.svc"; }
         }
 
-        public FactTreeMemento Get(FactTreeMemento rootTree, FactID rootId, TimestampID timestamp)
+        public FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
-            FactTree root = Translate.MementoToFactTree(rootTree);
-            FactTree result = _synchronizationService.CallService(service => service.Get(root, rootId.key, timestamp.Key));
+            FactTree pivot = Translate.MementoToFactTree(pivotTree);
+            FactTree result = _synchronizationService.CallService(service => service.Get(pivot, pivotId.key, timestamp.Key));
             return Translate.FactTreeToMemento(result);
         }
 

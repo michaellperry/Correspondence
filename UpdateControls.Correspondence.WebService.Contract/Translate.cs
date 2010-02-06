@@ -53,14 +53,14 @@ namespace UpdateControls.Correspondence.WebService.Contract
 
         public static FactTree MementoToFactTree(FactTreeMemento memento)
         {
-            FactTree root = new FactTree()
+            FactTree pivot = new FactTree()
             {
                 DatabaseId = memento.DatabaseId,
                 Facts = memento.Facts
                     .Select(fact => MementoToFact(fact))
                     .ToList()
             };
-            return root;
+            return pivot;
         }
 
         public static Fact MementoToFact(IdentifiedFactMemento memento)
