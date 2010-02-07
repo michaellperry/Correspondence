@@ -1,22 +1,24 @@
 using System;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.WebService.Contract
 {
     [DataContract(Namespace = Constants.Namespace)]
-    public class Fact
+    public class FactRole
     {
         [DataMember]
-        public long FactId { get; set; }
+        public int RoleId { get; set; }
 
         [DataMember]
-        public int FactTypeId { get; set; }
+        public int DeclaringTypeId { get; set; }
 
         [DataMember]
-        public byte[] Data { get; set; }
+        public string RoleName { get; set; }
 
         [DataMember]
-        public List<Predecessor> Predecessors { get; set; }
+        public int TargetTypeId { get; set; }
+
+        [DataMember]
+        public bool IsPivot { get; set; }
     }
 }

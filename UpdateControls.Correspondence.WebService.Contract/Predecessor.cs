@@ -7,13 +7,7 @@ namespace UpdateControls.Correspondence.WebService.Contract
     public class Predecessor
     {
         [DataMember]
-        public FactType DeclaringType { get; set; }
-
-        [DataMember]
-        public string RoleName { get; set; }
-
-        [DataMember]
-        public FactType TargetType { get; set; }
+        public int RoleId { get; set; }
 
         [DataMember]
         public long PredecessorId { get; set; }

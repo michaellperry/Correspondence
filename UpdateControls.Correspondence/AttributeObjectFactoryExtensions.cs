@@ -29,13 +29,7 @@ namespace UpdateControls.Correspondence
                     community.AddType(
                         typeName,
                         new AttributeFactFactory(type, mementoConstructor, community.FieldSerializerByType),
-                        new FactMetadata(
-                            GetConvertableTypes(type),
-                            type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                                .Select(field => field.GetValue(null))
-                                .OfType<RoleBase>()
-                                .Where(role => role.Metadata == RoleRelationship.Pivot)
-                                .Select(role => role.RoleMemento)));
+                        new FactMetadata(GetConvertableTypes(type)));
 
                     // Find all queries defined within the type.
                     foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic)

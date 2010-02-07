@@ -17,7 +17,6 @@ namespace UpdateControls.Correspondence
             new Dictionary<CorrespondenceFactType, ICorrespondenceFactFactory>();
         private IDictionary<CorrespondenceFactType, List<QueryInvalidator>> _queryInvalidatorsByType =
             new Dictionary<CorrespondenceFactType, List<QueryInvalidator>>();
-        private IDictionary<RoleMemento, RoleMemento> _pivotRoles = new Dictionary<RoleMemento, RoleMemento>();
         private IDictionary<CorrespondenceFactType, FactMetadata> _metadataByFactType = new Dictionary<CorrespondenceFactType, FactMetadata>();
 
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
@@ -36,8 +35,6 @@ namespace UpdateControls.Correspondence
         {
             _factoryByType[type] = factory;
             _metadataByFactType.Add(type, factMetadata);
-            foreach (RoleMemento pivotRole in factMetadata.PivotRoles)
-                _pivotRoles.Add(pivotRole, pivotRole);
         }
 
         public void AddQuery(CorrespondenceFactType type, QueryDefinition query)
@@ -82,7 +79,7 @@ namespace UpdateControls.Correspondence
 
                 // Set the ID and add the object to the community.
                 FactID id;
-                if (_storageStrategy.Save(memento, FindPivots(memento).ToList(), out id))
+                if (_storageStrategy.Save(memento, out id))
                 {
                     // Invalidate all of the queries affected by the new object.
                     List<QueryInvalidator> invalidators;
@@ -289,13 +286,6 @@ namespace UpdateControls.Correspondence
             }
 
             return memento;
-        }
-
-        private IEnumerable<FactID> FindPivots(FactMemento memento)
-        {
-            return memento.Predecessors
-                .Where(predecessor => _pivotRoles.ContainsKey(predecessor.Role))
-                .Select(predecessor => predecessor.ID);
         }
     }
 }

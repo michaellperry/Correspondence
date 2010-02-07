@@ -132,7 +132,7 @@ namespace UpdateControls.Correspondence.SSCE
 			return identifiedMemento.Memento;
 		}
 
-        public bool Save(FactMemento memento, List<FactID> pivots, out FactID id)
+        public bool Save(FactMemento memento, out FactID id)
         {
             using (var session = new Session(_connectionString))
             {
@@ -168,14 +168,14 @@ namespace UpdateControls.Correspondence.SSCE
 
                 // Store a message for each pivot.
                 FactID newFactId = id;
-                SaveMessages(session, pivots
-                    .Select(pivot => new MessageMemento(pivot, newFactId)));
+                SaveMessages(session, memento.Predecessors
+                    .Where(predecessor => predecessor.Role.IsPivot)
+                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactId)));
 
                 // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
                 string[] nonPivots = memento.Predecessors
-                    .Select(predecessor => predecessor.ID)
-                    .Where(predecessorId => !pivots.Contains(predecessorId))
-                    .Select(factId => factId.key.ToString())
+                    .Where(predecessor => !predecessor.Role.IsPivot)
+                    .Select(predecessor => predecessor.ID.key.ToString())
                     .ToArray();
                 if (nonPivots.Length > 0)
                 {
@@ -666,6 +666,7 @@ namespace UpdateControls.Correspondence.SSCE
                     new FactID() { key = factId });
             }
         }
+
         private RoleMemento GetRoleMemento(int roleId, int declaringTypeId, string declaringTypeTypeName, int declaringTypeVersion, string roleName)
 		{
 			// Look in the cache for the role.
@@ -684,7 +685,7 @@ namespace UpdateControls.Correspondence.SSCE
 					_typeMementoById.Add(declaringTypeId, type);
 				}
 
-				roleMemento = new RoleMemento(type, roleName, null);
+				roleMemento = new RoleMemento(type, roleName, null, false);
 				_roleMementoById.Add(roleId, roleMemento);
 				_roleIdByMemento.Add(roleMemento, roleId);
 			}

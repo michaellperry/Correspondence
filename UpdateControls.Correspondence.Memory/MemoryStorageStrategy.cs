@@ -39,7 +39,7 @@ namespace UpdateControls.Correspondence.Memory
                 throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
 
-        public bool Save(FactMemento memento, List<FactID> pivots, out FactID id)
+        public bool Save(FactMemento memento, out FactID id)
         {
             // See if the fact already exists.
             IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
@@ -52,13 +52,14 @@ namespace UpdateControls.Correspondence.Memory
                 _factTable.Add(fact);
 
                 // Store a message for each pivot.
-                _messageTable.AddRange(pivots
-                    .Select(pivot => new MessageMemento(pivot, newFactID)));
+                _messageTable.AddRange(memento.Predecessors
+                    .Where(predecessor => predecessor.Role.IsPivot)
+                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactID)));
 
                 // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
                 List<FactID> nonPivots = memento.Predecessors
+                    .Where(predecessor => !predecessor.Role.IsPivot)
                     .Select(predecessor => predecessor.ID)
-                    .Where(predecessorId => !pivots.Contains(predecessorId))
                     .ToList();
                 List<FactID> predecessorsPivots = _messageTable
                     .Where(message => nonPivots.Contains(message.FactId))

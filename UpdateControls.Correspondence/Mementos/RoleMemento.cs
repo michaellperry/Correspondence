@@ -6,12 +6,14 @@ namespace UpdateControls.Correspondence.Mementos
         private CorrespondenceFactType _declaringType;
         private string _roleName;
         private CorrespondenceFactType _targetType;
+        private bool _isPivot;
 
-        public RoleMemento(CorrespondenceFactType declaringType, string roleName, CorrespondenceFactType targetType)
+        public RoleMemento(CorrespondenceFactType declaringType, string roleName, CorrespondenceFactType targetType, bool isPivot)
         {
             _declaringType = declaringType;
             _roleName = roleName;
             _targetType = targetType;
+            _isPivot = isPivot;
         }
 
         public CorrespondenceFactType DeclaringType
@@ -27,6 +29,11 @@ namespace UpdateControls.Correspondence.Mementos
         public CorrespondenceFactType TargetType
         {
             get { return _targetType; }
+        }
+
+        public bool IsPivot
+        {
+            get { return _isPivot; }
         }
 
         public override bool Equals(object obj)
