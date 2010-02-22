@@ -74,7 +74,7 @@ namespace UpdateControls.Correspondence
                 {
                     foreach (CorrespondenceFact pivot in interest.Pivots)
                     {
-                        FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
+                        FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0l);
                         FactID pivotId = pivot.ID;
                         AddToFactTree(pivotTree, pivotId);
                         TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, pivotId);
@@ -103,7 +103,7 @@ namespace UpdateControls.Correspondence
                 FactTreeMemento messageBody;
                 if (!messageBodiesByPivotId.TryGetValue(message.PivotId, out messageBody))
                 {
-                    messageBody = new FactTreeMemento(ClientDatabasId);
+                    messageBody = new FactTreeMemento(ClientDatabasId, 0l);
                     messageBodiesByPivotId.Add(message.PivotId, messageBody);
                 }
                 AddToFactTree(messageBody, message.FactId);
@@ -125,7 +125,6 @@ namespace UpdateControls.Correspondence
         private TimestampID ReceiveMessage(FactTreeMemento messageBody)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-            long maxRemoteId = 0;
             foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
             {
                 FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
@@ -135,11 +134,9 @@ namespace UpdateControls.Correspondence
                 FactID localId = _model.SaveFact(translatedMemento);
                 FactID remoteId = identifiedFact.Id;
                 localIdByRemoteId.Add(remoteId, localId);
-
-                if (remoteId.key > maxRemoteId)
-                    maxRemoteId = remoteId.key;
             }
-            return new TimestampID(messageBody.DatabaseId, maxRemoteId);
+
+            return new TimestampID(messageBody.DatabaseId, messageBody.Timestamp);
         }
     }
 }

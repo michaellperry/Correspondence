@@ -12,9 +12,9 @@ namespace UpdateControls.Correspondence.WebService.Contract
         private Dictionary<int, CorrespondenceFactType> _typeById = new Dictionary<int, CorrespondenceFactType>();
         private Dictionary<int, RoleMemento> _roleById = new Dictionary<int, RoleMemento>();
 
-        public ContractToMementoTranslator(long databaseId)
+        public ContractToMementoTranslator(long databaseId, long timestamp)
         {
-            _targetFactTree = new FactTreeMemento(databaseId);
+            _targetFactTree = new FactTreeMemento(databaseId, timestamp);
         }
 
         public void AddFactType(FactType factType)

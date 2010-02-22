@@ -8,10 +8,12 @@ namespace UpdateControls.Correspondence.Mementos
     {
         private long _databaseId;
         private List<IdentifiedFactMemento> _facts = new List<IdentifiedFactMemento>();
+        private long _timestamp;
 
-        public FactTreeMemento(long databaseId)
+        public FactTreeMemento(long databaseId, long timestamp)
         {
             _databaseId = databaseId;
+            _timestamp = timestamp;
         }
 
         public long DatabaseId
@@ -22,6 +24,11 @@ namespace UpdateControls.Correspondence.Mementos
         public IEnumerable<IdentifiedFactMemento> Facts
         {
             get { return _facts; }
+        }
+
+        public long Timestamp
+        {
+            get { return _timestamp; }
         }
 
         public bool Contains(FactID factId)

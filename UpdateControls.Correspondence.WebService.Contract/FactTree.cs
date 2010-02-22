@@ -11,6 +11,9 @@ namespace UpdateControls.Correspondence.WebService.Contract
         public long DatabaseId { get; set; }
 
         [DataMember]
+        public long Timestamp { get; set; }
+
+        [DataMember]
         public List<FactType> Types { set; get; }
 
         [DataMember]

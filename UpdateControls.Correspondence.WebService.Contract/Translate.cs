@@ -7,13 +7,22 @@ namespace UpdateControls.Correspondence.WebService.Contract
     {
         public static FactTreeMemento FactTreeToMemento(FactTree tree)
         {
-            ContractToMementoTranslator translator = new ContractToMementoTranslator(tree.DatabaseId);
-            foreach (FactType type in tree.Types)
-                translator.AddFactType(type);
-            foreach (FactRole role in tree.Roles)
-                translator.AddRole(role);
-            foreach (Fact fact in tree.Facts)
-                translator.AddFact(fact);
+            ContractToMementoTranslator translator = new ContractToMementoTranslator(tree.DatabaseId, tree.Timestamp);
+            if (tree.Types != null)
+            {
+                foreach (FactType type in tree.Types)
+                    translator.AddFactType(type);
+            }
+            if (tree.Roles != null)
+            {
+                foreach (FactRole role in tree.Roles)
+                    translator.AddRole(role);
+            }
+            if (tree.Facts != null)
+            {
+                foreach (Fact fact in tree.Facts)
+                    translator.AddFact(fact);
+            }
             return translator.TargetFactTree;
         }
 
