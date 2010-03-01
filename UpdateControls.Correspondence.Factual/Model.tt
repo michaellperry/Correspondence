@@ -1,0 +1,16 @@
+<#@ template language="C#v3.5" hostspecific="True" debug="True" #>
+<#@ include file="Factual.ttinclude"#>
+<#@ output extension=".generated.cs"#>
+<#
+var ast = Parser.Parse(Host.TemplateFile.Replace(".tt",".fact"));
+#>
+using System;
+
+namespace <#=ast.Namespace#>
+{
+<# foreach (FactDefinition fact in ast.FactDefinitions) { #>
+    public class <#=fact.Name#>
+    {
+    }
+<#}#>
+}

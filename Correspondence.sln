@@ -41,9 +41,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameQueueService", 
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Reversi.Setup", "Reversi.Setup\Reversi.Setup.vdproj", "{801336D1-AA19-4F8C-AB10-92762162518F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual", "UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj", "{5DE5E950-C19C-4588-80EC-5C60A50D352C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameModel.InternalDSL", "Reversi.GameModel.InternalDSL\Reversi.GameModel.InternalDSL.csproj", "{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -92,6 +96,12 @@ Global
 		SccProjectUniqueName15 = Reversi.Setup\\Reversi.Setup.vdproj
 		SccProjectName15 = Reversi.Setup
 		SccLocalPath15 = Reversi.Setup
+		SccProjectUniqueName16 = UpdateControls.Correspondence.Factual\\UpdateControls.Correspondence.Factual.csproj
+		SccProjectName16 = UpdateControls.Correspondence.Factual
+		SccLocalPath16 = UpdateControls.Correspondence.Factual
+		SccProjectUniqueName17 = Reversi.GameModel.InternalDSL\\Reversi.GameModel.InternalDSL.csproj
+		SccProjectName17 = Reversi.GameModel.InternalDSL
+		SccLocalPath17 = Reversi.GameModel.InternalDSL
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -159,6 +169,14 @@ Global
 		{C1E396FB-6744-4400-BF30-07699D4F2DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{801336D1-AA19-4F8C-AB10-92762162518F}.Debug|Any CPU.ActiveCfg = Debug
 		{801336D1-AA19-4F8C-AB10-92762162518F}.Release|Any CPU.ActiveCfg = Release
+		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

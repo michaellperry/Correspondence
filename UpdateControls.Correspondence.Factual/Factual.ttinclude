@@ -1,0 +1,32 @@
+﻿<#@ assembly name="System.Core"
+#><#@ import namespace="System.Collections.Generic"
+#><#+
+class AbstractSyntaxTree
+{
+    public string Namespace
+    {
+		get { return "GameModel"; }
+    }
+    
+    public IEnumerable<FactDefinition> FactDefinitions
+    {
+		get { yield return new FactDefinition(); }
+    }
+}
+
+class FactDefinition
+{
+	public string Name
+	{
+		get { return "MyFact"; }
+	}
+}
+
+class Parser
+{
+	public static AbstractSyntaxTree Parse(string filename)
+	{
+		return new AbstractSyntaxTree();
+	}
+}
+#>

@@ -1,0 +1,4 @@
+﻿namespace GameModel;
+
+fact GameQueue {
+}
