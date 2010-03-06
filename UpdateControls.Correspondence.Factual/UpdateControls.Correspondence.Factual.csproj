@@ -49,8 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AST\Cardinality.cs" />
     <Compile Include="AST\Fact.cs" />
+    <Compile Include="AST\Field.cs" />
+    <Compile Include="AST\FieldType.cs" />
+    <Compile Include="AST\FieldTypeNative.cs" />
     <Compile Include="AST\Identifier.cs" />
+    <Compile Include="AST\NativeType.cs" />
     <Compile Include="Compiler\Analyzer.cs" />
     <Compile Include="AST\Namespace.cs" />
     <Compile Include="Compiler\Lexer.cs" />

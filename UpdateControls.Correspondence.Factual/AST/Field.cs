@@ -1,20 +1,18 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace UpdateControls.Correspondence.Factual.AST
 {
-    public class Fact
+    public class Field
     {
         private int _lineNumber;
         private string _name;
-        private List<Field> _fields = new List<Field>();
+        private FieldType _type;
 
-        public Fact(string name, int lineNumber)
+        public Field(int lineNumber, string name, FieldType type)
         {
-            _name = name;
             _lineNumber = lineNumber;
+            _name = name;
+            _type = type;
         }
 
         public int LineNumber
@@ -27,14 +25,9 @@ namespace UpdateControls.Correspondence.Factual.AST
             get { return _name; }
         }
 
-        public IEnumerable<Field> Fields
+        public FieldType Type
         {
-            get { return _fields; }
-        }
-
-        public void AddField(Field field)
-        {
-            _fields.Add(field);
+            get { return _type; }
         }
     }
 }

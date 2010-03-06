@@ -79,9 +79,59 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenFactIsGiven_FactIsRecognized()
         {
-            Parser parser = new Parser(new StringReader("namespace Reversi.GameModel;\r\n\r\nfact GameQueue {}"));
+            Parser parser = new Parser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {}"
+            ));
             Namespace result = parser.Parse();
-            Pred.Assert(result.Facts, Contains<Fact>.That(Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue"))));
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")).And(
+                Has<Fact>.Property(fact => fact.LineNumber, Is.EqualTo(3)))));
+        }
+
+        [TestMethod]
+        public void WhenFactHasField_FieldIsRecognized()
+        {
+            Parser parser = new Parser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  string identifier;\r\n" +
+                "}"
+            ));
+            Namespace result = parser.Parse();
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")).And(
+                Has<Fact>.Property(fact => fact.Fields, Contains<Field>.That(
+                    Has<Field>.Property(field => field.Name, Is.EqualTo("identifier")).And(
+                    Has<Field>.Property(field => field.Type,
+                        Has<FieldType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
+                        KindOf<FieldType, FieldTypeNative>.That(
+                            Has<FieldTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String)))
+                    )).And(
+                    Has<Field>.Property(field => field.LineNumber, Is.EqualTo(4))))
+                )))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenFieldIsOptional_CardinalityIsRecognized()
+        {
+            Parser parser = new Parser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  string? identifier;\r\n" +
+                "}"
+            ));
+            Namespace result = parser.Parse();
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Fields, Contains<Field>.That(
+                    Has<Field>.Property(field => field.Type,
+                        Has<FieldType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.Optional)))
+                ))
+            ));
         }
     }
 }

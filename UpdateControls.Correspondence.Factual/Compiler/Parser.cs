@@ -2,6 +2,7 @@
 using UpdateControls.Correspondence.Factual.AST;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.Factual.Compiler
 {
@@ -15,10 +16,18 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             _lexer = new Lexer(input)
                 .AddSymbol("namespace", Symbol.Namespace)
                 .AddSymbol("fact", Symbol.Fact)
+                .AddSymbol("string", Symbol.String)
+                .AddSymbol("int", Symbol.Int)
+                .AddSymbol("float", Symbol.Float)
+                .AddSymbol("char", Symbol.Char)
+                .AddSymbol("date", Symbol.Date)
+                .AddSymbol("time", Symbol.Time)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
                 .AddSymbol("}", Symbol.CloseBracket)
+                .AddSymbol("?", Symbol.Question)
+                .AddSymbol("*", Symbol.Asterisk)
                 ;
         }
 
@@ -28,7 +37,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             Namespace namespaceNode = MatchNamespace();
 
-            while (Lookahead.Symbol == Symbol.Fact)
+            while (StartOfFact())
                 namespaceNode.AddFact(MatchFact());
 
             if (Lookahead.Symbol != Symbol.EndOfFile)
@@ -41,7 +50,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
             Token namespaceToken = Expect(Symbol.Namespace, "Add a 'namespace' declaration.");
 
-            if (Lookahead.Symbol != Symbol.Identifier)
+            if (!StartOfDottedIdentifier())
                 throw new FactualException("Provide a dotted identifier for the namespace.", Lookahead.LineNumber);
             string namespaceIdentifier = MatchDottedIdentifier();
 
@@ -50,18 +59,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new Namespace(namespaceIdentifier, namespaceToken.LineNumber);
         }
 
-        private Fact MatchFact()
+        private bool StartOfDottedIdentifier()
         {
-            Token factToken = Expect(Symbol.Fact, "Declare a fact.");
-            Token factNameToken = Expect(Symbol.Identifier, "Provide a name for the fact.");
-
-            Fact fact = new Fact(factNameToken.Value, factNameToken.LineNumber);
-
-            Token openBracketToken = Expect(Symbol.OpenBracket, "Declare members of a fact within brackets.");
-
-            Token closeBracketToken = Expect(Symbol.CloseBracket, "A member must be a field, property, query, or predicate.");
-
-            return fact;
+            return Lookahead.Symbol == Symbol.Identifier;
         }
 
         private string MatchDottedIdentifier()
@@ -81,6 +81,89 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
 
             return result.ToString();
+        }
+
+        private bool StartOfFact()
+        {
+            return Lookahead.Symbol == Symbol.Fact;
+        }
+
+        private Fact MatchFact()
+        {
+            Token factToken = Expect(Symbol.Fact, "Declare a fact.");
+            Token factNameToken = Expect(Symbol.Identifier, "Provide a name for the fact.");
+
+            Fact fact = new Fact(factNameToken.Value, factNameToken.LineNumber);
+
+            Token openBracketToken = Expect(Symbol.OpenBracket, "Declare members of a fact within brackets.");
+
+            while (true)
+            {
+                if (StartOfType())
+                {
+                    FieldType type = MatchType();
+                    Token nameToken = Expect(Symbol.Identifier, "Provide a name for the field or query.");
+                    Expect(Symbol.Semicolon, "Terminate a field with a semicolon.");
+                    fact.AddField(new Field(nameToken.LineNumber, nameToken.Value, type));
+                }
+                else
+                    break;
+            }
+
+            Token closeBracketToken = Expect(Symbol.CloseBracket, "A member must be a field, property, query, or predicate.");
+
+            return fact;
+        }
+
+        private bool StartOfType()
+        {
+            return
+                StartOfNativeType() ||
+                Lookahead.Symbol == Symbol.Identifier;
+        }
+
+        private FieldType MatchType()
+        {
+            if (StartOfNativeType())
+                return MatchNativeType();
+            else
+                throw new FactualException("Declare a native type or fact type.", Lookahead.LineNumber);
+        }
+
+        private static Dictionary<Symbol, NativeType> _nativeTypeBySymbol = new Dictionary<Symbol, NativeType>()
+        {
+            { Symbol.String, NativeType.String },
+            { Symbol.Int, NativeType.Int },
+            { Symbol.Float, NativeType.Float },
+            { Symbol.Char, NativeType.Char },
+            { Symbol.Date, NativeType.Date },
+            { Symbol.Time, NativeType.Time }
+        };
+
+        private bool StartOfNativeType()
+        {
+            return _nativeTypeBySymbol.ContainsKey(Lookahead.Symbol);
+        }
+
+        private FieldTypeNative MatchNativeType()
+        {
+            return new FieldTypeNative(_nativeTypeBySymbol[Consume().Symbol], MatchCardinality());
+        }
+
+        private Cardinality MatchCardinality()
+        {
+            if (Lookahead.Symbol == Symbol.Question)
+            {
+                Consume();
+                return Cardinality.Optional;
+            }
+            else if (Lookahead.Symbol == Symbol.Asterisk)
+            {
+                Consume();
+                return Cardinality.Many;
+            }
+            else
+                return Cardinality.One;
         }
 
         private Token Lookahead

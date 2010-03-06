@@ -11,6 +11,14 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Semicolon,
         Fact,
         OpenBracket,
-        CloseBracket
+        CloseBracket,
+        String,
+        Question,
+        Asterisk,
+        Int,
+        Float,
+        Char,
+        Date,
+        Time
     }
 }
