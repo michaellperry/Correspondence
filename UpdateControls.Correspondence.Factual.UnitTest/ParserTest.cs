@@ -116,6 +116,30 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         }
 
         [TestMethod]
+        public void WhenFieldIsPredecessor_PredecessorIsRecognized()
+        {
+            Parser parser = new Parser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "  GameQueue gameQueue;\r\n" +
+                "}"
+            ));
+            Namespace result = parser.Parse();
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Fields, Contains<DataMember>.That(
+                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("gameQueue")).And(
+                    Has<DataMember>.Property(field => field.Type,
+                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
+                        KindOf<DataType, DataTypeFact>.That(
+                            Has<DataTypeFact>.Property(type => type.FactName, Is.EqualTo("GameQueue")))
+                    )).And(
+                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))))
+                ))
+            ));
+        }
+
+        [TestMethod]
         public void WhenFieldIsOptional_CardinalityIsRecognized()
         {
             Parser parser = new Parser(new StringReader(
@@ -150,6 +174,38 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                     Has<DataMember>.Property(property => property.Name, Is.EqualTo("firstName")).And(
                     Has<DataMember>.Property(property => property.Type, KindOf<DataType, DataTypeNative>.That(
                         Has<DataTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String))
+                    )))
+                ))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenFactHasQuery_QueryIsRecognized()
+        {
+            Parser parser = new Parser(new StringReader(
+                "namespace ContactList;\r\n" +
+                "\r\n" +
+                "fact Person {\r\n" +
+                "  Address* addresses {\r\n" +
+                "    Address address : address.person = this\r\n" +
+                "  }\r\n" +
+                "}"
+            ));
+            Namespace result = parser.Parse();
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Queries, Contains<Query>.That(
+                    Has<Query>.Property(query => query.Name, Is.EqualTo("addresses")).And(
+                    Has<Query>.Property(query => query.FactName, Is.EqualTo("Address"))).And(
+                    Has<Query>.Property(query => query.Sets, Contains<Set>.That(
+                        Has<Set>.Property(set => set.Name, Is.EqualTo("address")).And(
+                        Has<Set>.Property(set => set.FactName, Is.EqualTo("Address"))).And(
+                        Has<Set>.Property(set => set.LeftPath, KindOf<AST.Path, PathRelative>.That(
+                            Has<PathRelative>.Property(path => path.Segments,
+                                Contains<string>.That(Is.EqualTo("address")).And(
+                                Contains<string>.That(Is.EqualTo("person")))
+                            )
+                        ))).And(
+                        Has<Set>.Property(set => set.RightPath, KindOf<AST.Path, PathAbsolute>.That(Is.NotNull<PathAbsolute>())))
                     )))
                 ))
             ));

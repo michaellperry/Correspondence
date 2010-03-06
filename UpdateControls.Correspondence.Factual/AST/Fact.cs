@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace UpdateControls.Correspondence.Factual.AST
 {
@@ -11,6 +9,7 @@ namespace UpdateControls.Correspondence.Factual.AST
         private string _name;
         private List<DataMember> _fields = new List<DataMember>();
         private List<DataMember> _properties = new List<DataMember>();
+        private List<Query> _queries = new List<Query>();
 
         public Fact(string name, int lineNumber)
         {
@@ -46,6 +45,16 @@ namespace UpdateControls.Correspondence.Factual.AST
         public void AddProperty(DataMember property)
         {
             _properties.Add(property);
+        }
+
+        public IEnumerable<Query> Queries
+        {
+            get { return _queries; }
+        }
+
+        public void AddQuery(Query query)
+        {
+            _queries.Add(query);
         }
     }
 }

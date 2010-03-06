@@ -50,12 +50,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\Cardinality.cs" />
+    <Compile Include="AST\DataTypeFact.cs" />
     <Compile Include="AST\Fact.cs" />
     <Compile Include="AST\DataMember.cs" />
     <Compile Include="AST\DataType.cs" />
     <Compile Include="AST\DataTypeNative.cs" />
     <Compile Include="AST\Identifier.cs" />
     <Compile Include="AST\NativeType.cs" />
+    <Compile Include="AST\Path.cs" />
+    <Compile Include="AST\PathAbsolute.cs" />
+    <Compile Include="AST\PathRelative.cs" />
+    <Compile Include="AST\Query.cs" />
+    <Compile Include="AST\Set.cs" />
     <Compile Include="Compiler\Analyzer.cs" />
     <Compile Include="AST\Namespace.cs" />
     <Compile Include="Compiler\Lexer.cs" />

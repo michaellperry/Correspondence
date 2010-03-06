@@ -20,6 +20,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Char,
         Date,
         Time,
-        Property
+        Property,
+        Colon,
+        This,
+        Equal
     }
 }

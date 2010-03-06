@@ -1,6 +1,5 @@
 ﻿using System;
 using UpdateControls.Correspondence.Factual.AST;
-using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
@@ -11,12 +10,13 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         private Lexer _lexer;
         private Token _lookahead;
 
-        public Parser(TextReader input)
+        public Parser(System.IO.TextReader input)
         {
             _lexer = new Lexer(input)
                 .AddSymbol("namespace", Symbol.Namespace)
                 .AddSymbol("fact", Symbol.Fact)
                 .AddSymbol("property", Symbol.Property)
+                .AddSymbol("this", Symbol.This)
                 .AddSymbol("string", Symbol.String)
                 .AddSymbol("int", Symbol.Int)
                 .AddSymbol("float", Symbol.Float)
@@ -29,6 +29,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("}", Symbol.CloseBracket)
                 .AddSymbol("?", Symbol.Question)
                 .AddSymbol("*", Symbol.Asterisk)
+                .AddSymbol(":", Symbol.Colon)
+                .AddSymbol("=", Symbol.Equal)
                 ;
         }
 
@@ -104,8 +106,29 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 {
                     DataType type = MatchType();
                     Token nameToken = Expect(Symbol.Identifier, "Provide a name for the field or query.");
-                    Expect(Symbol.Semicolon, "Terminate a field with a semicolon.");
-                    fact.AddField(new DataMember(type.LineNumber, nameToken.Value, type));
+                    if (Lookahead.Symbol == Symbol.OpenBracket)
+                    {
+                        Consume();
+
+                        DataTypeFact factType = type as DataTypeFact;
+                        if (factType == null)
+                            throw new FactualException("A query must return a fact type, not a native type.", type.LineNumber);
+                        if (factType.Cardinality != Cardinality.Many)
+                            throw new FactualException("A query must return multiple results.", factType.LineNumber);
+
+                        Query query = new Query(nameToken.Value, factType.FactName, factType.LineNumber);
+
+                        while (StartOfSet())
+                            query.AddSet(MatchSet());
+                        fact.AddQuery(query);
+
+                        Expect(Symbol.CloseBracket, "A query must contain sets.");
+                    }
+                    else
+                    {
+                        Expect(Symbol.Semicolon, "Terminate a field with a semicolon.");
+                        fact.AddField(new DataMember(type.LineNumber, nameToken.Value, type));
+                    }
                 }
                 else if (StartOfProperty())
                     fact.AddProperty(MatchProperty());
@@ -132,6 +155,56 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new DataMember(propertyToken.LineNumber, nameToken.Value, type);
         }
 
+        private bool StartOfSet()
+        {
+            return Lookahead.Symbol == Symbol.Identifier;
+        }
+
+        private Set MatchSet()
+        {
+            Token factNameToken = Expect(Symbol.Identifier, "Declare a fact type for the set.");
+            Token setNameToken = Expect(Symbol.Identifier, "Provide a name for the set.");
+            Expect(Symbol.Colon, "Use a colon to separate the set name from its definition.");
+            Path leftPath = MatchPath();
+            Expect(Symbol.Equal, "Separate paths with an equal sign.");
+            Path rightPath = MatchPath();
+            return new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, factNameToken.LineNumber);
+        }
+
+        private Path MatchPath()
+        {
+            if (StartOfRelativePath())
+            {
+                return MatchRelativePath();
+            }
+            else
+            {
+                Token thisToken = Expect(Symbol.This, "Provide either a relative path or \"this\".");
+                return new PathAbsolute();
+            }
+        }
+
+        private bool StartOfRelativePath()
+        {
+            return Lookahead.Symbol == Symbol.Identifier;
+        }
+
+        private PathRelative MatchRelativePath()
+        {
+            PathRelative result = new PathRelative();
+            Token idenifier = Expect(Symbol.Identifier, "Begin with an identifier.");
+            result.AddSegment(idenifier.Value);
+
+            while (Lookahead.Symbol == Symbol.Dot)
+            {
+                Consume();
+                idenifier = Expect(Symbol.Identifier, "A relative path contains only identifiers.");
+                result.AddSegment(idenifier.Value);
+            }
+
+            return result;
+        }
+
         private bool StartOfType()
         {
             return
@@ -144,7 +217,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             if (StartOfNativeType())
                 return MatchNativeType();
             else
-                throw new FactualException("Declare a native type or fact type.", Lookahead.LineNumber);
+            {
+                Token factNameToken = Expect(Symbol.Identifier, "Declare a native type or fact type.");
+                return new DataTypeFact(factNameToken.Value, MatchCardinality(), factNameToken.LineNumber);
+            }
         }
 
         private static Dictionary<Symbol, NativeType> _nativeTypeBySymbol = new Dictionary<Symbol, NativeType>()
