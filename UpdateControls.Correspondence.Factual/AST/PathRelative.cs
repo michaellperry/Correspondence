@@ -12,9 +12,10 @@ namespace UpdateControls.Correspondence.Factual.AST
             get { return _segments; }
         }
 
-        public void AddSegment(string segment)
+        public PathRelative AddSegment(string segment)
         {
             _segments.Add(segment);
+            return this;
         }
     }
 }

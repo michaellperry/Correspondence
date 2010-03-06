@@ -2,17 +2,19 @@
 using UpdateControls.Correspondence.Factual.AST;
 using System.Text;
 using System.Collections.Generic;
+using UpdateControls.Correspondence.Factual.Compiler.Rules;
 
 namespace UpdateControls.Correspondence.Factual.Compiler
 {
     public class Parser
     {
-        private Lexer _lexer;
-        private Token _lookahead;
+        private TokenStream _tokenStream;
+        private Rule<string> _dottedIdentifierRule;
+        private Rule<PathRelative> _relativePathRule;
 
         public Parser(System.IO.TextReader input)
         {
-            _lexer = new Lexer(input)
+            Lexer _lexer = new Lexer(input)
                 .AddSymbol("namespace", Symbol.Namespace)
                 .AddSymbol("fact", Symbol.Fact)
                 .AddSymbol("property", Symbol.Property)
@@ -32,6 +34,21 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol(":", Symbol.Colon)
                 .AddSymbol("=", Symbol.Equal)
                 ;
+
+            _tokenStream = new TokenStream(_lexer);
+            Rule<string> identifier = Terminal(Symbol.Identifier, t => t.Value);
+            _dottedIdentifierRule = Separated(identifier, Symbol.Dot, a => a, (a, b) => a + "." + b);
+            _relativePathRule = Separated(identifier, Symbol.Dot, segment => new PathRelative().AddSegment(segment), (path, segment) => path.AddSegment(segment));
+        }
+
+        public static Rule<T> Terminal<T>(Symbol expectedSymbol, Func<Token, T> resolve)
+        {
+            return new RuleTerminal<T>(expectedSymbol, resolve);
+        }
+
+        public static Rule<T> Separated<T, TItem>(Rule<TItem> itemRule, Symbol separator, Func<TItem, T> begin, Func<T, TItem, T> append)
+        {
+            return new RuleSeparated<T, TItem>(itemRule, separator, begin, append);
         }
 
         public Namespace Parse()
@@ -64,26 +81,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private bool StartOfDottedIdentifier()
         {
-            return Lookahead.Symbol == Symbol.Identifier;
+            return _dottedIdentifierRule.Start(Lookahead.Symbol);
         }
 
         private string MatchDottedIdentifier()
         {
-            StringBuilder result = new StringBuilder();
-
-            Token idenifier = Expect(Symbol.Identifier, "Begin with an identifier.");
-            result.Append(idenifier.Value);
-
-            while (Lookahead.Symbol == Symbol.Dot)
-            {
-                Consume();
-                result.Append(".");
-
-                idenifier = Expect(Symbol.Identifier, "A dotted identifier cannot contain other symbols.");
-                result.Append(idenifier.Value);
-            }
-
-            return result.ToString();
+            return _dottedIdentifierRule.Match(_tokenStream);
         }
 
         private bool StartOfFact()
@@ -186,23 +189,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private bool StartOfRelativePath()
         {
-            return Lookahead.Symbol == Symbol.Identifier;
+            return _relativePathRule.Start(Lookahead.Symbol);
         }
 
         private PathRelative MatchRelativePath()
         {
-            PathRelative result = new PathRelative();
-            Token idenifier = Expect(Symbol.Identifier, "Begin with an identifier.");
-            result.AddSegment(idenifier.Value);
-
-            while (Lookahead.Symbol == Symbol.Dot)
-            {
-                Consume();
-                idenifier = Expect(Symbol.Identifier, "A relative path contains only identifiers.");
-                result.AddSegment(idenifier.Value);
-            }
-
-            return result;
+            return _relativePathRule.Match(_tokenStream);
         }
 
         private bool StartOfType()
@@ -262,21 +254,17 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private Token Lookahead
         {
-            get { return _lookahead; }
+            get { return _tokenStream.Lookahead; }
         }
 
         private Token Consume()
         {
-            Token lastToken = _lookahead;
-            _lookahead = _lexer.NextToken();
-            return lastToken;
+            return _tokenStream.Consume();
         }
 
         private Token Expect(Symbol symbol, string errorMessage)
         {
-            if (Lookahead.Symbol != symbol)
-                throw new FactualException(errorMessage, Lookahead.LineNumber);
-            return Consume();
+            return _tokenStream.Expect(symbol, errorMessage);
         }
     }
 }
