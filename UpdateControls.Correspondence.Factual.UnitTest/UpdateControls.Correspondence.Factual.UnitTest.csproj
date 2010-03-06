@@ -1,17 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5DE5E950-C19C-4588-80EC-5C60A50D352C}</ProjectGuid>
+    <ProjectGuid>{B1246571-0BC0-4B06-A5AE-6C3989E8903C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UpdateControls.Correspondence.Factual</RootNamespace>
-    <AssemblyName>UpdateControls.Correspondence.Factual</AssemblyName>
+    <RootNamespace>UpdateControls.Correspondence.Factual.UnitTest</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence.Factual.UnitTest</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
@@ -35,38 +35,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AST\Fact.cs" />
-    <Compile Include="AST\Identifier.cs" />
-    <Compile Include="Compiler\Analyzer.cs" />
-    <Compile Include="AST\Namespace.cs" />
-    <Compile Include="Compiler\Lexer.cs" />
-    <Compile Include="Compiler\Parser.cs" />
-    <Compile Include="Compiler\Token.cs" />
-    <Compile Include="FactualException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Compiler\Symbol.cs" />
+    <Compile Include="ParserTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+    <ProjectReference Include="..\Predassert\Predassert.csproj">
+      <Project>{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}</Project>
+      <Name>Predassert</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj">
+      <Project>{5DE5E950-C19C-4588-80EC-5C60A50D352C}</Project>
+      <Name>UpdateControls.Correspondence.Factual</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Metadata\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

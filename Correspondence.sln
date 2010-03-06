@@ -45,9 +45,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameModel.InternalDSL", "Reversi.GameModel.InternalDSL\Reversi.GameModel.InternalDSL.csproj", "{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual.UnitTest", "UpdateControls.Correspondence.Factual.UnitTest\UpdateControls.Correspondence.Factual.UnitTest.csproj", "{B1246571-0BC0-4B06-A5AE-6C3989E8903C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs10.codeplex.com/
 		SccLocalPath0 = .
@@ -102,6 +104,9 @@ Global
 		SccProjectUniqueName17 = Reversi.GameModel.InternalDSL\\Reversi.GameModel.InternalDSL.csproj
 		SccProjectName17 = Reversi.GameModel.InternalDSL
 		SccLocalPath17 = Reversi.GameModel.InternalDSL
+		SccProjectUniqueName18 = UpdateControls.Correspondence.Factual.UnitTest\\UpdateControls.Correspondence.Factual.UnitTest.csproj
+		SccProjectName18 = UpdateControls.Correspondence.Factual.UnitTest
+		SccLocalPath18 = UpdateControls.Correspondence.Factual.UnitTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -177,6 +182,10 @@ Global
 		{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56B7CA0E-3AD2-479A-9CBA-8CE0D63E4E75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1246571-0BC0-4B06-A5AE-6C3989E8903C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1246571-0BC0-4B06-A5AE-6C3989E8903C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1246571-0BC0-4B06-A5AE-6C3989E8903C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1246571-0BC0-4B06-A5AE-6C3989E8903C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
