@@ -2,13 +2,13 @@ using System;
 
 namespace UpdateControls.Correspondence.Factual.AST
 {
-    public class Field
+    public class DataMember
     {
         private int _lineNumber;
         private string _name;
-        private FieldType _type;
+        private DataType _type;
 
-        public Field(int lineNumber, string name, FieldType type)
+        public DataMember(int lineNumber, string name, DataType type)
         {
             _lineNumber = lineNumber;
             _name = name;
@@ -25,7 +25,7 @@ namespace UpdateControls.Correspondence.Factual.AST
             get { return _name; }
         }
 
-        public FieldType Type
+        public DataType Type
         {
             get { return _type; }
         }

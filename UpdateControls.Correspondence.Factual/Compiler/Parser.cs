@@ -16,6 +16,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             _lexer = new Lexer(input)
                 .AddSymbol("namespace", Symbol.Namespace)
                 .AddSymbol("fact", Symbol.Fact)
+                .AddSymbol("property", Symbol.Property)
                 .AddSymbol("string", Symbol.String)
                 .AddSymbol("int", Symbol.Int)
                 .AddSymbol("float", Symbol.Float)
@@ -101,11 +102,13 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             {
                 if (StartOfType())
                 {
-                    FieldType type = MatchType();
+                    DataType type = MatchType();
                     Token nameToken = Expect(Symbol.Identifier, "Provide a name for the field or query.");
                     Expect(Symbol.Semicolon, "Terminate a field with a semicolon.");
-                    fact.AddField(new Field(nameToken.LineNumber, nameToken.Value, type));
+                    fact.AddField(new DataMember(type.LineNumber, nameToken.Value, type));
                 }
+                else if (StartOfProperty())
+                    fact.AddProperty(MatchProperty());
                 else
                     break;
             }
@@ -115,6 +118,20 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return fact;
         }
 
+        private bool StartOfProperty()
+        {
+            return Lookahead.Symbol == Symbol.Property;
+        }
+
+        private DataMember MatchProperty()
+        {
+            Token propertyToken = Expect(Symbol.Property, "Begin a property with the keyword \"property\".");
+            DataType type = MatchType();
+            Token nameToken = Expect(Symbol.Identifier, "Provide a name for the field or query.");
+            Expect(Symbol.Semicolon, "Terminate a property with a semicolon.");
+            return new DataMember(propertyToken.LineNumber, nameToken.Value, type);
+        }
+
         private bool StartOfType()
         {
             return
@@ -122,7 +139,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Lookahead.Symbol == Symbol.Identifier;
         }
 
-        private FieldType MatchType()
+        private DataType MatchType()
         {
             if (StartOfNativeType())
                 return MatchNativeType();
@@ -145,9 +162,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return _nativeTypeBySymbol.ContainsKey(Lookahead.Symbol);
         }
 
-        private FieldTypeNative MatchNativeType()
+        private DataTypeNative MatchNativeType()
         {
-            return new FieldTypeNative(_nativeTypeBySymbol[Consume().Symbol], MatchCardinality());
+            Token typeToken = Consume();
+            return new DataTypeNative(_nativeTypeBySymbol[typeToken.Symbol], MatchCardinality(), typeToken.LineNumber);
         }
 
         private Cardinality MatchCardinality()

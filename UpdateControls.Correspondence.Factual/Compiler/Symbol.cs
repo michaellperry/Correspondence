@@ -19,6 +19,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Float,
         Char,
         Date,
-        Time
+        Time,
+        Property
     }
 }

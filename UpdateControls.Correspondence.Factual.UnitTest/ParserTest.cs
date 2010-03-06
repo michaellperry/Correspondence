@@ -103,14 +103,14 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")).And(
-                Has<Fact>.Property(fact => fact.Fields, Contains<Field>.That(
-                    Has<Field>.Property(field => field.Name, Is.EqualTo("identifier")).And(
-                    Has<Field>.Property(field => field.Type,
-                        Has<FieldType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
-                        KindOf<FieldType, FieldTypeNative>.That(
-                            Has<FieldTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String)))
+                Has<Fact>.Property(fact => fact.Fields, Contains<DataMember>.That(
+                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("identifier")).And(
+                    Has<DataMember>.Property(field => field.Type,
+                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
+                        KindOf<DataType, DataTypeNative>.That(
+                            Has<DataTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String)))
                     )).And(
-                    Has<Field>.Property(field => field.LineNumber, Is.EqualTo(4))))
+                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))))
                 )))
             ));
         }
@@ -127,9 +127,30 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Fields, Contains<Field>.That(
-                    Has<Field>.Property(field => field.Type,
-                        Has<FieldType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.Optional)))
+                Has<Fact>.Property(fact => fact.Fields, Contains<DataMember>.That(
+                    Has<DataMember>.Property(field => field.Type,
+                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.Optional)))
+                ))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenFactHasProperty_PropertyIsRecognized()
+        {
+            Parser parser = new Parser(new StringReader(
+                "namespace ContactList;\r\n" +
+                "\r\n" +
+                "fact Person {\r\n" +
+                "  property string firstName;\r\n" +
+                "}"
+            ));
+            Namespace result = parser.Parse();
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Properties, Contains<DataMember>.That(
+                    Has<DataMember>.Property(property => property.Name, Is.EqualTo("firstName")).And(
+                    Has<DataMember>.Property(property => property.Type, KindOf<DataType, DataTypeNative>.That(
+                        Has<DataTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String))
+                    )))
                 ))
             ));
         }

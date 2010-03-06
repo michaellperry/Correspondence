@@ -9,7 +9,8 @@ namespace UpdateControls.Correspondence.Factual.AST
     {
         private int _lineNumber;
         private string _name;
-        private List<Field> _fields = new List<Field>();
+        private List<DataMember> _fields = new List<DataMember>();
+        private List<DataMember> _properties = new List<DataMember>();
 
         public Fact(string name, int lineNumber)
         {
@@ -27,14 +28,24 @@ namespace UpdateControls.Correspondence.Factual.AST
             get { return _name; }
         }
 
-        public IEnumerable<Field> Fields
+        public IEnumerable<DataMember> Fields
         {
             get { return _fields; }
         }
 
-        public void AddField(Field field)
+        public void AddField(DataMember field)
         {
             _fields.Add(field);
+        }
+
+        public IEnumerable<DataMember> Properties
+        {
+            get { return _properties; }
+        }
+
+        public void AddProperty(DataMember property)
+        {
+            _properties.Add(property);
         }
     }
 }

@@ -2,12 +2,12 @@ using System;
 
 namespace UpdateControls.Correspondence.Factual.AST
 {
-    public class FieldTypeNative : FieldType
+    public class DataTypeNative : DataType
     {
         private NativeType _nativeType;
 
-        public FieldTypeNative(NativeType nativeType, Cardinality cardinality)
-            : base(cardinality)
+        public DataTypeNative(NativeType nativeType, Cardinality cardinality, int lineNumber)
+            : base(cardinality, lineNumber)
         {
             _nativeType = nativeType;
         }         
