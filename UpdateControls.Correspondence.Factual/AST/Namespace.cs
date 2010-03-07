@@ -17,9 +17,10 @@ namespace UpdateControls.Correspondence.Factual.AST
             _identifier = identifier;
         }
 
-        public void AddFact(Fact fact)
+        public Namespace AddFact(Fact fact)
         {
             _facts.Add(fact);
+            return this;
         }
 
         public int LineNumber

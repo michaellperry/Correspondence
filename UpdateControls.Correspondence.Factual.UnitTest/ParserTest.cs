@@ -16,7 +16,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         {
             try
             {
-                Parser parser = new Parser(new StringReader(""));
+                FactualParser parser = new FactualParser(new StringReader(""));
                 Namespace result = parser.Parse();
                 Assert.Fail("A FactualException should have been thrown.");
             }
@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         {
             try
             {
-                Parser parser = new Parser(new StringReader("namespace"));
+                FactualParser parser = new FactualParser(new StringReader("namespace"));
                 Namespace result = parser.Parse();
                 Assert.Fail("A FactualException should have been thrown.");
             }
@@ -48,7 +48,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         {
             try
             {
-                Parser parser = new Parser(new StringReader("namespace Reversi.GameModel"));
+                FactualParser parser = new FactualParser(new StringReader("namespace Reversi.GameModel"));
                 Namespace result = parser.Parse();
                 Assert.Fail("A FactualException should have been thrown.");
             }
@@ -62,7 +62,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenNamespaceHasNoDot_NamepaceIsRecognized()
         {
-            Parser parser = new Parser(new StringReader("namespace GameModel;"));
+            FactualParser parser = new FactualParser(new StringReader("namespace GameModel;"));
             Namespace result = parser.Parse();
             Pred.Assert(result.Identifier, Is.EqualTo("GameModel"));
             Pred.Assert(result.LineNumber, Is.EqualTo(1));
@@ -71,7 +71,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenNamespaceIsGiven_NamepaceIsRecognized()
         {
-            Parser parser = new Parser(new StringReader("namespace Reversi.GameModel;"));
+            FactualParser parser = new FactualParser(new StringReader("namespace Reversi.GameModel;"));
             Namespace result = parser.Parse();
             Pred.Assert(result.Identifier, Is.EqualTo("Reversi.GameModel"));
         }
@@ -79,7 +79,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenFactIsGiven_FactIsRecognized()
         {
-            Parser parser = new Parser(new StringReader(
+            FactualParser parser = new FactualParser(new StringReader(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {}"
@@ -93,7 +93,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenFactHasField_FieldIsRecognized()
         {
-            Parser parser = new Parser(new StringReader(
+            FactualParser parser = new FactualParser(new StringReader(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
@@ -118,7 +118,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenFieldIsPredecessor_PredecessorIsRecognized()
         {
-            Parser parser = new Parser(new StringReader(
+            FactualParser parser = new FactualParser(new StringReader(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
@@ -142,7 +142,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenFieldIsOptional_CardinalityIsRecognized()
         {
-            Parser parser = new Parser(new StringReader(
+            FactualParser parser = new FactualParser(new StringReader(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
@@ -161,7 +161,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenFactHasProperty_PropertyIsRecognized()
         {
-            Parser parser = new Parser(new StringReader(
+            FactualParser parser = new FactualParser(new StringReader(
                 "namespace ContactList;\r\n" +
                 "\r\n" +
                 "fact Person {\r\n" +
@@ -182,7 +182,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         [TestMethod]
         public void WhenFactHasQuery_QueryIsRecognized()
         {
-            Parser parser = new Parser(new StringReader(
+            FactualParser parser = new FactualParser(new StringReader(
                 "namespace ContactList;\r\n" +
                 "\r\n" +
                 "fact Person {\r\n" +
