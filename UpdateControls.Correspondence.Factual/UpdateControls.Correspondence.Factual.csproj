@@ -65,11 +65,16 @@
     <Compile Include="Compiler\Analyzer.cs" />
     <Compile Include="AST\Namespace.cs" />
     <Compile Include="Compiler\Lexer.cs" />
+    <Compile Include="AST\NativeTypeAtLine.cs" />
     <Compile Include="Compiler\Parser.cs" />
     <Compile Include="Compiler\Rule.cs" />
+    <Compile Include="Compiler\Rules\RuleSequence2.cs" />
+    <Compile Include="Compiler\Rules\RuleOptional.cs" />
+    <Compile Include="Compiler\Rules\RuleOr.cs" />
     <Compile Include="Compiler\Rules\RuleSequence3.cs" />
     <Compile Include="Compiler\Rules\RuleSeparated.cs" />
     <Compile Include="Compiler\Rules\RuleTerminal.cs" />
+    <Compile Include="Compiler\Rules\RuleTranslate.cs" />
     <Compile Include="Compiler\Token.cs" />
     <Compile Include="Compiler\TokenStream.cs" />
     <Compile Include="FactualException.cs" />

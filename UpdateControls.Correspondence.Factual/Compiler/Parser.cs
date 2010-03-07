@@ -3,14 +3,16 @@ using UpdateControls.Correspondence.Factual.AST;
 using System.Text;
 using System.Collections.Generic;
 using UpdateControls.Correspondence.Factual.Compiler.Rules;
+using System.Diagnostics;
 
 namespace UpdateControls.Correspondence.Factual.Compiler
 {
     public class Parser
     {
         private TokenStream _tokenStream;
-        private Rule<PathRelative> _relativePathRule;
         private Rule<Namespace> _namespaceRule;
+        private Rule<Path> _pathRule;
+        private Rule<DataType> _typeRule;
 
         public Parser(System.IO.TextReader input)
         {
@@ -41,7 +43,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Symbol.Dot,
                 identifier => new StringBuilder().Append(identifier.Value),
                 (stringBuilder, identifier) => stringBuilder.Append(".").Append(identifier.Value));
-            _relativePathRule = Separated(
+            var relativePath = Separated(
                 Terminal(Symbol.Identifier),
                 Symbol.Dot,
                 segment => new PathRelative().AddSegment(segment.Value),
@@ -51,6 +53,31 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 dottedIdentifier, "Provide a dotted identifier for the namespace.",
                 Terminal(Symbol.Semicolon), "Terminate the namespace declaration with a semicolon.",
                 (namespaceToken, identifier, ignored) => new Namespace(identifier.ToString(), namespaceToken.LineNumber));
+            _pathRule =
+                Translate(relativePath, path => (Path)path) |
+                Translate(Terminal(Symbol.This), t => (Path)new PathAbsolute());
+            var cardinalityRule = Optional(
+                Translate(Terminal(Symbol.Question), t => Cardinality.Optional) |
+                Translate(Terminal(Symbol.Asterisk), t => Cardinality.Many),
+                Cardinality.One);
+            var nativeTypeNameRule =
+                Translate(Terminal(Symbol.String), t => new NativeTypeAtLine(NativeType.String, t.LineNumber)) |
+                Translate(Terminal(Symbol.Int),    t => new NativeTypeAtLine(NativeType.Int, t.LineNumber)) |
+                Translate(Terminal(Symbol.Float),  t => new NativeTypeAtLine(NativeType.Float, t.LineNumber)) |
+                Translate(Terminal(Symbol.Char),   t => new NativeTypeAtLine(NativeType.Char, t.LineNumber)) |
+                Translate(Terminal(Symbol.Date),   t => new NativeTypeAtLine(NativeType.Date, t.LineNumber)) |
+                Translate(Terminal(Symbol.Time),   t => new NativeTypeAtLine(NativeType.Time, t.LineNumber));
+            var nativeTypeRule = Sequence(
+                nativeTypeNameRule,
+                cardinalityRule, "Defect.",
+                (nativeType, cardinality) => new DataTypeNative(nativeType.NativeType, cardinality, nativeType.LineNumber));
+            var factTypeRule = Sequence(
+                Terminal(Symbol.Identifier),
+                cardinalityRule, "Defect.",
+                (identifier, cardinality) => new DataTypeFact(identifier.Value, cardinality, identifier.LineNumber));
+            _typeRule =
+                Translate(nativeTypeRule, t => (DataType)t) |
+                Translate(factTypeRule,   t => (DataType)t);
         }
 
         public static Rule<Token> Terminal(Symbol expectedSymbol)
@@ -58,9 +85,24 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new RuleTerminal(expectedSymbol);
         }
 
+        public static Rule<T> Translate<TFrom, T>(Rule<TFrom> ruleFrom, Func<TFrom, T> translation)
+        {
+            return new RuleTranslate<TFrom, T>(ruleFrom, translation);
+        }
+
+        public static Rule<T> Optional<T>(Rule<T> rule, T defaultValue)
+        {
+            return new RuleOptional<T>(rule, defaultValue);
+        }
+
         public static Rule<T> Separated<T, TItem>(Rule<TItem> itemRule, Symbol separator, Func<TItem, T> begin, Func<T, TItem, T> append)
         {
             return new RuleSeparated<T, TItem>(itemRule, separator, begin, append);
+        }
+
+        private static Rule<T> Sequence<T1, T2, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Func<T1, T2, T> reduce)
+        {
+            return new RuleSequence2<T1, T2, T>(rule1, rule2, error2, reduce);
         }
 
         private static Rule<T> Sequence<T1, T2, T3, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, Func<T1, T2, T3, T> reduce)
@@ -182,80 +224,17 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private Path MatchPath()
         {
-            if (StartOfRelativePath())
-            {
-                return MatchRelativePath();
-            }
-            else
-            {
-                Token thisToken = Expect(Symbol.This, "Provide either a relative path or \"this\".");
-                return new PathAbsolute();
-            }
-        }
-
-        private bool StartOfRelativePath()
-        {
-            return _relativePathRule.Start(Lookahead.Symbol);
-        }
-
-        private PathRelative MatchRelativePath()
-        {
-            return _relativePathRule.Match(_tokenStream);
+            return _pathRule.Match(_tokenStream);
         }
 
         private bool StartOfType()
         {
-            return
-                StartOfNativeType() ||
-                Lookahead.Symbol == Symbol.Identifier;
+            return _typeRule.Start(Lookahead.Symbol);
         }
 
         private DataType MatchType()
         {
-            if (StartOfNativeType())
-                return MatchNativeType();
-            else
-            {
-                Token factNameToken = Expect(Symbol.Identifier, "Declare a native type or fact type.");
-                return new DataTypeFact(factNameToken.Value, MatchCardinality(), factNameToken.LineNumber);
-            }
-        }
-
-        private static Dictionary<Symbol, NativeType> _nativeTypeBySymbol = new Dictionary<Symbol, NativeType>()
-        {
-            { Symbol.String, NativeType.String },
-            { Symbol.Int, NativeType.Int },
-            { Symbol.Float, NativeType.Float },
-            { Symbol.Char, NativeType.Char },
-            { Symbol.Date, NativeType.Date },
-            { Symbol.Time, NativeType.Time }
-        };
-
-        private bool StartOfNativeType()
-        {
-            return _nativeTypeBySymbol.ContainsKey(Lookahead.Symbol);
-        }
-
-        private DataTypeNative MatchNativeType()
-        {
-            Token typeToken = Consume();
-            return new DataTypeNative(_nativeTypeBySymbol[typeToken.Symbol], MatchCardinality(), typeToken.LineNumber);
-        }
-
-        private Cardinality MatchCardinality()
-        {
-            if (Lookahead.Symbol == Symbol.Question)
-            {
-                Consume();
-                return Cardinality.Optional;
-            }
-            else if (Lookahead.Symbol == Symbol.Asterisk)
-            {
-                Consume();
-                return Cardinality.Many;
-            }
-            else
-                return Cardinality.One;
+            return _typeRule.Match(_tokenStream);
         }
 
         private Token Lookahead
