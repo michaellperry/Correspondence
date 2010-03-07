@@ -2,15 +2,15 @@
 
 namespace UpdateControls.Correspondence.Factual.Compiler.Rules
 {
-    public class RuleTranslate<TFrom, T> : Rule<T>
+    public class RuleReduce<TFrom, T> : Rule<T>
     {
         private Rule<TFrom> _ruleFrom;
-        private Func<TFrom, T> _translation;
+        private Func<TFrom, T> _reduce;
 
-        public RuleTranslate(Rule<TFrom> ruleFrom, Func<TFrom, T> translation)
+        public RuleReduce(Rule<TFrom> ruleFrom, Func<TFrom, T> reduce)
         {
             _ruleFrom = ruleFrom;
-            _translation = translation;
+            _reduce = reduce;
         }
 
         public override bool Start(Symbol symbol)
@@ -20,7 +20,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler.Rules
 
         public override T Match(TokenStream tokenStream)
         {
-            return _translation(_ruleFrom.Match(tokenStream));
+            return _reduce(_ruleFrom.Match(tokenStream));
         }
     }
 }

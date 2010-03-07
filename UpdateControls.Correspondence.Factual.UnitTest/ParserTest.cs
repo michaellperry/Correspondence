@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Linq;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Predassert;
 using UpdateControls.Correspondence.Factual.AST;
@@ -103,7 +104,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")).And(
-                Has<Fact>.Property(fact => fact.Fields, Contains<DataMember>.That(
+                Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
                     Has<DataMember>.Property(field => field.Name, Is.EqualTo("identifier")).And(
                     Has<DataMember>.Property(field => field.Type,
                         Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
@@ -127,7 +128,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Fields, Contains<DataMember>.That(
+                Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
                     Has<DataMember>.Property(field => field.Name, Is.EqualTo("gameQueue")).And(
                     Has<DataMember>.Property(field => field.Type,
                         Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
@@ -151,8 +152,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Fields, Contains<DataMember>.That(
-                    Has<DataMember>.Property(field => field.Type,
+                Has<Fact>.Property(fact => fact.Members.OfType<Field>(), Contains<Field>.That(
+                    Has<Field>.Property(field => field.Type,
                         Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.Optional)))
                 ))
             ));
@@ -170,9 +171,9 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Properties, Contains<DataMember>.That(
-                    Has<DataMember>.Property(property => property.Name, Is.EqualTo("firstName")).And(
-                    Has<DataMember>.Property(property => property.Type, KindOf<DataType, DataTypeNative>.That(
+                Has<Fact>.Property(fact => fact.Members.OfType<Property>(), Contains<Property>.That(
+                    Has<Property>.Property(property => property.Name, Is.EqualTo("firstName")).And(
+                    Has<Property>.Property(property => property.Type, KindOf<DataType, DataTypeNative>.That(
                         Has<DataTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String))
                     )))
                 ))
@@ -193,7 +194,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Queries, Contains<Query>.That(
+                Has<Fact>.Property(fact => fact.Members.OfType<Query>(), Contains<Query>.That(
                     Has<Query>.Property(query => query.Name, Is.EqualTo("addresses")).And(
                     Has<Query>.Property(query => query.FactName, Is.EqualTo("Address"))).And(
                     Has<Query>.Property(query => query.Sets, Contains<Set>.That(

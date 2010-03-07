@@ -7,9 +7,7 @@ namespace UpdateControls.Correspondence.Factual.AST
     {
         private int _lineNumber;
         private string _name;
-        private List<DataMember> _fields = new List<DataMember>();
-        private List<DataMember> _properties = new List<DataMember>();
-        private List<Query> _queries = new List<Query>();
+        private List<FactMember> _members = new List<FactMember>();
 
         public Fact(string name, int lineNumber)
         {
@@ -27,34 +25,15 @@ namespace UpdateControls.Correspondence.Factual.AST
             get { return _name; }
         }
 
-        public IEnumerable<DataMember> Fields
+        public IEnumerable<FactMember> Members
         {
-            get { return _fields; }
+            get { return _members; }
         }
 
-        public void AddField(DataMember field)
+        public Fact AddMember(FactMember member)
         {
-            _fields.Add(field);
-        }
-
-        public IEnumerable<DataMember> Properties
-        {
-            get { return _properties; }
-        }
-
-        public void AddProperty(DataMember property)
-        {
-            _properties.Add(property);
-        }
-
-        public IEnumerable<Query> Queries
-        {
-            get { return _queries; }
-        }
-
-        public void AddQuery(Query query)
-        {
-            _queries.Add(query);
+            _members.Add(member);
+            return this;
         }
     }
 }

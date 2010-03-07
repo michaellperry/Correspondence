@@ -2,27 +2,14 @@ using System;
 
 namespace UpdateControls.Correspondence.Factual.AST
 {
-    public class DataMember
+    public abstract class DataMember : FactMember
     {
-        private int _lineNumber;
-        private string _name;
         private DataType _type;
 
         public DataMember(int lineNumber, string name, DataType type)
+            : base(name, lineNumber)
         {
-            _lineNumber = lineNumber;
-            _name = name;
             _type = type;
-        }
-
-        public int LineNumber
-        {
-            get { return _lineNumber; }
-        }
-
-        public string Name
-        {
-            get { return _name; }
         }
 
         public DataType Type
