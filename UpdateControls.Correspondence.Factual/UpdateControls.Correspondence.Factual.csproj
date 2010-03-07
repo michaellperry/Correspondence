@@ -68,6 +68,10 @@
     <Compile Include="AST\NativeTypeAtLine.cs" />
     <Compile Include="Compiler\Parser.cs" />
     <Compile Include="Compiler\Rule.cs" />
+    <Compile Include="Compiler\Rules\RuleSequence6.cs" />
+    <Compile Include="Compiler\Rules\RuleSequence.cs" />
+    <Compile Include="Compiler\Rules\RuleSequence5.cs" />
+    <Compile Include="Compiler\Rules\RuleSequence4.cs" />
     <Compile Include="Compiler\Rules\RuleSequence2.cs" />
     <Compile Include="Compiler\Rules\RuleOptional.cs" />
     <Compile Include="Compiler\Rules\RuleOr.cs" />

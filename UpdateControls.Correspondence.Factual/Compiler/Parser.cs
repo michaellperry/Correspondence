@@ -11,8 +11,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
     {
         private TokenStream _tokenStream;
         private Rule<Namespace> _namespaceRule;
-        private Rule<Path> _pathRule;
         private Rule<DataType> _typeRule;
+        private Rule<DataMember> _propertyRule;
+        private Rule<Set> _setRule;
 
         public Parser(System.IO.TextReader input)
         {
@@ -53,7 +54,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 dottedIdentifier, "Provide a dotted identifier for the namespace.",
                 Terminal(Symbol.Semicolon), "Terminate the namespace declaration with a semicolon.",
                 (namespaceToken, identifier, ignored) => new Namespace(identifier.ToString(), namespaceToken.LineNumber));
-            _pathRule =
+            var pathRule =
                 Translate(relativePath, path => (Path)path) |
                 Translate(Terminal(Symbol.This), t => (Path)new PathAbsolute());
             var cardinalityRule = Optional(
@@ -78,6 +79,20 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             _typeRule =
                 Translate(nativeTypeRule, t => (DataType)t) |
                 Translate(factTypeRule,   t => (DataType)t);
+            _propertyRule = Sequence(
+                Terminal(Symbol.Property),
+                _typeRule, "Declare a type for the property.",
+                Terminal(Symbol.Identifier), "Provide a name for the property.",
+                Terminal(Symbol.Semicolon), "Terminate a property with a semicolon.",
+                (propertyToken, dataType, propertyNameToken, semicolonToken) => new DataMember(propertyToken.LineNumber, propertyNameToken.Value, dataType));
+            _setRule = Sequence(
+                Terminal(Symbol.Identifier),
+                Terminal(Symbol.Identifier), "Provide a name for the set.",
+                Terminal(Symbol.Colon), "Use a colon to separate the set name from its definition.",
+                pathRule, "Declare a relative path or \"this\".",
+                Terminal(Symbol.Equal), "Separate paths with an equal sign.",
+                pathRule, "Declare a relative path or \"this\".",
+                (factNameToken, setNameToken, colonToken, leftPath, equalToken, rightPath) => new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, factNameToken.LineNumber));
         }
 
         public static Rule<Token> Terminal(Symbol expectedSymbol)
@@ -100,14 +115,29 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new RuleSeparated<T, TItem>(itemRule, separator, begin, append);
         }
 
-        private static Rule<T> Sequence<T1, T2, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Func<T1, T2, T> reduce)
+        private static Rule<T> Sequence<T1, T2, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, RuleSequence2<T1, T2, T>.Function reduce)
         {
             return new RuleSequence2<T1, T2, T>(rule1, rule2, error2, reduce);
         }
 
-        private static Rule<T> Sequence<T1, T2, T3, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, Func<T1, T2, T3, T> reduce)
+        private static Rule<T> Sequence<T1, T2, T3, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, RuleSequence3<T1, T2, T3, T>.Function reduce)
         {
             return new RuleSequence3<T1, T2, T3, T>(rule1, rule2, error2, rule3, error3, reduce);
+        }
+
+        private static Rule<T> Sequence<T1, T2, T3, T4, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, Rule<T4> rule4, string error4, RuleSequence4<T1, T2, T3, T4, T>.Function reduce)
+        {
+            return new RuleSequence4<T1, T2, T3, T4, T>(rule1, rule2, error2, rule3, error3, rule4, error4, reduce);
+        }
+
+        private static Rule<T> Sequence<T1, T2, T3, T4, T5, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, Rule<T4> rule4, string error4, Rule<T5> rule5, string error5, RuleSequence5<T1, T2, T3, T4, T5, T>.Function reduce)
+        {
+            return new RuleSequence5<T1, T2, T3, T4, T5, T>(rule1, rule2, error2, rule3, error3, rule4, error4, rule5, error5, reduce);
+        }
+
+        private static Rule<T> Sequence<T1, T2, T3, T4, T5, T6, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, Rule<T4> rule4, string error4, Rule<T5> rule5, string error5, Rule<T6> rule6, string error6, RuleSequence6<T1, T2, T3, T4, T5, T6, T>.Function reduce)
+        {
+            return new RuleSequence6<T1, T2, T3, T4, T5, T6, T>(rule1, rule2, error2, rule3, error3, rule4, error4, rule5, error5, rule6, error6, reduce);
         }
 
         public Namespace Parse()
@@ -194,37 +224,22 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private bool StartOfProperty()
         {
-            return Lookahead.Symbol == Symbol.Property;
+            return _propertyRule.Start(Lookahead.Symbol);
         }
 
         private DataMember MatchProperty()
         {
-            Token propertyToken = Expect(Symbol.Property, "Begin a property with the keyword \"property\".");
-            DataType type = MatchType();
-            Token nameToken = Expect(Symbol.Identifier, "Provide a name for the field or query.");
-            Expect(Symbol.Semicolon, "Terminate a property with a semicolon.");
-            return new DataMember(propertyToken.LineNumber, nameToken.Value, type);
+            return _propertyRule.Match(_tokenStream);
         }
 
         private bool StartOfSet()
         {
-            return Lookahead.Symbol == Symbol.Identifier;
+            return _setRule.Start(Lookahead.Symbol);
         }
 
         private Set MatchSet()
         {
-            Token factNameToken = Expect(Symbol.Identifier, "Declare a fact type for the set.");
-            Token setNameToken = Expect(Symbol.Identifier, "Provide a name for the set.");
-            Expect(Symbol.Colon, "Use a colon to separate the set name from its definition.");
-            Path leftPath = MatchPath();
-            Expect(Symbol.Equal, "Separate paths with an equal sign.");
-            Path rightPath = MatchPath();
-            return new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, factNameToken.LineNumber);
-        }
-
-        private Path MatchPath()
-        {
-            return _pathRule.Match(_tokenStream);
+            return _setRule.Match(_tokenStream);
         }
 
         private bool StartOfType()
