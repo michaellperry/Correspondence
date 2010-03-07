@@ -2,15 +2,13 @@ using System;
 
 namespace UpdateControls.Correspondence.Factual.Compiler.Rules
 {
-    public class RuleTerminal<T> : Rule<T>
+    public class RuleTerminal : Rule<Token>
     {
         private Symbol _expectedSymbol;
-        private Func<Token, T> _resolve;
 
-        public RuleTerminal(Symbol expectedSymbol, Func<Token, T> resolve)
+        public RuleTerminal(Symbol expectedSymbol)
         {
             _expectedSymbol = expectedSymbol;
-            _resolve = resolve;
         }
 
         public override bool Start(Symbol symbol)
@@ -18,9 +16,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler.Rules
             return symbol == _expectedSymbol;
         }
 
-        public override T Match(TokenStream tokenStream)
+        public override Token Match(TokenStream tokenStream)
         {
-            return _resolve(tokenStream.Consume());
+            return tokenStream.Consume();
         }
     }
 }

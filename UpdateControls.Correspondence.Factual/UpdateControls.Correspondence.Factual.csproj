@@ -67,6 +67,7 @@
     <Compile Include="Compiler\Lexer.cs" />
     <Compile Include="Compiler\Parser.cs" />
     <Compile Include="Compiler\Rule.cs" />
+    <Compile Include="Compiler\Rules\RuleSequence3.cs" />
     <Compile Include="Compiler\Rules\RuleSeparated.cs" />
     <Compile Include="Compiler\Rules\RuleTerminal.cs" />
     <Compile Include="Compiler\Token.cs" />

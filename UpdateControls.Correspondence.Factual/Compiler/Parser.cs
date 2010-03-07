@@ -9,8 +9,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
     public class Parser
     {
         private TokenStream _tokenStream;
-        private Rule<string> _dottedIdentifierRule;
         private Rule<PathRelative> _relativePathRule;
+        private Rule<Namespace> _namespaceRule;
 
         public Parser(System.IO.TextReader input)
         {
@@ -36,14 +36,26 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 ;
 
             _tokenStream = new TokenStream(_lexer);
-            Rule<string> identifier = Terminal(Symbol.Identifier, t => t.Value);
-            _dottedIdentifierRule = Separated(identifier, Symbol.Dot, a => a, (a, b) => a + "." + b);
-            _relativePathRule = Separated(identifier, Symbol.Dot, segment => new PathRelative().AddSegment(segment), (path, segment) => path.AddSegment(segment));
+            var dottedIdentifier = Separated(
+                Terminal(Symbol.Identifier),
+                Symbol.Dot,
+                identifier => new StringBuilder().Append(identifier.Value),
+                (stringBuilder, identifier) => stringBuilder.Append(".").Append(identifier.Value));
+            _relativePathRule = Separated(
+                Terminal(Symbol.Identifier),
+                Symbol.Dot,
+                segment => new PathRelative().AddSegment(segment.Value),
+                (path, segment) => path.AddSegment(segment.Value));
+            _namespaceRule = Sequence(
+                Terminal(Symbol.Namespace),
+                dottedIdentifier, "Provide a dotted identifier for the namespace.",
+                Terminal(Symbol.Semicolon), "Terminate the namespace declaration with a semicolon.",
+                (namespaceToken, identifier, ignored) => new Namespace(identifier.ToString(), namespaceToken.LineNumber));
         }
 
-        public static Rule<T> Terminal<T>(Symbol expectedSymbol, Func<Token, T> resolve)
+        public static Rule<Token> Terminal(Symbol expectedSymbol)
         {
-            return new RuleTerminal<T>(expectedSymbol, resolve);
+            return new RuleTerminal(expectedSymbol);
         }
 
         public static Rule<T> Separated<T, TItem>(Rule<TItem> itemRule, Symbol separator, Func<TItem, T> begin, Func<T, TItem, T> append)
@@ -51,10 +63,17 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new RuleSeparated<T, TItem>(itemRule, separator, begin, append);
         }
 
+        private static Rule<T> Sequence<T1, T2, T3, T>(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, Func<T1, T2, T3, T> reduce)
+        {
+            return new RuleSequence3<T1, T2, T3, T>(rule1, rule2, error2, rule3, error3, reduce);
+        }
+
         public Namespace Parse()
         {
             Consume();
 
+            if (!StartOfNamespace())
+                throw new FactualException("Add a 'namespace' declaration.", Lookahead.LineNumber);
             Namespace namespaceNode = MatchNamespace();
 
             while (StartOfFact())
@@ -66,27 +85,14 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return namespaceNode;
         }
 
+        private bool StartOfNamespace()
+        {
+            return _namespaceRule.Start(Lookahead.Symbol);
+        }
+
         private Namespace MatchNamespace()
         {
-            Token namespaceToken = Expect(Symbol.Namespace, "Add a 'namespace' declaration.");
-
-            if (!StartOfDottedIdentifier())
-                throw new FactualException("Provide a dotted identifier for the namespace.", Lookahead.LineNumber);
-            string namespaceIdentifier = MatchDottedIdentifier();
-
-            Expect(Symbol.Semicolon, "Terminate the namespace declaration with a semicolon.");
-
-            return new Namespace(namespaceIdentifier, namespaceToken.LineNumber);
-        }
-
-        private bool StartOfDottedIdentifier()
-        {
-            return _dottedIdentifierRule.Start(Lookahead.Symbol);
-        }
-
-        private string MatchDottedIdentifier()
-        {
-            return _dottedIdentifierRule.Match(_tokenStream);
+            return _namespaceRule.Match(_tokenStream);
         }
 
         private bool StartOfFact()
