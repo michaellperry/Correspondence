@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Predassert;
-using QEDCode.LALROne;
+using QEDCode.LLOne;
 using UpdateControls.Correspondence.Factual.AST;
 using UpdateControls.Correspondence.Factual.Compiler;
 

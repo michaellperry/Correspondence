@@ -1,7 +1,7 @@
 using System;
-using QEDCode.LALROne;
+using QEDCode.LLOne;
 
-namespace QEDCode.LALROne.Rules
+namespace QEDCode.LLOne.Rules
 {
     public class RuleSequence5<TSymbol, T1, T2, T3, T4, T5, T> : RuleSequence<TSymbol, T>
     {

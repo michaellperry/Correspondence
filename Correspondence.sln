@@ -47,7 +47,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameModel.InternalD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual.UnitTest", "UpdateControls.Correspondence.Factual.UnitTest\UpdateControls.Correspondence.Factual.UnitTest.csproj", "{B1246571-0BC0-4B06-A5AE-6C3989E8903C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEDCode.LALROne", "QEDCode.LALROne\QEDCode.LALROne.csproj", "{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEDCode.LLOne", "QEDCode.LLOne\QEDCode.LLOne.csproj", "{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -109,9 +109,9 @@ Global
 		SccProjectUniqueName18 = UpdateControls.Correspondence.Factual.UnitTest\\UpdateControls.Correspondence.Factual.UnitTest.csproj
 		SccProjectName18 = UpdateControls.Correspondence.Factual.UnitTest
 		SccLocalPath18 = UpdateControls.Correspondence.Factual.UnitTest
-		SccProjectUniqueName19 = QEDCode.LALROne\\QEDCode.LALROne.csproj
-		SccProjectName19 = QEDCode.LALROne
-		SccLocalPath19 = QEDCode.LALROne
+		SccProjectUniqueName19 = QEDCode.LLOne\\QEDCode.LLOne.csproj
+		SccProjectName19 = QEDCode.LLOne
+		SccLocalPath19 = QEDCode.LLOne
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi

@@ -5,7 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace QEDCode.LALROne
+namespace QEDCode.LLOne
 {
     public class Lexer<TSymbol>
     {

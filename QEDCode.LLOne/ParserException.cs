@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace QEDCode.LALROne
+namespace QEDCode.LLOne
 {
     public class ParserException : Exception
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QEDCode.LALROne</RootNamespace>
-    <AssemblyName>QEDCode.LALROne</AssemblyName>
+    <RootNamespace>QEDCode.LLOne</RootNamespace>
+    <AssemblyName>QEDCode.LLOne</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

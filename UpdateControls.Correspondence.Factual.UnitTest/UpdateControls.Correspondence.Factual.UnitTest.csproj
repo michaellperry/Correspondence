@@ -50,9 +50,9 @@
       <Project>{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}</Project>
       <Name>Predassert</Name>
     </ProjectReference>
-    <ProjectReference Include="..\QEDCode.LALROne\QEDCode.LALROne.csproj">
+    <ProjectReference Include="..\QEDCode.LLOne\QEDCode.LLOne.csproj">
       <Project>{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}</Project>
-      <Name>QEDCode.LALROne</Name>
+      <Name>QEDCode.LLOne</Name>
     </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj">
       <Project>{5DE5E950-C19C-4588-80EC-5C60A50D352C}</Project>

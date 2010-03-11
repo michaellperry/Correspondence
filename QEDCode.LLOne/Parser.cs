@@ -1,7 +1,7 @@
 ﻿using System;
-using QEDCode.LALROne.Rules;
+using QEDCode.LLOne.Rules;
 
-namespace QEDCode.LALROne
+namespace QEDCode.LLOne
 {
     public abstract class Parser<TSymbol, T>
     {

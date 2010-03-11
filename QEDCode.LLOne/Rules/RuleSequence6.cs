@@ -1,10 +1,11 @@
 using System;
+using QEDCode.LLOne;
 
-namespace QEDCode.LALROne.Rules
+namespace QEDCode.LLOne.Rules
 {
-    public class RuleSequence4<TSymbol, T1, T2, T3, T4, T> : RuleSequence<TSymbol, T>
+    public class RuleSequence6<TSymbol, T1, T2, T3, T4, T5, T6, T> : RuleSequence<TSymbol, T>
     {
-        public delegate T Function(T1 v1, T2 v2, T3 v3, T4 v4);
+        public delegate T Function(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6);
 
         private Rule<TSymbol, T1> _rule1;
         private Rule<TSymbol, T2> _rule2;
@@ -13,9 +14,13 @@ namespace QEDCode.LALROne.Rules
         private string _error3;
         private Rule<TSymbol, T4> _rule4;
         private string _error4;
+        private Rule<TSymbol, T5> _rule5;
+        private string _error5;
+        private Rule<TSymbol, T6> _rule6;
+        private string _error6;
         private Function _reduce;
 
-        public RuleSequence4(Rule<TSymbol, T1> rule1, Rule<TSymbol, T2> rule2, string error2, Rule<TSymbol, T3> rule3, string error3, Rule<TSymbol, T4> rule4, string error4, Function reduce)
+        public RuleSequence6(Rule<TSymbol, T1> rule1, Rule<TSymbol, T2> rule2, string error2, Rule<TSymbol, T3> rule3, string error3, Rule<TSymbol, T4> rule4, string error4, Rule<TSymbol, T5> rule5, string error5, Rule<TSymbol, T6> rule6, string error6, Function reduce)
         {
             _rule1 = rule1;
             _rule2 = rule2;
@@ -24,6 +29,10 @@ namespace QEDCode.LALROne.Rules
             _error3 = error3;
             _rule4 = rule4;
             _error4 = error4;
+            _rule5 = rule5;
+            _error5 = error5;
+            _rule6 = rule6;
+            _error6 = error6;
             _reduce = reduce;
         }
 
@@ -38,8 +47,10 @@ namespace QEDCode.LALROne.Rules
             T2 value2 = GetValue(tokenStream, _rule2, _error2);
             T3 value3 = GetValue(tokenStream, _rule3, _error3);
             T4 value4 = GetValue(tokenStream, _rule4, _error4);
+            T5 value5 = GetValue(tokenStream, _rule5, _error5);
+            T6 value6 = GetValue(tokenStream, _rule6, _error6);
 
-            return _reduce(value1, value2, value3, value4);
+            return _reduce(value1, value2, value3, value4, value5, value6);
         }
     }
 }

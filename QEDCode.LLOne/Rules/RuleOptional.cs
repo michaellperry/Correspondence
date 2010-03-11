@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QEDCode.LALROne.Rules
+namespace QEDCode.LLOne.Rules
 {
     public class RuleOptional<TSymbol, T> : Rule<TSymbol, T>
     {

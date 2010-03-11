@@ -1,6 +1,6 @@
 using System;
 
-namespace QEDCode.LALROne
+namespace QEDCode.LLOne
 {
     public class TokenStream<TSymbol>
     {

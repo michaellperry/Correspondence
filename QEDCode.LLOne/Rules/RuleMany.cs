@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QEDCode.LALROne.Rules
+namespace QEDCode.LLOne.Rules
 {
     public class RuleMany<TSymbol, TItem, T> : Rule<TSymbol, T>
     {

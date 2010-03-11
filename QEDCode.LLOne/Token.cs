@@ -1,5 +1,5 @@
 
-namespace QEDCode.LALROne
+namespace QEDCode.LLOne
 {
     public class Token<TSymbol>
     {

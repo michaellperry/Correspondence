@@ -1,6 +1,6 @@
 using System;
 
-namespace QEDCode.LALROne.Rules
+namespace QEDCode.LLOne.Rules
 {
     public class RuleSequence2<TSymbol, T1, T2, T> : RuleSequence<TSymbol, T>
     {

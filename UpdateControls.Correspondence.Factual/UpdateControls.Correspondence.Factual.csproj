@@ -78,9 +78,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\QEDCode.LALROne\QEDCode.LALROne.csproj">
+    <ProjectReference Include="..\QEDCode.LLOne\QEDCode.LLOne.csproj">
       <Project>{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}</Project>
-      <Name>QEDCode.LALROne</Name>
+      <Name>QEDCode.LLOne</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
