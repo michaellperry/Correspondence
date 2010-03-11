@@ -1,10 +1,11 @@
 using System;
 using UpdateControls.Correspondence.Factual.AST;
 using System.Text;
+using QEDCode.LALROne;
 
 namespace UpdateControls.Correspondence.Factual.Compiler
 {
-    public class FactualParser : Parser<Namespace>
+    public class FactualParser : Parser<Symbol, Namespace>
     {
         public FactualParser(System.IO.TextReader input)
             : base(
@@ -16,9 +17,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
         }
 
-        private static Lexer Lexer(System.IO.TextReader input)
+        private static Lexer<Symbol> Lexer(System.IO.TextReader input)
         {
-            return new Lexer(input)
+            return new Lexer<Symbol>(input, Symbol.Identifier, Symbol.EndOfFile)
                 .AddSymbol("namespace", Symbol.Namespace)
                 .AddSymbol("fact", Symbol.Fact)
                 .AddSymbol("property", Symbol.Property)
@@ -39,7 +40,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("=", Symbol.Equal);
         }
 
-        private static Rule<Namespace> Rule()
+        private static Rule<Symbol, Namespace> Rule()
         {
             // dotted_identifier -> identifier ("." identifier)*
             // namespace_declaration -> "namespace" dotted_identifier ";"
@@ -143,7 +144,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return rule;
         }
 
-        private static Func<DataType, Token, FactMember> QueryGenerator(QueryTail queryTail)
+        private static Func<DataType, Token<Symbol>, FactMember> QueryGenerator(QueryTail queryTail)
         {
             return (type, nameToken) =>
             {
@@ -157,7 +158,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             };
         }
 
-        private static Func<DataType, Token, FactMember> FieldGenerator()
+        private static Func<DataType, Token<Symbol>, FactMember> FieldGenerator()
         {
             return (type, nameToken) => new Field(type.LineNumber, nameToken.Value, type);
         }

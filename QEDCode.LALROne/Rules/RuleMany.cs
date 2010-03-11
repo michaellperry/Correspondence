@@ -1,26 +1,26 @@
 ﻿using System;
 
-namespace UpdateControls.Correspondence.Factual.Compiler.Rules
+namespace QEDCode.LALROne.Rules
 {
-    public class RuleMany<TItem, T>: Rule<T>
+    public class RuleMany<TSymbol, TItem, T> : Rule<TSymbol, T>
     {
-        private Rule<T> _headerRule;
-        private Rule<TItem> _itemRule;
+        private Rule<TSymbol, T> _headerRule;
+        private Rule<TSymbol, TItem> _itemRule;
         Func<T, TItem, T> _append;
 
-        public RuleMany(Rule<T> headerRule, Rule<TItem> itemRule, Func<T, TItem, T> append)
+        public RuleMany(Rule<TSymbol, T> headerRule, Rule<TSymbol, TItem> itemRule, Func<T, TItem, T> append)
         {
             _headerRule = headerRule;
             _itemRule = itemRule;
             _append = append;
         }
 
-        public override bool Start(Symbol symbol)
+        public override bool Start(TSymbol symbol)
         {
             return _headerRule.Start(symbol);
         }
 
-        public override T Match(TokenStream tokenStream)
+        public override T Match(TokenStream<TSymbol> tokenStream)
         {
             T result = _headerRule.Match(tokenStream);
 

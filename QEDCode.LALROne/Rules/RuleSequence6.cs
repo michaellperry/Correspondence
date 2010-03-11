@@ -1,27 +1,26 @@
 using System;
-using UpdateControls.Correspondence.Factual;
-using UpdateControls.Correspondence.Factual.Compiler;
+using QEDCode.LALROne;
 
-namespace UpdateControls.Correspondence.Factual.Compiler.Rules
+namespace QEDCode.LALROne.Rules
 {
-    public class RuleSequence6<T1, T2, T3, T4, T5, T6, T> : RuleSequence<T>
+    public class RuleSequence6<TSymbol, T1, T2, T3, T4, T5, T6, T> : RuleSequence<TSymbol, T>
     {
         public delegate T Function(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6);
 
-        private Rule<T1> _rule1;
-        private Rule<T2> _rule2;
+        private Rule<TSymbol, T1> _rule1;
+        private Rule<TSymbol, T2> _rule2;
         private string _error2;
-        private Rule<T3> _rule3;
+        private Rule<TSymbol, T3> _rule3;
         private string _error3;
-        private Rule<T4> _rule4;
+        private Rule<TSymbol, T4> _rule4;
         private string _error4;
-        private Rule<T5> _rule5;
+        private Rule<TSymbol, T5> _rule5;
         private string _error5;
-        private Rule<T6> _rule6;
+        private Rule<TSymbol, T6> _rule6;
         private string _error6;
         private Function _reduce;
 
-        public RuleSequence6(Rule<T1> rule1, Rule<T2> rule2, string error2, Rule<T3> rule3, string error3, Rule<T4> rule4, string error4, Rule<T5> rule5, string error5, Rule<T6> rule6, string error6, Function reduce)
+        public RuleSequence6(Rule<TSymbol, T1> rule1, Rule<TSymbol, T2> rule2, string error2, Rule<TSymbol, T3> rule3, string error3, Rule<TSymbol, T4> rule4, string error4, Rule<TSymbol, T5> rule5, string error5, Rule<TSymbol, T6> rule6, string error6, Function reduce)
         {
             _rule1 = rule1;
             _rule2 = rule2;
@@ -37,12 +36,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler.Rules
             _reduce = reduce;
         }
 
-        public override bool Start(Symbol symbol)
+        public override bool Start(TSymbol symbol)
         {
             return _rule1.Start(symbol);
         }
 
-        public override T Match(TokenStream tokenStream)
+        public override T Match(TokenStream<TSymbol> tokenStream)
         {
             T1 value1 = _rule1.Match(tokenStream);
             T2 value2 = GetValue(tokenStream, _rule2, _error2);

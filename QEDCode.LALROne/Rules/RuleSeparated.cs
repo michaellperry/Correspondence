@@ -1,15 +1,15 @@
 using System;
 
-namespace UpdateControls.Correspondence.Factual.Compiler.Rules
+namespace QEDCode.LALROne.Rules
 {
-    public class RuleSeparated<T, TItem> : Rule<T>
+    public class RuleSeparated<TSymbol, T, TItem> : Rule<TSymbol, T>
     {
-        private Symbol _separator;
-        private Rule<TItem> _itemRule;
+        private TSymbol _separator;
+        private Rule<TSymbol, TItem> _itemRule;
         Func<TItem, T> _begin;
         Func<T, TItem, T> _append;
 
-        public RuleSeparated(Rule<TItem> itemRule, Symbol separator, Func<TItem, T> begin, Func<T, TItem, T> append)
+        public RuleSeparated(Rule<TSymbol, TItem> itemRule, TSymbol separator, Func<TItem, T> begin, Func<T, TItem, T> append)
         {
             _separator = separator;
             _itemRule = itemRule;
@@ -17,16 +17,16 @@ namespace UpdateControls.Correspondence.Factual.Compiler.Rules
             _append = append;
         }
 
-        public override bool Start(Symbol symbol)
+        public override bool Start(TSymbol symbol)
         {
             return _itemRule.Start(symbol);
         }
 
-        public override T Match(TokenStream tokenStream)
+        public override T Match(TokenStream<TSymbol> tokenStream)
         {
             T result = _begin(_itemRule.Match(tokenStream));
 
-            while (tokenStream.Lookahead.Symbol == _separator)
+            while (tokenStream.Lookahead.Symbol.Equals(_separator))
             {
                 tokenStream.Consume();
                 result = _append(result, _itemRule.Match(tokenStream));

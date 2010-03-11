@@ -5,24 +5,33 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Text;
 
-namespace UpdateControls.Correspondence.Factual.Compiler
+namespace QEDCode.LALROne
 {
-    public class Lexer
+    public class Lexer<TSymbol>
     {
         private static Regex IdentifierExpression = new Regex("^[a-zA-Z_][a-zA-Z0-9_]*$");
 
         private TextReader _input;
-        private Dictionary<string, Symbol> _keywords = new Dictionary<string, Symbol>();
-        private Dictionary<string, Symbol> _punctuation = new Dictionary<string, Symbol>();
+        private TSymbol _identifier;
+        private TSymbol _endOfFile;
+        private Dictionary<string, TSymbol> _keywords = new Dictionary<string, TSymbol>();
+        private Dictionary<string, TSymbol> _punctuation = new Dictionary<string, TSymbol>();
 
         private int _lineNumber = 1;
 
-        public Lexer(TextReader input)
+        public Lexer(TextReader input, TSymbol identifier, TSymbol endOfFile)
         {
             _input = input;
+            _identifier = identifier;
+            _endOfFile = endOfFile;
         }
 
-        public Token NextToken()
+        public TSymbol EndOfFile
+        {
+            get { return _endOfFile; }
+        }
+
+        public Token<TSymbol> NextToken()
         {
             int nextCharacter = _input.Peek();
             while (nextCharacter == ' ' || nextCharacter == '\t' || nextCharacter == '\r' || nextCharacter == '\n')
@@ -34,7 +43,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
 
             if (nextCharacter == -1)
-                return new Token(Symbol.EndOfFile, string.Empty, _lineNumber);
+                return new Token<TSymbol>(_endOfFile, string.Empty, _lineNumber);
 
             else if (
                 ('a' <= nextCharacter && nextCharacter <= 'z') ||
@@ -55,25 +64,25 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     identifier.Append((char)_input.Read());
                     nextCharacter = _input.Peek();
                 }
-                Symbol keywordSymbol;
+                TSymbol keywordSymbol;
                 if (_keywords.TryGetValue(identifier.ToString(), out keywordSymbol))
-                    return new Token(keywordSymbol, identifier.ToString(), _lineNumber);
+                    return new Token<TSymbol>(keywordSymbol, identifier.ToString(), _lineNumber);
                 else
-                    return new Token(Symbol.Identifier, identifier.ToString(), _lineNumber);
+                    return new Token<TSymbol>(_identifier, identifier.ToString(), _lineNumber);
             }
 
             else
             {
                 string punctuationText = ((char)_input.Read()).ToString();
-                Symbol punctuationSymbol;
+                TSymbol punctuationSymbol;
                 if (_punctuation.TryGetValue(punctuationText, out punctuationSymbol))
-                    return new Token(punctuationSymbol, punctuationText, _lineNumber);
+                    return new Token<TSymbol>(punctuationSymbol, punctuationText, _lineNumber);
                 else
-                    throw new FactualException(string.Format("Unknown symbol {0}.", punctuationText), _lineNumber);
+                    throw new ParserException(string.Format("Unknown symbol {0}.", punctuationText), _lineNumber);
             }
         }
 
-        public Lexer AddSymbol(string text, Symbol symbol)
+        public Lexer<TSymbol> AddSymbol(string text, TSymbol symbol)
         {
             if (IdentifierExpression.IsMatch(text))
                 _keywords.Add(text, symbol);

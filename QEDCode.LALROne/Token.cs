@@ -1,20 +1,20 @@
 
-namespace UpdateControls.Correspondence.Factual.Compiler
+namespace QEDCode.LALROne
 {
-    public class Token
+    public class Token<TSymbol>
     {
-        private Symbol _symbol;
+        private TSymbol _symbol;
         private string _value;
         private int _lineNumber;
 
-        public Token(Symbol symbol, string value, int lineNumber)
+        public Token(TSymbol symbol, string value, int lineNumber)
         {
             _symbol = symbol;
             _value = value;
             _lineNumber = lineNumber;
         }
 
-        public Symbol Symbol
+        public TSymbol Symbol
         {
             get { return _symbol; }
         }

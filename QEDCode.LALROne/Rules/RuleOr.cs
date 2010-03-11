@@ -1,28 +1,28 @@
 ﻿using System;
 
-namespace UpdateControls.Correspondence.Factual.Compiler.Rules
+namespace QEDCode.LALROne.Rules
 {
-    public class RuleOr<T> : Rule<T>
+    public class RuleOr<TSymbol, T> : Rule<TSymbol, T>
     {
-        private Rule<T> _rule1;
-        private Rule<T> _rule2;
+        private Rule<TSymbol, T> _rule1;
+        private Rule<TSymbol, T> _rule2;
 
-        public RuleOr(Rule<T> rule1, Rule<T> rule2)
+        public RuleOr(Rule<TSymbol, T> rule1, Rule<TSymbol, T> rule2)
         {
             _rule1 = rule1;
             _rule2 = rule2;
         }
 
-        public override bool Start(Symbol symbol)
+        public override bool Start(TSymbol symbol)
         {
             bool start1 = _rule1.Start(symbol);
             bool start2 = _rule2.Start(symbol);
             if (start1 && start2)
-                throw new FactualException(string.Format("The grammar is ambiguous for symbol {0}. It is not LALR(1).", symbol), 0);
+                throw new ParserException(string.Format("The grammar is ambiguous for symbol {0}. It is not LALR(1).", symbol), 0);
             return start1 || start2;
         }
 
-        public override T Match(TokenStream tokenStream)
+        public override T Match(TokenStream<TSymbol> tokenStream)
         {
             if (_rule1.Start(tokenStream.Lookahead.Symbol))
                 return _rule1.Match(tokenStream);

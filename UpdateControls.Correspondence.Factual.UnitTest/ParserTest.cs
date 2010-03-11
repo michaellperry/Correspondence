@@ -1,7 +1,8 @@
-﻿using System.Linq;
-using System.IO;
+﻿using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Predassert;
+using QEDCode.LALROne;
 using UpdateControls.Correspondence.Factual.AST;
 using UpdateControls.Correspondence.Factual.Compiler;
 
@@ -19,9 +20,9 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             {
                 FactualParser parser = new FactualParser(new StringReader(""));
                 Namespace result = parser.Parse();
-                Assert.Fail("A FactualException should have been thrown.");
+                Assert.Fail("A ParserException should have been thrown.");
             }
-            catch (FactualException ex)
+            catch (ParserException ex)
             {
                 Pred.Assert(ex.Message, Is.EqualTo("Add a 'namespace' declaration."));
                 Pred.Assert(ex.LineNumber, Is.EqualTo(1));
@@ -35,9 +36,9 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             {
                 FactualParser parser = new FactualParser(new StringReader("namespace"));
                 Namespace result = parser.Parse();
-                Assert.Fail("A FactualException should have been thrown.");
+                Assert.Fail("A ParserException should have been thrown.");
             }
-            catch (FactualException ex)
+            catch (ParserException ex)
             {
                 Pred.Assert(ex.Message, Is.EqualTo("Provide a dotted identifier for the namespace."));
                 Pred.Assert(ex.LineNumber, Is.EqualTo(1));
@@ -51,9 +52,9 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             {
                 FactualParser parser = new FactualParser(new StringReader("namespace Reversi.GameModel"));
                 Namespace result = parser.Parse();
-                Assert.Fail("A FactualException should have been thrown.");
+                Assert.Fail("A ParserException should have been thrown.");
             }
-            catch (FactualException ex)
+            catch (ParserException ex)
             {
                 Pred.Assert(ex.Message, Is.EqualTo("Terminate the namespace declaration with a semicolon."));
                 Pred.Assert(ex.LineNumber, Is.EqualTo(1));
