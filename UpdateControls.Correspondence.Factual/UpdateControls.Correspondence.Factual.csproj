@@ -71,6 +71,8 @@
     <Compile Include="Compiler\FactualParser.cs" />
     <Compile Include="AST\NativeTypeAtLine.cs" />
     <Compile Include="FactualException.cs" />
+    <Compile Include="Metadata\Class.cs" />
+    <Compile Include="Metadata\Namespace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Compiler\Symbol.cs" />
   </ItemGroup>
@@ -82,9 +84,6 @@
       <Project>{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}</Project>
       <Name>QEDCode.LLOne</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Metadata\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
