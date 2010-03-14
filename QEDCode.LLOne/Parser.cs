@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using QEDCode.LLOne.Rules;
 
 namespace QEDCode.LLOne
@@ -10,6 +12,7 @@ namespace QEDCode.LLOne
         private Rule<TSymbol, T> _root;
         private string _errorStart;
         private string _errorEnd;
+        private List<ParserError> _errors = new List<ParserError>();
 
         protected Parser(Lexer<TSymbol> lexer, Rule<TSymbol, T> root, string errorStart, string errorEnd)
         {
@@ -72,17 +75,30 @@ namespace QEDCode.LLOne
 
         public T Parse()
         {
-            _tokenStream.Consume();
+            try
+            {
+                _tokenStream.Consume();
 
-            if (!_root.Start(_tokenStream.Lookahead.Symbol))
-                throw new ParserException(_errorStart, _tokenStream.Lookahead.LineNumber);
+                if (!_root.Start(_tokenStream.Lookahead.Symbol))
+                    throw new ParserException(_errorStart, _tokenStream.Lookahead.LineNumber);
 
-            T rootNode = _root.Match(_tokenStream);
+                T rootNode = _root.Match(_tokenStream);
 
-            if (!_tokenStream.Lookahead.Symbol.Equals(_lexer.EndOfFile))
-                throw new ParserException(_errorEnd, _tokenStream.Lookahead.LineNumber);
+                if (!_tokenStream.Lookahead.Symbol.Equals(_lexer.EndOfFile))
+                    throw new ParserException(_errorEnd, _tokenStream.Lookahead.LineNumber);
 
-            return rootNode;
+                return rootNode;
+            }
+            catch (ParserException e)
+            {
+                _errors.Add(new ParserError(e.Message, e.LineNumber));
+                return default(T);
+            }
+        }
+
+        public IEnumerable<ParserError> Errors
+        {
+            get { return _errors; }
         }
     }
 }
