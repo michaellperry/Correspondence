@@ -88,8 +88,9 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")).And(
-                Has<Fact>.Property(fact => fact.LineNumber, Is.EqualTo(3)))));
+                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")) &
+                Has<Fact>.Property(fact => fact.LineNumber, Is.EqualTo(3))
+            ));
         }
 
         [TestMethod]
@@ -104,16 +105,17 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")).And(
+                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")) &
                 Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
-                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("identifier")).And(
+                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("identifier")) &
                     Has<DataMember>.Property(field => field.Type,
-                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
+                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)) &
                         KindOf<DataType, DataTypeNative>.That(
-                            Has<DataTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String)))
-                    )).And(
-                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))))
-                )))
+                            Has<DataTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String))
+                        )
+                    ) &
+                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))
+                ))
             ));
         }
 
@@ -130,13 +132,14 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
-                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("gameQueue")).And(
+                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("gameQueue")) &
                     Has<DataMember>.Property(field => field.Type,
-                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)).And(
+                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)) &
                         KindOf<DataType, DataTypeFact>.That(
-                            Has<DataTypeFact>.Property(type => type.FactName, Is.EqualTo("GameQueue")))
-                    )).And(
-                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))))
+                            Has<DataTypeFact>.Property(type => type.FactName, Is.EqualTo("GameQueue"))
+                        )
+                    ) &
+                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))
                 ))
             ));
         }
@@ -173,10 +176,10 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members.OfType<Property>(), Contains<Property>.That(
-                    Has<Property>.Property(property => property.Name, Is.EqualTo("firstName")).And(
+                    Has<Property>.Property(property => property.Name, Is.EqualTo("firstName")) &
                     Has<Property>.Property(property => property.Type, KindOf<DataType, DataTypeNative>.That(
                         Has<DataTypeNative>.Property(type => type.NativeType, Is.EqualTo(NativeType.String))
-                    )))
+                    ))
                 ))
             ));
         }
@@ -196,19 +199,19 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members.OfType<Query>(), Contains<Query>.That(
-                    Has<Query>.Property(query => query.Name, Is.EqualTo("addresses")).And(
-                    Has<Query>.Property(query => query.FactName, Is.EqualTo("Address"))).And(
+                    Has<Query>.Property(query => query.Name, Is.EqualTo("addresses")) &
+                    Has<Query>.Property(query => query.FactName, Is.EqualTo("Address")) &
                     Has<Query>.Property(query => query.Sets, Contains<Set>.That(
-                        Has<Set>.Property(set => set.Name, Is.EqualTo("address")).And(
-                        Has<Set>.Property(set => set.FactName, Is.EqualTo("Address"))).And(
+                        Has<Set>.Property(set => set.Name, Is.EqualTo("address")) &
+                        Has<Set>.Property(set => set.FactName, Is.EqualTo("Address")) &
                         Has<Set>.Property(set => set.LeftPath, KindOf<AST.Path, PathRelative>.That(
                             Has<PathRelative>.Property(path => path.Segments,
-                                Contains<string>.That(Is.EqualTo("address")).And(
-                                Contains<string>.That(Is.EqualTo("person")))
+                                Contains<string>.That(Is.EqualTo("address")) &
+                                Contains<string>.That(Is.EqualTo("person"))
                             )
-                        ))).And(
-                        Has<Set>.Property(set => set.RightPath, KindOf<AST.Path, PathAbsolute>.That(Is.NotNull<PathAbsolute>())))
-                    )))
+                        )) &
+                        Has<Set>.Property(set => set.RightPath, KindOf<AST.Path, PathAbsolute>.That(Is.NotNull<PathAbsolute>()))
+                    ))
                 ))
             ));
         }

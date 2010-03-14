@@ -71,7 +71,10 @@
     <Compile Include="Compiler\FactualParser.cs" />
     <Compile Include="AST\NativeTypeAtLine.cs" />
     <Compile Include="FactualException.cs" />
+    <Compile Include="Metadata\Cardinality.cs" />
     <Compile Include="Metadata\Class.cs" />
+    <Compile Include="Metadata\NativeType.cs" />
+    <Compile Include="Metadata\Field.cs" />
     <Compile Include="Metadata\Namespace.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Compiler\Symbol.cs" />

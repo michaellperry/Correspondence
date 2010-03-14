@@ -8,6 +8,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
     public class Class
     {
         private string _name;
+        private List<Field> _fields = new List<Field>();
 
         public Class(string name)
         {
@@ -17,6 +18,17 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         public string Name
         {
             get { return _name; }
+        }
+
+        public IEnumerable<Field> Fields
+        {
+            get { return _fields; }
+        }
+
+        public Class AddField(Field field)
+        {
+            _fields.Add(field);
+            return this;
         }
     }
 }

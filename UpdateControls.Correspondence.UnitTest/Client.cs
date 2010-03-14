@@ -54,10 +54,10 @@ namespace UpdateControls.Correspondence.UnitTest
         public void AssertHasMove(int index, Guid personId)
         {
             Pred.Assert(_gameRequest.Game.Players, Contains<Player>.That(
-				Has<Player>.Property(player => player.Person.Unique, Is.EqualTo(personId))
-				.And(Has<Player>.Property(player => player.Moves, Contains<Move>.That(
+				Has<Player>.Property(player => player.Person.Unique, Is.EqualTo(personId)) &
+				Has<Player>.Property(player => player.Moves, Contains<Move>.That(
 					Has<Move>.Property(move => move.Index, Is.EqualTo(index))
-				)))
+				))
 			));
         }
     }

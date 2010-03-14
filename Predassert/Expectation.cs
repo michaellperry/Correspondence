@@ -15,15 +15,6 @@ namespace Predassert
             _reasonTrue = reasonTrue;
         }
 
-        public Expectation<T> And(Expectation<T> that)
-        {
-            return new Expectation<T>(
-                actual => this.Test(actual) && that.Test(actual),
-                actual => this.Test(actual) ? that.ReasonFalse(actual) : this.ReasonFalse(actual),
-                actual => string.Format("{0} and {1}", this.ReasonTrue(actual), that.ReasonTrue(actual))
-            );
-        }
-
         public bool Test(T actual)
         {
             return _predicate(actual);
@@ -37,6 +28,15 @@ namespace Predassert
         public string ReasonTrue(T actual)
         {
             return _reasonTrue(actual);
+        }
+
+        public static Expectation<T> operator &(Expectation<T> first, Expectation<T> second)
+        {
+            return new Expectation<T>(
+                actual => first.Test(actual) && second.Test(actual),
+                actual => first.Test(actual) ? second.ReasonFalse(actual) : first.ReasonFalse(actual),
+                actual => string.Format("{0} and {1}", first.ReasonTrue(actual), second.ReasonTrue(actual))
+            );
         }
     }
 }
