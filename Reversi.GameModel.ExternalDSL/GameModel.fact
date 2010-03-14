@@ -1,0 +1,14 @@
+﻿namespace Reversi.GameModel;
+
+fact Queue {
+	string identifier;
+}
+
+fact Time {
+	time start;
+}
+
+fact Frame {
+	Queue queue;
+	Time timestamp;
+}

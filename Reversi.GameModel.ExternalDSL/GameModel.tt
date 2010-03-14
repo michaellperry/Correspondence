@@ -1,0 +1,169 @@
+﻿<#@ template language="C#v3.5" hostspecific="True" debug="True" #>
+<#@ assembly name="System.Core"#>
+<#@ assembly name="UpdateControls.Correspondence.Factual.dll"#>
+<#@ assembly name="QEDCode.LLOne.dll"#>
+<#@ import namespace="System.IO"#>
+<#@ import namespace="System.Collections.Generic"#>
+<#@ import namespace="System.Linq"#>
+<#@ import namespace="UpdateControls.Correspondence.Factual"#>
+<#@ import namespace="UpdateControls.Correspondence.Factual.Compiler"#>
+<#@ import namespace="UpdateControls.Correspondence.Factual.Metadata"#>
+<#@ output extension=".generated.cs"#>
+<#
+var fileName = Host.TemplateFile.Replace(".tt",".fact");
+var parser = new FactualParser(new StreamReader(fileName));
+var ast = parser.Parse();
+
+if (ast == null)
+{
+    foreach (var error in parser.Errors)
+    {#>
+#line <#=error.LineNumber#> "<#=fileName#>"
+#error <#=error.Message#>
+    <#}
+}
+else {
+
+var analyzer = new Analyzer(ast);
+var result = analyzer.Analyze();
+
+if (result == null)
+{
+    foreach (var error in analyzer.Errors)
+    {#>
+#line <#=error.LineNumber#> "<#=fileName#>"
+#error <#=error.Message#>
+    <#}
+}
+else {
+
+#>
+using System.Collections.Generic;
+using System.Linq;
+using UpdateControls.Correspondence;
+using UpdateControls.Correspondence.Mementos;
+using System;
+
+namespace <#=result.Name#>
+{
+<# foreach (Class c in result.Classes) { #>
+    [CorrespondenceType]
+    public class <#=c.Name#> : CorrespondenceFact
+    {
+<# foreach (Predecessor predecessor in c.Predecessors) { #>
+        public static <#=RoleClass(predecessor)#> <#=RoleName(predecessor.Name)#> = new <#=RoleClass(predecessor)#>("<#=predecessor.Name#>");
+<#}#>
+
+<# foreach (Predecessor predecessor in c.Predecessors) { #>
+        private <#=PredecessorClass(predecessor)#> _<#=predecessor.Name#>;
+<#}#>
+
+<# foreach (Field field in c.Fields) {#>
+        [CorrespondenceField]
+        private <#=FieldType(field)#> _<#=field.Name#>;
+<#}#>
+
+        public <#=c.Name#>(
+<# SeparatorReset(); foreach (Predecessor predecessor in c.Predecessors) { #>
+            <#=Separator(",")#><#=predecessor.FactType#> <#=predecessor.Name#>
+<#}#>
+<# foreach (Field field in c.Fields) {#>
+            <#=Separator(",")#><#=FieldType(field)#> <#=field.Name#>
+<#}#>
+            )
+        {
+<# foreach (Predecessor predecessor in c.Predecessors) { #>
+            _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, <#=RoleName(predecessor.Name)#>, <#=predecessor.Name#>);
+<#}#>
+<# foreach (Field field in c.Fields) {#>
+            _<#=field.Name#> = <#=field.Name#>;
+<#}#>
+        }
+
+        public <#=c.Name#>(FactMemento memento)
+        {
+<# foreach (Predecessor predecessor in c.Predecessors) { #>
+            _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, <#=RoleName(predecessor.Name)#>, memento);
+<#}#>
+        }
+    }
+<#}#>
+}
+<#}}#>
+<#+
+private static string RoleClass(Predecessor predecessor)
+{
+    return "Role<" + predecessor.FactType + ">";
+}
+
+private static string RoleName(string predecessorName)
+{
+    return "Role_" + predecessorName;
+}
+
+private static string PredecessorClass(Predecessor predecessor)
+{
+    return
+        (predecessor.Cardinality == Cardinality.Many ? "PredecessorList" :
+         predecessor.Cardinality == Cardinality.Optional ? "PredecessorOpt" :
+         "PredecessorObj") +
+        "<" + predecessor.FactType + ">";
+}
+
+private static string FieldType(Field field)
+{
+    if (field.Cardinality == Cardinality.One)
+        return NativeTypeName(field.DataType);
+    else if (field.Cardinality == Cardinality.Many)
+        return string.Format("List<{0}>", NativeTypeName(field.DataType));
+    else
+    {
+        if (IsReferenceType(field.DataType))
+            return NativeTypeName(field.DataType);
+        else
+            return string.Format("{0}?", NativeTypeName(field.DataType));
+    }
+}
+
+private static string NativeTypeName(NativeType nativeType)
+{
+    if (nativeType == NativeType.String)
+        return "string";
+    if (nativeType == NativeType.Int)
+        return "int";
+    if (nativeType == NativeType.Float)
+        return "float";
+    if (nativeType == NativeType.Char)
+        return "char";
+    if (nativeType == NativeType.Date)
+        return "DateTime";
+    if (nativeType == NativeType.Time)
+        return "DateTime";
+    return "UnknownType";
+}
+
+private static bool IsReferenceType(NativeType nativeType)
+{
+    return
+        nativeType == NativeType.String
+        ;
+}
+
+private bool _first;
+
+private void SeparatorReset()
+{
+    _first = true;
+}
+
+private string Separator(string text)
+{
+    if (!_first)
+        return text;
+    else
+    {
+        _first = false;
+        return string.Empty;
+    }
+}
+#>
