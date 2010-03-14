@@ -54,8 +54,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private void AnalyzeFact(Source.Fact fact, Target.Namespace result)
         {
-            if (result.Classes.Any(c => c.Name == fact.Name))
-                _errors.Add(new Error(string.Format("The fact \"{0}\" has already been defined.", fact.Name), fact.LineNumber));
+            if (_root.Facts.Any(f => f != fact && f.Name == fact.Name))
+                _errors.Add(new Error(string.Format("The fact \"{0}\" is defined more than once.", fact.Name), fact.LineNumber));
             else
             {
                 Target.Class factClass = new Target.Class(fact.Name);

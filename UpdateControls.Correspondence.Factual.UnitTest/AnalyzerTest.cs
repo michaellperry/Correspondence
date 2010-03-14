@@ -54,7 +54,11 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             Namespace result = analyzer.Analyze();
             Pred.Assert(result, Is.Null<Namespace>());
             Pred.Assert(analyzer.Errors, Contains<Error>.That(
-                Has<Error>.Property(e => e.Message, Is.EqualTo("The fact \"GameQueue\" has already been defined.")) &
+                Has<Error>.Property(e => e.Message, Is.EqualTo("The fact \"GameQueue\" is defined more than once.")) &
+                Has<Error>.Property(e => e.LineNumber, Is.EqualTo(3))
+            ));
+            Pred.Assert(analyzer.Errors, Contains<Error>.That(
+                Has<Error>.Property(e => e.Message, Is.EqualTo("The fact \"GameQueue\" is defined more than once.")) &
                 Has<Error>.Property(e => e.LineNumber, Is.EqualTo(4))
             ));
         }
