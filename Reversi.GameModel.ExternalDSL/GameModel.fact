@@ -12,3 +12,10 @@ fact Frame {
 	Queue queue;
 	Time timestamp;
 }
+
+fact Player {
+}
+
+fact Game {
+    Player* players;
+}

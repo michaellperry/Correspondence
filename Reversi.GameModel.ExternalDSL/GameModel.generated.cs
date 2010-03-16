@@ -94,4 +94,49 @@ namespace Reversi.GameModel
 
     }
     
+    [CorrespondenceType]
+    public class Player : CorrespondenceFact
+    {
+
+
+
+        public Player(
+            )
+        {
+        }
+
+        public Player(FactMemento memento)
+        {
+        }
+
+
+    }
+    
+    [CorrespondenceType]
+    public class Game : CorrespondenceFact
+    {
+        public static Role<Player> Role_players = new Role<Player>("players");
+
+        private PredecessorList<Player> _players;
+
+
+        public Game(
+            IEnumerable<Player> players
+            )
+        {
+            _players = new PredecessorList<Player>(this, Role_players, players);
+        }
+
+        public Game(FactMemento memento)
+        {
+            _players = new PredecessorList<Player>(this, Role_players, memento);
+        }
+
+        public IEnumerable<Player> players
+        {
+            get { return _players; }
+        }
+     
+    }
+    
 }

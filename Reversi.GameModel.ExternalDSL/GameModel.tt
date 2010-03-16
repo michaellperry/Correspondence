@@ -65,7 +65,7 @@ namespace <#=result.Name#>
 
         public <#=c.Name#>(
 <# SeparatorReset(); foreach (Predecessor predecessor in c.Predecessors) { #>
-            <#=Separator(",")#><#=predecessor.FactType#> <#=predecessor.Name#>
+            <#=Separator(",")#><#=ParameterType(predecessor)#> <#=predecessor.Name#>
 <#}#>
 <# foreach (Field field in c.Fields) {#>
             <#=Separator(",")#><#=FieldType(field)#> <#=field.Name#>
@@ -129,6 +129,14 @@ private static string PredecessorClass(Predecessor predecessor)
          predecessor.Cardinality == Cardinality.Optional ? "PredecessorOpt" :
          "PredecessorObj") +
         "<" + predecessor.FactType + ">";
+}
+
+private static string ParameterType(Predecessor predecessor)
+{
+    if (predecessor.Cardinality == Cardinality.Many)
+        return string.Format("IEnumerable<{0}>", predecessor.FactType);
+    else
+        return predecessor.FactType;
 }
 
 private static string FieldType(Field field)
