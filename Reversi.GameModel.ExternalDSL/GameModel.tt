@@ -50,19 +50,23 @@ namespace <#=result.Name#>
     [CorrespondenceType]
     public class <#=c.Name#> : CorrespondenceFact
     {
+        // Roles
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
         public static <#=RoleClass(predecessor)#> <#=RoleName(predecessor.Name)#> = new <#=RoleClass(predecessor)#>("<#=predecessor.Name#>");
 <#}#>
 
+        // Predecessors
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
         private <#=PredecessorClass(predecessor)#> _<#=predecessor.Name#>;
 <#}#>
 
+        // Fields
 <# foreach (Field field in c.Fields) {#>
         [CorrespondenceField]
         private <#=FieldType(field)#> _<#=field.Name#>;
 <#}#>
 
+        // Business constructor
         public <#=c.Name#>(
 <# SeparatorReset(); foreach (Predecessor predecessor in c.Predecessors) { #>
             <#=Separator(",")#><#=ParameterType(predecessor)#> <#=predecessor.Name#>
@@ -80,6 +84,7 @@ namespace <#=result.Name#>
 <#}#>
         }
 
+        // Hydration constructor
         public <#=c.Name#>(FactMemento memento)
         {
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
@@ -87,21 +92,23 @@ namespace <#=result.Name#>
 <#}#>
         }
 
+        // Predecessor access
 <# foreach (Predecessor predecessor in c.Predecessors) {
         if (predecessor.Cardinality == Cardinality.Many) { #>
-        public IEnumerable<<#=predecessor.FactType#>> <#=predecessor.Name#>
+        public IEnumerable<<#=predecessor.FactType#>> <#=Capitalize(predecessor.Name)#>
         {
             get { return _<#=predecessor.Name#>; }
         }
      <# } else { #>
-        public <#=predecessor.FactType#> <#=predecessor.Name#>
+        public <#=predecessor.FactType#> <#=Capitalize(predecessor.Name)#>
         {
             get { return _<#=predecessor.Name#>.Fact; }
         }
 <#}}#>
 
+        // Field access
 <# foreach (Field field in c.Fields) {#>
-        public <#=PropertyType(field)#> <#=field.Name#>
+        public <#=PropertyType(field)#> <#=Capitalize(field.Name)#>
         {
             get { return _<#=field.Name#>; }
         }
@@ -112,6 +119,11 @@ namespace <#=result.Name#>
 }
 <#}}#>
 <#+
+private static string Capitalize(string str)
+{
+    return str.Substring(0, 1).ToUpper() + str.Substring(1);
+}
+
 private static string RoleClass(Predecessor predecessor)
 {
     return "Role<" + predecessor.FactType + ">";
@@ -119,7 +131,7 @@ private static string RoleClass(Predecessor predecessor)
 
 private static string RoleName(string predecessorName)
 {
-    return "Role_" + predecessorName;
+    return "Role" + Capitalize(predecessorName);
 }
 
 private static string PredecessorClass(Predecessor predecessor)
