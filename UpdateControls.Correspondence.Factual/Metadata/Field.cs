@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace UpdateControls.Correspondence.Factual.Metadata
 {
@@ -9,13 +6,13 @@ namespace UpdateControls.Correspondence.Factual.Metadata
     {
         private string _name;
         private Cardinality _cardinality;
-        private NativeType _dataType;
+        private NativeType _nativeType;
 
-        public Field(string name, Cardinality cardinality, NativeType dataType)
+        public Field(string name, Cardinality cardinality, NativeType nativeType)
         {
             _name = name;
             _cardinality = cardinality;
-            _dataType = dataType;
+            _nativeType = nativeType;
         }
 
         public string Name
@@ -28,9 +25,9 @@ namespace UpdateControls.Correspondence.Factual.Metadata
             get { return _cardinality; }
         }
 
-        public NativeType DataType
+        public NativeType NativeType
         {
-            get { return _dataType; }
+            get { return _nativeType; }
         }
     }
 }

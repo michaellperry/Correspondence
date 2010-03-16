@@ -86,7 +86,28 @@ namespace <#=result.Name#>
             _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, <#=RoleName(predecessor.Name)#>, memento);
 <#}#>
         }
+
+<# foreach (Predecessor predecessor in c.Predecessors) {
+        if (predecessor.Cardinality == Cardinality.Many) { #>
+        public IEnumerable<<#=predecessor.FactType#>> <#=predecessor.Name#>
+        {
+            get { return _<#=predecessor.Name#>; }
+        }
+     <# } else { #>
+        public <#=predecessor.FactType#> <#=predecessor.Name#>
+        {
+            get { return _<#=predecessor.Name#>.Fact; }
+        }
+<#}}#>
+
+<# foreach (Field field in c.Fields) {#>
+        public <#=PropertyType(field)#> <#=field.Name#>
+        {
+            get { return _<#=field.Name#>; }
+        }
+<#}#>
     }
+    
 <#}#>
 }
 <#}}#>
@@ -113,15 +134,30 @@ private static string PredecessorClass(Predecessor predecessor)
 private static string FieldType(Field field)
 {
     if (field.Cardinality == Cardinality.One)
-        return NativeTypeName(field.DataType);
+        return NativeTypeName(field.NativeType);
     else if (field.Cardinality == Cardinality.Many)
-        return string.Format("List<{0}>", NativeTypeName(field.DataType));
+        return string.Format("List<{0}>", NativeTypeName(field.NativeType));
     else
     {
-        if (IsReferenceType(field.DataType))
-            return NativeTypeName(field.DataType);
+        if (IsReferenceType(field.NativeType))
+            return NativeTypeName(field.NativeType);
         else
-            return string.Format("{0}?", NativeTypeName(field.DataType));
+            return string.Format("{0}?", NativeTypeName(field.NativeType));
+    }
+}
+
+private static string PropertyType(Field field)
+{
+    if (field.Cardinality == Cardinality.One)
+        return NativeTypeName(field.NativeType);
+    else if (field.Cardinality == Cardinality.Many)
+        return string.Format("IEnumerable<{0}>", NativeTypeName(field.NativeType));
+    else
+    {
+        if (IsReferenceType(field.NativeType))
+            return NativeTypeName(field.NativeType);
+        else
+            return string.Format("{0}?", NativeTypeName(field.NativeType));
     }
 }
 

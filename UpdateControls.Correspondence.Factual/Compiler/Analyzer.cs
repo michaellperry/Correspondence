@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Source = UpdateControls.Correspondence.Factual.AST;
 using Target = UpdateControls.Correspondence.Factual.Metadata;
 
@@ -62,27 +61,28 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 result.AddClass(factClass);
 
                 foreach (Source.FactMember member in fact.Members)
-                    AnalyzeField(member, factClass);
-            }
-        }
-
-        private void AnalyzeField(Source.FactMember member, Target.Class factClass)
-        {
-            var field = member as Source.Field;
-            if (field != null)
-            {
-                Source.DataTypeNative dataTypeNative = field.Type as Source.DataTypeNative;
-                if (dataTypeNative != null)
-                    AnalyzeFieldNative(field, dataTypeNative, factClass);
-                else
                 {
-                    Source.DataTypeFact dataTypeFact = field.Type as Source.DataTypeFact;
-                    if (dataTypeFact != null)
-                        AnalyzeFieldFact(field, dataTypeFact, factClass);
+                    if (fact.Members.Any(m => m != member && m.Name == member.Name))
+                        _errors.Add(new Error(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Name, member.Name), member.LineNumber));
+                    var field = member as Source.Field;
+                    if (field != null)
+                        AnalyzeField(factClass, field);
                 }
             }
         }
 
+        private void AnalyzeField(Target.Class factClass, UpdateControls.Correspondence.Factual.AST.Field field)
+        {
+            Source.DataTypeNative dataTypeNative = field.Type as Source.DataTypeNative;
+            if (dataTypeNative != null)
+                AnalyzeFieldNative(field, dataTypeNative, factClass);
+            else
+            {
+                Source.DataTypeFact dataTypeFact = field.Type as Source.DataTypeFact;
+                if (dataTypeFact != null)
+                    AnalyzeFieldFact(field, dataTypeFact, factClass);
+            }
+        }
         private void AnalyzeFieldNative(Source.Field field, Source.DataTypeNative dataTypeNative, Target.Class factClass)
         {
             factClass.AddField(new Target.Field(

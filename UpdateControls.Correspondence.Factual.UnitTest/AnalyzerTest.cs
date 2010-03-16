@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Factual.Compiler;
 using System.IO;
@@ -78,7 +75,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             Pred.Assert(result.Classes, Contains<Class>.That(
                 Has<Class>.Property(c => c.Fields, Contains<Field>.That(
                     Has<Field>.Property(f => f.Name, Is.EqualTo("identifier")) &
-                    Has<Field>.Property(f => f.DataType, Is.EqualTo(NativeType.String)) &
+                    Has<Field>.Property(f => f.NativeType, Is.EqualTo(NativeType.String)) &
                     Has<Field>.Property(f => f.Cardinality, Is.EqualTo(Cardinality.One))
                 ))
             ));
@@ -106,6 +103,32 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                     Has<Predecessor>.Property(p => p.FactType, Is.EqualTo("GameQueue")) &
                     Has<Predecessor>.Property(p => p.Cardinality, Is.EqualTo(Cardinality.One))
                 ))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenFieldIsDuplicated_ErrorIsGenerated()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact Id { }\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  string identifier;\r\n" +
+                "  Id identifier;\r\n" +
+                "}"
+            ));
+            Analyzer analyzer = new Analyzer(parser.Parse());
+            Namespace result = analyzer.Analyze();
+            Pred.Assert(result, Is.Null<Namespace>());
+            Pred.Assert(analyzer.Errors, Contains<Error>.That(
+                Has<Error>.Property(e => e.Message, Is.EqualTo("The member \"GameQueue.identifier\" is defined more than once.")) &
+                Has<Error>.Property(e => e.LineNumber, Is.EqualTo(6))
+            ));
+            Pred.Assert(analyzer.Errors, Contains<Error>.That(
+                Has<Error>.Property(e => e.Message, Is.EqualTo("The member \"GameQueue.identifier\" is defined more than once.")) &
+                Has<Error>.Property(e => e.LineNumber, Is.EqualTo(7))
             ));
         }
  

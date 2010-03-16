@@ -24,7 +24,14 @@ namespace Reversi.GameModel
         public Queue(FactMemento memento)
         {
         }
+
+
+        public string identifier
+        {
+            get { return _identifier; }
+        }
     }
+    
     [CorrespondenceType]
     public class Time : CorrespondenceFact
     {
@@ -43,7 +50,14 @@ namespace Reversi.GameModel
         public Time(FactMemento memento)
         {
         }
+
+
+        public DateTime start
+        {
+            get { return _start; }
+        }
     }
+    
     [CorrespondenceType]
     public class Frame : CorrespondenceFact
     {
@@ -68,5 +82,16 @@ namespace Reversi.GameModel
             _queue = new PredecessorObj<Queue>(this, Role_queue, memento);
             _timestamp = new PredecessorObj<Time>(this, Role_timestamp, memento);
         }
+
+        public Queue queue
+        {
+            get { return _queue.Fact; }
+        }
+        public Time timestamp
+        {
+            get { return _timestamp.Fact; }
+        }
+
     }
+    
 }
