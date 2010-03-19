@@ -67,11 +67,17 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     var field = member as Source.Field;
                     if (field != null)
                         AnalyzeField(factClass, field);
+                    else
+                    {
+                        var query = member as Source.Query;
+                        if (query != null)
+                            AnalyzeQuery(factClass, query);
+                    }
                 }
             }
         }
 
-        private void AnalyzeField(Target.Class factClass, UpdateControls.Correspondence.Factual.AST.Field field)
+        private void AnalyzeField(Target.Class factClass, Source.Field field)
         {
             Source.DataTypeNative dataTypeNative = field.Type as Source.DataTypeNative;
             if (dataTypeNative != null)
@@ -83,6 +89,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     AnalyzeFieldFact(field, dataTypeFact, factClass);
             }
         }
+
         private void AnalyzeFieldNative(Source.Field field, Source.DataTypeNative dataTypeNative, Target.Class factClass)
         {
             factClass.AddField(new Target.Field(
@@ -103,6 +110,20 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     dataTypeFact.FactName
                 ));
             }
+        }
+
+        private void AnalyzeQuery(Target.Class factClass, Source.Query sourceQuery)
+        {
+            Target.Query targetQuery = new Target.Query(sourceQuery.Name, sourceQuery.FactName);
+
+            // Follow the chain of predecessors on both sides of each set.
+            IEnumerable<Source.Set> sets = sourceQuery.Sets;
+            foreach (Source.Set sourceSet in sets)
+            {
+                Source.Path path = sourceSet.LeftPath;
+            }
+
+            factClass.AddQuery(targetQuery);
         }
     }
 }

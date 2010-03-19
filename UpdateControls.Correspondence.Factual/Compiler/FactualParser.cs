@@ -55,16 +55,19 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Semicolon), "Terminate the namespace declaration with a semicolon.",
                 (namespaceToken, identifier, ignored) => new Namespace(identifier.ToString(), namespaceToken.LineNumber));
 
-            // relative_path -> identifier ("." identifier)*
-            // path -> relative_path | "this"
-            var relativePath = Separated(
-                Terminal(Symbol.Identifier),
-                Symbol.Dot,
-                segment => new PathRelative().AddSegment(segment.Value),
-                (path, segment) => path.AddSegment(segment.Value));
+            // path -> (identifier | "this") ("." identifier)*
             var pathRule =
-                Reduce(relativePath, path => (Path)path) |
-                Reduce(Terminal(Symbol.This), t => (Path)new PathAbsolute());
+                Many(
+                    Reduce(Terminal(Symbol.Identifier), t => new Path(false).AddSegment(t.Value)) |
+                    Reduce(Terminal(Symbol.This), t => new Path(true)),
+                    Sequence(
+                        Terminal(Symbol.Dot),
+                        Terminal(Symbol.Identifier),
+                        "Provide a predecessor after the dot.",
+                        (dot, identifier) => identifier
+                    ),
+                    (path, segment) => path.AddSegment(segment.Value)
+                );
 
             // type -> (native_type | identifier) ("?" | "*")?
             // native_type -> "int" | "float" | "char" | "string" | "date" | "time"

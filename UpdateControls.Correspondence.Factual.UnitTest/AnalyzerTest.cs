@@ -150,5 +150,38 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 Has<Error>.Property(e => e.LineNumber, Is.EqualTo(4))
             ));
         }
+
+        [TestMethod]
+        public void WhenQueryIsDefined_QueryIsGenerated()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  GameRequest *gameRequests {\r\n" +
+                "    GameRequest r : r.gameQueue = this\r\n" +
+                "  }\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "  GameQueue gameQueue;\r\n" +
+                "}"
+            ));
+            Analyzer analyzer = new Analyzer(parser.Parse());
+            Namespace result = analyzer.Analyze();
+            Pred.Assert(result, Is.NotNull<Namespace>());
+            Pred.Assert(result.Classes, Contains<Class>.That(
+                Has<Class>.Property(c => c.Name, Is.EqualTo("GameQueue")) &
+                Has<Class>.Property(c => c.Queries, Contains<Query>.That(
+                    Has<Query>.Property(q => q.Name, Is.EqualTo("gameRequests")) &
+                    Has<Query>.Property(q => q.Type, Is.EqualTo("GameRequest")) &
+                    Has<Query>.Property(q => q.Joins, Contains<Join>.That(
+                        Has<Join>.Property(j => j.Direction, Is.EqualTo(Direction.Successors)) &
+                        Has<Join>.Property(j => j.Type, Is.EqualTo("GameRequest")) &
+                        Has<Join>.Property(j => j.Name, Is.EqualTo("gameQueue"))
+                    ))
+                ))
+            ));
+        }
     }
 }

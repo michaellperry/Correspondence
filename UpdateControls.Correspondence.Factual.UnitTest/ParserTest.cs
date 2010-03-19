@@ -189,21 +189,24 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
             Namespace result = parser.Parse();
             Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Members.OfType<Query>(), Contains<Query>.That(
+                Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(KindOf<FactMember, Query>.That(
                     Has<Query>.Property(query => query.Name, Is.EqualTo("addresses")) &
                     Has<Query>.Property(query => query.FactName, Is.EqualTo("Address")) &
                     Has<Query>.Property(query => query.Sets, Contains<Set>.That(
                         Has<Set>.Property(set => set.Name, Is.EqualTo("address")) &
                         Has<Set>.Property(set => set.FactName, Is.EqualTo("Address")) &
-                        Has<Set>.Property(set => set.LeftPath, KindOf<AST.Path, PathRelative>.That(
-                            Has<PathRelative>.Property(path => path.Segments,
+                        Has<Set>.Property(set => set.LeftPath,
+                            Has<AST.Path>.Property(path => path.Absolute, Is.EqualTo(false)) &
+                            Has<AST.Path>.Property(path => path.Segments,
                                 Contains<string>.That(Is.EqualTo("address")) &
                                 Contains<string>.That(Is.EqualTo("person"))
                             )
-                        )) &
-                        Has<Set>.Property(set => set.RightPath, KindOf<AST.Path, PathAbsolute>.That(Is.NotNull<PathAbsolute>()))
+                        ) &
+                        Has<Set>.Property(set => set.RightPath,
+                            Has<AST.Path>.Property(path => path.Absolute, Is.EqualTo(true))
+                        )
                     ))
-                ))
+                )))
             ));
         }
     }
