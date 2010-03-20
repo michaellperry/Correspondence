@@ -130,52 +130,91 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             // Follow the chain of predecessors on both sides of each set.
             IEnumerable<Source.Set> sets = sourceQuery.Sets;
-            foreach (Source.Set sourceSet in sets)
+            Source.Set firstSet = sets.First();
+            Source.Fact priorType = JoinFirstSet(fact, targetQuery, firstSet);
+            string priorName = firstSet.Name;
+            foreach (Source.Set subsequentSet in sets.Skip(1))
             {
-                Source.Path parentPath = sourceSet.RightPath;
-                Source.Path childPath = sourceSet.LeftPath;
-                if (!parentPath.Absolute)
-                {
-                    parentPath = sourceSet.LeftPath;
-                    childPath = sourceSet.RightPath;
-                }
-                int lineNumber = sourceSet.LineNumber;
-                if (!parentPath.Absolute)
-                    throw new CompilerException("The query set needs to relate to \"this\".", lineNumber);
-                if (childPath.Absolute)
-                    throw new CompilerException("Only one side of the equation can relate to \"this\".", lineNumber);
-                if (childPath.Segments.First() != sourceSet.Name)
-                    throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", sourceSet.Name), lineNumber);
-
-                Source.Fact parentEnd = fact;
-                List<PredecessorInfo> parentPredecessors = WalkSegments(ref parentEnd, parentPath.Segments, lineNumber);
-                Source.Fact childEnd = GetFactByName(sourceSet.FactName, lineNumber);
-                if (childEnd == null)
-                    throw new CompilerException(string.Format("The fact \"{0}\" is not defined.", sourceSet.FactName), lineNumber);
-                List<PredecessorInfo> childPredecessors = WalkSegments(ref childEnd, childPath.Segments.Skip(1), lineNumber);
-                if (parentEnd != childEnd)
-                    throw new CompilerException(string.Format("A query cannot join \"{0}\" to \"{1}\".", childEnd.Name, parentEnd.Name), lineNumber);
-
-                foreach (PredecessorInfo parentPredecessor in parentPredecessors)
-                {
-                    targetQuery.AddJoin(
-                        new Target.Join(
-                            Target.Direction.Predecessors,
-                            parentPredecessor.Fact.Name,
-                            parentPredecessor.Field.Name));
-                }
-                childPredecessors.Reverse();
-                foreach (PredecessorInfo childPredecessor in childPredecessors)
-                {
-                    targetQuery.AddJoin(
-                        new Target.Join(
-                            Target.Direction.Successors,
-                            childPredecessor.Fact.Name,
-                            childPredecessor.Field.Name));
-                }
+                priorType = JoinSubsequentSet(priorType, targetQuery, priorName, subsequentSet);
+                priorName = subsequentSet.Name;
             }
 
             factClass.AddQuery(targetQuery);
+        }
+
+        private Source.Fact JoinFirstSet(Source.Fact fact, Target.Query targetQuery, Source.Set sourceSet)
+        {
+            Source.Path parentPath = sourceSet.RightPath;
+            Source.Path childPath = sourceSet.LeftPath;
+            if (!parentPath.Absolute)
+            {
+                parentPath = sourceSet.LeftPath;
+                childPath = sourceSet.RightPath;
+            }
+            int lineNumber = sourceSet.LineNumber;
+            if (!parentPath.Absolute)
+                throw new CompilerException("The query set needs to relate to \"this\".", lineNumber);
+            if (childPath.Absolute)
+                throw new CompilerException("Only one side of the equation can relate to \"this\".", lineNumber);
+            if (childPath.Segments.First() != sourceSet.Name)
+                throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", sourceSet.Name), lineNumber);
+
+            return JoinPaths(fact, targetQuery, sourceSet, parentPath, childPath, lineNumber);
+        }
+
+        private Source.Fact JoinSubsequentSet(Source.Fact fact, Target.Query targetQuery, string priorName, Source.Set sourceSet)
+        {
+            Source.Path parentPath = sourceSet.RightPath;
+            Source.Path childPath = sourceSet.LeftPath;
+            if (parentPath.Segments.First() != priorName)
+            {
+                parentPath = sourceSet.LeftPath;
+                childPath = sourceSet.RightPath;
+            }
+            int lineNumber = sourceSet.LineNumber;
+            if (parentPath.Absolute || childPath.Absolute)
+                throw new CompilerException("Subsequent sets cannot relate to \"this\".", lineNumber);
+            if (parentPath.Segments.First() != priorName)
+                throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", priorName), lineNumber);
+            if (childPath.Segments.First() != sourceSet.Name)
+                throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", sourceSet.Name), lineNumber);
+
+            return JoinPaths(fact, targetQuery, sourceSet, parentPath, childPath, lineNumber);
+        }
+
+        private Source.Fact JoinPaths(Source.Fact fact, Target.Query targetQuery, Source.Set sourceSet, Source.Path parentPath, Source.Path childPath, int lineNumber)
+        {
+            Source.Fact parentEnd = fact;
+            IEnumerable<string> parentSegments = parentPath.Segments;
+            if (!parentPath.Absolute)
+                parentSegments = parentSegments.Skip(1);
+            List<PredecessorInfo> parentPredecessors = WalkSegments(ref parentEnd, parentSegments, lineNumber);
+            Source.Fact setType = GetFactByName(sourceSet.FactName, lineNumber);
+            Source.Fact childEnd = setType;
+            if (childEnd == null)
+                throw new CompilerException(string.Format("The fact \"{0}\" is not defined.", sourceSet.FactName), lineNumber);
+            List<PredecessorInfo> childPredecessors = WalkSegments(ref childEnd, childPath.Segments.Skip(1), lineNumber);
+            if (parentEnd != childEnd)
+                throw new CompilerException(string.Format("A query cannot join \"{0}\" to \"{1}\".", childEnd.Name, parentEnd.Name), lineNumber);
+
+            foreach (PredecessorInfo parentPredecessor in parentPredecessors)
+            {
+                targetQuery.AddJoin(
+                    new Target.Join(
+                        Target.Direction.Predecessors,
+                        parentPredecessor.Fact.Name,
+                        parentPredecessor.Field.Name));
+            }
+            childPredecessors.Reverse();
+            foreach (PredecessorInfo childPredecessor in childPredecessors)
+            {
+                targetQuery.AddJoin(
+                    new Target.Join(
+                        Target.Direction.Successors,
+                        childPredecessor.Fact.Name,
+                        childPredecessor.Field.Name));
+            }
+            return setType;
         }
 
         private List<PredecessorInfo> WalkSegments(ref Source.Fact fact, IEnumerable<string> segments, int lineNumber)

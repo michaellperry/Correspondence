@@ -478,4 +478,165 @@ namespace Reversi.GameModel
         // Query result access
     }
     
+    [CorrespondenceType]
+    public class Subscriber : CorrespondenceFact
+    {
+        // Roles
+
+        // Queries
+        private static Query QueryArticles = new Query()
+            .JoinSuccessors(Subscription.RoleSubscriber)
+            .JoinPredecessors(Subscription.RoleMagazine)
+            .JoinSuccessors(Article.RoleMagazine)
+            ;
+
+        // Predecessors
+
+        // Fields
+
+        // Results
+        private Result<Article> _articles;
+
+        // Business constructor
+        public Subscriber(
+            )
+        {
+        }
+
+        // Hydration constructor
+        public Subscriber(FactMemento memento)
+        {
+        }
+
+        // Predecessor access
+
+        // Field access
+
+        // Query result access
+        public IEnumerable<Article> Articles
+        {
+            get { return _articles; }
+        }
+    }
+    
+    [CorrespondenceType]
+    public class Magazine : CorrespondenceFact
+    {
+        // Roles
+
+        // Queries
+
+        // Predecessors
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Magazine(
+            )
+        {
+        }
+
+        // Hydration constructor
+        public Magazine(FactMemento memento)
+        {
+        }
+
+        // Predecessor access
+
+        // Field access
+
+        // Query result access
+    }
+    
+    [CorrespondenceType]
+    public class Subscription : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Subscriber> RoleSubscriber = new Role<Subscriber>("subscriber");
+        public static Role<Magazine> RoleMagazine = new Role<Magazine>("magazine");
+
+        // Queries
+
+        // Predecessors
+        private PredecessorObj<Subscriber> _subscriber;
+        private PredecessorObj<Magazine> _magazine;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Subscription(
+            Subscriber subscriber
+            ,Magazine magazine
+            )
+        {
+            _subscriber = new PredecessorObj<Subscriber>(this, RoleSubscriber, subscriber);
+            _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, magazine);
+        }
+
+        // Hydration constructor
+        public Subscription(FactMemento memento)
+        {
+            _subscriber = new PredecessorObj<Subscriber>(this, RoleSubscriber, memento);
+            _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, memento);
+        }
+
+        // Predecessor access
+        public Subscriber Subscriber
+        {
+            get { return _subscriber.Fact; }
+        }
+        public Magazine Magazine
+        {
+            get { return _magazine.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+    }
+    
+    [CorrespondenceType]
+    public class Article : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Magazine> RoleMagazine = new Role<Magazine>("magazine");
+
+        // Queries
+
+        // Predecessors
+        private PredecessorObj<Magazine> _magazine;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Article(
+            Magazine magazine
+            )
+        {
+            _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, magazine);
+        }
+
+        // Hydration constructor
+        public Article(FactMemento memento)
+        {
+            _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, memento);
+        }
+
+        // Predecessor access
+        public Magazine Magazine
+        {
+            get { return _magazine.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+    }
+    
 }

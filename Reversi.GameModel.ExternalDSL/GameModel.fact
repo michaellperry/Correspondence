@@ -69,3 +69,22 @@ fact Reject {
 fact Cancel {
 	Request request;
 }
+
+fact Subscriber {
+  Article* articles {
+    Subscription subscription : subscription.subscriber = this
+    Article article : article.magazine = subscription.magazine
+  }
+}
+
+fact Magazine {
+}
+
+fact Subscription {
+  Subscriber subscriber;
+  Magazine magazine;
+}
+
+fact Article {
+  Magazine magazine;
+}

@@ -153,9 +153,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             {
                 DataTypeFact factType = type as DataTypeFact;
                 if (factType == null)
-                    throw new FactualException("A query must return a fact type, not a native type.", type.LineNumber);
+                    throw new ParserException("A query must return a fact type, not a native type.", type.LineNumber);
                 if (factType.Cardinality != Cardinality.Many)
-                    throw new FactualException("A query must return multiple results.", factType.LineNumber);
+                    throw new ParserException("A query must return multiple results.", factType.LineNumber);
 
                 return new Query(nameToken.Value, factType.FactName, queryTail, factType.LineNumber);
             };
