@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.Factual.AST
@@ -34,6 +35,11 @@ namespace UpdateControls.Correspondence.Factual.AST
         {
             _members.Add(member);
             return this;
+        }
+
+        public FactMember GetMemberByName(string name)
+        {
+            return _members.FirstOrDefault(m => m.Name == name);
         }
     }
 }

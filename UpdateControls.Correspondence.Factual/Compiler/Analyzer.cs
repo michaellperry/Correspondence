@@ -11,7 +11,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         private Source.Namespace _root;
         private List<Error> _errors = new List<Error>();
 
-        private static Dictionary<Source.NativeType, Target.NativeType> _nativeTypeMap = new Dictionary<Source.NativeType,Target.NativeType>
+        private static Dictionary<Source.NativeType, Target.NativeType> _nativeTypeMap = new Dictionary<Source.NativeType, Target.NativeType>
         {
             { Source.NativeType.String, Target.NativeType.String },
             { Source.NativeType.Int,    Target.NativeType.Int },
@@ -43,7 +43,16 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             Target.Namespace result = new Target.Namespace(_root.Identifier);
 
             foreach (Source.Fact fact in _root.Facts)
-                AnalyzeFact(fact, result);
+            {
+                try
+                {
+                    AnalyzeFact(fact, result);
+                }
+                catch (CompilerException ex)
+                {
+                    _errors.Add(new Error(ex.Message, ex.LineNumber));
+                }
+            }
 
             if (_errors.Any())
                 return null;
@@ -54,16 +63,17 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         private void AnalyzeFact(Source.Fact fact, Target.Namespace result)
         {
             if (_root.Facts.Any(f => f != fact && f.Name == fact.Name))
-                _errors.Add(new Error(string.Format("The fact \"{0}\" is defined more than once.", fact.Name), fact.LineNumber));
-            else
-            {
-                Target.Class factClass = new Target.Class(fact.Name);
-                result.AddClass(factClass);
+                throw new CompilerException(string.Format("The fact \"{0}\" is defined more than once.", fact.Name), fact.LineNumber);
 
-                foreach (Source.FactMember member in fact.Members)
+            Target.Class factClass = new Target.Class(fact.Name);
+            result.AddClass(factClass);
+
+            foreach (Source.FactMember member in fact.Members)
+            {
+                try
                 {
                     if (fact.Members.Any(m => m != member && m.Name == member.Name))
-                        _errors.Add(new Error(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Name, member.Name), member.LineNumber));
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Name, member.Name), member.LineNumber);
                     var field = member as Source.Field;
                     if (field != null)
                         AnalyzeField(factClass, field);
@@ -71,8 +81,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     {
                         var query = member as Source.Query;
                         if (query != null)
-                            AnalyzeQuery(factClass, query);
+                            AnalyzeQuery(factClass, fact, query);
                     }
+                }
+                catch (CompilerException ex)
+                {
+                    _errors.Add(new Error(ex.Message, ex.LineNumber));
                 }
             }
         }
@@ -101,18 +115,16 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         private void AnalyzeFieldFact(Source.Field field, Source.DataTypeFact dataTypeFact, Target.Class factClass)
         {
             if (!_root.Facts.Any(f => f.Name == dataTypeFact.FactName))
-                _errors.Add(new Error(string.Format("The fact type \"{0}\" is not defined.", dataTypeFact.FactName), field.LineNumber));
-            else
-            {
-                factClass.AddPredecessor(new Target.Predecessor(
-                    field.Name,
-                    _cardinalityMap[dataTypeFact.Cardinality],
-                    dataTypeFact.FactName
-                ));
-            }
+                throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", dataTypeFact.FactName), field.LineNumber);
+
+            factClass.AddPredecessor(new Target.Predecessor(
+                field.Name,
+                _cardinalityMap[dataTypeFact.Cardinality],
+                dataTypeFact.FactName
+            ));
         }
 
-        private void AnalyzeQuery(Target.Class factClass, Source.Query sourceQuery)
+        private void AnalyzeQuery(Target.Class factClass, Source.Fact fact, Source.Query sourceQuery)
         {
             Target.Query targetQuery = new Target.Query(sourceQuery.Name, sourceQuery.FactName);
 
@@ -120,10 +132,82 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             IEnumerable<Source.Set> sets = sourceQuery.Sets;
             foreach (Source.Set sourceSet in sets)
             {
-                Source.Path path = sourceSet.LeftPath;
+                Source.Path parentPath = sourceSet.RightPath;
+                Source.Path childPath = sourceSet.LeftPath;
+                if (!parentPath.Absolute)
+                {
+                    parentPath = sourceSet.LeftPath;
+                    childPath = sourceSet.RightPath;
+                }
+                int lineNumber = sourceSet.LineNumber;
+                if (!parentPath.Absolute)
+                    throw new CompilerException("The query set needs to relate to \"this\".", lineNumber);
+                if (childPath.Absolute)
+                    throw new CompilerException("Only one side of the equation can relate to \"this\".", lineNumber);
+                if (childPath.Segments.First() != sourceSet.Name)
+                    throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", sourceSet.Name), lineNumber);
+
+                Source.Fact parentEnd = fact;
+                List<PredecessorInfo> parentPredecessors = WalkSegments(ref parentEnd, parentPath.Segments, lineNumber);
+                Source.Fact childEnd = GetFactByName(sourceSet.FactName, lineNumber);
+                if (childEnd == null)
+                    throw new CompilerException(string.Format("The fact \"{0}\" is not defined.", sourceSet.FactName), lineNumber);
+                List<PredecessorInfo> childPredecessors = WalkSegments(ref childEnd, childPath.Segments.Skip(1), lineNumber);
+                if (parentEnd != childEnd)
+                    throw new CompilerException(string.Format("A query cannot join \"{0}\" to \"{1}\".", childEnd.Name, parentEnd.Name), lineNumber);
+
+                foreach (PredecessorInfo parentPredecessor in parentPredecessors)
+                {
+                    targetQuery.AddJoin(
+                        new Target.Join(
+                            Target.Direction.Predecessors,
+                            parentPredecessor.Fact.Name,
+                            parentPredecessor.Field.Name));
+                }
+                childPredecessors.Reverse();
+                foreach (PredecessorInfo childPredecessor in childPredecessors)
+                {
+                    targetQuery.AddJoin(
+                        new Target.Join(
+                            Target.Direction.Successors,
+                            childPredecessor.Fact.Name,
+                            childPredecessor.Field.Name));
+                }
             }
 
             factClass.AddQuery(targetQuery);
+        }
+
+        private List<PredecessorInfo> WalkSegments(ref Source.Fact fact, IEnumerable<string> segments, int lineNumber)
+        {
+            List<PredecessorInfo> predecessors = new List<PredecessorInfo>();
+            foreach (string segment in segments)
+            {
+                Source.FactMember member = fact.GetMemberByName(segment);
+                if (member == null)
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", fact.Name, segment), lineNumber);
+                Source.Field field = member as Source.Field;
+                if (field == null)
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a field.", fact.Name, segment), lineNumber);
+                Source.DataTypeFact predecessor = field.Type as Source.DataTypeFact;
+                if (predecessor == null)
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a fact.", fact.Name, segment), lineNumber);
+                predecessors.Add(new PredecessorInfo
+                {
+                    Fact = fact,
+                    Field = field
+                });
+                fact = GetFactByName(predecessor.FactName, lineNumber);
+            }
+            return predecessors;
+        }
+
+        private Source.Fact GetFactByName(string factName, int lineNumber)
+        {
+            Source.Fact fact = _root.Facts.FirstOrDefault(f => f.Name == factName);
+            if (fact == null)
+                throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", factName), lineNumber);
+            return fact;
         }
     }
 }

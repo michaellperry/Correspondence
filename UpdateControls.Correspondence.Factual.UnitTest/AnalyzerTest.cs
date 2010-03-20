@@ -152,6 +152,55 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         }
 
         [TestMethod]
+        public void WhenPredecessorIsUndefined_ErrorIsGenerated()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  GameRequest *gameRequests {\r\n" +
+                "    GameRequest r : r.gameQueue = this\r\n" +
+                "  }\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "}"
+            ));
+            Analyzer analyzer = new Analyzer(parser.Parse());
+            Namespace result = analyzer.Analyze();
+            Pred.Assert(result, Is.Null<Namespace>());
+            Pred.Assert(analyzer.Errors, Contains<Error>.That(
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(5)) &
+                Has<Error>.Property(error => error.Message, Is.EqualTo("The member \"GameRequest.gameQueue\" is not defined."))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenFieldIsANativeType_ErrorIsGenerated()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  GameRequest *gameRequests {\r\n" +
+                "    GameRequest r : r.identifier = this\r\n" +
+                "  }\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "  string identifier;\r\n" +
+                "}"
+            ));
+            Analyzer analyzer = new Analyzer(parser.Parse());
+            Namespace result = analyzer.Analyze();
+            Pred.Assert(result, Is.Null<Namespace>());
+            Pred.Assert(analyzer.Errors, Contains<Error>.That(
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(5)) &
+                Has<Error>.Property(error => error.Message, Is.EqualTo("The member \"GameRequest.identifier\" is not a fact."))
+            ));
+        }
+
+        [TestMethod]
         public void WhenQueryIsDefined_QueryIsGenerated()
         {
             FactualParser parser = new FactualParser(new StringReader(
