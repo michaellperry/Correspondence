@@ -55,6 +55,15 @@ namespace <#=result.Name#>
         public static <#=RoleClass(predecessor)#> <#=RoleName(predecessor.Name)#> = new <#=RoleClass(predecessor)#>("<#=predecessor.Name#>");
 <#}#>
 
+        // Queries
+<# foreach (Query query in c.Queries) { #>
+        private static Query <#=QueryName(query.Name)#> = new Query()
+<# foreach (Join join in query.Joins) { #>
+            .Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>)
+<#}#>
+            ;
+<#}#>
+
         // Predecessors
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
         private <#=PredecessorClass(predecessor)#> _<#=predecessor.Name#>;
@@ -64,6 +73,11 @@ namespace <#=result.Name#>
 <# foreach (Field field in c.Fields) {#>
         [CorrespondenceField]
         private <#=FieldType(field)#> _<#=field.Name#>;
+<#}#>
+
+        // Results
+<# foreach (Query query in c.Queries) { #>
+        private <#=ResultClass(query)#> _<#=query.Name#>;
 <#}#>
 
         // Business constructor
@@ -113,6 +127,14 @@ namespace <#=result.Name#>
             get { return _<#=field.Name#>; }
         }
 <#}#>
+
+        // Query result access
+<# foreach (Query query in c.Queries) { #>
+        public IEnumerable<<#=query.Type#>> <#=Capitalize(query.Name)#>
+        {
+            get { return _<#=query.Name#>; }
+        }
+<#}#>
     }
     
 <#}#>
@@ -132,6 +154,16 @@ private static string RoleClass(Predecessor predecessor)
 private static string RoleName(string predecessorName)
 {
     return "Role" + Capitalize(predecessorName);
+}
+
+private static string QueryName(string queryName)
+{
+    return "Query" + Capitalize(queryName);
+}
+
+private static string ResultClass(Query query)
+{
+    return "Result<" + query.Type + ">";
 }
 
 private static string PredecessorClass(Predecessor predecessor)

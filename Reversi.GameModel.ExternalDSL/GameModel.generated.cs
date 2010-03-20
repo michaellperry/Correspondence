@@ -11,11 +11,15 @@ namespace Reversi.GameModel
     {
         // Roles
 
+        // Queries
+
         // Predecessors
 
         // Fields
         [CorrespondenceField]
         private string _identifier;
+
+        // Results
 
         // Business constructor
         public Queue(
@@ -37,6 +41,8 @@ namespace Reversi.GameModel
         {
             get { return _identifier; }
         }
+
+        // Query result access
     }
     
     [CorrespondenceType]
@@ -44,11 +50,15 @@ namespace Reversi.GameModel
     {
         // Roles
 
+        // Queries
+
         // Predecessors
 
         // Fields
         [CorrespondenceField]
         private DateTime _start;
+
+        // Results
 
         // Business constructor
         public Time(
@@ -70,6 +80,8 @@ namespace Reversi.GameModel
         {
             get { return _start; }
         }
+
+        // Query result access
     }
     
     [CorrespondenceType]
@@ -79,11 +91,19 @@ namespace Reversi.GameModel
         public static Role<Queue> RoleQueue = new Role<Queue>("queue");
         public static Role<Time> RoleTimestamp = new Role<Time>("timestamp");
 
+        // Queries
+        private static Query QueryOutstandingRequests = new Query()
+            .JoinSuccessors(Request.RoleFrame)
+            ;
+
         // Predecessors
         private PredecessorObj<Queue> _queue;
         private PredecessorObj<Time> _timestamp;
 
         // Fields
+
+        // Results
+        private Result<Request> _outstandingRequests;
 
         // Business constructor
         public Frame(
@@ -113,6 +133,12 @@ namespace Reversi.GameModel
         }
 
         // Field access
+
+        // Query result access
+        public IEnumerable<Request> OutstandingRequests
+        {
+            get { return _outstandingRequests; }
+        }
     }
     
     [CorrespondenceType]
@@ -120,9 +146,13 @@ namespace Reversi.GameModel
     {
         // Roles
 
+        // Queries
+
         // Predecessors
 
         // Fields
+
+        // Results
 
         // Business constructor
         public Player(
@@ -138,6 +168,8 @@ namespace Reversi.GameModel
         // Predecessor access
 
         // Field access
+
+        // Query result access
     }
     
     [CorrespondenceType]
@@ -146,10 +178,14 @@ namespace Reversi.GameModel
         // Roles
         public static Role<Player> RolePlayers = new Role<Player>("players");
 
+        // Queries
+
         // Predecessors
         private PredecessorList<Player> _players;
 
         // Fields
+
+        // Results
 
         // Business constructor
         public Game(
@@ -172,6 +208,274 @@ namespace Reversi.GameModel
         }
      
         // Field access
+
+        // Query result access
+    }
+    
+    [CorrespondenceType]
+    public class Person : CorrespondenceFact
+    {
+        // Roles
+
+        // Queries
+
+        // Predecessors
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Person(
+            )
+        {
+        }
+
+        // Hydration constructor
+        public Person(FactMemento memento)
+        {
+        }
+
+        // Predecessor access
+
+        // Field access
+
+        // Query result access
+    }
+    
+    [CorrespondenceType]
+    public class Request : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Frame> RoleFrame = new Role<Frame>("frame");
+        public static Role<Person> RoleRequester = new Role<Person>("requester");
+
+        // Queries
+        private static Query QueryBids = new Query()
+            .JoinSuccessors(Bid.RoleRequest)
+            ;
+
+        // Predecessors
+        private PredecessorObj<Frame> _frame;
+        private PredecessorObj<Person> _requester;
+
+        // Fields
+
+        // Results
+        private Result<Bid> _bids;
+
+        // Business constructor
+        public Request(
+            Frame frame
+            ,Person requester
+            )
+        {
+            _frame = new PredecessorObj<Frame>(this, RoleFrame, frame);
+            _requester = new PredecessorObj<Person>(this, RoleRequester, requester);
+        }
+
+        // Hydration constructor
+        public Request(FactMemento memento)
+        {
+            _frame = new PredecessorObj<Frame>(this, RoleFrame, memento);
+            _requester = new PredecessorObj<Person>(this, RoleRequester, memento);
+        }
+
+        // Predecessor access
+        public Frame Frame
+        {
+            get { return _frame.Fact; }
+        }
+        public Person Requester
+        {
+            get { return _requester.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+        public IEnumerable<Bid> Bids
+        {
+            get { return _bids; }
+        }
+    }
+    
+    [CorrespondenceType]
+    public class Bid : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Request> RoleRequest = new Role<Request>("request");
+        public static Role<Person> RoleBidder = new Role<Person>("bidder");
+
+        // Queries
+
+        // Predecessors
+        private PredecessorObj<Request> _request;
+        private PredecessorObj<Person> _bidder;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Bid(
+            Request request
+            ,Person bidder
+            )
+        {
+            _request = new PredecessorObj<Request>(this, RoleRequest, request);
+            _bidder = new PredecessorObj<Person>(this, RoleBidder, bidder);
+        }
+
+        // Hydration constructor
+        public Bid(FactMemento memento)
+        {
+            _request = new PredecessorObj<Request>(this, RoleRequest, memento);
+            _bidder = new PredecessorObj<Person>(this, RoleBidder, memento);
+        }
+
+        // Predecessor access
+        public Request Request
+        {
+            get { return _request.Fact; }
+        }
+        public Person Bidder
+        {
+            get { return _bidder.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+    }
+    
+    [CorrespondenceType]
+    public class Accept : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Request> RoleRequest = new Role<Request>("request");
+        public static Role<Bid> RoleBid = new Role<Bid>("bid");
+
+        // Queries
+
+        // Predecessors
+        private PredecessorObj<Request> _request;
+        private PredecessorObj<Bid> _bid;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Accept(
+            Request request
+            ,Bid bid
+            )
+        {
+            _request = new PredecessorObj<Request>(this, RoleRequest, request);
+            _bid = new PredecessorObj<Bid>(this, RoleBid, bid);
+        }
+
+        // Hydration constructor
+        public Accept(FactMemento memento)
+        {
+            _request = new PredecessorObj<Request>(this, RoleRequest, memento);
+            _bid = new PredecessorObj<Bid>(this, RoleBid, memento);
+        }
+
+        // Predecessor access
+        public Request Request
+        {
+            get { return _request.Fact; }
+        }
+        public Bid Bid
+        {
+            get { return _bid.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+    }
+    
+    [CorrespondenceType]
+    public class Reject : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Bid> RoleBid = new Role<Bid>("bid");
+
+        // Queries
+
+        // Predecessors
+        private PredecessorObj<Bid> _bid;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Reject(
+            Bid bid
+            )
+        {
+            _bid = new PredecessorObj<Bid>(this, RoleBid, bid);
+        }
+
+        // Hydration constructor
+        public Reject(FactMemento memento)
+        {
+            _bid = new PredecessorObj<Bid>(this, RoleBid, memento);
+        }
+
+        // Predecessor access
+        public Bid Bid
+        {
+            get { return _bid.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+    }
+    
+    [CorrespondenceType]
+    public class Cancel : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Request> RoleRequest = new Role<Request>("request");
+
+        // Queries
+
+        // Predecessors
+        private PredecessorObj<Request> _request;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Cancel(
+            Request request
+            )
+        {
+            _request = new PredecessorObj<Request>(this, RoleRequest, request);
+        }
+
+        // Hydration constructor
+        public Cancel(FactMemento memento)
+        {
+            _request = new PredecessorObj<Request>(this, RoleRequest, memento);
+        }
+
+        // Predecessor access
+        public Request Request
+        {
+            get { return _request.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
     }
     
 }

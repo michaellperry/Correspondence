@@ -25,6 +25,9 @@ fact Game {
     Player* players;
 }
 
+fact Person {
+    // unique;
+}
 
 fact Request {
 	Frame frame;
@@ -44,7 +47,7 @@ fact Request {
 
 fact Bid {
 	Request request;
-	Perdon bidder;
+	Person bidder;
 	
 	/*
 	bool isOutstanding {
