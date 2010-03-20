@@ -209,5 +209,48 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 )))
             ));
         }
+
+        [TestMethod]
+        public void WhenMultiLineCommentFound_CommentIsIgnored()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace ContactList;\r\n" +
+                "\r\n" +
+                "/*fact Ignored\r\n" +
+                "{\r\n" +
+                "}\r\n" +
+                "*/\r\n" +
+                "fact Person {\r\n" +
+                "  Address* addresses {\r\n" +
+                "    Address address : address.person = this\r\n" +
+                "  }\r\n" +
+                "}"
+            ));
+            Namespace result = parser.Parse();
+            Pred.Assert(result.Facts, ContainsNo<Fact>.That(
+                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Ignored"))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenSingleLineCommentFound_CommentIsIgnored()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace ContactList;\r\n" +
+                "\r\n" +
+                "fact Person {\r\n" +
+                "  Address* addresses {\r\n" +
+                "    Address address : address.person = this\r\n" +
+                "  }\r\n" +
+                "  //string ignored;\r\n" +
+                "}"
+            ));
+            Namespace result = parser.Parse();
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Members, ContainsNo<FactMember>.That(
+                    Has<FactMember>.Property(member => member.Name, Is.EqualTo("ignored"))
+                ))
+            ));
+        }
     }
 }

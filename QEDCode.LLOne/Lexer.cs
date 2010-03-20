@@ -34,18 +34,14 @@ namespace QEDCode.LLOne
         public Token<TSymbol> NextToken()
         {
             int nextCharacter = _input.Peek();
-            while (nextCharacter == ' ' || nextCharacter == '\t' || nextCharacter == '\r' || nextCharacter == '\n')
-            {
-                if (nextCharacter == '\n')
-                    ++_lineNumber;
-                _input.Read();
-                nextCharacter = _input.Peek();
-            }
+            if (nextCharacter == '\n')
+                ++_lineNumber;
 
+            SkipWhitespace(ref nextCharacter);
             if (nextCharacter == -1)
                 return new Token<TSymbol>(_endOfFile, string.Empty, _lineNumber);
 
-            else if (
+            if (
                 ('a' <= nextCharacter && nextCharacter <= 'z') ||
                 ('A' <= nextCharacter && nextCharacter <= 'Z') ||
                 nextCharacter == '_'
@@ -71,15 +67,59 @@ namespace QEDCode.LLOne
                     return new Token<TSymbol>(_identifier, identifier.ToString(), _lineNumber);
             }
 
+            string punctuationText = ((char)_input.Read()).ToString();
+            TSymbol punctuationSymbol;
+            if (_punctuation.TryGetValue(punctuationText, out punctuationSymbol))
+                return new Token<TSymbol>(punctuationSymbol, punctuationText, _lineNumber);
             else
+                throw new ParserException(string.Format("Unknown symbol {0}.", punctuationText), _lineNumber);
+        }
+
+        private void SkipWhitespace(ref int nextCharacter)
+        {
+            while (true)
             {
-                string punctuationText = ((char)_input.Read()).ToString();
-                TSymbol punctuationSymbol;
-                if (_punctuation.TryGetValue(punctuationText, out punctuationSymbol))
-                    return new Token<TSymbol>(punctuationSymbol, punctuationText, _lineNumber);
+                while (nextCharacter == ' ' || nextCharacter == '\t' || nextCharacter == '\r' || nextCharacter == '\n')
+                {
+                    nextCharacter = Consume();
+                }
+
+                if (nextCharacter == '/')
+                {
+                    nextCharacter = Consume();
+                    if (nextCharacter == '/')
+                    {
+                        // Single line comment.
+                        do
+                        {
+                            nextCharacter = Consume();
+                        } while (nextCharacter != '\n');
+                    }
+                    else if (nextCharacter == '*')
+                    {
+                        // Multi line comment.
+                        do
+                        {
+                            do
+                            {
+                                nextCharacter = Consume();
+                            } while (nextCharacter != '*');
+                            nextCharacter = Consume();
+                        } while (nextCharacter != '/');
+                    }
+                }
                 else
-                    throw new ParserException(string.Format("Unknown symbol {0}.", punctuationText), _lineNumber);
+                    break;
             }
+        }
+
+        private int Consume()
+        {
+            _input.Read();
+            int nextCharacter = _input.Peek();
+            if (nextCharacter == '\n')
+                ++_lineNumber;
+            return nextCharacter;
         }
 
         public Lexer<TSymbol> AddSymbol(string text, TSymbol symbol)

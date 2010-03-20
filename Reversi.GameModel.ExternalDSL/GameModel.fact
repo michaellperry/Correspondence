@@ -11,6 +11,11 @@ fact Time {
 fact Frame {
 	Queue queue;
 	Time timestamp;
+	
+	Request* outstandingRequests {
+		Request request : request.frame = this
+			// where request.isOutstanding
+	}
 }
 
 fact Player {
@@ -18,4 +23,46 @@ fact Player {
 
 fact Game {
     Player* players;
+}
+
+
+fact Request {
+	Frame frame;
+	Person requester;
+	
+	/*
+	bool isOutstanding {
+		not exists Accept accept : accept.request = this and
+		not exists Cancel cancel : cancel.request = this
+	}
+	*/
+	
+	Bid* bids {
+		Bid bid : bid.request = this
+	}
+}
+
+fact Bid {
+	Request request;
+	Perdon bidder;
+	
+	/*
+	bool isOutstanding {
+		not exists Accept accept : accept.bid = this and
+		not exists Reject reject : reject.bid = this
+	}
+	*/
+}
+
+fact Accept {
+	Request request;
+	Bid bid;
+}
+
+fact Reject {
+	Bid bid;
+}
+
+fact Cancel {
+	Request request;
 }
