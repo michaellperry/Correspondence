@@ -197,8 +197,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                         Has<Set>.Property(set => set.FactName, Is.EqualTo("Address")) &
                         Has<Set>.Property(set => set.LeftPath,
                             Has<AST.Path>.Property(path => path.Absolute, Is.EqualTo(false)) &
+                            Has<AST.Path>.Property(path => path.RelativeTo, Is.EqualTo("address")) &
                             Has<AST.Path>.Property(path => path.Segments,
-                                Contains<string>.That(Is.EqualTo("address")) &
                                 Contains<string>.That(Is.EqualTo("person"))
                             )
                         ) &

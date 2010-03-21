@@ -156,7 +156,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 throw new CompilerException("The query set needs to relate to \"this\".", lineNumber);
             if (childPath.Absolute)
                 throw new CompilerException("Only one side of the equation can relate to \"this\".", lineNumber);
-            if (childPath.Segments.First() != sourceSet.Name)
+            if (childPath.RelativeTo != sourceSet.Name)
                 throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", sourceSet.Name), lineNumber);
 
             return JoinPaths(fact, targetQuery, sourceSet, parentPath, childPath, lineNumber);
@@ -166,7 +166,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
             Source.Path parentPath = sourceSet.RightPath;
             Source.Path childPath = sourceSet.LeftPath;
-            if (parentPath.Segments.First() != priorName)
+            if (parentPath.RelativeTo != priorName)
             {
                 parentPath = sourceSet.LeftPath;
                 childPath = sourceSet.RightPath;
@@ -174,9 +174,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             int lineNumber = sourceSet.LineNumber;
             if (parentPath.Absolute || childPath.Absolute)
                 throw new CompilerException("Subsequent sets cannot relate to \"this\".", lineNumber);
-            if (parentPath.Segments.First() != priorName)
+            if (parentPath.RelativeTo != priorName)
                 throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", priorName), lineNumber);
-            if (childPath.Segments.First() != sourceSet.Name)
+            if (childPath.RelativeTo != sourceSet.Name)
                 throw new CompilerException(string.Format("The query set needs to relate to \"{0}\".", sourceSet.Name), lineNumber);
 
             return JoinPaths(fact, targetQuery, sourceSet, parentPath, childPath, lineNumber);
@@ -186,14 +186,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
             Source.Fact parentEnd = fact;
             IEnumerable<string> parentSegments = parentPath.Segments;
-            if (!parentPath.Absolute)
-                parentSegments = parentSegments.Skip(1);
             List<PredecessorInfo> parentPredecessors = WalkSegments(ref parentEnd, parentSegments, lineNumber);
             Source.Fact setType = GetFactByName(sourceSet.FactName, lineNumber);
             Source.Fact childEnd = setType;
             if (childEnd == null)
                 throw new CompilerException(string.Format("The fact \"{0}\" is not defined.", sourceSet.FactName), lineNumber);
-            List<PredecessorInfo> childPredecessors = WalkSegments(ref childEnd, childPath.Segments.Skip(1), lineNumber);
+            List<PredecessorInfo> childPredecessors = WalkSegments(ref childEnd, childPath.Segments, lineNumber);
             if (parentEnd != childEnd)
                 throw new CompilerException(string.Format("A query cannot join \"{0}\" to \"{1}\".", childEnd.Name, parentEnd.Name), lineNumber);
 

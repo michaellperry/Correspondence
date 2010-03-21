@@ -58,8 +58,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             // path -> (identifier | "this") ("." identifier)*
             var pathRule =
                 Many(
-                    Reduce(Terminal(Symbol.Identifier), t => new Path(false).AddSegment(t.Value)) |
-                    Reduce(Terminal(Symbol.This), t => new Path(true)),
+                    Reduce(Terminal(Symbol.Identifier), t => new Path(false, t.Value)) |
+                    Reduce(Terminal(Symbol.This), t => new Path(true, "this")),
                     Sequence(
                         Terminal(Symbol.Dot),
                         Terminal(Symbol.Identifier),
