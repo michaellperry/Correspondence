@@ -30,6 +30,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("char", Symbol.Char)
                 .AddSymbol("date", Symbol.Date)
                 .AddSymbol("time", Symbol.Time)
+                .AddSymbol("bool", Symbol.Bool)
+                .AddSymbol("not", Symbol.Not)
+                .AddSymbol("exists", Symbol.Exists)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -59,7 +62,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             var pathRule =
                 Many(
                     Reduce(Terminal(Symbol.Identifier), t => new Path(false, t.Value)) |
-                    Reduce(Terminal(Symbol.This), t => new Path(true, "this")),
+                    Reduce(Terminal(Symbol.This), t => new Path(true, null)),
                     Sequence(
                         Terminal(Symbol.Dot),
                         Terminal(Symbol.Identifier),
@@ -120,6 +123,21 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A query must contain sets.",
                 (queryTail, closeBracket) => QueryGenerator(queryTail));
 
+            // predicate -> "bool" identifier "{" "not"? "exists" set* "}"
+            var predicateRule = Sequence(
+                Many(
+                    Sequence(
+                        Terminal(Symbol.Bool),
+                        Terminal(Symbol.Identifier), "Provide a name for the predicate.",
+                        Terminal(Symbol.OpenBracket), "Declare sets of a predicate inside of brackets.",
+                        Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive), "Defect",
+                        Terminal(Symbol.Exists), "Use the keyword \"exists\" to indicate the set of facts to test.",
+                        (boolToken, nameToken, openBracket, existence, existsToken) => new Predicate(nameToken.Value, existence, boolToken.LineNumber)),
+                    setRule,
+                    (predicate, set) => predicate.AddSet(set)),
+                Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
+                (predicate, closeBracket) => (FactMember)predicate);
+
             // field_tail -> ";"
             // field_or_query -> type identifier (field_tail | query_tail)
             var fieldTailRule = Reduce(Terminal(Symbol.Semicolon), t => FieldGenerator());
@@ -130,8 +148,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 (type, nameToken, generator) => generator(type, nameToken));
 
             // fact -> "fact" identifier "{" member* "}"
-            // member -> field_or_query | property
-            var factMemberRule = fieldOrQueryRule | propertyRule;
+            // member -> field_or_query | property | predicate
+            var factMemberRule = fieldOrQueryRule | propertyRule | predicateRule;
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",

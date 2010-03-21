@@ -23,6 +23,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Property,
         Colon,
         This,
-        Equal
+        Equal,
+        Bool,
+        Not,
+        Exists
     }
 }

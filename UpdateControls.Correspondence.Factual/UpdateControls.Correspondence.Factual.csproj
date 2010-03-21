@@ -60,6 +60,8 @@
     <Compile Include="AST\Identifier.cs" />
     <Compile Include="AST\NativeType.cs" />
     <Compile Include="AST\Path.cs" />
+    <Compile Include="AST\Predicate.cs" />
+    <Compile Include="AST\ConditionModifier.cs" />
     <Compile Include="AST\Property.cs" />
     <Compile Include="AST\Query.cs" />
     <Compile Include="AST\QueryTail.cs" />

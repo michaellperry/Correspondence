@@ -56,7 +56,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         public void WhenNamespaceHasNoDot_NamepaceIsRecognized()
         {
             FactualParser parser = new FactualParser(new StringReader("namespace GameModel;"));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Identifier, Is.EqualTo("GameModel"));
             Pred.Assert(result.LineNumber, Is.EqualTo(1));
         }
@@ -65,7 +65,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         public void WhenNamespaceIsGiven_NamepaceIsRecognized()
         {
             FactualParser parser = new FactualParser(new StringReader("namespace Reversi.GameModel;"));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Identifier, Is.EqualTo("Reversi.GameModel"));
         }
 
@@ -77,7 +77,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "\r\n" +
                 "fact GameQueue {}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")) &
                 Has<Fact>.Property(fact => fact.LineNumber, Is.EqualTo(3))
@@ -94,7 +94,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "  string identifier;\r\n" +
                 "}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Name, Is.EqualTo("GameQueue")) &
                 Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
@@ -120,7 +120,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "  GameQueue gameQueue;\r\n" +
                 "}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
                     Has<DataMember>.Property(field => field.Name, Is.EqualTo("gameQueue")) &
@@ -145,7 +145,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "  string? identifier;\r\n" +
                 "}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members.OfType<Field>(), Contains<Field>.That(
                     Has<Field>.Property(field => field.Type,
@@ -164,7 +164,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "  property string firstName;\r\n" +
                 "}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members.OfType<Property>(), Contains<Property>.That(
                     Has<Property>.Property(property => property.Name, Is.EqualTo("firstName")) &
@@ -187,7 +187,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "  }\r\n" +
                 "}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(KindOf<FactMember, Query>.That(
                     Has<Query>.Property(query => query.Name, Is.EqualTo("addresses")) &
@@ -226,7 +226,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "  }\r\n" +
                 "}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, ContainsNo<Fact>.That(
                 Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Ignored"))
             ));
@@ -245,12 +245,83 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "  //string ignored;\r\n" +
                 "}"
             ));
-            Namespace result = parser.Parse();
+            Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members, ContainsNo<FactMember>.That(
                     Has<FactMember>.Property(member => member.Name, Is.EqualTo("ignored"))
                 ))
             ));
+        }
+
+        [TestMethod]
+        public void WhenPredicateIsNegative_ExistenceIsNegative()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact Request {\r\n" +
+                "	Frame frame;\r\n" +
+                "	Person requester;\r\n" +
+                "	\r\n" +
+                "	bool isOutstanding {\r\n" +
+                "		not exists Accept accept : accept.request = this\r\n" +
+                "	}\r\n" +
+                "	\r\n" +
+                "	Bid* bids {\r\n" +
+                "		Bid bid : bid.request = this\r\n" +
+                "	}\r\n" +
+                "}"
+            ));
+            Namespace result = AssertNoErrors(parser);
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
+                    Has<FactMember>.Property(member => member.Name, Is.EqualTo("isOutstanding")) &
+                    Has<FactMember>.Property(member => member.LineNumber, Is.EqualTo(7)) &
+                    KindOf<FactMember, Predicate>.That(
+                        Has<Predicate>.Property(predicate => predicate.Existence, Is.EqualTo(ConditionModifier.Negative)) &
+                        Has<Predicate>.Property(predicate => predicate.Sets, Contains<Set>.That(
+                            Has<Set>.Property(set => set.Name, Is.EqualTo("accept")) &
+                            Has<Set>.Property(set => set.FactName, Is.EqualTo("Accept"))
+                        ))
+                    )
+                ))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenPredicateIsPositive_ExistenceIsPositive()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact Person {\r\n" +
+                "	bool isPlaying {\r\n" +
+                "		exists Game game : game.player.person = this\r\n" +
+                "	}\r\n" +
+                "}"
+            ));
+            Namespace result = AssertNoErrors(parser);
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
+                    Has<FactMember>.Property(member => member.Name, Is.EqualTo("isPlaying")) &
+                    Has<FactMember>.Property(member => member.LineNumber, Is.EqualTo(4)) &
+                    KindOf<FactMember, Predicate>.That(
+                        Has<Predicate>.Property(predicate => predicate.Existence, Is.EqualTo(ConditionModifier.Positive)) &
+                        Has<Predicate>.Property(predicate => predicate.Sets, Contains<Set>.That(
+                            Has<Set>.Property(set => set.Name, Is.EqualTo("game")) &
+                            Has<Set>.Property(set => set.FactName, Is.EqualTo("Game"))
+                        ))
+                    )
+                ))
+            ));
+        }
+
+        private static Namespace AssertNoErrors(FactualParser parser)
+        {
+            Namespace result = parser.Parse();
+            if (result == null)
+                Assert.Fail(parser.Errors.First().Message);
+            return result;
         }
     }
 }
