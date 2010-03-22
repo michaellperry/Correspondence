@@ -25,9 +25,9 @@ if (ast == null)
 else {
 
 var analyzer = new Analyzer(ast);
-var result = analyzer.Analyze();
+var targetNamespace = analyzer.Analyze();
 
-if (result == null)
+if (targetNamespace == null)
 {
     foreach (var error in analyzer.Errors)
     {#>
@@ -44,9 +44,9 @@ using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
 using System;
 
-namespace <#=result.Name#>
+namespace <#=targetNamespace.Name#>
 {
-<# foreach (Class c in result.Classes) { #>
+<# foreach (Class c in targetNamespace.Classes) { #>
     [CorrespondenceType]
     public class <#=c.Name#> : CorrespondenceFact
     {
@@ -76,8 +76,8 @@ namespace <#=result.Name#>
 <#}#>
 
         // Results
-<# foreach (Query query in c.Queries) { #>
-        private <#=ResultClass(query)#> _<#=query.Name#>;
+<# foreach (Result result in c.Results) { #>
+        private <#=ResultClass(result)#> _<#=result.Query.Name#>;
 <#}#>
 
         // Business constructor
@@ -129,10 +129,10 @@ namespace <#=result.Name#>
 <#}#>
 
         // Query result access
-<# foreach (Query query in c.Queries) { #>
-        public IEnumerable<<#=query.Type#>> <#=Capitalize(query.Name)#>
+<# foreach (Result result in c.Results) { #>
+        public IEnumerable<<#=result.Type#>> <#=Capitalize(result.Query.Name)#>
         {
-            get { return _<#=query.Name#>; }
+            get { return _<#=result.Query.Name#>; }
         }
 <#}#>
     }
@@ -161,9 +161,9 @@ private static string QueryName(string queryName)
     return "Query" + Capitalize(queryName);
 }
 
-private static string ResultClass(Query query)
+private static string ResultClass(Result result)
 {
-    return "Result<" + query.Type + ">";
+    return "Result<" + result.Type + ">";
 }
 
 private static string PredecessorClass(Predecessor predecessor)

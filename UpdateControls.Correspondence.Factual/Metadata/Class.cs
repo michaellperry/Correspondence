@@ -9,6 +9,8 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         private List<Field> _fields = new List<Field>();
         private List<Predecessor> _predecessors = new List<Predecessor>();
         private List<Query> _queries = new List<Query>();
+        private List<Result> _results = new List<Result>();
+        private List<Condition> _conditions = new List<Condition>();
 
         public Class(string name)
         {
@@ -50,6 +52,28 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         public Class AddQuery(Query query)
         {
             _queries.Add(query);
+            return this;
+        }
+
+        public IEnumerable<Result> Results
+        {
+            get { return _results; }
+        }
+
+        public Class AddResult(Result result)
+        {
+            _results.Add(result);
+            return this;
+        }
+
+        public IEnumerable<Condition> Conditions
+        {
+            get { return _conditions; }
+        }
+
+        public Class AddCondition(Condition condition)
+        {
+            _conditions.Add(condition);
             return this;
         }
     }

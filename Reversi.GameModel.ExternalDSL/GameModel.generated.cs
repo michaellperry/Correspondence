@@ -251,6 +251,9 @@ namespace Reversi.GameModel
         public static Role<Person> RoleRequester = new Role<Person>("requester");
 
         // Queries
+        private static Query QueryIsOutstanding = new Query()
+            .JoinSuccessors(Accept.RoleRequest)
+            ;
         private static Query QueryBids = new Query()
             .JoinSuccessors(Bid.RoleRequest)
             ;

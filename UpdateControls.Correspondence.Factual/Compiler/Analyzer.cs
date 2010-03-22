@@ -82,6 +82,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         var query = member as Source.Query;
                         if (query != null)
                             AnalyzeQuery(factClass, fact, query);
+                        else
+                        {
+                            var predicate = member as Source.Predicate;
+                            if (predicate != null)
+                                AnalyzePredicated(factClass, fact, predicate);
+                        }
                     }
                 }
                 catch (CompilerException ex)
@@ -126,10 +132,25 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private void AnalyzeQuery(Target.Class factClass, Source.Fact fact, Source.Query sourceQuery)
         {
-            Target.Query targetQuery = new Target.Query(sourceQuery.Name, sourceQuery.FactName);
+            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, sourceQuery.Name, sourceQuery.Sets);
+            factClass.AddResult(new Target.Result(sourceQuery.FactName, targetQuery));
+        }
+
+        private void AnalyzePredicated(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
+        {
+            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, predicate.Sets);
+            factClass.AddCondition(new Target.Condition(
+                predicate.Existence == Source.ConditionModifier.Negative ?
+                    Target.ConditionModifier.Negative :
+                    Target.ConditionModifier.Positive,
+                targetQuery));
+        }
+
+        private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets)
+        {
+            Target.Query targetQuery = new Target.Query(queryName);
 
             // Follow the chain of predecessors on both sides of each set.
-            IEnumerable<Source.Set> sets = sourceQuery.Sets;
             Source.Set firstSet = sets.First();
             Source.Fact priorType = JoinFirstSet(fact, targetQuery, firstSet);
             string priorName = firstSet.Name;
@@ -140,6 +161,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
 
             factClass.AddQuery(targetQuery);
+            return targetQuery;
         }
 
         private Source.Fact JoinFirstSet(Source.Fact fact, Target.Query targetQuery, Source.Set sourceSet)

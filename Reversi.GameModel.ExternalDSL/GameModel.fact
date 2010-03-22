@@ -33,12 +33,10 @@ fact Request {
 	Frame frame;
 	Person requester;
 	
-	/*
 	bool isOutstanding {
-		not exists Accept accept : accept.request = this and
-		not exists Cancel cancel : cancel.request = this
+		not exists Accept accept : accept.request = this /* and
+		not exists Cancel cancel : cancel.request = this */
 	}
-	*/
 	
 	Bid* bids {
 		Bid bid : bid.request = this
