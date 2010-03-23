@@ -13,6 +13,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
 
         // Fields
@@ -26,11 +28,18 @@ namespace Reversi.GameModel
             string identifier
             )
         {
+            InitializeResults();
             _identifier = identifier;
         }
 
         // Hydration constructor
         public Queue(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
         {
         }
 
@@ -52,6 +61,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
 
         // Fields
@@ -65,11 +76,18 @@ namespace Reversi.GameModel
             DateTime start
             )
         {
+            InitializeResults();
             _start = start;
         }
 
         // Hydration constructor
         public Time(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
         {
         }
 
@@ -96,6 +114,8 @@ namespace Reversi.GameModel
             .JoinSuccessors(Request.RoleFrame)
             ;
 
+        // Conditions
+
         // Predecessors
         private PredecessorObj<Queue> _queue;
         private PredecessorObj<Time> _timestamp;
@@ -111,6 +131,7 @@ namespace Reversi.GameModel
             ,Time timestamp
             )
         {
+            InitializeResults();
             _queue = new PredecessorObj<Queue>(this, RoleQueue, queue);
             _timestamp = new PredecessorObj<Time>(this, RoleTimestamp, timestamp);
         }
@@ -118,8 +139,15 @@ namespace Reversi.GameModel
         // Hydration constructor
         public Frame(FactMemento memento)
         {
+            InitializeResults();
             _queue = new PredecessorObj<Queue>(this, RoleQueue, memento);
             _timestamp = new PredecessorObj<Time>(this, RoleTimestamp, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+            _outstandingRequests = new Result<Request>(this, QueryOutstandingRequests);
         }
 
         // Predecessor access
@@ -148,6 +176,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
 
         // Fields
@@ -158,10 +188,17 @@ namespace Reversi.GameModel
         public Player(
             )
         {
+            InitializeResults();
         }
 
         // Hydration constructor
         public Player(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
         {
         }
 
@@ -180,6 +217,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
         private PredecessorList<Player> _players;
 
@@ -192,13 +231,20 @@ namespace Reversi.GameModel
             IEnumerable<Player> players
             )
         {
+            InitializeResults();
             _players = new PredecessorList<Player>(this, RolePlayers, players);
         }
 
         // Hydration constructor
         public Game(FactMemento memento)
         {
+            InitializeResults();
             _players = new PredecessorList<Player>(this, RolePlayers, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
         }
 
         // Predecessor access
@@ -219,6 +265,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
 
         // Fields
@@ -229,10 +277,17 @@ namespace Reversi.GameModel
         public Person(
             )
         {
+            InitializeResults();
         }
 
         // Hydration constructor
         public Person(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
         {
         }
 
@@ -258,6 +313,9 @@ namespace Reversi.GameModel
             .JoinSuccessors(Bid.RoleRequest)
             ;
 
+        // Conditions
+        public static Condition IsOutstanding = Condition.WhereIsEmpty(QueryIsOutstanding);
+
         // Predecessors
         private PredecessorObj<Frame> _frame;
         private PredecessorObj<Person> _requester;
@@ -273,6 +331,7 @@ namespace Reversi.GameModel
             ,Person requester
             )
         {
+            InitializeResults();
             _frame = new PredecessorObj<Frame>(this, RoleFrame, frame);
             _requester = new PredecessorObj<Person>(this, RoleRequester, requester);
         }
@@ -280,8 +339,15 @@ namespace Reversi.GameModel
         // Hydration constructor
         public Request(FactMemento memento)
         {
+            InitializeResults();
             _frame = new PredecessorObj<Frame>(this, RoleFrame, memento);
             _requester = new PredecessorObj<Person>(this, RoleRequester, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+            _bids = new Result<Bid>(this, QueryBids);
         }
 
         // Predecessor access
@@ -312,6 +378,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
         private PredecessorObj<Request> _request;
         private PredecessorObj<Person> _bidder;
@@ -326,6 +394,7 @@ namespace Reversi.GameModel
             ,Person bidder
             )
         {
+            InitializeResults();
             _request = new PredecessorObj<Request>(this, RoleRequest, request);
             _bidder = new PredecessorObj<Person>(this, RoleBidder, bidder);
         }
@@ -333,8 +402,14 @@ namespace Reversi.GameModel
         // Hydration constructor
         public Bid(FactMemento memento)
         {
+            InitializeResults();
             _request = new PredecessorObj<Request>(this, RoleRequest, memento);
             _bidder = new PredecessorObj<Person>(this, RoleBidder, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
         }
 
         // Predecessor access
@@ -361,6 +436,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
         private PredecessorObj<Request> _request;
         private PredecessorObj<Bid> _bid;
@@ -375,6 +452,7 @@ namespace Reversi.GameModel
             ,Bid bid
             )
         {
+            InitializeResults();
             _request = new PredecessorObj<Request>(this, RoleRequest, request);
             _bid = new PredecessorObj<Bid>(this, RoleBid, bid);
         }
@@ -382,8 +460,14 @@ namespace Reversi.GameModel
         // Hydration constructor
         public Accept(FactMemento memento)
         {
+            InitializeResults();
             _request = new PredecessorObj<Request>(this, RoleRequest, memento);
             _bid = new PredecessorObj<Bid>(this, RoleBid, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
         }
 
         // Predecessor access
@@ -409,6 +493,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
         private PredecessorObj<Bid> _bid;
 
@@ -421,13 +507,20 @@ namespace Reversi.GameModel
             Bid bid
             )
         {
+            InitializeResults();
             _bid = new PredecessorObj<Bid>(this, RoleBid, bid);
         }
 
         // Hydration constructor
         public Reject(FactMemento memento)
         {
+            InitializeResults();
             _bid = new PredecessorObj<Bid>(this, RoleBid, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
         }
 
         // Predecessor access
@@ -449,6 +542,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
         private PredecessorObj<Request> _request;
 
@@ -461,13 +556,20 @@ namespace Reversi.GameModel
             Request request
             )
         {
+            InitializeResults();
             _request = new PredecessorObj<Request>(this, RoleRequest, request);
         }
 
         // Hydration constructor
         public Cancel(FactMemento memento)
         {
+            InitializeResults();
             _request = new PredecessorObj<Request>(this, RoleRequest, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
         }
 
         // Predecessor access
@@ -493,6 +595,8 @@ namespace Reversi.GameModel
             .JoinSuccessors(Article.RoleMagazine)
             ;
 
+        // Conditions
+
         // Predecessors
 
         // Fields
@@ -504,11 +608,19 @@ namespace Reversi.GameModel
         public Subscriber(
             )
         {
+            InitializeResults();
         }
 
         // Hydration constructor
         public Subscriber(FactMemento memento)
         {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+            _articles = new Result<Article>(this, QueryArticles);
         }
 
         // Predecessor access
@@ -529,6 +641,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
 
         // Fields
@@ -539,10 +653,17 @@ namespace Reversi.GameModel
         public Magazine(
             )
         {
+            InitializeResults();
         }
 
         // Hydration constructor
         public Magazine(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
         {
         }
 
@@ -562,6 +683,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
         private PredecessorObj<Subscriber> _subscriber;
         private PredecessorObj<Magazine> _magazine;
@@ -576,6 +699,7 @@ namespace Reversi.GameModel
             ,Magazine magazine
             )
         {
+            InitializeResults();
             _subscriber = new PredecessorObj<Subscriber>(this, RoleSubscriber, subscriber);
             _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, magazine);
         }
@@ -583,8 +707,14 @@ namespace Reversi.GameModel
         // Hydration constructor
         public Subscription(FactMemento memento)
         {
+            InitializeResults();
             _subscriber = new PredecessorObj<Subscriber>(this, RoleSubscriber, memento);
             _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
         }
 
         // Predecessor access
@@ -610,6 +740,8 @@ namespace Reversi.GameModel
 
         // Queries
 
+        // Conditions
+
         // Predecessors
         private PredecessorObj<Magazine> _magazine;
 
@@ -622,13 +754,20 @@ namespace Reversi.GameModel
             Magazine magazine
             )
         {
+            InitializeResults();
             _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, magazine);
         }
 
         // Hydration constructor
         public Article(FactMemento memento)
         {
+            InitializeResults();
             _magazine = new PredecessorObj<Magazine>(this, RoleMagazine, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
         }
 
         // Predecessor access

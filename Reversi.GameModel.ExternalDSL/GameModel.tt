@@ -64,6 +64,11 @@ namespace <#=targetNamespace.Name#>
             ;
 <#}#>
 
+        // Conditions
+<# foreach (Condition condition in c.Conditions) { #>
+        public static Condition <#=Capitalize(condition.Query.Name)#> = Condition.WhereIs<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=QueryName(condition.Query.Name)#>);
+<#}#>
+
         // Predecessors
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
         private <#=PredecessorClass(predecessor)#> _<#=predecessor.Name#>;
@@ -90,6 +95,7 @@ namespace <#=targetNamespace.Name#>
 <#}#>
             )
         {
+            InitializeResults();
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
             _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, <#=RoleName(predecessor.Name)#>, <#=predecessor.Name#>);
 <#}#>
@@ -101,8 +107,17 @@ namespace <#=targetNamespace.Name#>
         // Hydration constructor
         public <#=c.Name#>(FactMemento memento)
         {
+            InitializeResults();
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
             _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, <#=RoleName(predecessor.Name)#>, memento);
+<#}#>
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+<# foreach (Result result in c.Results) { #>
+            _<#=result.Query.Name#> = new <#=ResultClass(result)#>(this, <#=QueryName(result.Query.Name)#>);
 <#}#>
         }
 
