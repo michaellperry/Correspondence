@@ -3,9 +3,9 @@ using QEDCode.LLOne;
 
 namespace QEDCode.LLOne.Rules
 {
-    public class RuleSequence6<TSymbol, T1, T2, T3, T4, T5, T6, T> : RuleSequence<TSymbol, T>
+    public class RuleSequence7<TSymbol, T1, T2, T3, T4, T5, T6, T7, T> : RuleSequence<TSymbol, T>
     {
-        public delegate T Function(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6);
+        public delegate T Function(T1 v1, T2 v2, T3 v3, T4 v4, T5 v5, T6 v6, T7 v7);
 
         private Rule<TSymbol, T1> _rule1;
         private Rule<TSymbol, T2> _rule2;
@@ -18,9 +18,11 @@ namespace QEDCode.LLOne.Rules
         private string _error5;
         private Rule<TSymbol, T6> _rule6;
         private string _error6;
+        private Rule<TSymbol, T7> _rule7;
+        private string _error7;
         private Function _reduce;
 
-        public RuleSequence6(Rule<TSymbol, T1> rule1, Rule<TSymbol, T2> rule2, string error2, Rule<TSymbol, T3> rule3, string error3, Rule<TSymbol, T4> rule4, string error4, Rule<TSymbol, T5> rule5, string error5, Rule<TSymbol, T6> rule6, string error6, Function reduce)
+        public RuleSequence7(Rule<TSymbol, T1> rule1, Rule<TSymbol, T2> rule2, string error2, Rule<TSymbol, T3> rule3, string error3, Rule<TSymbol, T4> rule4, string error4, Rule<TSymbol, T5> rule5, string error5, Rule<TSymbol, T6> rule6, string error6, Rule<TSymbol, T7> rule7, string error7, Function reduce)
         {
             _rule1 = rule1;
             _rule2 = rule2;
@@ -33,6 +35,8 @@ namespace QEDCode.LLOne.Rules
             _error5 = error5;
             _rule6 = rule6;
             _error6 = error6;
+            _rule7 = rule7;
+            _error7 = error7;
             _reduce = reduce;
         }
 
@@ -58,7 +62,11 @@ namespace QEDCode.LLOne.Rules
                 return _rule5.Start(symbol);
             if (_rule5.Start(symbol))
                 return true;
-            return _rule6.Start(symbol);
+            if (!_rule6.Epsilon())
+                return _rule6.Start(symbol);
+            if (_rule6.Start(symbol))
+                return true;
+            return _rule7.Start(symbol);
         }
 
         public override T Match(TokenStream<TSymbol> tokenStream)
@@ -69,8 +77,9 @@ namespace QEDCode.LLOne.Rules
             T4 value4 = GetValue(tokenStream, _rule4, _error4);
             T5 value5 = GetValue(tokenStream, _rule5, _error5);
             T6 value6 = GetValue(tokenStream, _rule6, _error6);
+            T7 value7 = GetValue(tokenStream, _rule7, _error7);
 
-            return _reduce(value1, value2, value3, value4, value5, value6);
+            return _reduce(value1, value2, value3, value4, value5, value6, value7);
         }
     }
 }

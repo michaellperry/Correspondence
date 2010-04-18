@@ -27,6 +27,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Bool,
         Not,
         Exists,
-        And
+        Where
     }
 }

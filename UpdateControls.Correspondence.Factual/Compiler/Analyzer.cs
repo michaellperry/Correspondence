@@ -86,7 +86,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         {
                             var predicate = member as Source.Predicate;
                             if (predicate != null)
-                                AnalyzePredicate(factClass, fact, predicate);
+                                AnalyzePredicated(factClass, fact, predicate);
                         }
                     }
                 }
@@ -136,21 +136,16 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             factClass.AddResult(new Target.Result(sourceQuery.FactName, targetQuery));
         }
 
-        private void AnalyzePredicate(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
+        private void AnalyzePredicated(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
         {
-            Source.Clause clause = predicate.Clauses.First();
-            AnalyzeClause(factClass, fact, predicate, clause);
-        }
-
-        private void AnalyzeClause(Target.Class factClass, Source.Fact fact, Source.Predicate predicate, Source.Clause clause)
-        {
-            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, clause.Sets);
+            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, predicate.Sets);
             factClass.AddCondition(new Target.Condition(
-                clause.Existence == Source.ConditionModifier.Negative ?
+                predicate.Existence == Source.ConditionModifier.Negative ?
                     Target.ConditionModifier.Negative :
                     Target.ConditionModifier.Positive,
                 targetQuery));
         }
+
         private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets)
         {
             Target.Query targetQuery = new Target.Query(queryName);

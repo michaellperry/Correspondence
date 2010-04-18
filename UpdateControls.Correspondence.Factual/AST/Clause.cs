@@ -6,13 +6,14 @@ namespace UpdateControls.Correspondence.Factual.AST
     public class Clause
     {
         private ConditionModifier _existence;
-        private List<Set> _sets = new List<Set>();
-        private int _lineNumber;
+        private string _name;
+        private string _predicateName;
 
-        public Clause(ConditionModifier existence, int lineNumber)
+        public Clause(ConditionModifier existence, string name, string predicateName)
         {
             _existence = existence;
-            _lineNumber = lineNumber;
+            _name = name;
+            _predicateName = predicateName;
         }
 
         public ConditionModifier Existence
@@ -20,15 +21,14 @@ namespace UpdateControls.Correspondence.Factual.AST
             get { return _existence; }
         }
 
-        public IEnumerable<Set> Sets
+        public string Name
         {
-            get { return _sets; }
+            get { return _name; }
         }
 
-        public Clause AddSet(Set set)
+        public string PredicateName
         {
-            _sets.Add(set);
-            return this;
+            get { return _predicateName; }
         }
     }
 }

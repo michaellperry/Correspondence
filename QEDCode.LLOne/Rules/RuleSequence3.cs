@@ -25,7 +25,15 @@ namespace QEDCode.LLOne.Rules
 
         public override bool Start(TSymbol symbol)
         {
-            return _rule1.Start(symbol);
+            if (!_rule1.Epsilon())
+                return _rule1.Start(symbol);
+            if (_rule1.Start(symbol))
+                return true;
+            if (!_rule2.Epsilon())
+                return _rule2.Start(symbol);
+            if (_rule2.Start(symbol))
+                return true;
+            return _rule3.Start(symbol);
         }
 
         public override T Match(TokenStream<TSymbol> tokenStream)

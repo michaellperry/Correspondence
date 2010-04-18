@@ -278,12 +278,10 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                     Has<FactMember>.Property(member => member.Name, Is.EqualTo("isOutstanding")) &
                     Has<FactMember>.Property(member => member.LineNumber, Is.EqualTo(7)) &
                     KindOf<FactMember, Predicate>.That(
-                        Has<Predicate>.Property(predicate => predicate.Clauses, Contains<Clause>.That(
-                            Has<Clause>.Property(clause => clause.Existence, Is.EqualTo(ConditionModifier.Negative)) &
-                            Has<Clause>.Property(clause => clause.Sets, Contains<Set>.That(
-                                Has<Set>.Property(set => set.Name, Is.EqualTo("accept")) &
-                                Has<Set>.Property(set => set.FactName, Is.EqualTo("Accept"))
-                            ))
+                        Has<Predicate>.Property(predicate => predicate.Existence, Is.EqualTo(ConditionModifier.Negative)) &
+                        Has<Predicate>.Property(predicate => predicate.Sets, Contains<Set>.That(
+                            Has<Set>.Property(set => set.Name, Is.EqualTo("accept")) &
+                            Has<Set>.Property(set => set.FactName, Is.EqualTo("Accept"))
                         ))
                     )
                 ))
@@ -308,12 +306,10 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                     Has<FactMember>.Property(member => member.Name, Is.EqualTo("isPlaying")) &
                     Has<FactMember>.Property(member => member.LineNumber, Is.EqualTo(4)) &
                     KindOf<FactMember, Predicate>.That(
-                        Has<Predicate>.Property(predicate => predicate.Clauses, Contains<Clause>.That(
-                            Has<Clause>.Property(clause => clause.Existence, Is.EqualTo(ConditionModifier.Positive)) &
-                            Has<Clause>.Property(clause => clause.Sets, Contains<Set>.That(
-                                Has<Set>.Property(set => set.Name, Is.EqualTo("game")) &
-                                Has<Set>.Property(set => set.FactName, Is.EqualTo("Game"))
-                            ))
+                        Has<Predicate>.Property(predicate => predicate.Existence, Is.EqualTo(ConditionModifier.Positive)) &
+                        Has<Predicate>.Property(predicate => predicate.Sets, Contains<Set>.That(
+                            Has<Set>.Property(set => set.Name, Is.EqualTo("game")) &
+                            Has<Set>.Property(set => set.FactName, Is.EqualTo("Game"))
                         ))
                     )
                 ))
@@ -321,43 +317,37 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         }
 
         [TestMethod]
-        public void WhenAnd_PredicateHasTwoClauses()
+        public void WhenWhen_ConditionHasClause()
         {
             FactualParser parser = new FactualParser(new StringReader(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
-                "fact Request {\r\n" +
-                "	Frame frame;\r\n" +
-                "	Person requester;\r\n" +
+                "fact Frame {\r\n" +
+                "	Queue queue;\r\n" +
+                "	Time timestamp;\r\n" +
                 "	\r\n" +
-                "	bool isOutstanding {\r\n" +
-                "		not exists Accept accept : accept.request = this and\r\n" +
-                "		not exists Cancel cancel : cancel.request = this\r\n" +
-                "	}\r\n" +
-                "\r\n" +
-                "	Bid* bids {\r\n" +
-                "		Bid bid : bid.request = this\r\n" +
+                "	Request* outstandingRequests {\r\n" +
+                "		Request request : request.frame = this\r\n" +
+                "			where not request.isAccepted /*and not request.isCanceled*/\r\n" +
                 "	}\r\n" +
                 "}"
             ));
             Namespace result = AssertNoErrors(parser);
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
-                    Has<FactMember>.Property(member => member.Name, Is.EqualTo("isOutstanding")) &
+                    Has<FactMember>.Property(member => member.Name, Is.EqualTo("outstandingRequests")) &
                     Has<FactMember>.Property(member => member.LineNumber, Is.EqualTo(7)) &
-                    KindOf<FactMember, Predicate>.That(
-                        Has<Predicate>.Property(predicate => predicate.Clauses, Contains<Clause>.That(
-                            Has<Clause>.Property(clause => clause.Existence, Is.EqualTo(ConditionModifier.Negative)) &
-                            Has<Clause>.Property(clause => clause.Sets, Contains<Set>.That(
-                                Has<Set>.Property(set => set.Name, Is.EqualTo("accept")) &
-                                Has<Set>.Property(set => set.FactName, Is.EqualTo("Accept"))
-                            ))
-                        ) & Contains<Clause>.That(
-                            Has<Clause>.Property(clause => clause.Existence, Is.EqualTo(ConditionModifier.Negative)) &
-                            Has<Clause>.Property(clause => clause.Sets, Contains<Set>.That(
-                                Has<Set>.Property(set => set.Name, Is.EqualTo("cancel")) &
-                                Has<Set>.Property(set => set.FactName, Is.EqualTo("Cancel"))
-                            ))
+                    KindOf<FactMember, Query>.That(
+                        Has<Query>.Property(query => query.Sets, Contains<Set>.That(
+                            Has<Set>.Property(set => set.Name, Is.EqualTo("request")) &
+                            Has<Set>.Property(set => set.FactName, Is.EqualTo("Request")) &
+                            Has<Set>.Property(set => set.Condition,
+                                Has<Condition>.Property(condition => condition.Clauses, Contains<Clause>.That(
+                                    Has<Clause>.Property(clause => clause.Existence, Is.EqualTo(ConditionModifier.Negative)) &
+                                    Has<Clause>.Property(clause => clause.Name, Is.EqualTo("request")) &
+                                    Has<Clause>.Property(clause => clause.PredicateName, Is.EqualTo("isAccepted"))
+                                ))
+                            )
                         ))
                     )
                 ))

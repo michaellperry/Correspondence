@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\Cardinality.cs" />
+    <Compile Include="AST\Clause.cs" />
     <Compile Include="AST\Condition.cs" />
     <Compile Include="AST\DataTypeFact.cs" />
     <Compile Include="AST\Fact.cs" />

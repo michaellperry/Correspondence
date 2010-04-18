@@ -2,6 +2,7 @@ using System;
 using UpdateControls.Correspondence.Factual.AST;
 using System.Text;
 using QEDCode.LLOne;
+using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.Factual.Compiler
 {
@@ -33,7 +34,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("bool", Symbol.Bool)
                 .AddSymbol("not", Symbol.Not)
                 .AddSymbol("exists", Symbol.Exists)
-                .AddSymbol("and", Symbol.And)
+                .AddSymbol("where", Symbol.Where)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -106,6 +107,22 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Semicolon), "Terminate a property with a semicolon.",
                 (propertyToken, dataType, propertyNameToken, semicolonToken) => (FactMember)new Property(propertyToken.LineNumber, propertyNameToken.Value, dataType));
 
+            // clause -> "not"? identifier "." identifier
+            // condition -> "where" clause ("and" clause)*
+            var clauseRule = Sequence(
+                Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive),
+                Terminal(Symbol.Identifier), "Provide the name of a set.",
+                Terminal(Symbol.Dot), "Use a dot to reference a predicate.",
+                Terminal(Symbol.Identifier), "Provide the name of a predicate.",
+                (not, set, dot, predicate) => new Clause(not, set.Value, predicate.Value));
+            var conditionRule = Many(
+                Sequence(
+                    Terminal(Symbol.Where),
+                    clauseRule, "Give a predicate to use as a condition.",
+                    (whereToken, clause) => new Condition().AddClause(clause)),
+                clauseRule,
+                (condition, clause) => condition.AddClause(clause));
+
             // query_tail -> "{" set* "}"
             // set -> identifier identifier ":" path "=" path condition?
             var setRule = Sequence(
@@ -115,7 +132,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 pathRule, "Declare a relative path or \"this\".",
                 Terminal(Symbol.Equal), "Separate paths with an equal sign.",
                 pathRule, "Declare a relative path or \"this\".",
-                (factNameToken, setNameToken, colonToken, leftPath, equalToken, rightPath) => new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, factNameToken.LineNumber));
+                Optional(conditionRule, new Condition()), "Defect.",
+                (factNameToken, setNameToken, colonToken, leftPath, equalToken, rightPath, condition) => new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, condition, factNameToken.LineNumber));
             var queryTailRule = Sequence(
                 Many(
                     Reduce(Terminal(Symbol.OpenBracket), t => new QueryTail()),
@@ -124,33 +142,18 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A query must contain sets.",
                 (queryTail, closeBracket) => QueryGenerator(queryTail));
 
-            // clause -> "not"? "exists" set*
-            var clauseRule = Many(
-                Sequence(
-                    Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive),
-                    Terminal(Symbol.Exists), "Use the keyword \"exists\" to indicate the set of facts to test.",
-                    (existence, existsToken) => new Clause(existence, existsToken.LineNumber)
-                ),
-                setRule,
-                (clause, set) => clause.AddSet(set)
-            );
-
-            // predicate -> "bool" identifier "{" clause ("and" clause)* "}"
+            // predicate -> "bool" identifier "{" "not"? "exists" set* "}"
             var predicateRule = Sequence(
                 Many(
                     Sequence(
                         Terminal(Symbol.Bool),
                         Terminal(Symbol.Identifier), "Provide a name for the predicate.",
                         Terminal(Symbol.OpenBracket), "Declare sets of a predicate inside of brackets.",
-                        clauseRule, "Declare a clause beginning with \"exists\" or \"not exists\".",
-                        (boolToken, nameToken, openBracket, clause) => new Predicate(nameToken.Value, boolToken.LineNumber).AddClause(clause)
-                    ),
-                    Sequence(
-                        Terminal(Symbol.And),
-                        clauseRule, "Provide additional clauses.",
-                        (and, clause) => clause
-                    ),
-                    (predicate, clause) => predicate.AddClause(clause)),
+                        Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive), "Defect",
+                        Terminal(Symbol.Exists), "Use the keyword \"exists\" to indicate the set of facts to test.",
+                        (boolToken, nameToken, openBracket, existence, existsToken) => new Predicate(nameToken.Value, existence, boolToken.LineNumber)),
+                    setRule,
+                    (predicate, set) => predicate.AddSet(set)),
                 Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
                 (predicate, closeBracket) => (FactMember)predicate);
 

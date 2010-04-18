@@ -15,6 +15,11 @@ namespace QEDCode.LLOne.Rules
 
         public override bool Start(TSymbol symbol)
         {
+            return _rule.Start(symbol);
+        }
+
+        public override bool Epsilon()
+        {
             return true;
         }
 
