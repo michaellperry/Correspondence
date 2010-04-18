@@ -26,6 +26,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Equal,
         Bool,
         Not,
-        Exists
+        Exists,
+        And
     }
 }

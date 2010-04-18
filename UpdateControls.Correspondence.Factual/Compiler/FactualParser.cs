@@ -33,6 +33,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("bool", Symbol.Bool)
                 .AddSymbol("not", Symbol.Not)
                 .AddSymbol("exists", Symbol.Exists)
+                .AddSymbol("and", Symbol.And)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -123,18 +124,33 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A query must contain sets.",
                 (queryTail, closeBracket) => QueryGenerator(queryTail));
 
-            // predicate -> "bool" identifier "{" "not"? "exists" set* "}"
+            // clause -> "not"? "exists" set*
+            var clauseRule = Many(
+                Sequence(
+                    Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive),
+                    Terminal(Symbol.Exists), "Use the keyword \"exists\" to indicate the set of facts to test.",
+                    (existence, existsToken) => new Clause(existence, existsToken.LineNumber)
+                ),
+                setRule,
+                (clause, set) => clause.AddSet(set)
+            );
+
+            // predicate -> "bool" identifier "{" clause ("and" clause)* "}"
             var predicateRule = Sequence(
                 Many(
                     Sequence(
                         Terminal(Symbol.Bool),
                         Terminal(Symbol.Identifier), "Provide a name for the predicate.",
                         Terminal(Symbol.OpenBracket), "Declare sets of a predicate inside of brackets.",
-                        Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive), "Defect",
-                        Terminal(Symbol.Exists), "Use the keyword \"exists\" to indicate the set of facts to test.",
-                        (boolToken, nameToken, openBracket, existence, existsToken) => new Predicate(nameToken.Value, existence, boolToken.LineNumber)),
-                    setRule,
-                    (predicate, set) => predicate.AddSet(set)),
+                        clauseRule, "Declare a clause beginning with \"exists\" or \"not exists\".",
+                        (boolToken, nameToken, openBracket, clause) => new Predicate(nameToken.Value, boolToken.LineNumber).AddClause(clause)
+                    ),
+                    Sequence(
+                        Terminal(Symbol.And),
+                        clauseRule, "Provide additional clauses.",
+                        (and, clause) => clause
+                    ),
+                    (predicate, clause) => predicate.AddClause(clause)),
                 Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
                 (predicate, closeBracket) => (FactMember)predicate);
 
