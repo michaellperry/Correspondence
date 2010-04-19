@@ -35,6 +35,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("not", Symbol.Not)
                 .AddSymbol("exists", Symbol.Exists)
                 .AddSymbol("where", Symbol.Where)
+                .AddSymbol("and", Symbol.And)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -120,7 +121,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     Terminal(Symbol.Where),
                     clauseRule, "Give a predicate to use as a condition.",
                     (whereToken, clause) => new Condition().AddClause(clause)),
-                clauseRule,
+                Sequence(
+                    Terminal(Symbol.And),
+                    clauseRule, "Provide another clause.",
+                    (and, clause) => clause),
                 (condition, clause) => condition.AddClause(clause));
 
             // query_tail -> "{" set* "}"
