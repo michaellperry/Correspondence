@@ -5,15 +5,22 @@ namespace UpdateControls.Correspondence.Factual.AST
 {
     public class Clause
     {
+        private int _lineNumber;
         private ConditionModifier _existence;
         private string _name;
         private string _predicateName;
 
-        public Clause(ConditionModifier existence, string name, string predicateName)
+        public Clause(int lineNumber, ConditionModifier existence, string name, string predicateName)
         {
+            _lineNumber = lineNumber;
             _existence = existence;
             _name = name;
             _predicateName = predicateName;
+        }
+
+        public int LineNumber
+        {
+            get { return _lineNumber; }
         }
 
         public ConditionModifier Existence

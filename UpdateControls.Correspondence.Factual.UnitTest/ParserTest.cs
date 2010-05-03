@@ -317,7 +317,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         }
 
         [TestMethod]
-        public void WhenWhen_ConditionHasClause()
+        public void WhenWhere_ConditionHasClause()
         {
             FactualParser parser = new FactualParser(new StringReader(
                 "namespace Reversi.GameModel;\r\n" +
@@ -355,7 +355,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         }
 
         [TestMethod]
-        public void WhenWhenAndAnd_ConditionHasTwoClauses()
+        public void WhenWhereAndAnd_ConditionHasTwoClauses()
         {
             FactualParser parser = new FactualParser(new StringReader(
                 "namespace Reversi.GameModel;\r\n" +

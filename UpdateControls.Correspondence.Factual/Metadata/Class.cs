@@ -10,7 +10,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         private List<Predecessor> _predecessors = new List<Predecessor>();
         private List<Query> _queries = new List<Query>();
         private List<Result> _results = new List<Result>();
-        private List<Condition> _conditions = new List<Condition>();
+        private List<Predicate> _predicates = new List<Predicate>();
 
         public Class(string name)
         {
@@ -66,14 +66,14 @@ namespace UpdateControls.Correspondence.Factual.Metadata
             return this;
         }
 
-        public IEnumerable<Condition> Conditions
+        public IEnumerable<Predicate> Predicates
         {
-            get { return _conditions; }
+            get { return _predicates; }
         }
 
-        public Class AddCondition(Condition condition)
+        public Class AddPredicate(Predicate predicate)
         {
-            _conditions.Add(condition);
+            _predicates.Add(predicate);
             return this;
         }
     }

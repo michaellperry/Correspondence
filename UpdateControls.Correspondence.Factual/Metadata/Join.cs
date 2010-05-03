@@ -8,6 +8,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         private Direction _direction;
         private string _type;
         private string _name;
+        private List<Condition> _conditions = new List<Condition>();
 
         public Join(Direction direction, string type, string name)
         {
@@ -29,6 +30,16 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         public string Name
         {
             get { return _name; }
+        }
+
+        public IEnumerable<Condition> Conditions
+        {
+            get { return _conditions; }
+        }
+
+        public void AddCondition(Condition condition)
+        {
+            _conditions.Add(condition);
         }
     }
 }

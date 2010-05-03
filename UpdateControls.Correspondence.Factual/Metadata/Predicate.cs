@@ -2,15 +2,15 @@ using System;
 
 namespace UpdateControls.Correspondence.Factual.Metadata
 {
-    public class Condition
+    public class Predicate
     {
         private ConditionModifier _modifier;
-        private string _name;
+        private Query _query;
 
-        public Condition(ConditionModifier modifier, string name)
+        public Predicate(ConditionModifier modifier, Query query)
         {
             _modifier = modifier;
-            _name = name;
+            _query = query;
         }
 
         public ConditionModifier Modifier
@@ -18,9 +18,9 @@ namespace UpdateControls.Correspondence.Factual.Metadata
             get { return _modifier; }
         }
 
-        public string Name
+        public Query Query
         {
-            get { return _name; }
+            get { return _query; }
         }
     }
 }

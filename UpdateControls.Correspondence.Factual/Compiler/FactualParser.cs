@@ -115,7 +115,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Identifier), "Provide the name of a set.",
                 Terminal(Symbol.Dot), "Use a dot to reference a predicate.",
                 Terminal(Symbol.Identifier), "Provide the name of a predicate.",
-                (not, set, dot, predicate) => new Clause(not, set.Value, predicate.Value));
+                (not, set, dot, predicate) => new Clause(set.LineNumber, not, set.Value, predicate.Value));
             var conditionRule = Many(
                 Sequence(
                     Terminal(Symbol.Where),

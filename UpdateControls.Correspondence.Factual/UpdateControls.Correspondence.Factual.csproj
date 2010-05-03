@@ -81,6 +81,7 @@
     <Compile Include="Metadata\Cardinality.cs" />
     <Compile Include="Metadata\Class.cs" />
     <Compile Include="Metadata\Condition.cs" />
+    <Compile Include="Metadata\Predicate.cs" />
     <Compile Include="Metadata\ConditionModifier.cs" />
     <Compile Include="Metadata\Direction.cs" />
     <Compile Include="Metadata\Join.cs" />

@@ -86,7 +86,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         {
                             var predicate = member as Source.Predicate;
                             if (predicate != null)
-                                AnalyzePredicated(factClass, fact, predicate);
+                                AnalyzePredicate(factClass, fact, predicate);
                         }
                     }
                 }
@@ -136,10 +136,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             factClass.AddResult(new Target.Result(sourceQuery.FactName, targetQuery));
         }
 
-        private void AnalyzePredicated(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
+        private void AnalyzePredicate(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
         {
             Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, predicate.Sets);
-            factClass.AddCondition(new Target.Condition(
+            factClass.AddPredicate(new Target.Predicate(
                 predicate.Existence == Source.ConditionModifier.Negative ?
                     Target.ConditionModifier.Negative :
                     Target.ConditionModifier.Positive,
@@ -217,23 +217,43 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             if (parentEnd != childEnd)
                 throw new CompilerException(string.Format("A query cannot join \"{0}\" to \"{1}\".", childEnd.Name, parentEnd.Name), lineNumber);
 
+            Target.Join lastJoin = null;
             foreach (PredecessorInfo parentPredecessor in parentPredecessors)
             {
-                targetQuery.AddJoin(
-                    new Target.Join(
-                        Target.Direction.Predecessors,
-                        parentPredecessor.Fact.Name,
-                        parentPredecessor.Field.Name));
+                lastJoin = new Target.Join(Target.Direction.Predecessors, parentPredecessor.Fact.Name, parentPredecessor.Field.Name);
+                targetQuery.AddJoin(lastJoin);
             }
             childPredecessors.Reverse();
             foreach (PredecessorInfo childPredecessor in childPredecessors)
             {
-                targetQuery.AddJoin(
-                    new Target.Join(
-                        Target.Direction.Successors,
-                        childPredecessor.Fact.Name,
-                        childPredecessor.Field.Name));
+                lastJoin = new Target.Join(Target.Direction.Successors, childPredecessor.Fact.Name, childPredecessor.Field.Name);
+                targetQuery.AddJoin(lastJoin);
             }
+
+            if (sourceSet.Condition != null && sourceSet.Condition.Clauses.Any())
+            {
+                if (lastJoin == null)
+                    throw new CompilerException("The query must specify at least one join in order to have a condition.", sourceSet.LineNumber);
+
+                foreach (Source.Clause clause in sourceSet.Condition.Clauses)
+                {
+                    if (clause.Name != sourceSet.Name)
+                        throw new CompilerException(string.Format("The condition must relate to {0}.", sourceSet.Name), clause.LineNumber);
+                    Source.FactMember member = setType.GetMemberByName(clause.PredicateName);
+                    if (member == null)
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", sourceSet.FactName, clause.PredicateName), clause.LineNumber);
+                    Source.Predicate predicate = member as Source.Predicate;
+                    if (predicate == null)
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", sourceSet.FactName, clause.PredicateName), clause.LineNumber);
+
+                    lastJoin.AddCondition(new Target.Condition(
+                        clause.Existence == Source.ConditionModifier.Positive ?
+                            Target.ConditionModifier.Positive :
+                            Target.ConditionModifier.Negative,
+                        clause.PredicateName));
+                }
+            }
+
             return setType;
         }
 
