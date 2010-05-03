@@ -246,8 +246,17 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     if (predicate == null)
                         throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", sourceSet.FactName, clause.PredicateName), clause.LineNumber);
 
+                    Source.ConditionModifier modifier = clause.Existence;
+                    if (predicate.Existence == Source.ConditionModifier.Negative)
+                    {
+                        // Invert the modifier if the predicate itself is negative.
+                        modifier = modifier == Source.ConditionModifier.Positive ?
+                            Source.ConditionModifier.Negative :
+                            Source.ConditionModifier.Positive;
+                    }
+
                     lastJoin.AddCondition(new Target.Condition(
-                        clause.Existence == Source.ConditionModifier.Positive ?
+                        modifier == Source.ConditionModifier.Positive ?
                             Target.ConditionModifier.Positive :
                             Target.ConditionModifier.Negative,
                         clause.PredicateName));

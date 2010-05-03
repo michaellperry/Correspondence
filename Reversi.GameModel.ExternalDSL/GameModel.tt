@@ -57,16 +57,25 @@ namespace <#=targetNamespace.Name#>
 
         // Queries
 <# foreach (Query query in c.Queries) { #>
-        private static Query <#=QueryName(query.Name)#> = new Query()
+        public static Query <#=QueryName(query.Name)#> = new Query()
 <# foreach (Join join in query.Joins) { #>
+<#   if (join.Conditions.Any()) { #>
+<#      Condition first = join.Conditions.First(); #>
+            .Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>, Condition.WhereIs<#=first.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=join.Type#>.<#=QueryName(first.Name)#>)
+<#        foreach (Condition condition in join.Conditions.Skip(1)) { #>
+                .And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=join.Type#>.<#=QueryName(condition.Name)#>)
+<#        } #>
+            )
+<#   } else { #>
             .Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>)
+<#   }#>
 <#}#>
             ;
 <#}#>
 
-        // Conditions
-<# foreach (Condition condition in c.Conditions) { #>
-        public static Condition <#=Capitalize(condition.Query.Name)#> = Condition.WhereIs<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=QueryName(condition.Query.Name)#>);
+        // Predicates
+<# foreach (Predicate predicate in c.Predicates) { #>
+        public static Condition <#=Capitalize(predicate.Query.Name)#> = Condition.WhereIs<#=predicate.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=QueryName(predicate.Query.Name)#>);
 <#}#>
 
         // Predecessors

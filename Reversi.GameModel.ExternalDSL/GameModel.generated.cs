@@ -13,7 +13,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
 
@@ -61,7 +61,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
 
@@ -110,11 +110,13 @@ namespace Reversi.GameModel
         public static Role<Time> RoleTimestamp = new Role<Time>("timestamp");
 
         // Queries
-        private static Query QueryOutstandingRequests = new Query()
-            .JoinSuccessors(Request.RoleFrame)
+        public static Query QueryOutstandingRequests = new Query()
+            .JoinSuccessors(Request.RoleFrame, Condition.WhereIsEmpty(Request.QueryIsAccepted)
+                .And().IsEmpty(Request.QueryIsCanceled)
+            )
             ;
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorObj<Queue> _queue;
@@ -176,7 +178,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
 
@@ -217,7 +219,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorList<Player> _players;
@@ -265,7 +267,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
 
@@ -306,15 +308,19 @@ namespace Reversi.GameModel
         public static Role<Person> RoleRequester = new Role<Person>("requester");
 
         // Queries
-        private static Query QueryIsOutstanding = new Query()
+        public static Query QueryIsAccepted = new Query()
             .JoinSuccessors(Accept.RoleRequest)
             ;
-        private static Query QueryBids = new Query()
+        public static Query QueryIsCanceled = new Query()
+            .JoinSuccessors(Cancel.RoleRequest)
+            ;
+        public static Query QueryBids = new Query()
             .JoinSuccessors(Bid.RoleRequest)
             ;
 
-        // Conditions
-        public static Condition IsOutstanding = Condition.WhereIsEmpty(QueryIsOutstanding);
+        // Predicates
+        public static Condition IsAccepted = Condition.WhereIsNotEmpty(QueryIsAccepted);
+        public static Condition IsCanceled = Condition.WhereIsNotEmpty(QueryIsCanceled);
 
         // Predecessors
         private PredecessorObj<Frame> _frame;
@@ -378,7 +384,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorObj<Request> _request;
@@ -436,7 +442,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorObj<Request> _request;
@@ -493,7 +499,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorObj<Bid> _bid;
@@ -542,7 +548,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorObj<Request> _request;
@@ -589,13 +595,13 @@ namespace Reversi.GameModel
         // Roles
 
         // Queries
-        private static Query QueryArticles = new Query()
+        public static Query QueryArticles = new Query()
             .JoinSuccessors(Subscription.RoleSubscriber)
             .JoinPredecessors(Subscription.RoleMagazine)
             .JoinSuccessors(Article.RoleMagazine)
             ;
 
-        // Conditions
+        // Predicates
 
         // Predecessors
 
@@ -641,7 +647,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
 
@@ -683,7 +689,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorObj<Subscriber> _subscriber;
@@ -740,7 +746,7 @@ namespace Reversi.GameModel
 
         // Queries
 
-        // Conditions
+        // Predicates
 
         // Predecessors
         private PredecessorObj<Magazine> _magazine;
