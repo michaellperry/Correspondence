@@ -6,6 +6,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
     public class Class
     {
         private string _name;
+        private bool _unique;
         private List<Field> _fields = new List<Field>();
         private List<Predecessor> _predecessors = new List<Predecessor>();
         private List<Query> _queries = new List<Query>();
@@ -20,6 +21,12 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         public string Name
         {
             get { return _name; }
+        }
+
+        public bool Unique
+        {
+            get { return _unique; }
+            set { _unique = value; }
         }
 
         public IEnumerable<Field> Fields

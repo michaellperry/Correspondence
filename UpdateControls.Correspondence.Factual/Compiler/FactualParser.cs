@@ -36,6 +36,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("exists", Symbol.Exists)
                 .AddSymbol("where", Symbol.Where)
                 .AddSymbol("and", Symbol.And)
+                .AddSymbol("unique", Symbol.Unique)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -170,7 +171,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 fieldTailRule | queryTailRule, "Declare a field or a query.",
                 (type, nameToken, generator) => generator(type, nameToken));
 
-            // fact -> "fact" identifier "{" member* "}"
+            // fact -> "fact" identifier "{" modifier* member* "}"
             // member -> field_or_query | property | predicate
             var factMemberRule = fieldOrQueryRule | propertyRule | predicateRule;
             var factHeader = Sequence(
@@ -178,8 +179,14 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
                 Terminal(Symbol.OpenBracket), "Declare members of a fact within brackets.",
                 (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
+            var modifierRule = Sequence(
+                Terminal(Symbol.Unique),
+                Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
+                (modifier, semicolon) => modifier);
+            var modifiedFactHeader = Many(
+                factHeader, modifierRule, (fact, modifier) => ModifyFact(fact, modifier.Symbol));
             var factRule = Sequence(
-                Many(factHeader, factMemberRule, (fact, member) => fact.AddMember(member)),
+                Many(modifiedFactHeader, factMemberRule, (fact, member) => fact.AddMember(member)),
                 Terminal(Symbol.CloseBracket), "A member must be a field, property, query, or predicate.",
                 (fact, closeBracket) => fact);
 
@@ -205,6 +212,13 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         private static Func<DataType, Token<Symbol>, FactMember> FieldGenerator()
         {
             return (type, nameToken) => new Field(type.LineNumber, nameToken.Value, type);
+        }
+
+        private static Fact ModifyFact(Fact fact, Symbol modifier)
+        {
+            if (modifier == Symbol.Unique)
+                fact.Unique = true;
+            return fact;
         }
     }
 }

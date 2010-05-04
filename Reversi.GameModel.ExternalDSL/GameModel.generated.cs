@@ -7,7 +7,7 @@ using System;
 namespace Reversi.GameModel
 {
     [CorrespondenceType]
-    public class Queue : CorrespondenceFact
+    public partial class Queue : CorrespondenceFact
     {
         // Roles
 
@@ -55,7 +55,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Time : CorrespondenceFact
+    public partial class Time : CorrespondenceFact
     {
         // Roles
 
@@ -103,7 +103,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Frame : CorrespondenceFact
+    public partial class Frame : CorrespondenceFact
     {
         // Roles
         public static Role<Queue> RoleQueue = new Role<Queue>("queue");
@@ -172,7 +172,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Player : CorrespondenceFact
+    public partial class Player : CorrespondenceFact
     {
         // Roles
 
@@ -212,7 +212,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Game : CorrespondenceFact
+    public partial class Game : CorrespondenceFact
     {
         // Roles
         public static Role<Player> RolePlayers = new Role<Player>("players");
@@ -261,7 +261,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Person : CorrespondenceFact
+    public partial class Person : CorrespondenceFact
     {
         // Roles
 
@@ -271,6 +271,10 @@ namespace Reversi.GameModel
 
         // Predecessors
 
+        // Unique
+        [CorrespondenceField]
+        private Guid _unique;
+
         // Fields
 
         // Results
@@ -279,6 +283,7 @@ namespace Reversi.GameModel
         public Person(
             )
         {
+            _unique = Guid.NewGuid();
             InitializeResults();
         }
 
@@ -301,7 +306,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Request : CorrespondenceFact
+    public partial class Request : CorrespondenceFact
     {
         // Roles
         public static Role<Frame> RoleFrame = new Role<Frame>("frame");
@@ -315,7 +320,9 @@ namespace Reversi.GameModel
             .JoinSuccessors(Cancel.RoleRequest)
             ;
         public static Query QueryBids = new Query()
-            .JoinSuccessors(Bid.RoleRequest)
+            .JoinSuccessors(Bid.RoleRequest, Condition.WhereIsNotEmpty(Bid.QueryIsAccepted)
+                .And().IsNotEmpty(Bid.QueryIsRejected)
+            )
             ;
 
         // Predicates
@@ -376,15 +383,23 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Bid : CorrespondenceFact
+    public partial class Bid : CorrespondenceFact
     {
         // Roles
         public static Role<Request> RoleRequest = new Role<Request>("request");
         public static Role<Person> RoleBidder = new Role<Person>("bidder");
 
         // Queries
+        public static Query QueryIsAccepted = new Query()
+            .JoinSuccessors(Accept.RoleBid)
+            ;
+        public static Query QueryIsRejected = new Query()
+            .JoinSuccessors(Reject.RoleBid)
+            ;
 
         // Predicates
+        public static Condition IsAccepted = Condition.WhereIsEmpty(QueryIsAccepted);
+        public static Condition IsRejected = Condition.WhereIsEmpty(QueryIsRejected);
 
         // Predecessors
         private PredecessorObj<Request> _request;
@@ -434,7 +449,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Accept : CorrespondenceFact
+    public partial class Accept : CorrespondenceFact
     {
         // Roles
         public static Role<Request> RoleRequest = new Role<Request>("request");
@@ -492,7 +507,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Reject : CorrespondenceFact
+    public partial class Reject : CorrespondenceFact
     {
         // Roles
         public static Role<Bid> RoleBid = new Role<Bid>("bid");
@@ -541,7 +556,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Cancel : CorrespondenceFact
+    public partial class Cancel : CorrespondenceFact
     {
         // Roles
         public static Role<Request> RoleRequest = new Role<Request>("request");
@@ -590,7 +605,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Subscriber : CorrespondenceFact
+    public partial class Subscriber : CorrespondenceFact
     {
         // Roles
 
@@ -641,7 +656,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Magazine : CorrespondenceFact
+    public partial class Magazine : CorrespondenceFact
     {
         // Roles
 
@@ -681,7 +696,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Subscription : CorrespondenceFact
+    public partial class Subscription : CorrespondenceFact
     {
         // Roles
         public static Role<Subscriber> RoleSubscriber = new Role<Subscriber>("subscriber");
@@ -739,7 +754,7 @@ namespace Reversi.GameModel
     }
     
     [CorrespondenceType]
-    public class Article : CorrespondenceFact
+    public partial class Article : CorrespondenceFact
     {
         // Roles
         public static Role<Magazine> RoleMagazine = new Role<Magazine>("magazine");

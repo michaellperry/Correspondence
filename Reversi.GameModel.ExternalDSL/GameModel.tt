@@ -48,7 +48,7 @@ namespace <#=targetNamespace.Name#>
 {
 <# foreach (Class c in targetNamespace.Classes) { #>
     [CorrespondenceType]
-    public class <#=c.Name#> : CorrespondenceFact
+    public partial class <#=c.Name#> : CorrespondenceFact
     {
         // Roles
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
@@ -83,6 +83,12 @@ namespace <#=targetNamespace.Name#>
         private <#=PredecessorClass(predecessor)#> _<#=predecessor.Name#>;
 <#}#>
 
+<# if (c.Unique) { #>
+        // Unique
+        [CorrespondenceField]
+        private Guid _unique;
+
+<# } #>
         // Fields
 <# foreach (Field field in c.Fields) {#>
         [CorrespondenceField]
@@ -104,6 +110,9 @@ namespace <#=targetNamespace.Name#>
 <#}#>
             )
         {
+<# if (c.Unique) { #>
+            _unique = Guid.NewGuid();
+<# } #>
             InitializeResults();
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
             _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, <#=RoleName(predecessor.Name)#>, <#=predecessor.Name#>);

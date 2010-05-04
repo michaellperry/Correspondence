@@ -28,6 +28,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Not,
         Exists,
         Where,
-        And
+        And,
+        Unique
     }
 }

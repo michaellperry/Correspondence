@@ -396,6 +396,23 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
             ));
         }
 
+        [TestMethod]
+        public void WhenUnique_UniqueIsRecognized()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact Person {\r\n" +
+                "    unique;\r\n" +
+                "}"
+            ));
+            Namespace result = AssertNoErrors(parser);
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Person")) &
+                Has<Fact>.Property(fact => fact.Unique, Is.EqualTo(true))
+            ));
+        }
+
         private static Namespace AssertNoErrors(FactualParser parser)
         {
             Namespace result = parser.Parse();

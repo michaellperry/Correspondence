@@ -68,6 +68,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             Target.Class factClass = new Target.Class(fact.Name);
             result.AddClass(factClass);
 
+            factClass.Unique = fact.Unique;
+
             foreach (Source.FactMember member in fact.Members)
             {
                 try
