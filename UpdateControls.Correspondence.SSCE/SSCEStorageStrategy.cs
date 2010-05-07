@@ -6,6 +6,8 @@ using System.Text;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using System.IO;
+using System.Reflection;
 
 namespace UpdateControls.Correspondence.SSCE
 {
@@ -34,13 +36,37 @@ namespace UpdateControls.Correspondence.SSCE
         private IDictionary<string, int> _protocolIdByName = new Dictionary<string, int>();
 
         /// <summary>
-        /// Initialize the SQL Server Compact Edition storage strategy. Provide a connection string
-        /// that locates your Correspondence.sdf file.
+        /// Initialize the SQL Server Compact Edition storage strategy. Provide the location
+        /// of your Correspondence.sdf file. The file will be created if it does not exist.
         /// </summary>
-        /// <param name="connectionString">Example: @"Data Source ="".\SSCE\Correspondence.sdf"""</param>
-        public SSCEStorageStrategy(string connectionString)
+        /// <param name="connectionString">The full path to Correspondence.sdf</param>
+        public SSCEStorageStrategy(string correspondenceDatabaseFileName)
 		{
-            _connectionString = connectionString;
+            CreateDatabase(correspondenceDatabaseFileName);
+            _connectionString = string.Format(@"Data Source =""{0}""", correspondenceDatabaseFileName);
+        }
+
+        private void CreateDatabase(string databaseFilename)
+        {
+            if (!File.Exists(databaseFilename))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(databaseFilename));
+                using (Stream resourceStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                    typeof(SSCEStorageStrategy), "Correspondence.sdf"))
+                {
+                    using (Stream fileStream = File.Create(databaseFilename))
+                    {
+                        byte[] buffer = new byte[1024];
+                        while (true)
+                        {
+                            int read = resourceStream.Read(buffer, 0, buffer.Length);
+                            if (read <= 0)
+                                break;
+                            fileStream.Write(buffer, 0, read);
+                        }
+                    }
+                }
+            }
         }
 
 		private static void AddParameter(IDbCommand command, string name, object value)
