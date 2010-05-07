@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence
                         new FactMetadata(GetConvertableTypes(type)));
 
                     // Find all queries defined within the type.
-                    foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.NonPublic)
+					foreach (FieldInfo field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
                         .Where(field => typeof(Query).IsAssignableFrom(field.FieldType) && field.IsStatic))
                     {
                         community.AddQuery(
