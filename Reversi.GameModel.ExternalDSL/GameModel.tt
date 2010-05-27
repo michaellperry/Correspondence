@@ -52,7 +52,7 @@ namespace <#=targetNamespace.Name#>
     {
         // Roles
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
-        public static <#=RoleClass(predecessor)#> <#=RoleName(predecessor.Name)#> = new <#=RoleClass(predecessor)#>("<#=predecessor.Name#>");
+        public static <#=RoleClass(predecessor)#> <#=RoleName(predecessor.Name)#> = new <#=RoleClass(predecessor)#>("<#=predecessor.Name#>"<#=predecessor.IsPivot ? ", RoleRelationship.Pivot" : ""#>);
 <#}#>
 
         // Queries

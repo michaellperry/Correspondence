@@ -97,7 +97,33 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 Has<Class>.Property(c => c.Predecessors, Contains<Predecessor>.That(
                     Has<Predecessor>.Property(p => p.Name, Is.EqualTo("gameQueue")) &
                     Has<Predecessor>.Property(p => p.FactType, Is.EqualTo("GameQueue")) &
-                    Has<Predecessor>.Property(p => p.Cardinality, Is.EqualTo(Cardinality.One))
+                    Has<Predecessor>.Property(p => p.Cardinality, Is.EqualTo(Cardinality.One)) &
+					Has<Predecessor>.Property(p => p.IsPivot, Is.EqualTo(false))
+                ))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenFactFieldIsPivot_PredecessorIsPivot()
+        {
+            Namespace result = AssertNoError(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  string identifier;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "  pivot GameQueue gameQueue;\r\n" +
+                "}"
+            );
+
+            Pred.Assert(result.Classes, Contains<Class>.That(
+                Has<Class>.Property(c => c.Predecessors, Contains<Predecessor>.That(
+                    Has<Predecessor>.Property(p => p.Name, Is.EqualTo("gameQueue")) &
+                    Has<Predecessor>.Property(p => p.FactType, Is.EqualTo("GameQueue")) &
+					Has<Predecessor>.Property(p => p.Cardinality, Is.EqualTo(Cardinality.One)) &
+					Has<Predecessor>.Property(p => p.IsPivot, Is.EqualTo(true))
                 ))
             ));
         }

@@ -29,6 +29,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Exists,
         Where,
         And,
-        Unique
+        Unique,
+		Pivot
     }
 }

@@ -30,7 +30,7 @@ fact Person {
 }
 
 fact Request {
-	Frame frame;
+	pivot Frame frame;
 	Person requester;
 	
 	bool isAccepted {

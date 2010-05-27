@@ -127,7 +127,34 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                     Has<DataMember>.Property(field => field.Type,
                         Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)) &
                         KindOf<DataType, DataTypeFact>.That(
-                            Has<DataTypeFact>.Property(type => type.FactName, Is.EqualTo("GameQueue"))
+                            Has<DataTypeFact>.Property(type => type.FactName, Is.EqualTo("GameQueue")) &
+							Has<DataTypeFact>.Property(type => type.IsPivot, Is.EqualTo(false))
+                        )
+                    ) &
+                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))
+                ))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenFieldIsPivot_PivotIsRecognized()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "  pivot GameQueue gameQueue;\r\n" +
+                "}"
+            ));
+            Namespace result = AssertNoErrors(parser);
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
+                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("gameQueue")) &
+                    Has<DataMember>.Property(field => field.Type,
+                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.One)) &
+                        KindOf<DataType, DataTypeFact>.That(
+                            Has<DataTypeFact>.Property(type => type.FactName, Is.EqualTo("GameQueue")) &
+							Has<DataTypeFact>.Property(type => type.IsPivot, Is.EqualTo(true))
                         )
                     ) &
                     Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))

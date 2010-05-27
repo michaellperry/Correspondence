@@ -10,13 +10,15 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         private string _name;
         private Cardinality _cardinality;
         private string _factType;
+		private bool _isPivot;
 
-        public Predecessor(string name, Cardinality cardinality, string factType)
-        {
-            _name = name;
-            _cardinality = cardinality;
-            _factType = factType;
-        }
+		public Predecessor(string name, Cardinality cardinality, string factType, bool isPivot)
+		{
+			_name = name;
+			_cardinality = cardinality;
+			_factType = factType;
+			_isPivot = isPivot;
+		}
 
         public string Name
         {
@@ -32,5 +34,10 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         {
             get { return _factType; }
         }
-    }
+
+		public bool IsPivot
+		{
+			get { return _isPivot; }
+		}
+	}
 }

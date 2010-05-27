@@ -126,10 +126,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", dataTypeFact.FactName), field.LineNumber);
 
             factClass.AddPredecessor(new Target.Predecessor(
-                field.Name,
-                _cardinalityMap[dataTypeFact.Cardinality],
-                dataTypeFact.FactName
-            ));
+				field.Name, 
+				_cardinalityMap[dataTypeFact.Cardinality], 
+				dataTypeFact.FactName, 
+				dataTypeFact.IsPivot));
         }
 
         private void AnalyzeQuery(Target.Class factClass, Source.Fact fact, Source.Query sourceQuery)

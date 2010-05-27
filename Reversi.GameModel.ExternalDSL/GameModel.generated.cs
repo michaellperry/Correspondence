@@ -309,7 +309,7 @@ namespace Reversi.GameModel
     public partial class Request : CorrespondenceFact
     {
         // Roles
-        public static Role<Frame> RoleFrame = new Role<Frame>("frame");
+        public static Role<Frame> RoleFrame = new Role<Frame>("frame", RoleRelationship.Pivot);
         public static Role<Person> RoleRequester = new Role<Person>("requester");
 
         // Queries
