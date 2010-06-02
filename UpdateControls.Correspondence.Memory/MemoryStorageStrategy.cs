@@ -15,9 +15,9 @@ namespace UpdateControls.Correspondence.Memory
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
         private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
 
-        public IDisposable BeginUnitOfWork()
+        public IDisposable BeginDuration()
         {
-            return new UnitOfWork();
+            return new Duration();
         }
 
         public bool GetID(string factName, out FactID id)

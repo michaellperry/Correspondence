@@ -73,9 +73,9 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
-        public IDisposable BeginUnitOfWork()
+        public IDisposable BeginDuration()
         {
-            return _model.BeginUnitOfWork();
+            return _model.BeginDuration();
         }
 
 		public T AddFact<T>( T prototype ) where T : CorrespondenceFact

@@ -9,7 +9,7 @@ namespace UpdateControls.Correspondence.Strategy
 	/// </summary>
 	public interface IStorageStrategy
     {
-        IDisposable BeginUnitOfWork();
+        IDisposable BeginDuration();
 
         // Facts.
         bool GetID(string factName, out FactID id);

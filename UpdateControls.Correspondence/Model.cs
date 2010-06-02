@@ -54,9 +54,9 @@ namespace UpdateControls.Correspondence
                 .InvertQuery(query.Joins);
         }
 
-        public IDisposable BeginUnitOfWork()
+        public IDisposable BeginDuration()
         {
-            return _storageStrategy.BeginUnitOfWork();
+            return _storageStrategy.BeginDuration();
         }
 
         public T AddFact<T>(T prototype) where T : CorrespondenceFact

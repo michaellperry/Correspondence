@@ -3,16 +3,16 @@ using System.Data;
 
 namespace UpdateControls.Correspondence.SSCE
 {
-    internal class UnitOfWork : IDisposable
+    internal class Duration : IDisposable
     {
         [ThreadStatic]
-        private static UnitOfWork _currentUnitOfWork;
+        private static Duration _currentDuration;
 
         private string _connectionString;
         private IDbConnection _connection;
-        private UnitOfWork _prior;
+        private Duration _prior;
 
-        public UnitOfWork(UnitOfWork prior)
+        public Duration(Duration prior)
         {
             _prior = prior;
         }
@@ -44,22 +44,22 @@ namespace UpdateControls.Correspondence.SSCE
                 _connection.Close();
 
             // Pop myself off the stack.
-            _currentUnitOfWork = _currentUnitOfWork._prior;
+            _currentDuration = _currentDuration._prior;
         }
 
         public static IDbConnection Enlist(string connectionString)
         {
-            // If a unit of work was begun, use it.
-            return _currentUnitOfWork != null
-                ? (IDbConnection)_currentUnitOfWork.GetConnection(connectionString)
+            // If a duration has begun, use it.
+            return _currentDuration != null
+                ? (IDbConnection)_currentDuration.GetConnection(connectionString)
                 : null;
         }
 
         public static IDisposable Begin()
         {
-            // Push a new unit of work to the stack.
-            _currentUnitOfWork = new UnitOfWork(_currentUnitOfWork);
-            return _currentUnitOfWork;
+            // Push a new duration to the stack.
+            _currentDuration = new Duration(_currentDuration);
+            return _currentDuration;
         }
     }
 }

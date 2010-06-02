@@ -12,7 +12,7 @@ namespace UpdateControls.Correspondence.SSCE
         public Session(string connectionString)
         {
             // First try to enlist.
-            _connection = UnitOfWork.Enlist(connectionString);
+            _connection = Duration.Enlist(connectionString);
             _enlisted = _connection != null;
 
             // If we did not enlist, then create our own connection.

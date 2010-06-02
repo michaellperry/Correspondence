@@ -85,9 +85,9 @@ namespace UpdateControls.Correspondence.SSCE
 			Array.Copy(buffer, memento.Data, length);
 		}
 
-        public IDisposable BeginUnitOfWork()
+        public IDisposable BeginDuration()
         {
-            return UnitOfWork.Begin();
+            return Duration.Begin();
         }
 
         public bool GetID(string factName, out FactID id)

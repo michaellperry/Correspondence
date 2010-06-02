@@ -2,7 +2,7 @@ using System;
 
 namespace UpdateControls.Correspondence.Memory
 {
-    internal class UnitOfWork : IDisposable
+    internal class Duration : IDisposable
     {
         public void Dispose()
         {
