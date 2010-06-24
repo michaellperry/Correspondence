@@ -59,17 +59,17 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
-        public Community AddInterest<T>(Func<IEnumerable<T>> pivots)
+        public Community Subscribe<T>(Func<IEnumerable<T>> pivots)
             where T : CorrespondenceFact
         {
-            _network.AddInterest(new Interest(() => pivots().OfType<CorrespondenceFact>()));
+            _network.Subscribe(new Subscription(() => pivots().OfType<CorrespondenceFact>()));
             return this;
         }
 
-        public Community AddInterest<T>(Func<T> pivot)
+        public Community Subscribe<T>(Func<T> pivot)
             where T : CorrespondenceFact
         {
-            _network.AddInterest(new Interest(() => Enumerable.Repeat(pivot(), 1).OfType<CorrespondenceFact>()));
+            _network.Subscribe(new Subscription(() => Enumerable.Repeat(pivot(), 1).OfType<CorrespondenceFact>()));
             return this;
         }
 

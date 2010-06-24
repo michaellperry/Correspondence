@@ -67,7 +67,7 @@
     <Compile Include="FieldSerializer\IntFieldSerializer.cs" />
     <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
     <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
-    <Compile Include="Interest.cs" />
+    <Compile Include="Subscription.cs" />
     <Compile Include="IQueryResult.cs" />
     <Compile Include="Mementos\FactTreeMemento.cs" />
     <Compile Include="Mementos\MessageMemento.cs" />

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence
 {
-    class Interest
+    class Subscription
     {
         private Func<IEnumerable<CorrespondenceFact>> _pivots;
 
-        public Interest(Func<IEnumerable<CorrespondenceFact>> pivots)
+        public Subscription(Func<IEnumerable<CorrespondenceFact>> pivots)
         {
             _pivots = pivots;
         }

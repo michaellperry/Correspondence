@@ -11,7 +11,7 @@ namespace UpdateControls.Correspondence
 
         private Model _model;
         private IStorageStrategy _storageStrategy;
-        private List<Interest> _interests = new List<Interest>();
+        private List<Subscription> _subscriptions = new List<Subscription>();
         private List<ICommunicationStrategy> _communicationStrategies = new List<ICommunicationStrategy>();
 
         public Network(Model model, IStorageStrategy storageStrategy)
@@ -20,9 +20,9 @@ namespace UpdateControls.Correspondence
             _storageStrategy = storageStrategy;
         }
 
-        public void AddInterest(Interest interest)
+        public void Subscribe(Subscription subscription)
         {
-            _interests.Add(interest);
+            _subscriptions.Add(subscription);
         }
 
         public void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
@@ -70,9 +70,9 @@ namespace UpdateControls.Correspondence
                 string protocolName = communicationStrategy.ProtocolName;
                 string peerName = communicationStrategy.PeerName;
 
-                foreach (Interest interest in _interests)
+                foreach (Subscription subscription in _subscriptions)
                 {
-                    foreach (CorrespondenceFact pivot in interest.Pivots)
+                    foreach (CorrespondenceFact pivot in subscription.Pivots)
                     {
                         FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0l);
                         FactID pivotId = pivot.ID;

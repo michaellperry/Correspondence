@@ -24,8 +24,8 @@ namespace Reversi.Client
             Community community = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(new WebServiceCommunicationStrategy())
                 .RegisterAssembly(typeof(GameQueue))
-                .AddInterest(() => _person.OutstandingGameRequests)
-                .AddInterest(() => _person.UnfinishedGames);
+                .Subscribe(() => _person.OutstandingGameRequests)
+                .Subscribe(() => _person.UnfinishedGames);
 
             _synchronizationThread = new SynchronizationThread(community);
 

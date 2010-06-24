@@ -28,8 +28,8 @@ namespace Reversi.GameQueueService
             Community community = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(new WebServiceCommunicationStrategy())
                 .RegisterAssembly(typeof(GameQueue))
-                .AddInterest(() => _gameQueue)
-                .AddInterest(() => _gameQueue.OutstandingGameRequests);
+                .Subscribe(() => _gameQueue)
+                .Subscribe(() => _gameQueue.OutstandingGameRequests);
 
             _gameQueue = community.AddFact(new GameQueue("http://correspondence.cloudapp.net/reversi/1"));
             Service service = community.AddFact(new Service(_gameQueue));
