@@ -163,6 +163,32 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         }
 
         [TestMethod]
+        public void WhenListIsPivot_PivotIsRecognized()
+        {
+            FactualParser parser = new FactualParser(new StringReader(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact Game {\r\n" +
+                "  pivot User *players;\r\n" +
+                "}"
+            ));
+            Namespace result = AssertNoErrors(parser);
+            Pred.Assert(result.Facts, Contains<Fact>.That(
+                Has<Fact>.Property(fact => fact.Members.OfType<DataMember>(), Contains<DataMember>.That(
+                    Has<DataMember>.Property(field => field.Name, Is.EqualTo("players")) &
+                    Has<DataMember>.Property(field => field.Type,
+                        Has<DataType>.Property(type => type.Cardinality, Is.EqualTo(Cardinality.Many)) &
+                        KindOf<DataType, DataTypeFact>.That(
+                            Has<DataTypeFact>.Property(type => type.FactName, Is.EqualTo("User")) &
+							Has<DataTypeFact>.Property(type => type.IsPivot, Is.EqualTo(true))
+                        )
+                    ) &
+                    Has<DataMember>.Property(field => field.LineNumber, Is.EqualTo(4))
+                ))
+            ));
+        }
+
+        [TestMethod]
         public void WhenFieldIsOptional_CardinalityIsRecognized()
         {
             FactualParser parser = new FactualParser(new StringReader(
