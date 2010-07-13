@@ -74,7 +74,7 @@ namespace UpdateControls.Correspondence
                 {
                     foreach (CorrespondenceFact pivot in subscription.Pivots)
                     {
-                        FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0l);
+                        FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
                         FactID pivotId = pivot.ID;
                         AddToFactTree(pivotTree, pivotId);
                         TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, pivotId);
@@ -103,7 +103,7 @@ namespace UpdateControls.Correspondence
                 FactTreeMemento messageBody;
                 if (!messageBodiesByPivotId.TryGetValue(message.PivotId, out messageBody))
                 {
-                    messageBody = new FactTreeMemento(ClientDatabasId, 0l);
+                    messageBody = new FactTreeMemento(ClientDatabasId, 0L);
                     messageBodiesByPivotId.Add(message.PivotId, messageBody);
                 }
                 AddToFactTree(messageBody, message.FactId);
