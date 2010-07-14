@@ -1,8 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{8A2EE5D2-BFAB-4DA6-9F1B-AD5645329313}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BED3008-81C4-44AE-841E-C971D41D72B3}"
 	ProjectSection(SolutionItems) = preProject
 		Correspondence.vsmdi = Correspondence.vsmdi
@@ -12,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		SolutionItems\UpdateControls.dll = SolutionItems\UpdateControls.dll
 		SolutionItems\UpdateControls.XAML.dll = SolutionItems\UpdateControls.XAML.dll
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{8A2EE5D2-BFAB-4DA6-9F1B-AD5645329313}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{04178710-8BE6-416F-9D41-909258CDE242}"
 EndProject
@@ -53,7 +53,7 @@ Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 20
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://tfs10.codeplex.com/
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = UpdateControls.Correspondence.UnitTest\\UpdateControls.Correspondence.UnitTest.csproj
 		SccProjectName1 = UpdateControls.Correspondence.UnitTest
