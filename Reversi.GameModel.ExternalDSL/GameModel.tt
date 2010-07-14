@@ -1,7 +1,7 @@
-﻿<#@ template language="C#v3.5" hostspecific="True" debug="True" #>
+﻿<#@ template language="C#" hostspecific="True" debug="True" #>
 <#@ assembly name="System.Core"#>
-<#@ assembly name="UpdateControls.Correspondence.Factual.dll"#>
-<#@ assembly name="QEDCode.LLOne.dll"#>
+<#@ assembly name="UpdateControls.Correspondence.Factual"#>
+<#@ assembly name="QEDCode.LLOne"#>
 <#@ import namespace="System.IO"#>
 <#@ import namespace="System.Collections.Generic"#>
 <#@ import namespace="System.Linq"#>

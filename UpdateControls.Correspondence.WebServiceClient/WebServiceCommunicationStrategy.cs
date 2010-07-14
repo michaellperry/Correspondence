@@ -17,7 +17,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         public string PeerName
         {
-            get { return "http://correspondence.cloudapp.net/SynchronizationService.svc"; }
+            get { return _synchronizationService.Address.ToString(); }
         }
 
         public FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)

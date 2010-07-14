@@ -14,6 +14,17 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
 
+        public Uri Address
+        {
+            get
+            {
+                using (Client client = new Client())
+                {
+                    return client.Endpoint.Address.Uri;
+                }
+            }
+        }
+
         public void CallService(Action<TServiceInterface> action)
         {
             Client client = new Client();
