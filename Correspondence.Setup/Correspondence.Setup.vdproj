@@ -15,6 +15,18 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_12085865A6784678A5CF1694E70B6556"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_1AA1662D88A278E61A9D9FB07AC2B4CD"
+        "OwnerKey" = "8:_C2BEF91285254DAFA31B30FA245407DC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_1AB9486A38FC4BC8A7B8EEB767B16F8D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -23,6 +35,12 @@
         {
         "MsmKey" = "8:_310C216CCF572A0A07725BF3BECB00D6"
         "OwnerKey" = "8:_1AB9486A38FC4BC8A7B8EEB767B16F8D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_3D9D302C2D8A471FA3CA147872AB9790"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -93,14 +111,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6397B0DC05388E555AD36E5120B8B25A"
-        "OwnerKey" = "8:_C2BEF91285254DAFA31B30FA245407DC"
+        "MsmKey" = "8:_646E7A868634F72D6B3127F471E3C7A0"
+        "OwnerKey" = "8:_72C457857B374E9CA08C8E947E1F5533"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_646E7A868634F72D6B3127F471E3C7A0"
-        "OwnerKey" = "8:_72C457857B374E9CA08C8E947E1F5533"
+        "MsmKey" = "8:_6F900DC7B0B4400091331F08E565F9BF"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -112,6 +130,12 @@
         "Entry"
         {
         "MsmKey" = "8:_7D8F8F76B4B64A37BA9953A07DDDED50"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_85BB86AB5DB14C72A386368CF9EFA43C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -154,7 +178,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_6397B0DC05388E555AD36E5120B8B25A"
+        "OwnerKey" = "8:_1AA1662D88A278E61A9D9FB07AC2B4CD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -224,6 +248,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -248,6 +285,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -278,6 +328,57 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_12085865A6784678A5CF1694E70B6556"
+            {
+            "SourcePath" = "8:..\\Project Templates\\Visual Studio 2010\\Correspondence WPF Application.zip"
+            "TargetName" = "8:Correspondence WPF Application.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_E749373E5B924566B4AE030E7BEB0E05"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1AA1662D88A278E61A9D9FB07AC2B4CD"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_1AA1662D88A278E61A9D9FB07AC2B4CD"
+                    {
+                    "Name" = "8:System.Data.SqlServerCe.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Data.SqlServerCe.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_800DAAC8F474405B9B90FAE150BED101"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_310C216CCF572A0A07725BF3BECB00D6"
             {
             "AssemblyRegister" = "3:1"
@@ -307,6 +408,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3D9D302C2D8A471FA3CA147872AB9790"
+            {
+            "SourcePath" = "8:..\\Project Templates\\Visual Studio 2010\\Correspondence Model.zip"
+            "TargetName" = "8:Correspondence Model.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_E749373E5B924566B4AE030E7BEB0E05"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_47A10FEBBB710BE09EA2670FA588893A"
@@ -402,37 +523,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6397B0DC05388E555AD36E5120B8B25A"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Data.SqlServerCe, Version=3.5.1.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_6397B0DC05388E555AD36E5120B8B25A"
-                    {
-                    "Name" = "8:System.Data.SqlServerCe.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:System.Data.SqlServerCe.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_800DAAC8F474405B9B90FAE150BED101"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_646E7A868634F72D6B3127F471E3C7A0"
             {
             "AssemblyRegister" = "3:1"
@@ -464,12 +554,52 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6F900DC7B0B4400091331F08E565F9BF"
+            {
+            "SourcePath" = "8:..\\Project Templates\\Visual Studio 2010\\Correspondence View Model.zip"
+            "TargetName" = "8:Correspondence View Model.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_E749373E5B924566B4AE030E7BEB0E05"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7D8F8F76B4B64A37BA9953A07DDDED50"
             {
             "SourcePath" = "8:..\\Project Templates\\Visual Studio 2008\\Correspondence WPF Application.zip"
             "TargetName" = "8:Correspondence WPF Application.zip"
             "Tag" = "8:"
             "Folder" = "8:_257548E7328748BA8ABE4B9AB6D972E5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_85BB86AB5DB14C72A386368CF9EFA43C"
+            {
+            "SourcePath" = "8:..\\Project Templates\\Visual Studio 2010\\Correspondence Unit Test.zip"
+            "TargetName" = "8:Correspondence Unit Test.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_E749373E5B924566B4AE030E7BEB0E05"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -602,6 +732,61 @@
                                                     "Condition" = "8:"
                                                     "Transitive" = "11:FALSE"
                                                     "Property" = "8:_20C5B101ECBA454BA6A968F40D6F3263"
+                                                        "Folders"
+                                                        {
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F74280484C40459D8577F3BE6E07D053"
+                    {
+                    "Name" = "8:Visual Studio 2010"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_6585A29AE9784DE8A4E3F1F44B6C279F"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_E176B4CE040845899893769ABBDF659A"
+                            {
+                            "Name" = "8:Templates"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_97E90BB96F5345BEBFE0AC5651DB9BD0"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_22CDE8FC883C4DABB42C02DECFB08B36"
+                                    {
+                                    "Name" = "8:ProjectTemplates"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_EEA07EE72DE64F208B1FE92D6DC1201A"
+                                        "Folders"
+                                        {
+                                            "{9EF0B969-E518-4E46-987F-47570745A589}:_1B644DD604A44FC887BC4FBB24A8CFD8"
+                                            {
+                                            "Name" = "8:Visual C#"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "Condition" = "8:"
+                                            "Transitive" = "11:FALSE"
+                                            "Property" = "8:_CDC67BCA61124EC18310AEB572D274EC"
+                                                "Folders"
+                                                {
+                                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_E749373E5B924566B4AE030E7BEB0E05"
+                                                    {
+                                                    "Name" = "8:Correspondence"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "Condition" = "8:"
+                                                    "Transitive" = "11:FALSE"
+                                                    "Property" = "8:_1ABC34EB64B94E3C8A8ACFFE7FD8F87A"
                                                         "Folders"
                                                         {
                                                         }
@@ -757,7 +942,7 @@
                                             "Transitive" = "11:FALSE"
                                                 "Keys"
                                                 {
-                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_94E2E894661744EA99233A97EA4691C5"
+                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_5D9D92C0DABF49918011C16BEDE4AD54"
                                                     {
                                                     "Name" = "8:UpdateControls.Correspondence"
                                                     "Condition" = "8:"
@@ -769,7 +954,7 @@
                                                         }
                                                         "Values"
                                                         {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_59D7A774E3F243939C0A2E6395748F71"
+                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_FE01612E91C74C2A92B6D9A038A58791"
                                                             {
                                                             "Name" = "8:"
                                                             "Condition" = "8:"
@@ -777,6 +962,56 @@
                                                             "ValueTypes" = "3:1"
                                                             "Value" = "8:[TARGETDIR]Desktop"
                                                             }
+                                                        }
+                                                    }
+                                                }
+                                                "Values"
+                                                {
+                                                }
+                                            }
+                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E3A96B3D71C749FA928CFDCCB0A03003"
+                                            {
+                                            "Name" = "8:v3.5"
+                                            "Condition" = "8:"
+                                            "AlwaysCreate" = "11:FALSE"
+                                            "DeleteAtUninstall" = "11:FALSE"
+                                            "Transitive" = "11:FALSE"
+                                                "Keys"
+                                                {
+                                                    "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_FED5FC97682E4E688D3BDA3BB877A676"
+                                                    {
+                                                    "Name" = "8:AssemblyFoldersEx"
+                                                    "Condition" = "8:"
+                                                    "AlwaysCreate" = "11:FALSE"
+                                                    "DeleteAtUninstall" = "11:FALSE"
+                                                    "Transitive" = "11:FALSE"
+                                                        "Keys"
+                                                        {
+                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_E1E6B63BA3934662A0059135D2D190D8"
+                                                            {
+                                                            "Name" = "8:UpdateControls.Correspondence"
+                                                            "Condition" = "8:"
+                                                            "AlwaysCreate" = "11:FALSE"
+                                                            "DeleteAtUninstall" = "11:FALSE"
+                                                            "Transitive" = "11:FALSE"
+                                                                "Keys"
+                                                                {
+                                                                }
+                                                                "Values"
+                                                                {
+                                                                    "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_59D7A774E3F243939C0A2E6395748F71"
+                                                                    {
+                                                                    "Name" = "8:"
+                                                                    "Condition" = "8:"
+                                                                    "Transitive" = "11:FALSE"
+                                                                    "ValueTypes" = "3:1"
+                                                                    "Value" = "8:[TARGETDIR]Desktop"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        "Values"
+                                                        {
                                                         }
                                                     }
                                                 }
