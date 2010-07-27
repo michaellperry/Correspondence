@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using GameModel;
+using Reversi.Model;
 
 namespace Reversi.Client.ViewModel
 {

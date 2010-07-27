@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameModel;
+using Reversi.Model;
 using Reversi.GameLogic;
 using UpdateControls;
 

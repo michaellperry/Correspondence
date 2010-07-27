@@ -74,9 +74,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameModel\GameModel.csproj">
-      <Project>{659D7839-99B0-46C4-A7AB-4B9721428E76}</Project>
-      <Name>GameModel</Name>
+    <ProjectReference Include="..\Reversi.Model\Reversi.Model.csproj">
+      <Project>{B6D2F677-390D-4D0E-8905-A840804FDFB5}</Project>
+      <Name>Reversi.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>

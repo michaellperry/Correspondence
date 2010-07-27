@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using GameModel;
+using Reversi.Model;
 using Reversi.Client.Synchronization;
 using Reversi.Client.View;
 using Reversi.Client.ViewModel;

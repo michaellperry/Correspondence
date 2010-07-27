@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GameModel;
+using Reversi.Model;
 using UpdateControls.Correspondence.Service;
 
 namespace GameService

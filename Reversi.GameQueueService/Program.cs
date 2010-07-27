@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using GameModel;
-using UpdateControls.Correspondence.Service;
+using System.Threading;
+using Reversi.Model;
 using UpdateControls;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Memory;
+using UpdateControls.Correspondence.Service;
 using UpdateControls.Correspondence.WebServiceClient;
-using System.Threading;
 
 namespace Reversi.GameQueueService
 {

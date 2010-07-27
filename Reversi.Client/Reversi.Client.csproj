@@ -136,13 +136,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GameModel\GameModel.csproj">
-      <Project>{659D7839-99B0-46C4-A7AB-4B9721428E76}</Project>
-      <Name>GameModel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Reversi.GameLogic\Reversi.GameLogic.csproj">
       <Project>{15C2C87D-3996-480B-8576-1E04C20B1D09}</Project>
       <Name>Reversi.GameLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reversi.Model\Reversi.Model.csproj">
+      <Project>{B6D2F677-390D-4D0E-8905-A840804FDFB5}</Project>
+      <Name>Reversi.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj">
       <Project>{E318C58A-0EB8-4FFB-9547-DD5F73760989}</Project>

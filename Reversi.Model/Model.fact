@@ -1,0 +1,80 @@
+﻿namespace Reversi.Model;
+
+fact Person {
+	GameRequest* outstandingGameRequests {
+		GameRequest r : r.person = this
+			where r.isOutstanding
+	}
+
+	Game* unfinishedGames {
+		Game g : g.gameRequests.person = this
+			where g.isUnfinished
+	}
+}
+
+fact GameQueue {
+	string identifier;
+
+	GameRequest* outstandingGameRequests {
+		GameRequest r : r.gameQueue = this
+			where r.isOutstanding
+	}
+}
+
+fact Service {
+	pivot GameQueue gameQueue;
+}
+
+fact GameRequest {
+	unique;
+	GameQueue gameQueue;
+	Person person;
+
+	Game* games {
+		Game g : g.gameRequests = this
+	}
+
+	bool isOutstanding {
+		not exists Game g : g.gameRequests = this
+	}
+}
+
+fact Game {
+	GameRequest* gameRequests;
+
+	Player* players {
+		Player p : p.game = this
+	}
+
+	Move* moves {
+		Move m : m.player.game = this
+	}
+
+	Outcome* outcomes {
+		Outcome o : o.game = this
+	}
+
+	bool isUnfinished {
+		not exists Outcome o : o.game = this
+	}
+}
+
+fact Player {
+	Person person;
+	pivot Game game;
+
+	Move* moves {
+		Move m : m.player = this
+	}
+}
+
+fact Move {
+	Player player;
+	int index;
+	int square;
+}
+
+fact Outcome {
+	Game game;
+	Player? winner;
+}
