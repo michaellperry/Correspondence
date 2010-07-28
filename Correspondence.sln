@@ -57,9 +57,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight 4", "Silverligh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Silverlight 4\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Silverlight 4\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reversi", "Reversi", "{9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.Model", "Silverlight 4\Reversi\Reversi.Model\Reversi.Model.csproj", "{90511DF3-3151-447E-9C2E-1B3E11CD788C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 23
+		SccNumberOfProjects = 25
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -130,6 +136,14 @@ Global
 		SccProjectTopLevelParentUniqueName22 = Correspondence.sln
 		SccProjectName22 = Silverlight\u00204/UpdateControls.Correspondence
 		SccLocalPath22 = Silverlight\u00204\\UpdateControls.Correspondence
+		SccProjectUniqueName23 = Silverlight\u00204\\UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
+		SccProjectTopLevelParentUniqueName23 = Correspondence.sln
+		SccProjectName23 = Silverlight\u00204/UpdateControls.Correspondence.Memory
+		SccLocalPath23 = Silverlight\u00204\\UpdateControls.Correspondence.Memory
+		SccProjectUniqueName24 = Silverlight\u00204\\Reversi\\Reversi.Model\\Reversi.Model.csproj
+		SccProjectTopLevelParentUniqueName24 = Correspondence.sln
+		SccProjectName24 = Silverlight\u00204/Reversi/Reversi.Model
+		SccLocalPath24 = Silverlight\u00204\\Reversi\\Reversi.Model
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -223,11 +237,22 @@ Global
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD} = {B08999A9-59D8-4790-A084-515E40DDF472}
+		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646} = {B08999A9-59D8-4790-A084-515E40DDF472}
+		{9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4} = {B08999A9-59D8-4790-A084-515E40DDF472}
+		{90511DF3-3151-447E-9C2E-1B3E11CD788C} = {9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4}
 	EndGlobalSection
 EndGlobal
