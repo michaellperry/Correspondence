@@ -43,6 +43,10 @@ namespace Reversi.Model
 
         // Predecessors
 
+        // Unique
+        [CorrespondenceField]
+        private Guid _unique;
+
         // Fields
 
         // Results
@@ -53,6 +57,7 @@ namespace Reversi.Model
         public Person(
             )
         {
+            _unique = Guid.NewGuid();
             InitializeResults();
         }
 
@@ -413,7 +418,7 @@ namespace Reversi.Model
         {
             get { return _moves; }
         }
-	}
+    }
     
     [CorrespondenceType]
     public partial class Move : CorrespondenceFact

@@ -1,6 +1,8 @@
 ﻿namespace Reversi.Model;
 
 fact Person {
+	unique;
+
 	GameRequest* outstandingGameRequests {
 		GameRequest r : r.person = this
 			where r.isOutstanding

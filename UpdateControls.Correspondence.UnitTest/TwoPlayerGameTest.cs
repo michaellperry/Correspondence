@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using GameModel;
+using Reversi.Model;
 using GameService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Memory;

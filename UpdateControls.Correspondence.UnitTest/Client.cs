@@ -1,5 +1,5 @@
 using System;
-using GameModel;
+using Reversi.Model;
 using Predassert;
 
 namespace UpdateControls.Correspondence.UnitTest

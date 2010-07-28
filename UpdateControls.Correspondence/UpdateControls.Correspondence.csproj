@@ -74,6 +74,7 @@
     <Compile Include="AttributeObjectFactoryExtensions.cs" />
     <Compile Include="AttributeTypeStrategy.cs" />
     <Compile Include="Community.cs" />
+    <Compile Include="Community.Platform.cs" />
     <Compile Include="Conditions\AndCondition.cs" />
     <Compile Include="Conditions\AndConditionBuilder.cs" />
     <Compile Include="Conditions\IConditionVisitor.cs" />

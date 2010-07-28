@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GameModel;
+using Reversi.Model;
 using GameService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Predassert;

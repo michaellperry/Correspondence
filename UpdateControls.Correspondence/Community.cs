@@ -10,25 +10,22 @@ namespace UpdateControls.Correspondence
 {
     /// <summary>
 	/// </summary>
-	public class Community
+	public partial class Community
 	{
         private Model _model;
         private Network _network;
         private IDictionary<Type, IFieldSerializer> _fieldSerializerByType = new Dictionary<Type, IFieldSerializer>();
 
-        public Community(IStorageStrategy storageStrategy, ITypeStrategy typeStrategy)
+		public Community(IStorageStrategy storageStrategy, ITypeStrategy typeStrategy)
         {
             _model = new Model(this, storageStrategy, typeStrategy);
             _network = new Network(_model, storageStrategy);
 
             // Register the default types.
-            this
-                .AddFieldSerializer<string>(new StringFieldSerializer())
-                .AddFieldSerializer<decimal>(new DecimalFieldSerializer())
-				.AddFieldSerializer<DateTime>(new DateTimeFieldSerializer())
-                .AddFieldSerializer<Guid>(new GuidFieldSerializer())
-                .AddFieldSerializer<int>(new IntFieldSerializer());
-        }
+			RegisterDefaultTypes();
+		}
+
+		partial void RegisterDefaultTypes();
 
         public Community(IStorageStrategy storageStrategy)
             : this(storageStrategy, new AttributeTypeStrategy())

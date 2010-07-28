@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UpdateControls.Correspondence</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+    <Reference Include="UpdateControls.Light, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files\Mallard Software Designs\Update Controls\Silverlight\UpdateControls.Light.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\UpdateControls.Correspondence\AttributeFactFactory.cs">
+      <Link>AttributeFactFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\AttributeObjectFactoryExtensions.cs">
+      <Link>AttributeObjectFactoryExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\AttributeTypeStrategy.cs">
+      <Link>AttributeTypeStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Community.cs">
+      <Link>Community.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Condition.cs">
+      <Link>Condition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Conditions\AndCondition.cs">
+      <Link>Conditions\AndCondition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Conditions\AndConditionBuilder.cs">
+      <Link>Conditions\AndConditionBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Conditions\IConditionVisitor.cs">
+      <Link>Conditions\IConditionVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Conditions\SimpleCondition.cs">
+      <Link>Conditions\SimpleCondition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\CorrespondenceException.cs">
+      <Link>CorrespondenceException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\CorrespondenceFact.cs">
+      <Link>CorrespondenceFact.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\CorrespondenceFieldAttribute.cs">
+      <Link>CorrespondenceFieldAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\CorrespondenceTypeAttribute.cs">
+      <Link>CorrespondenceTypeAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\FactMetadata.cs">
+      <Link>FactMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\FieldSerializer\DateTimeFieldSerializer.cs">
+      <Link>FieldSerializer\DateTimeFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\FieldSerializer\GuidFieldSerializer.cs">
+      <Link>FieldSerializer\GuidFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\FieldSerializer\IntFieldSerializer.cs">
+      <Link>FieldSerializer\IntFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\FieldSerializer\StringFieldSerializer.cs">
+      <Link>FieldSerializer\StringFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\IQueryResult.cs">
+      <Link>IQueryResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\CorrespondenceFactType.cs">
+      <Link>Mementos\CorrespondenceFactType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\FactID.cs">
+      <Link>Mementos\FactID.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\FactMemento.cs">
+      <Link>Mementos\FactMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\FactTreeMemento.cs">
+      <Link>Mementos\FactTreeMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\IdentifiedFactMemento.cs">
+      <Link>Mementos\IdentifiedFactMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\MessageMemento.cs">
+      <Link>Mementos\MessageMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\NamedFactMemento.cs">
+      <Link>Mementos\NamedFactMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\PredecessorMemento.cs">
+      <Link>Mementos\PredecessorMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\RoleMemento.cs">
+      <Link>Mementos\RoleMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\TimestampID.cs">
+      <Link>Mementos\TimestampID.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Model.cs">
+      <Link>Model.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Network.cs">
+      <Link>Network.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\PredecessorBase.cs">
+      <Link>PredecessorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\PredecessorList.cs">
+      <Link>PredecessorList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\PredecessorObj.cs">
+      <Link>PredecessorObj.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\PredecessorOpt.cs">
+      <Link>PredecessorOpt.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Queries\Join.cs">
+      <Link>Queries\Join.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Queries\QueryDefinition.cs">
+      <Link>Queries\QueryDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Queries\QueryInvalidator.cs">
+      <Link>Queries\QueryInvalidator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Query.cs">
+      <Link>Query.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\QueryInverter.cs">
+      <Link>QueryInverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Result.cs">
+      <Link>Result.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Role.cs">
+      <Link>Role.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\RoleBase.cs">
+      <Link>RoleBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\RoleRelationship.cs">
+      <Link>RoleRelationship.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Service\IService.cs">
+      <Link>Service\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\ICommunicationStrategy.cs">
+      <Link>Strategy\ICommunicationStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\ICorrespondenceFactFactory.cs">
+      <Link>Strategy\ICorrespondenceFactFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\IFieldSerializer.cs">
+      <Link>Strategy\IFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\IStorageStrategy.cs">
+      <Link>Strategy\IStorageStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\ITypeStrategy.cs">
+      <Link>Strategy\ITypeStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\QueryOptions.cs">
+      <Link>Strategy\QueryOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Subscription.cs">
+      <Link>Subscription.cs</Link>
+    </Compile>
+    <Compile Include="Community.Platform.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

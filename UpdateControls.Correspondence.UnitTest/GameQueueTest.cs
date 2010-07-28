@@ -1,4 +1,4 @@
-﻿using GameModel;
+﻿using Reversi.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Predassert;
 using UpdateControls.Correspondence.Memory;
