@@ -10,7 +10,7 @@ namespace UpdateControls.Correspondence
 {
     /// <summary>
 	/// </summary>
-	public partial class Community
+	public partial class Community : ICommunity
 	{
         private Model _model;
         private Network _network;
@@ -75,12 +75,14 @@ namespace UpdateControls.Correspondence
             return _model.BeginDuration();
         }
 
-		public T AddFact<T>( T prototype ) where T : CorrespondenceFact
-		{
+        public T AddFact<T>(T prototype)
+            where T : CorrespondenceFact
+        {
             return _model.AddFact<T>(prototype);
-		}
+        }
 
-        public T FindFact<T>(T prototype) where T : CorrespondenceFact
+        public T FindFact<T>(T prototype)
+            where T : CorrespondenceFact
         {
             return _model.FindFact<T>(prototype);
         }

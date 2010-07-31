@@ -26,7 +26,7 @@ namespace UpdateControls.Correspondence
             {
                 // Cache the predecessor.
                 _cached = true;
-                PopulateCache(_subject.Community);
+                PopulateCache(_subject.InternalCommunity);
             }
         }
     }

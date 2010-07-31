@@ -21,10 +21,15 @@ namespace UpdateControls.Correspondence
 			set { _id = value; }
 		}
 
-		internal protected Community Community
+		protected ICommunity Community
 		{
 			get { return _community; }
 		}
+
+        internal Community InternalCommunity
+        {
+            get { return _community; }
+        }
 
 		internal void SetCommunity( Community community )
 		{

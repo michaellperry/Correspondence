@@ -57,9 +57,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="UpdateControls.Light, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>C:\Projects\Correspondence\SolutionItems\Silverlight 4\UpdateControls.Light.dll</HintPath>
-    </Reference>
+    <Reference Include="UpdateControls.Light, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\UpdateControls.Correspondence\AttributeFactFactory.cs">
@@ -115,6 +113,9 @@
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\FieldSerializer\StringFieldSerializer.cs">
       <Link>FieldSerializer\StringFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\ICommunity.cs">
+      <Link>ICommunity.cs</Link>
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\IQueryResult.cs">
       <Link>IQueryResult.cs</Link>

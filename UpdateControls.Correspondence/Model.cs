@@ -67,7 +67,7 @@ namespace UpdateControls.Correspondence
 
             lock (this)
             {
-                if (prototype.Community != null)
+                if (prototype.InternalCommunity != null)
                     throw new CorrespondenceException("A fact may only belong to one community");
 
                 FactMemento memento = CreateMementoFromFact(prototype);
@@ -130,7 +130,7 @@ namespace UpdateControls.Correspondence
         {
             lock (this)
             {
-                if (prototype.Community != null)
+                if (prototype.InternalCommunity != null)
                     throw new CorrespondenceException("A fact may only belong to one community");
 
                 FactMemento memento = CreateMementoFromFact(prototype);

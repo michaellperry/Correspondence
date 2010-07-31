@@ -57,7 +57,7 @@ namespace UpdateControls.Correspondence
             {
                 // Load the results from storage and cache them.
                 _results =
-                    _startingPoint.Community.ExecuteQuery(_query.QueryDefinition, _startingPoint.ID, _options)
+                    _startingPoint.InternalCommunity.ExecuteQuery(_query.QueryDefinition, _startingPoint.ID, _options)
                     .Cast<TResultType>()
                     .ToList();
             }

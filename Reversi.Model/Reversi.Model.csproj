@@ -44,9 +44,6 @@
     <Reference Include="UpdateControls">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="UpdateControls.Correspondence">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
@@ -70,6 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
+      <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>
+      <Name>UpdateControls.Correspondence</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
