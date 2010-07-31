@@ -134,13 +134,23 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private void AnalyzeQuery(Target.Class factClass, Source.Fact fact, Source.Query sourceQuery)
         {
-            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, sourceQuery.Name, sourceQuery.Sets);
+            if (!_root.Facts.Any(f => f.Name == sourceQuery.FactName))
+                throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", sourceQuery.FactName), sourceQuery.LineNumber);
+            Source.Fact resultType;
+            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, sourceQuery.Name, sourceQuery.Sets, out resultType);
+            if (sourceQuery.FactName != resultType.Name)
+                throw new CompilerException(
+                    String.Format("The query results in \"{0}\", not \"{1}\".",
+                        resultType.Name,
+                        sourceQuery.FactName),
+                    sourceQuery.LineNumber);
             factClass.AddResult(new Target.Result(sourceQuery.FactName, targetQuery));
         }
 
         private void AnalyzePredicate(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
         {
-            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, predicate.Sets);
+            Source.Fact resultType;
+            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, predicate.Sets, out resultType);
             factClass.AddPredicate(new Target.Predicate(
                 predicate.Existence == Source.ConditionModifier.Negative ?
                     Target.ConditionModifier.Negative :
@@ -148,7 +158,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 targetQuery));
         }
 
-        private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets)
+        private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, out Source.Fact resultType)
         {
             Target.Query targetQuery = new Target.Query(queryName);
 
@@ -162,6 +172,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 priorName = subsequentSet.Name;
             }
 
+            resultType = priorType;
             factClass.AddQuery(targetQuery);
             return targetQuery;
         }

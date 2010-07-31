@@ -273,6 +273,55 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         }
 
         [TestMethod]
+        public void WhenQueryIsDefined_TypeMustExist()
+        {
+            IEnumerable<Error> errors = AssertError(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  TypeNotFound *gameRequests {\r\n" +
+                "    GameRequest r : r.gameQueue = this\r\n" +
+                "  }\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "  GameQueue gameQueue;\r\n" +
+                "}"
+            );
+
+            Pred.Assert(errors, Contains<Error>.That(
+                Has<Error>.Property(error => error.Message, Is.EqualTo("The fact type \"TypeNotFound\" is not defined.")) &
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(4))
+            ));
+        }
+
+        [TestMethod]
+        public void WhenQueryIsDefined_TypeMustMatchResult()
+        {
+            IEnumerable<Error> errors = AssertError(
+                "namespace Reversi.GameModel;\r\n" +
+                "\r\n" +
+                "fact GameQueue {\r\n" +
+                "  TypeFoundButWrong *gameRequests {\r\n" +
+                "    GameRequest r : r.gameQueue = this\r\n" +
+                "  }\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "fact GameRequest {\r\n" +
+                "  GameQueue gameQueue;\r\n" +
+                "}\r\n" +
+                "\r\n" +
+                "fact TypeFoundButWrong {\r\n" +
+                "}"
+            );
+
+            Pred.Assert(errors, Contains<Error>.That(
+                Has<Error>.Property(error => error.Message, Is.EqualTo("The query results in \"GameRequest\", not \"TypeFoundButWrong\".")) &
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(4))
+            ));
+        }
+
+        [TestMethod]
         public void WhenTwoSetsAreJoined_QueryZigZags()
         {
             Namespace result = AssertNoError(
@@ -528,7 +577,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
         {
             Analyzer analyzer = CreateAnalyzer(factual);
             Namespace result = analyzer.Analyze();
-            Pred.Assert(result, Is.Null<Namespace>());
+            if (result != null)
+                Assert.Fail("The analyzer was supposed to return an error.");
             List<Error> errors = analyzer.Errors;
             return errors;
         }
