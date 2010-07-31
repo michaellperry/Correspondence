@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Rebuild", "UpdateControls.Correspondence.Rebuild\UpdateControls.Correspondence.Rebuild.csproj", "{4D0E4C15-A2AD-456D-BCF3-496EBB20E76B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameModel", "GameModel\GameModel.csproj", "{659D7839-99B0-46C4-A7AB-4B9721428E76}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameService", "GameService\GameService.csproj", "{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Predassert", "Predassert\Predassert.csproj", "{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}"
@@ -37,8 +35,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameLogic", "Revers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.Client", "Reversi.Client\Reversi.Client.csproj", "{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameQueueService", "Reversi.GameQueueService\Reversi.GameQueueService.csproj", "{C1E396FB-6744-4400-BF30-07699D4F2DCF}"
-EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Reversi.Setup", "Reversi.Setup\Reversi.Setup.vdproj", "{801336D1-AA19-4F8C-AB10-92762162518F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual", "UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj", "{5DE5E950-C19C-4588-80EC-5C60A50D352C}"
@@ -46,8 +42,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual.UnitTest", "UpdateControls.Correspondence.Factual.UnitTest\UpdateControls.Correspondence.Factual.UnitTest.csproj", "{B1246571-0BC0-4B06-A5AE-6C3989E8903C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEDCode.LLOne", "QEDCode.LLOne\QEDCode.LLOne.csproj", "{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameModel.ExternalDSL", "Reversi.GameModel.ExternalDSL\Reversi.GameModel.ExternalDSL.csproj", "{544FD7AB-EF50-47AF-B90C-7DF694B763C2}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Correspondence.Setup", "Correspondence.Setup\Correspondence.Setup.vdproj", "{51624E7F-2AAB-40F9-9979-23695F20A7CC}"
 EndProject
@@ -65,7 +59,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.Model", "Silverligh
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 25
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -84,66 +78,57 @@ Global
 		SccProjectUniqueName5 = UpdateControls.Correspondence.Rebuild\\UpdateControls.Correspondence.Rebuild.csproj
 		SccProjectName5 = UpdateControls.Correspondence.Rebuild
 		SccLocalPath5 = UpdateControls.Correspondence.Rebuild
-		SccProjectUniqueName6 = GameModel\\GameModel.csproj
-		SccProjectName6 = GameModel
-		SccLocalPath6 = GameModel
-		SccProjectUniqueName7 = GameService\\GameService.csproj
-		SccProjectName7 = GameService
-		SccLocalPath7 = GameService
-		SccProjectUniqueName8 = Predassert\\Predassert.csproj
-		SccProjectName8 = Predassert
-		SccLocalPath8 = Predassert
-		SccProjectUniqueName9 = UpdateControls.Correspondence.WebServiceClient\\UpdateControls.Correspondence.WebServiceClient.csproj
-		SccProjectName9 = UpdateControls.Correspondence.WebServiceClient
-		SccLocalPath9 = UpdateControls.Correspondence.WebServiceClient
-		SccProjectUniqueName10 = UpdateControls.Correspondence.WebService.Contract\\UpdateControls.Correspondence.WebService.Contract.csproj
-		SccProjectName10 = UpdateControls.Correspondence.WebService.Contract
-		SccLocalPath10 = UpdateControls.Correspondence.WebService.Contract
-		SccProjectUniqueName11 = Reversi.GameLogic\\Reversi.GameLogic.csproj
-		SccProjectName11 = Reversi.GameLogic
-		SccLocalPath11 = Reversi.GameLogic
-		SccProjectUniqueName12 = Reversi.GameLogic.UnitTest\\Reversi.GameLogic.UnitTest.csproj
-		SccProjectName12 = Reversi.GameLogic.UnitTest
-		SccLocalPath12 = Reversi.GameLogic.UnitTest
-		SccProjectUniqueName13 = Reversi.Client\\Reversi.Client.csproj
-		SccProjectName13 = Reversi.Client
-		SccLocalPath13 = Reversi.Client
-		SccProjectUniqueName14 = Reversi.GameQueueService\\Reversi.GameQueueService.csproj
-		SccProjectName14 = Reversi.GameQueueService
-		SccLocalPath14 = Reversi.GameQueueService
-		SccProjectUniqueName15 = Reversi.Setup\\Reversi.Setup.vdproj
-		SccProjectName15 = Reversi.Setup
-		SccLocalPath15 = Reversi.Setup
-		SccProjectUniqueName16 = UpdateControls.Correspondence.Factual\\UpdateControls.Correspondence.Factual.csproj
-		SccProjectName16 = UpdateControls.Correspondence.Factual
-		SccLocalPath16 = UpdateControls.Correspondence.Factual
-		SccProjectUniqueName17 = UpdateControls.Correspondence.Factual.UnitTest\\UpdateControls.Correspondence.Factual.UnitTest.csproj
-		SccProjectName17 = UpdateControls.Correspondence.Factual.UnitTest
-		SccLocalPath17 = UpdateControls.Correspondence.Factual.UnitTest
-		SccProjectUniqueName18 = QEDCode.LLOne\\QEDCode.LLOne.csproj
-		SccProjectName18 = QEDCode.LLOne
-		SccLocalPath18 = QEDCode.LLOne
-		SccProjectUniqueName19 = Reversi.GameModel.ExternalDSL\\Reversi.GameModel.ExternalDSL.csproj
-		SccProjectName19 = Reversi.GameModel.ExternalDSL
-		SccLocalPath19 = Reversi.GameModel.ExternalDSL
-		SccProjectUniqueName20 = Correspondence.Setup\\Correspondence.Setup.vdproj
-		SccProjectName20 = Correspondence.Setup
-		SccLocalPath20 = Correspondence.Setup
-		SccProjectUniqueName21 = Reversi.Model\\Reversi.Model.csproj
-		SccProjectName21 = Reversi.Model
-		SccLocalPath21 = Reversi.Model
-		SccProjectUniqueName22 = Silverlight\u00204\\UpdateControls.Correspondence\\UpdateControls.Correspondence.csproj
-		SccProjectTopLevelParentUniqueName22 = Correspondence.sln
-		SccProjectName22 = Silverlight\u00204/UpdateControls.Correspondence
-		SccLocalPath22 = Silverlight\u00204\\UpdateControls.Correspondence
-		SccProjectUniqueName23 = Silverlight\u00204\\UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
-		SccProjectTopLevelParentUniqueName23 = Correspondence.sln
-		SccProjectName23 = Silverlight\u00204/UpdateControls.Correspondence.Memory
-		SccLocalPath23 = Silverlight\u00204\\UpdateControls.Correspondence.Memory
-		SccProjectUniqueName24 = Silverlight\u00204\\Reversi\\Reversi.Model\\Reversi.Model.csproj
-		SccProjectTopLevelParentUniqueName24 = Correspondence.sln
-		SccProjectName24 = Silverlight\u00204/Reversi/Reversi.Model
-		SccLocalPath24 = Silverlight\u00204\\Reversi\\Reversi.Model
+		SccProjectUniqueName6 = GameService\\GameService.csproj
+		SccProjectName6 = GameService
+		SccLocalPath6 = GameService
+		SccProjectUniqueName7 = Predassert\\Predassert.csproj
+		SccProjectName7 = Predassert
+		SccLocalPath7 = Predassert
+		SccProjectUniqueName8 = UpdateControls.Correspondence.WebServiceClient\\UpdateControls.Correspondence.WebServiceClient.csproj
+		SccProjectName8 = UpdateControls.Correspondence.WebServiceClient
+		SccLocalPath8 = UpdateControls.Correspondence.WebServiceClient
+		SccProjectUniqueName9 = UpdateControls.Correspondence.WebService.Contract\\UpdateControls.Correspondence.WebService.Contract.csproj
+		SccProjectName9 = UpdateControls.Correspondence.WebService.Contract
+		SccLocalPath9 = UpdateControls.Correspondence.WebService.Contract
+		SccProjectUniqueName10 = Reversi.GameLogic\\Reversi.GameLogic.csproj
+		SccProjectName10 = Reversi.GameLogic
+		SccLocalPath10 = Reversi.GameLogic
+		SccProjectUniqueName11 = Reversi.GameLogic.UnitTest\\Reversi.GameLogic.UnitTest.csproj
+		SccProjectName11 = Reversi.GameLogic.UnitTest
+		SccLocalPath11 = Reversi.GameLogic.UnitTest
+		SccProjectUniqueName12 = Reversi.Client\\Reversi.Client.csproj
+		SccProjectName12 = Reversi.Client
+		SccLocalPath12 = Reversi.Client
+		SccProjectUniqueName13 = Reversi.Setup\\Reversi.Setup.vdproj
+		SccProjectName13 = Reversi.Setup
+		SccLocalPath13 = Reversi.Setup
+		SccProjectUniqueName14 = UpdateControls.Correspondence.Factual\\UpdateControls.Correspondence.Factual.csproj
+		SccProjectName14 = UpdateControls.Correspondence.Factual
+		SccLocalPath14 = UpdateControls.Correspondence.Factual
+		SccProjectUniqueName15 = UpdateControls.Correspondence.Factual.UnitTest\\UpdateControls.Correspondence.Factual.UnitTest.csproj
+		SccProjectName15 = UpdateControls.Correspondence.Factual.UnitTest
+		SccLocalPath15 = UpdateControls.Correspondence.Factual.UnitTest
+		SccProjectUniqueName16 = QEDCode.LLOne\\QEDCode.LLOne.csproj
+		SccProjectName16 = QEDCode.LLOne
+		SccLocalPath16 = QEDCode.LLOne
+		SccProjectUniqueName17 = Correspondence.Setup\\Correspondence.Setup.vdproj
+		SccProjectName17 = Correspondence.Setup
+		SccLocalPath17 = Correspondence.Setup
+		SccProjectUniqueName18 = Reversi.Model\\Reversi.Model.csproj
+		SccProjectName18 = Reversi.Model
+		SccLocalPath18 = Reversi.Model
+		SccProjectUniqueName19 = Silverlight\u00204\\UpdateControls.Correspondence\\UpdateControls.Correspondence.csproj
+		SccProjectTopLevelParentUniqueName19 = Correspondence.sln
+		SccProjectName19 = Silverlight\u00204/UpdateControls.Correspondence
+		SccLocalPath19 = Silverlight\u00204\\UpdateControls.Correspondence
+		SccProjectUniqueName20 = Silverlight\u00204\\UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
+		SccProjectTopLevelParentUniqueName20 = Correspondence.sln
+		SccProjectName20 = Silverlight\u00204/UpdateControls.Correspondence.Memory
+		SccLocalPath20 = Silverlight\u00204\\UpdateControls.Correspondence.Memory
+		SccProjectUniqueName21 = Silverlight\u00204\\Reversi\\Reversi.Model\\Reversi.Model.csproj
+		SccProjectTopLevelParentUniqueName21 = Correspondence.sln
+		SccProjectName21 = Silverlight\u00204/Reversi/Reversi.Model
+		SccLocalPath21 = Silverlight\u00204\\Reversi\\Reversi.Model
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -173,10 +158,6 @@ Global
 		{4D0E4C15-A2AD-456D-BCF3-496EBB20E76B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D0E4C15-A2AD-456D-BCF3-496EBB20E76B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D0E4C15-A2AD-456D-BCF3-496EBB20E76B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{659D7839-99B0-46C4-A7AB-4B9721428E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{659D7839-99B0-46C4-A7AB-4B9721428E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{659D7839-99B0-46C4-A7AB-4B9721428E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{659D7839-99B0-46C4-A7AB-4B9721428E76}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0860F066-2CD9-4DE3-BB0C-6E6638B0A84A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -205,10 +186,6 @@ Global
 		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1E396FB-6744-4400-BF30-07699D4F2DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1E396FB-6744-4400-BF30-07699D4F2DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1E396FB-6744-4400-BF30-07699D4F2DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1E396FB-6744-4400-BF30-07699D4F2DCF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{801336D1-AA19-4F8C-AB10-92762162518F}.Debug|Any CPU.ActiveCfg = Debug
 		{801336D1-AA19-4F8C-AB10-92762162518F}.Release|Any CPU.ActiveCfg = Release
 		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -223,10 +200,6 @@ Global
 		{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{544FD7AB-EF50-47AF-B90C-7DF694B763C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{544FD7AB-EF50-47AF-B90C-7DF694B763C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{544FD7AB-EF50-47AF-B90C-7DF694B763C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{544FD7AB-EF50-47AF-B90C-7DF694B763C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{51624E7F-2AAB-40F9-9979-23695F20A7CC}.Debug|Any CPU.ActiveCfg = Debug
 		{51624E7F-2AAB-40F9-9979-23695F20A7CC}.Release|Any CPU.ActiveCfg = Release
 		{B6D2F677-390D-4D0E-8905-A840804FDFB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
