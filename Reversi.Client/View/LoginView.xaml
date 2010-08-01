@@ -13,7 +13,7 @@
             Margin="5,0"
             Width="120">
             <TextBox.Style>
-                <Style>
+                <Style TargetType="TextBox">
                     <Style.Triggers>
                         <DataTrigger
                             Binding="{Binding IsLoggedIn}"
@@ -30,7 +30,7 @@
             Margin="5,0"
             Command="{Binding LogIn}">Log In
             <Button.Style>
-                <Style>
+                <Style TargetType="Button">
                     <Style.Triggers>
                         <DataTrigger
                             Binding="{Binding IsLoggedIn}"
@@ -47,7 +47,8 @@
             Margin="5,0"
             Command="{Binding LogOut}">Log Out
             <Button.Style>
-                <Style>
+                <Style
+                    TargetType="Button">
                     <Style.Triggers>
                         <DataTrigger
                             Binding="{Binding IsLoggedIn}"
