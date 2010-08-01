@@ -1,72 +1,92 @@
 ﻿using System.Linq;
 using Reversi.Model;
-using GameService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Memory;
+using Predassert;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
-	/// <summary>
-	/// Summary description for TwoPlayerGameTest
-	/// </summary>
 	[TestClass]
 	public class TwoPlayerGameTest
 	{
-		public TestContext TestContext { get; set; }
-
 		private Community _community;
-		private GameQueue _gameQueue;
-		private Client _alice;
-		private Client _bob;
-		private GameQueueService _service;
+        private Player _playerAlan;
+        private Player _playerFlynn;
 
-		[TestInitialize]
+        [TestInitialize]
 		public void Initialize()
 		{
 			_community = new Community(new MemoryStorageStrategy())
-				.RegisterAssembly(typeof(GameQueue));
-			_alice = new Client(_community);
-			_bob = new Client(_community);
-			_gameQueue = _community.AddFact(new GameQueue("mygamequeue"));
-			_service = new GameQueueService(_gameQueue);
+				.RegisterAssembly(typeof(Machine));
 
-			_alice.CreateGameRequest();
-			_bob.CreateGameRequest();
-			_service.Process(_service.Queue.ToList());
-		}
+            User alan = _community.AddFact(new User("alan1"));
+            User flynn = _community.AddFact(new User("flynn1"));
+            _playerAlan = alan.Challenge(flynn);
+            _playerFlynn = flynn.ActivePlayers.Single();
+        }
 
-		[TestMethod]
-		public void BobMakesAMove()
-		{
-			_bob.MakeMove(0);
+        [TestMethod]
+        public void GameHasNoMoves()
+        {
+            Pred.Assert(_playerAlan.Game,
+                Has<Game>.Property(g => g.Moves, Is.Empty<Move>())
+            );
+        }
 
-			_bob.AssertHasMove(0, _bob.Person.Unique);
-		}
+        [TestMethod]
+        public void FlynnMakesAMove()
+        {
+            _playerAlan.MakeMove(0, 0);
 
-		[TestMethod]
-		public void AliceSeesBobsMove()
-		{
-			_bob.MakeMove(0);
+            Pred.Assert(_playerAlan.Game,
+                Has<Game>.Property(g => g.Moves, Contains<Move>.That(
+                    Has<Move>.Property(m => m.Index, Is.EqualTo(0)) &
+                    Has<Move>.Property(m => m.Square, Is.EqualTo(0))
+                ))
+            );
+        }
 
-			_alice.AssertHasMove(0, _bob.Person.Unique);
-		}
+        [TestMethod]
+        public void FlynnSeesAlansMove()
+        {
+            _playerAlan.MakeMove(0, 0);
 
-		[TestMethod]
-		public void AliceMakesAMoveInResponse()
-		{
-			_bob.MakeMove(0);
-			_alice.MakeMove(1);
+            Pred.Assert(_playerFlynn.Game,
+                Has<Game>.Property(g => g.Moves, Contains<Move>.That(
+                    Has<Move>.Property(m => m.Index, Is.EqualTo(0)) &
+                    Has<Move>.Property(m => m.Square, Is.EqualTo(0)) &
+                    Has<Move>.Property(m => m.Player, Is.SameAs(_playerAlan))
+                ))
+            );
+        }
 
-			_alice.AssertHasMove(1, _alice.Person.Unique);
-		}
+        [TestMethod]
+        public void FlynnMakesAMoveInResponse()
+        {
+            _playerAlan.MakeMove(0, 0);
+            _playerFlynn.MakeMove(1, 42);
 
-		[TestMethod]
-		public void BobSeesAlicesResponse()
-		{
-			_bob.MakeMove(0);
-			_alice.MakeMove(1);
+            Pred.Assert(_playerFlynn.Game,
+                Has<Game>.Property(g => g.Moves, Contains<Move>.That(
+                    Has<Move>.Property(m => m.Index, Is.EqualTo(1)) &
+                    Has<Move>.Property(m => m.Square, Is.EqualTo(42))
+                ))
+            );
+        }
 
-			_bob.AssertHasMove(1, _alice.Person.Unique);
-		}
+        [TestMethod]
+        public void AlanSeesFlynnsResponse()
+        {
+            _playerAlan.MakeMove(0, 0);
+            _playerFlynn.MakeMove(1, 42);
+
+            Pred.Assert(_playerAlan.Game,
+                Has<Game>.Property(g => g.Moves, Contains<Move>.That(
+                    Has<Move>.Property(m => m.Index, Is.EqualTo(1)) &
+                    Has<Move>.Property(m => m.Square, Is.EqualTo(42)) &
+                    Has<Move>.Property(m => m.Player, Is.SameAs(_playerFlynn))
+                ))
+            );
+        }
 	}
 }

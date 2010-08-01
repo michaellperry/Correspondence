@@ -66,20 +66,11 @@
     <Compile Include="..\..\..\Reversi.Model\Game.cs">
       <Link>Game.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\Reversi.Model\GameQueue.cs">
-      <Link>GameQueue.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Reversi.Model\GameRequest.cs">
-      <Link>GameRequest.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\Reversi.Model\Model.generated.cs">
       <Link>Model.generated.cs</Link>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="..\..\..\Reversi.Model\Person.cs">
-      <Link>Person.cs</Link>
     </Compile>
     <Compile Include="..\..\..\Reversi.Model\Player.cs">
       <Link>Player.cs</Link>

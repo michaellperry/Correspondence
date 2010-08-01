@@ -16,24 +16,18 @@ namespace Reversi.Client
     /// </summary>
     public partial class App : Application
     {
-        private Person _person;
+        private Machine _machine;
         private SynchronizationThread _synchronizationThread;
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             Community community = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(new WebServiceCommunicationStrategy())
-                .RegisterAssembly(typeof(GameQueue))
-                .Subscribe(() => _person.OutstandingGameRequests)
-                .Subscribe(() => _person.UnfinishedGames);
+                .RegisterAssembly(typeof(Machine));
 
             _synchronizationThread = new SynchronizationThread(community);
 
-            GameQueue gameQueue = community.AddFact(new GameQueue("http://correspondence.cloudapp.net/reversi/1"));
-            _person = community.AddFact(new Person());
             GameViewModel gameViewModel = new GameViewModel(
-                _person,
-                gameQueue,
                 _synchronizationThread);
 
             MainWindow = new MainWindow();

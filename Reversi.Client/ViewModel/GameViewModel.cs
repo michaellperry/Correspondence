@@ -12,17 +12,13 @@ namespace Reversi.Client.ViewModel
 {
     public class GameViewModel
     {
-        private Person _person;
-        private GameQueue _gameQueue;
         private SynchronizationThread _synchronizationThread;
 
         private GameState _gameState;
         private Dependent _depGameState;
 
-        public GameViewModel(Person person, GameQueue gameQueue, SynchronizationThread synchronizationThread)
+        public GameViewModel(SynchronizationThread synchronizationThread)
         {
-            _person = person;
-            _gameQueue = gameQueue;
             _synchronizationThread = synchronizationThread;
 
             _depGameState = new Dependent(UpdateGameState);
@@ -34,12 +30,7 @@ namespace Reversi.Client.ViewModel
         {
             get
             {
-                return MakeCommand
-                    .When(() =>
-                        !_person.UnfinishedGames.Any() &&
-                        !_person.OutstandingGameRequests.Any(
-                            gameRequest => gameRequest.GameQueue == _gameQueue))
-                    .Do(() => _gameQueue.CreateGameRequest(_person));
+                return null;
             }
         }
 
@@ -47,15 +38,7 @@ namespace Reversi.Client.ViewModel
         {
             get
             {
-                return MakeCommand
-                    .When(() => _person.UnfinishedGames.Any())
-                    .Do(delegate
-                        {
-                            Game game = _person.UnfinishedGames.First();
-                            GameRequest otherRequest = game.GameRequests.FirstOrDefault(
-                                request => request.Person != _person);
-                            game.DeclareWinner(otherRequest);
-                        });
+                return null;
             }
         }
 
@@ -124,9 +107,6 @@ namespace Reversi.Client.ViewModel
 
         private void UpdateGameState()
         {
-            Game game = _person.UnfinishedGames.FirstOrDefault();
-            if (game != null)
-                _gameState = new GameState(game.CreatePlayer(_person));
         }
     }
 }

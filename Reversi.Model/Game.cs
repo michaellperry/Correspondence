@@ -4,19 +4,9 @@ namespace Reversi.Model
 {
 	public partial class Game
 	{
-		public Player CreatePlayer(Person person)
+		public Player CreatePlayer(User person)
 		{
-			return Community.AddFact(new Player(person, this));
-		}
-
-		public GameRequest First
-		{
-			get { return GameRequests.ElementAt(0); }
-		}
-
-		public GameRequest Second
-		{
-			get { return GameRequests.ElementAt(1); }
+			return Community.AddFact(new Player(person, this, 0));
 		}
 
 		public Outcome Outcome
@@ -24,9 +14,8 @@ namespace Reversi.Model
 			get { return Outcomes.FirstOrDefault(); }
 		}
 
-		public void DeclareWinner(GameRequest winnersRequest)
+		public void DeclareWinner(Player winner)
 		{
-			var winner = Players.FirstOrDefault(player => player.Person == winnersRequest.Person);
 			Community.AddFact(new Outcome(this, winner));
 		}
 	}

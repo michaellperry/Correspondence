@@ -1,48 +1,39 @@
 ﻿namespace Reversi.Model;
 
-fact Person {
+fact Machine {
 	unique;
-
-	GameRequest* outstandingGameRequests {
-		GameRequest r : r.person = this
-			where r.isOutstanding
-	}
-
-	Game* unfinishedGames {
-		Game g : g.gameRequests.person = this
-			where g.isUnfinished
+	
+	LogOn *activeLogOns {
+		LogOn l : l.machine = this
+			where l.isActive
 	}
 }
 
-fact GameQueue {
-	string identifier;
+fact User {
+	string userName;
 
-	GameRequest* outstandingGameRequests {
-		GameRequest r : r.gameQueue = this
-			where r.isOutstanding
+	Player* activePlayers {
+		Player p : p.user = this
+			where p.isActive
 	}
 }
 
-fact Service {
-	pivot GameQueue gameQueue;
-}
-
-fact GameRequest {
+fact LogOn {
 	unique;
-	GameQueue gameQueue;
-	Person person;
-
-	Game* games {
-		Game g : g.gameRequests = this
+	User user;
+	Machine machine;
+	
+	bool isActive {
+		not exists LogOff lo : lo.logOn = this
 	}
+}
 
-	bool isOutstanding {
-		not exists Game g : g.gameRequests = this
-	}
+fact LogOff {
+	LogOn logOn;
 }
 
 fact Game {
-	GameRequest* gameRequests;
+	unique;
 
 	Player* players {
 		Player p : p.game = this
@@ -55,18 +46,19 @@ fact Game {
 	Outcome* outcomes {
 		Outcome o : o.game = this
 	}
-
-	bool isUnfinished {
-		not exists Outcome o : o.game = this
-	}
 }
 
 fact Player {
-	Person person;
+	User user;
 	pivot Game game;
+	int index;
 
 	Move* moves {
 		Move m : m.player = this
+	}
+
+	bool isActive {
+		not exists Outcome o : o.game = this.game
 	}
 }
 

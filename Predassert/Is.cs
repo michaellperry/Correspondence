@@ -33,6 +33,15 @@ namespace Predassert
             );
         }
 
+        public static Expectation<IEnumerable<T>> NotEmpty<T>()
+        {
+            return new Expectation<IEnumerable<T>>(
+                actual => actual.Any(),
+                actual => "The collection is empty.",
+                actual => string.Format("The collection contains {0} elements.", actual.Count())
+            );
+        }
+
         public static Expectation<T> EqualTo<T>(T expected)
         {
             return new Expectation<T>(

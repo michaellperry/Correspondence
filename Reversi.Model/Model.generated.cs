@@ -9,11 +9,10 @@ using System;
 digraph "Reversi.Model"
 {
     rankdir=BT
-    Service -> GameQueue [color="red"]
-    GameRequest -> GameQueue
-    GameRequest -> Person
-    Game -> GameRequest [label="  *"]
-    Player -> Person
+    LogOn -> User
+    LogOn -> Machine
+    LogOff -> LogOn
+    Player -> User
     Player -> Game [color="red"]
     Move -> Player
     Outcome -> Game
@@ -24,18 +23,13 @@ digraph "Reversi.Model"
 namespace Reversi.Model
 {
     [CorrespondenceType]
-    public partial class Person : CorrespondenceFact
+    public partial class Machine : CorrespondenceFact
     {
         // Roles
 
         // Queries
-        public static Query QueryOutstandingGameRequests = new Query()
-            .JoinSuccessors(GameRequest.RolePerson, Condition.WhereIsEmpty(GameRequest.QueryIsOutstanding)
-            )
-            ;
-        public static Query QueryUnfinishedGames = new Query()
-            .JoinSuccessors(GameRequest.RolePerson)
-            .JoinSuccessors(Game.RoleGameRequests, Condition.WhereIsEmpty(Game.QueryIsUnfinished)
+        public static Query QueryActiveLogOns = new Query()
+            .JoinSuccessors(LogOn.RoleMachine, Condition.WhereIsEmpty(LogOn.QueryIsActive)
             )
             ;
 
@@ -50,11 +44,10 @@ namespace Reversi.Model
         // Fields
 
         // Results
-        private Result<GameRequest> _outstandingGameRequests;
-        private Result<Game> _unfinishedGames;
+        private Result<LogOn> _activeLogOns;
 
         // Business constructor
-        public Person(
+        public Machine(
             )
         {
             _unique = Guid.NewGuid();
@@ -62,7 +55,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public Person(FactMemento memento)
+        public Machine(FactMemento memento)
         {
             InitializeResults();
         }
@@ -70,8 +63,7 @@ namespace Reversi.Model
         // Result initializer
         private void InitializeResults()
         {
-            _outstandingGameRequests = new Result<GameRequest>(this, QueryOutstandingGameRequests);
-            _unfinishedGames = new Result<Game>(this, QueryUnfinishedGames);
+            _activeLogOns = new Result<LogOn>(this, QueryActiveLogOns);
         }
 
         // Predecessor access
@@ -79,24 +71,20 @@ namespace Reversi.Model
         // Field access
 
         // Query result access
-        public IEnumerable<GameRequest> OutstandingGameRequests
+        public IEnumerable<LogOn> ActiveLogOns
         {
-            get { return _outstandingGameRequests; }
-        }
-        public IEnumerable<Game> UnfinishedGames
-        {
-            get { return _unfinishedGames; }
+            get { return _activeLogOns; }
         }
     }
     
     [CorrespondenceType]
-    public partial class GameQueue : CorrespondenceFact
+    public partial class User : CorrespondenceFact
     {
         // Roles
 
         // Queries
-        public static Query QueryOutstandingGameRequests = new Query()
-            .JoinSuccessors(GameRequest.RoleGameQueue, Condition.WhereIsEmpty(GameRequest.QueryIsOutstanding)
+        public static Query QueryActivePlayers = new Query()
+            .JoinSuccessors(Player.RoleUser, Condition.WhereIsEmpty(Player.QueryIsActive)
             )
             ;
 
@@ -106,22 +94,22 @@ namespace Reversi.Model
 
         // Fields
         [CorrespondenceField]
-        private string _identifier;
+        private string _userName;
 
         // Results
-        private Result<GameRequest> _outstandingGameRequests;
+        private Result<Player> _activePlayers;
 
         // Business constructor
-        public GameQueue(
-            string identifier
+        public User(
+            string userName
             )
         {
             InitializeResults();
-            _identifier = identifier;
+            _userName = userName;
         }
 
         // Hydration constructor
-        public GameQueue(FactMemento memento)
+        public User(FactMemento memento)
         {
             InitializeResults();
         }
@@ -129,94 +117,42 @@ namespace Reversi.Model
         // Result initializer
         private void InitializeResults()
         {
-            _outstandingGameRequests = new Result<GameRequest>(this, QueryOutstandingGameRequests);
+            _activePlayers = new Result<Player>(this, QueryActivePlayers);
         }
 
         // Predecessor access
 
         // Field access
-        public string Identifier
+        public string UserName
         {
-            get { return _identifier; }
+            get { return _userName; }
         }
 
         // Query result access
-        public IEnumerable<GameRequest> OutstandingGameRequests
+        public IEnumerable<Player> ActivePlayers
         {
-            get { return _outstandingGameRequests; }
+            get { return _activePlayers; }
         }
     }
     
     [CorrespondenceType]
-    public partial class Service : CorrespondenceFact
+    public partial class LogOn : CorrespondenceFact
     {
         // Roles
-        public static Role<GameQueue> RoleGameQueue = new Role<GameQueue>("gameQueue", RoleRelationship.Pivot);
+        public static Role<User> RoleUser = new Role<User>("user");
+        public static Role<Machine> RoleMachine = new Role<Machine>("machine");
 
         // Queries
-
-        // Predicates
-
-        // Predecessors
-        private PredecessorObj<GameQueue> _gameQueue;
-
-        // Fields
-
-        // Results
-
-        // Business constructor
-        public Service(
-            GameQueue gameQueue
-            )
-        {
-            InitializeResults();
-            _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, gameQueue);
-        }
-
-        // Hydration constructor
-        public Service(FactMemento memento)
-        {
-            InitializeResults();
-            _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, memento);
-        }
-
-        // Result initializer
-        private void InitializeResults()
-        {
-        }
-
-        // Predecessor access
-        public GameQueue GameQueue
-        {
-            get { return _gameQueue.Fact; }
-        }
-
-        // Field access
-
-        // Query result access
-    }
-    
-    [CorrespondenceType]
-    public partial class GameRequest : CorrespondenceFact
-    {
-        // Roles
-        public static Role<GameQueue> RoleGameQueue = new Role<GameQueue>("gameQueue");
-        public static Role<Person> RolePerson = new Role<Person>("person");
-
-        // Queries
-        public static Query QueryGames = new Query()
-            .JoinSuccessors(Game.RoleGameRequests)
-            ;
-        public static Query QueryIsOutstanding = new Query()
-            .JoinSuccessors(Game.RoleGameRequests)
+        public static Query QueryIsActive = new Query()
+            .JoinSuccessors(LogOff.RoleLogOn)
             ;
 
         // Predicates
-        public static Condition IsOutstanding = Condition.WhereIsEmpty(QueryIsOutstanding);
+        public static Condition IsActive = Condition.WhereIsEmpty(QueryIsActive);
 
         // Predecessors
-        private PredecessorObj<GameQueue> _gameQueue;
-        private PredecessorObj<Person> _person;
+        private PredecessorObj<User> _user;
+        private PredecessorObj<Machine> _machine;
 
         // Unique
         [CorrespondenceField]
@@ -225,58 +161,100 @@ namespace Reversi.Model
         // Fields
 
         // Results
-        private Result<Game> _games;
 
         // Business constructor
-        public GameRequest(
-            GameQueue gameQueue
-            ,Person person
+        public LogOn(
+            User user
+            ,Machine machine
             )
         {
             _unique = Guid.NewGuid();
             InitializeResults();
-            _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, gameQueue);
-            _person = new PredecessorObj<Person>(this, RolePerson, person);
+            _user = new PredecessorObj<User>(this, RoleUser, user);
+            _machine = new PredecessorObj<Machine>(this, RoleMachine, machine);
         }
 
         // Hydration constructor
-        public GameRequest(FactMemento memento)
+        public LogOn(FactMemento memento)
         {
             InitializeResults();
-            _gameQueue = new PredecessorObj<GameQueue>(this, RoleGameQueue, memento);
-            _person = new PredecessorObj<Person>(this, RolePerson, memento);
+            _user = new PredecessorObj<User>(this, RoleUser, memento);
+            _machine = new PredecessorObj<Machine>(this, RoleMachine, memento);
         }
 
         // Result initializer
         private void InitializeResults()
         {
-            _games = new Result<Game>(this, QueryGames);
         }
 
         // Predecessor access
-        public GameQueue GameQueue
+        public User User
         {
-            get { return _gameQueue.Fact; }
+            get { return _user.Fact; }
         }
-        public Person Person
+        public Machine Machine
         {
-            get { return _person.Fact; }
+            get { return _machine.Fact; }
         }
 
         // Field access
 
         // Query result access
-        public IEnumerable<Game> Games
+    }
+    
+    [CorrespondenceType]
+    public partial class LogOff : CorrespondenceFact
+    {
+        // Roles
+        public static Role<LogOn> RoleLogOn = new Role<LogOn>("logOn");
+
+        // Queries
+
+        // Predicates
+
+        // Predecessors
+        private PredecessorObj<LogOn> _logOn;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public LogOff(
+            LogOn logOn
+            )
         {
-            get { return _games; }
+            InitializeResults();
+            _logOn = new PredecessorObj<LogOn>(this, RoleLogOn, logOn);
         }
+
+        // Hydration constructor
+        public LogOff(FactMemento memento)
+        {
+            InitializeResults();
+            _logOn = new PredecessorObj<LogOn>(this, RoleLogOn, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+        public LogOn LogOn
+        {
+            get { return _logOn.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
     }
     
     [CorrespondenceType]
     public partial class Game : CorrespondenceFact
     {
         // Roles
-        public static Role<GameRequest> RoleGameRequests = new Role<GameRequest>("gameRequests");
 
         // Queries
         public static Query QueryPlayers = new Query()
@@ -289,15 +267,14 @@ namespace Reversi.Model
         public static Query QueryOutcomes = new Query()
             .JoinSuccessors(Outcome.RoleGame)
             ;
-        public static Query QueryIsUnfinished = new Query()
-            .JoinSuccessors(Outcome.RoleGame)
-            ;
 
         // Predicates
-        public static Condition IsUnfinished = Condition.WhereIsEmpty(QueryIsUnfinished);
 
         // Predecessors
-        private PredecessorList<GameRequest> _gameRequests;
+
+        // Unique
+        [CorrespondenceField]
+        private Guid _unique;
 
         // Fields
 
@@ -308,18 +285,16 @@ namespace Reversi.Model
 
         // Business constructor
         public Game(
-            IEnumerable<GameRequest> gameRequests
             )
         {
+            _unique = Guid.NewGuid();
             InitializeResults();
-            _gameRequests = new PredecessorList<GameRequest>(this, RoleGameRequests, gameRequests);
         }
 
         // Hydration constructor
         public Game(FactMemento memento)
         {
             InitializeResults();
-            _gameRequests = new PredecessorList<GameRequest>(this, RoleGameRequests, memento);
         }
 
         // Result initializer
@@ -331,11 +306,7 @@ namespace Reversi.Model
         }
 
         // Predecessor access
-        public IEnumerable<GameRequest> GameRequests
-        {
-            get { return _gameRequests; }
-        }
-     
+
         // Field access
 
         // Query result access
@@ -357,41 +328,50 @@ namespace Reversi.Model
     public partial class Player : CorrespondenceFact
     {
         // Roles
-        public static Role<Person> RolePerson = new Role<Person>("person");
+        public static Role<User> RoleUser = new Role<User>("user");
         public static Role<Game> RoleGame = new Role<Game>("game", RoleRelationship.Pivot);
 
         // Queries
         public static Query QueryMoves = new Query()
             .JoinSuccessors(Move.RolePlayer)
             ;
+        public static Query QueryIsActive = new Query()
+            .JoinPredecessors(Player.RoleGame)
+            .JoinSuccessors(Outcome.RoleGame)
+            ;
 
         // Predicates
+        public static Condition IsActive = Condition.WhereIsEmpty(QueryIsActive);
 
         // Predecessors
-        private PredecessorObj<Person> _person;
+        private PredecessorObj<User> _user;
         private PredecessorObj<Game> _game;
 
         // Fields
+        [CorrespondenceField]
+        private int _index;
 
         // Results
         private Result<Move> _moves;
 
         // Business constructor
         public Player(
-            Person person
+            User user
             ,Game game
+            ,int index
             )
         {
             InitializeResults();
-            _person = new PredecessorObj<Person>(this, RolePerson, person);
+            _user = new PredecessorObj<User>(this, RoleUser, user);
             _game = new PredecessorObj<Game>(this, RoleGame, game);
+            _index = index;
         }
 
         // Hydration constructor
         public Player(FactMemento memento)
         {
             InitializeResults();
-            _person = new PredecessorObj<Person>(this, RolePerson, memento);
+            _user = new PredecessorObj<User>(this, RoleUser, memento);
             _game = new PredecessorObj<Game>(this, RoleGame, memento);
         }
 
@@ -402,9 +382,9 @@ namespace Reversi.Model
         }
 
         // Predecessor access
-        public Person Person
+        public User User
         {
-            get { return _person.Fact; }
+            get { return _user.Fact; }
         }
         public Game Game
         {
@@ -412,6 +392,10 @@ namespace Reversi.Model
         }
 
         // Field access
+        public int Index
+        {
+            get { return _index; }
+        }
 
         // Query result access
         public IEnumerable<Move> Moves
