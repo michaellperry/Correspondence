@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="Reversi.Client.View.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="307">
+    <StackPanel
+        Orientation="Horizontal">
+        <Label>Username:</Label>
+        <TextBox
+            Text="{Binding Username}"
+            Margin="5,0"
+            Width="120">
+            <TextBox.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding IsLoggedIn}"
+                            Value="True">
+                            <Setter
+                                Property="IsEnabled"
+                                Value="False" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
+        <Button
+            Margin="5,0"
+            Command="{Binding LogIn}">Log In
+            <Button.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding IsLoggedIn}"
+                            Value="True">
+                            <Setter
+                                Property="Visibility"
+                                Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+        <Button
+            Margin="5,0"
+            Command="{Binding LogOut}">Log Out
+            <Button.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding IsLoggedIn}"
+                            Value="False">
+                            <Setter
+                                Property="Visibility"
+                                Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+    </StackPanel>
+</UserControl>

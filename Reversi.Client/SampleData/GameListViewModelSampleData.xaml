@@ -1,0 +1,53 @@
+<Reversi_Client:GameListViewModel xmlns:Reversi_Client="clr-namespace:Reversi.Client" OpponentName="Interdum vestibulum">
+	<Reversi_Client:GameListViewModel.Losses>
+		<Reversi_Client:GameSummaryViewModel BlackScore="90" MyColor="White" OpponentName="Aenean maecenas mauris" WhiteScore="45"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="80" MyColor="White" OpponentName="Nullam praesent vestibulum accumsan" WhiteScore="33"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="26" MyColor="Black" OpponentName="Class nam cras" WhiteScore="19"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="32" MyColor="White" OpponentName="Sed aptent duis" WhiteScore="77"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="98" MyColor="Black" OpponentName="Curabitur adipiscing phasellus auctor" WhiteScore="87"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="39" MyColor="Empty" OpponentName="Parturient bibendum dictumst eleifend facilisi" WhiteScore="71"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="54" MyColor="Empty" OpponentName="Aliquam curae dis consequat" WhiteScore="31"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="25" MyColor="Black" OpponentName="Faucibus integer nunc" WhiteScore="27"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="14" MyColor="Empty" OpponentName="Habitant amet" WhiteScore="38"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="74" MyColor="Empty" OpponentName="Inceptos congue" WhiteScore="40"/>
+	</Reversi_Client:GameListViewModel.Losses>
+	<Reversi_Client:GameListViewModel.SelectedGame>
+		<Reversi_Client:GameSummaryViewModel BlackScore="57" MyColor="White" OpponentName="Convallis vestibulum dignissim" WhiteScore="53"/>
+	</Reversi_Client:GameListViewModel.SelectedGame>
+	<Reversi_Client:GameListViewModel.TheirMove>
+		<Reversi_Client:GameSummaryViewModel BlackScore="48" MyColor="Empty" OpponentName="Donec ante" WhiteScore="10"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="93" MyColor="White" OpponentName="Est lobortis hac cursus quisque" WhiteScore="24"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="86" MyColor="White" OpponentName="Dictum adipiscing lectus libero parturient" WhiteScore="94"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="93" MyColor="Black" OpponentName="Arcu vestibulum vivamus aliquam nascetur" WhiteScore="89"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="86" MyColor="Empty" OpponentName="Pharetra leo mus" WhiteScore="50"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="18" MyColor="Black" OpponentName="Ligula elementum etiam diam nec" WhiteScore="68"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="63" MyColor="White" OpponentName="Litora non fusce vestibulum" WhiteScore="84"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="19" MyColor="Black" OpponentName="Aliquet facilisis per adipiscing" WhiteScore="22"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="27" MyColor="White" OpponentName="Placerat blandit commodo pulvinar" WhiteScore="61"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="36" MyColor="White" OpponentName="Parturient conubia eget fermentum" WhiteScore="45"/>
+	</Reversi_Client:GameListViewModel.TheirMove>
+	<Reversi_Client:GameListViewModel.Wins>
+		<Reversi_Client:GameSummaryViewModel BlackScore="58" MyColor="Black" OpponentName="Cubilia fringilla lorem elit" WhiteScore="38"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="97" MyColor="Empty" OpponentName="Morbi dapibus enim" WhiteScore="63"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="65" MyColor="White" OpponentName="Erat vestibulum" WhiteScore="43"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="38" MyColor="Empty" OpponentName="Sed eros habitasse hendrerit luctus" WhiteScore="82"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="11" MyColor="Empty" OpponentName="Egestas himenaeos vestibulum euismod" WhiteScore="59"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="81" MyColor="Black" OpponentName="Sagittis magnis nibh feugiat" WhiteScore="44"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="49" MyColor="White" OpponentName="Mattis gravida" WhiteScore="47"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="96" MyColor="Empty" OpponentName="Mauris sem mollis montes" WhiteScore="79"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="39" MyColor="White" OpponentName="Adipiscing parturient" WhiteScore="12"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="32" MyColor="White" OpponentName="Senectus sit vestibulum nulla" WhiteScore="37"/>
+	</Reversi_Client:GameListViewModel.Wins>
+	<Reversi_Client:GameListViewModel.YourMove>
+		<Reversi_Client:GameSummaryViewModel BlackScore="84" MyColor="White" OpponentName="Vestibulum adipiscing parturient" WhiteScore="19"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="10" MyColor="Black" OpponentName="Vestibulum imperdiet vestibulum malesuada" WhiteScore="88"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="62" MyColor="Empty" OpponentName="Nisi vel nostra iaculis nisl" WhiteScore="86"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="68" MyColor="Empty" OpponentName="Nam proin sed sociosqu suscipit" WhiteScore="41"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="17" MyColor="Empty" OpponentName="Ornare adipiscing torquent ultrices dis" WhiteScore="91"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="20" MyColor="White" OpponentName="Platea penatibus vehicula nunc est" WhiteScore="22"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="13" MyColor="Empty" OpponentName="Porttitor augue parturient" WhiteScore="22"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="94" MyColor="White" OpponentName="Primis odio" WhiteScore="19"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="13" MyColor="Empty" OpponentName="Tincidunt lacinia" WhiteScore="40"/>
+		<Reversi_Client:GameSummaryViewModel BlackScore="58" MyColor="Black" OpponentName="Rutrum laoreet vestibulum vestibulum" WhiteScore="53"/>
+	</Reversi_Client:GameListViewModel.YourMove>
+</Reversi_Client:GameListViewModel>

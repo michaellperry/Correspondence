@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="Reversi.Client.View.GameListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:Reversi.Client.ViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="462" d:DesignWidth="160" Background="#FF72FF71">
+    <UserControl.Resources>
+        <Style
+            TargetType="ListBox">
+            <Setter
+                Property="Margin"
+                Value="5,0,5,5" />
+        </Style>
+        <Style
+            TargetType="TextBox">
+            <Setter
+                Property="Margin"
+                Value="5,0,5,5" />
+        </Style>
+        <Style
+            TargetType="Button">
+            <Setter
+                Property="Margin"
+                Value="5,0,5,5" />
+        </Style>
+        <DataTemplate
+            DataType="vm:GameSummaryViewModel">
+            <Grid d:DesignWidth="174">
+            	<Grid.ColumnDefinitions>
+            		<ColumnDefinition Width="*"/>
+            		<ColumnDefinition Width="30"/>
+            		<ColumnDefinition Width="30"/>
+            	</Grid.ColumnDefinitions>
+                <TextBlock
+                    Text="{Binding OpponentName}" Grid.ColumnSpan="1" />
+                <TextBlock
+                    Text="{Binding BlackScore}" Grid.ColumnSpan="1" Grid.Column="1" />
+                <TextBlock
+                    Text="{Binding WhiteScore}" Grid.ColumnSpan="1" Grid.Column="2" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="GameSummaryViewModelTemplate">
+        	<StackPanel>
+        		<TextBlock Text="{Binding BlackScore}"/>
+        		<TextBlock Text="{Binding MyColor}"/>
+        		<TextBlock Text="{Binding OpponentName}"/>
+        		<TextBlock Text="{Binding WhiteScore}"/>
+        	</StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="GameSummaryViewModelTemplate1">
+        	<StackPanel>
+        		<TextBlock Text="{Binding BlackScore}"/>
+        		<TextBlock Text="{Binding MyColor}"/>
+        		<TextBlock Text="{Binding OpponentName}"/>
+        		<TextBlock Text="{Binding WhiteScore}"/>
+        	</StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="GameSummaryViewModelTemplate2">
+        	<StackPanel>
+        		<TextBlock Text="{Binding BlackScore}"/>
+        		<TextBlock Text="{Binding MyColor}"/>
+        		<TextBlock Text="{Binding OpponentName}"/>
+        		<TextBlock Text="{Binding WhiteScore}"/>
+        	</StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="GameSummaryViewModelTemplate3">
+        	<StackPanel>
+        		<TextBlock Text="{Binding BlackScore}"/>
+        		<TextBlock Text="{Binding MyColor}"/>
+        		<TextBlock Text="{Binding OpponentName}"/>
+        		<TextBlock Text="{Binding WhiteScore}"/>
+        	</StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ScrollViewer d:DataContext="{d:DesignData /SampleData/GameListViewModelSampleData.xaml}">
+        <StackPanel>
+        	<Label Content="Opponent:"/>
+			<TextBox Text="{Binding OpponentName}"></TextBox>
+			<Button Command="{Binding Challenge}">Challenge</Button>
+            <Label>Your Move:</Label>
+            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate}" ItemsSource="{Binding YourMove}"/>
+            <Label>Their Move:</Label>
+            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate1}" ItemsSource="{Binding TheirMove}"/>
+            <Label>Wins:</Label>
+            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate2}" ItemsSource="{Binding Wins}"/>
+            <Label>Losses:</Label>
+            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate3}" ItemsSource="{Binding Losses}"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

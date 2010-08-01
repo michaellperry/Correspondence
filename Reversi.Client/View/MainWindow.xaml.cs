@@ -15,16 +15,5 @@ namespace Reversi.Client.View
         {
             InitializeComponent();
         }
-
-        private void Square_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            FrameworkElement control = sender as FrameworkElement;
-            if (control != null)
-            {
-                SquareViewModel viewModel = ForView.Unwrap<SquareViewModel>(control.DataContext);
-                if (viewModel != null)
-                    viewModel.OnClick();
-            }
-        }
     }
 }
