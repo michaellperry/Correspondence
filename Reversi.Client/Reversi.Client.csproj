@@ -99,7 +99,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LoginView.xaml">
+    <Page Include="View\LogonView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -115,14 +115,17 @@
     </Compile>
     <Compile Include="ViewModel\GameListViewModel.cs" />
     <Compile Include="ViewModel\GameSummaryViewModel.cs" />
+    <Compile Include="ViewModel\LoginNavigationModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\GameBoardView.xaml.cs">
       <DependentUpon>GameBoardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\GameListView.xaml.cs">
       <DependentUpon>GameListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LoginView.xaml.cs">
-      <DependentUpon>LoginView.xaml</DependentUpon>
+    <Compile Include="View\LogonView.xaml.cs">
+      <DependentUpon>LogonView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

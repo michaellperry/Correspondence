@@ -7,7 +7,7 @@
     <DockPanel>
         <Border
             DockPanel.Dock="Top">
-            <local:LoginView />
+            <local:LogonView DataContext="{Binding Logon}" />
         </Border>
         <Border
             DockPanel.Dock="Bottom">

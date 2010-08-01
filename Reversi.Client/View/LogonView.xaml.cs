@@ -17,9 +17,9 @@ namespace Reversi.Client.View
     /// <summary>
     /// Interaction logic for LoginView.xaml
     /// </summary>
-    public partial class LoginView : UserControl
+    public partial class LogonView : UserControl
     {
-        public LoginView()
+        public LogonView()
         {
             InitializeComponent();
         }

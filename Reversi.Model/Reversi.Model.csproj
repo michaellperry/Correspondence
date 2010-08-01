@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game.cs" />
+    <Compile Include="Machine.cs" />
     <Compile Include="Model.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

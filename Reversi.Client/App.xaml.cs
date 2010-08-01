@@ -11,12 +11,10 @@ using UpdateControls.XAML;
 
 namespace Reversi.Client
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        private Machine _machine;
+        private const string ThisMachineName = "Reversi.Model.Machine.thisMachine";
+
         private SynchronizationThread _synchronizationThread;
 
         private void Application_Startup(object sender, StartupEventArgs e)
@@ -25,14 +23,23 @@ namespace Reversi.Client
                 .AddCommunicationStrategy(new WebServiceCommunicationStrategy())
                 .RegisterAssembly(typeof(Machine));
 
+            // Load or create the Machine fact.
+            Machine thisMachine = community.LoadFact<Machine>(ThisMachineName);
+            if (thisMachine == null)
+            {
+                thisMachine = community.AddFact(new Machine());
+                community.SetFact(ThisMachineName, thisMachine);
+            }
+
             _synchronizationThread = new SynchronizationThread(community);
 
-            GameViewModel gameViewModel = new GameViewModel(
+            MainViewModel mainViewModel = new MainViewModel(
+                thisMachine,
                 _synchronizationThread);
 
             MainWindow = new MainWindow();
-            MainWindow.DataContext = ForView.Wrap(gameViewModel);
-            MainWindow.Closed += new EventHandler(MainWindow_Closed);
+            MainWindow.DataContext = ForView.Wrap(mainViewModel);
+            MainWindow.Closed += MainWindow_Closed;
             MainWindow.Show();
 
             community.FactAdded += () => _synchronizationThread.Wake();
