@@ -12,7 +12,7 @@ digraph "Reversi.Model"
     LogOn -> User
     LogOn -> Machine
     LogOff -> LogOn
-    Player -> User
+    Player -> User [color="red"]
     Player -> Game [color="red"]
     Move -> Player
     Outcome -> Game
@@ -328,7 +328,7 @@ namespace Reversi.Model
     public partial class Player : CorrespondenceFact
     {
         // Roles
-        public static Role<User> RoleUser = new Role<User>("user");
+        public static Role<User> RoleUser = new Role<User>("user", RoleRelationship.Pivot);
         public static Role<Game> RoleGame = new Role<Game>("game", RoleRelationship.Pivot);
 
         // Queries

@@ -49,7 +49,7 @@ fact Game {
 }
 
 fact Player {
-	User user;
+	pivot User user;
 	pivot Game game;
 	int index;
 
