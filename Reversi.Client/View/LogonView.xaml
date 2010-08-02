@@ -9,7 +9,7 @@
         Orientation="Horizontal">
         <Label Margin="5">Username:</Label>
         <TextBox
-            Text="{Binding Username}"
+            Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
             Margin="5"
             Width="120">
             <TextBox.Style>

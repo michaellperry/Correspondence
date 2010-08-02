@@ -20,7 +20,7 @@ namespace Reversi.Client.ViewModel
             _player = player;
             if (_player != null)
             {
-                //_myColor = _player.Person == _player.Game.First.Person ? PieceColor.Black : PieceColor.White;
+                _myColor = _player.Index == 0 ? PieceColor.Black : PieceColor.White;
             }
 
             _depGameBoard = new Dependent(UpdateGameBoard);
@@ -86,6 +86,24 @@ namespace Reversi.Client.ViewModel
             return _gameBoard == null ? PieceColor.Empty : _gameBoard.PieceAt(square);
         }
 
+        public int BlackCount
+        {
+            get
+            {
+                _depGameBoard.OnGet();
+                return _gameBoard.BlackCount;
+            }
+        }
+
+        public int WhiteCount
+        {
+            get
+            {
+                _depGameBoard.OnGet();
+                return _gameBoard.BlackCount;
+            }
+        }
+
         public void MakeMove(Square square)
         {
             _depGameBoard.OnGet();
@@ -98,12 +116,12 @@ namespace Reversi.Client.ViewModel
                 {
                     int blackCount = _gameBoard.BlackCount;
                     int whiteCount = _gameBoard.WhiteCount;
-                    //if (blackCount > whiteCount)
-                    //    _player.Game.DeclareWinner(_player.Game.First);
-                    //else if (blackCount < whiteCount)
-                    //    _player.Game.DeclareWinner(_player.Game.Second);
-                    //else
-                    //    _player.Game.DeclareWinner(null);
+                    if (blackCount > whiteCount)
+                        _player.Game.DeclareWinner(_player.Game.Players.Single(p => p.Index == 0));
+                    else if (blackCount < whiteCount)
+                        _player.Game.DeclareWinner(_player.Game.Players.Single(p => p.Index == 1));
+                    else
+                        _player.Game.DeclareWinner(null);
                 }
             }
         }
@@ -119,12 +137,12 @@ namespace Reversi.Client.ViewModel
                 _gameBoard = GameBoard.OpeningPosition;
                 foreach (Move move in moves)
                 {
-                    //if (move.Index != expectedIndex)
-                    //    throw new ApplicationException(string.Format("Expected move {0}, but found {1}.", expectedIndex, move.Index));
-                    //if (move.Player.Person == _player.Game.First.Person && _gameBoard.ToMove != PieceColor.Black)
-                    //    throw new ApplicationException(string.Format("On move {0}, black was supposed to play.", move.Index));
-                    //if (move.Player.Person == _player.Game.Second.Person && _gameBoard.ToMove != PieceColor.White)
-                    //    throw new ApplicationException(string.Format("On move {0}, white was supposed to play.", move.Index));
+                    if (move.Index != expectedIndex)
+                        throw new ApplicationException(string.Format("Expected move {0}, but found {1}.", expectedIndex, move.Index));
+                    if (move.Player.Index == 0 && _gameBoard.ToMove != PieceColor.Black)
+                        throw new ApplicationException(string.Format("On move {0}, black was supposed to play.", move.Index));
+                    if (move.Player.Index == 1 && _gameBoard.ToMove != PieceColor.White)
+                        throw new ApplicationException(string.Format("On move {0}, white was supposed to play.", move.Index));
 
                     Square square = Square.FromIndex(move.Square);
                     if (!_gameBoard.LegalMoves.Contains(square))

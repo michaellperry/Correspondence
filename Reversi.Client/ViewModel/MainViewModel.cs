@@ -20,9 +20,22 @@ namespace Reversi.Client.ViewModel
 
         public LogonViewModel Logon
         {
+            get { return new LogonViewModel(_machine); }
+        }
+
+        public string LastError
+        {
+            get { return _synchronizationThread.LastError; }
+        }
+
+        public GameListViewModel GameList
+        {
             get
             {
-                return new LogonViewModel(_machine);
+                LogOn activeLogOn = _machine.ActiveLogOns.LastOrDefault();
+                if (activeLogOn == null)
+                    return null;
+                return new GameListViewModel(activeLogOn.User);
             }
         }
     }

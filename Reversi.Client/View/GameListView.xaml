@@ -5,14 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:Reversi.Client.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="462" d:DesignWidth="160" Background="#FF72FF71">
+             d:DesignHeight="462" d:DesignWidth="244" Background="#FF72FF71">
     <UserControl.Resources>
-        <Style
-            TargetType="ListBox">
-            <Setter
-                Property="Margin"
-                Value="5,0,5,5" />
-        </Style>
         <Style
             TargetType="TextBox">
             <Setter
@@ -26,67 +20,104 @@
                 Value="5,0,5,5" />
         </Style>
         <DataTemplate
-            DataType="vm:GameSummaryViewModel">
+            x:Key="GameSummaryDataTemplate">
             <Grid d:DesignWidth="174">
             	<Grid.ColumnDefinitions>
-            		<ColumnDefinition Width="*"/>
+            		<ColumnDefinition Width="18"/>
+            		<ColumnDefinition/>
             		<ColumnDefinition Width="30"/>
             		<ColumnDefinition Width="30"/>
             	</Grid.ColumnDefinitions>
                 <TextBlock
-                    Text="{Binding OpponentName}" Grid.ColumnSpan="1" />
+                    Text="{Binding OpponentName}" Grid.Column="1" />
                 <TextBlock
-                    Text="{Binding BlackScore}" Grid.ColumnSpan="1" Grid.Column="1" />
+                    Text="{Binding BlackCount}" Grid.Column="2" />
                 <TextBlock
-                    Text="{Binding WhiteScore}" Grid.ColumnSpan="1" Grid.Column="2" />
+                    Text="{Binding WhiteCount}" Grid.Column="3" />
+                <Ellipse
+                    Fill="White"
+                    Width="14"
+                    Height="14"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Stroke="Black">
+                    <Ellipse.Style>
+                        <Style
+                            TargetType="Ellipse">
+                            <Setter
+                                Property="Visibility"
+                                Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding MyColor}"
+                                    Value="White">
+                                    <Setter
+                                        Property="Visibility"
+                                        Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+                <Ellipse
+                    Fill="Black"
+                    Width="14"
+                    Height="14"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <Ellipse.Style>
+                        <Style
+                            TargetType="Ellipse">
+                            <Setter
+                                Property="Visibility"
+                                Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding MyColor}"
+                                    Value="Black">
+                                    <Setter
+                                        Property="Visibility"
+                                        Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="GameSummaryViewModelTemplate">
-        	<StackPanel>
-        		<TextBlock Text="{Binding BlackScore}"/>
-        		<TextBlock Text="{Binding MyColor}"/>
-        		<TextBlock Text="{Binding OpponentName}"/>
-        		<TextBlock Text="{Binding WhiteScore}"/>
-        	</StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="GameSummaryViewModelTemplate1">
-        	<StackPanel>
-        		<TextBlock Text="{Binding BlackScore}"/>
-        		<TextBlock Text="{Binding MyColor}"/>
-        		<TextBlock Text="{Binding OpponentName}"/>
-        		<TextBlock Text="{Binding WhiteScore}"/>
-        	</StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="GameSummaryViewModelTemplate2">
-        	<StackPanel>
-        		<TextBlock Text="{Binding BlackScore}"/>
-        		<TextBlock Text="{Binding MyColor}"/>
-        		<TextBlock Text="{Binding OpponentName}"/>
-        		<TextBlock Text="{Binding WhiteScore}"/>
-        	</StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="GameSummaryViewModelTemplate3">
-        	<StackPanel>
-        		<TextBlock Text="{Binding BlackScore}"/>
-        		<TextBlock Text="{Binding MyColor}"/>
-        		<TextBlock Text="{Binding OpponentName}"/>
-        		<TextBlock Text="{Binding WhiteScore}"/>
-        	</StackPanel>
-        </DataTemplate>
+        <Style
+            TargetType="ListBox">
+            <Setter
+                Property="Margin"
+                Value="5,0,5,5" />
+            <Setter
+                Property="ItemTemplate"
+                Value="{StaticResource GameSummaryDataTemplate}" />
+            <Setter
+                Property="HorizontalContentAlignment"
+                Value="Stretch" />
+        </Style>
     </UserControl.Resources>
     <ScrollViewer d:DataContext="{d:DesignData /SampleData/GameListViewModelSampleData.xaml}">
         <StackPanel>
         	<Label Content="Opponent:"/>
-			<TextBox Text="{Binding OpponentName}"></TextBox>
+			<TextBox Text="{Binding OpponentName, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 			<Button Command="{Binding Challenge}">Challenge</Button>
             <Label>Your Move:</Label>
-            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate}" ItemsSource="{Binding YourMove}"/>
+            <ListBox
+                ItemTemplate="{StaticResource GameSummaryDataTemplate}"
+                ItemsSource="{Binding YourMove}"/>
             <Label>Their Move:</Label>
-            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate1}" ItemsSource="{Binding TheirMove}"/>
+            <ListBox
+                ItemTemplate="{StaticResource GameSummaryDataTemplate}"
+                ItemsSource="{Binding TheirMove}"/>
             <Label>Wins:</Label>
-            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate2}" ItemsSource="{Binding Wins}"/>
+            <ListBox
+                ItemTemplate="{StaticResource GameSummaryDataTemplate}"
+                ItemsSource="{Binding Wins}"/>
             <Label>Losses:</Label>
-            <ListBox ItemTemplate="{DynamicResource GameSummaryViewModelTemplate3}" ItemsSource="{Binding Losses}"/>
+            <ListBox
+                ItemTemplate="{StaticResource GameSummaryDataTemplate}"
+                ItemsSource="{Binding Losses}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

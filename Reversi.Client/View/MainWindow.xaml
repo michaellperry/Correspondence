@@ -19,7 +19,9 @@
         <Border
             DockPanel.Dock="Left"
             Width="160">
-            <local:GameListView />
+            <local:GameListView
+                Style="{StaticResource DisabledOnNull}"
+                DataContext="{Binding GameList}" />
         </Border>
         <Border Background="Green">
             <local:GameBoardView />

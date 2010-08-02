@@ -7,6 +7,11 @@ namespace Reversi.Model
 {
     public partial class User
     {
+        public Player Challenge(string opponentName)
+        {
+            return Challenge(Community.AddFact(new User(opponentName)));
+        }
+
         public Player Challenge(User other)
         {
             Game game = Community.AddFact(new Game());
