@@ -46,13 +46,13 @@ namespace UpdateControls.Correspondence
 
         private static ConstructorInfo GetMementoConstructor(Type type)
         {
-            ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { typeof(FactMemento) });
+            ConstructorInfo constructorInfo = type.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(FactMemento) }, null);
             if (constructorInfo != null)
                 return constructorInfo;
             else
                 // No appropriate constructor found.
                 throw new CorrespondenceException(string.Format(
-                    "Add a constructor to the class {0} taking a Memento as a parameter", type.FullName));
+                    "Add a private constructor to the class {0} taking a FactMemento as a parameter", type.FullName));
         }
 
         private static CorrespondenceFactType GetFactType(Type type, CorrespondenceTypeAttribute correspondenceAttribute)

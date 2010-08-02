@@ -55,7 +55,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public Machine(FactMemento memento)
+        private Machine(FactMemento memento)
         {
             InitializeResults();
         }
@@ -109,7 +109,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public User(FactMemento memento)
+        private User(FactMemento memento)
         {
             InitializeResults();
         }
@@ -175,7 +175,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public LogOn(FactMemento memento)
+        private LogOn(FactMemento memento)
         {
             InitializeResults();
             _user = new PredecessorObj<User>(this, RoleUser, memento);
@@ -229,7 +229,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public LogOff(FactMemento memento)
+        private LogOff(FactMemento memento)
         {
             InitializeResults();
             _logOn = new PredecessorObj<LogOn>(this, RoleLogOn, memento);
@@ -292,7 +292,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public Game(FactMemento memento)
+        private Game(FactMemento memento)
         {
             InitializeResults();
         }
@@ -368,7 +368,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public Player(FactMemento memento)
+        private Player(FactMemento memento)
         {
             InitializeResults();
             _user = new PredecessorObj<User>(this, RoleUser, memento);
@@ -439,7 +439,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public Move(FactMemento memento)
+        private Move(FactMemento memento)
         {
             InitializeResults();
             _player = new PredecessorObj<Player>(this, RolePlayer, memento);
@@ -500,7 +500,7 @@ namespace Reversi.Model
         }
 
         // Hydration constructor
-        public Outcome(FactMemento memento)
+        private Outcome(FactMemento memento)
         {
             InitializeResults();
             _game = new PredecessorObj<Game>(this, RoleGame, memento);

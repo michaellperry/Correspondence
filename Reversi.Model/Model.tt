@@ -146,7 +146,7 @@ namespace <#=targetNamespace.Name#>
         }
 
         // Hydration constructor
-        public <#=c.Name#>(FactMemento memento)
+        private <#=c.Name#>(FactMemento memento)
         {
             InitializeResults();
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
