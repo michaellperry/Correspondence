@@ -9,11 +9,13 @@ namespace Reversi.Client.ViewModel
     public class GameListViewModel
 	{
         private User _user;
+        private MainNavigationModel _mainNavigation;
         private GameListNavigationModel _navigation = new GameListNavigationModel();
 
-        public GameListViewModel(User user)
+        public GameListViewModel(User user, MainNavigationModel mainNavigation)
         {
             _user = user;
+            _mainNavigation = mainNavigation;
         }
 
         public string OpponentName
@@ -28,7 +30,7 @@ namespace Reversi.Client.ViewModel
             {
                 return MakeCommand
                     .When(() => !string.IsNullOrEmpty(_navigation.OpponentName))
-                    .Do(() => _user.Challenge(_navigation.OpponentName));
+                    .Do(() => _mainNavigation.SelectedPlayer = _user.Challenge(_navigation.OpponentName));
             }
         }
 
@@ -55,7 +57,21 @@ namespace Reversi.Client.ViewModel
         //public IEnumerable<GameSummaryViewModel> Wins { get; private set; }
         //public IEnumerable<GameSummaryViewModel> Losses { get; private set; }
 
-        public GameSummaryViewModel SelectedGame { get; set; }
+        public GameSummaryViewModel SelectedGame
+        {
+            get
+            {
+                return _mainNavigation.SelectedPlayer == null
+                    ? null
+                    : new GameSummaryViewModel(_mainNavigation.SelectedPlayer);
+            }
+            set
+            {
+            	_mainNavigation.SelectedPlayer = value == null
+                    ? null
+                    : value.Player;
+            }
+        }
 
         public override bool Equals(object obj)
         {

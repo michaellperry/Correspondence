@@ -118,6 +118,7 @@
     <Compile Include="ViewModel\GameSummaryViewModel.cs" />
     <Compile Include="ViewModel\LoginNavigationModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="ViewModel\MainNavigationModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\GameBoardView.xaml.cs">
       <DependentUpon>GameBoardView.xaml</DependentUpon>

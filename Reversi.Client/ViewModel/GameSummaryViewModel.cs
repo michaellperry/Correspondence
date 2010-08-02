@@ -17,6 +17,11 @@ namespace Reversi.Client.ViewModel
             _gameState = new GameState(player);
         }
 
+        public Player Player
+        {
+            get { return _player; }
+        }
+
         public bool MyTurn
         {
             get { return _gameState.MyTurn; }

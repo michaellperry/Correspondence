@@ -1,112 +1,80 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using Reversi.Model;
 using Reversi.GameLogic;
+using Reversi.Model;
 using UpdateControls.XAML;
-using UpdateControls;
-using System;
-using Reversi.Client.Synchronization;
 
 namespace Reversi.Client.ViewModel
 {
     public class GameViewModel
     {
-        private SynchronizationThread _synchronizationThread;
-
+        private Player _player;
         private GameState _gameState;
-        private Dependent _depGameState;
 
-        public GameViewModel(SynchronizationThread synchronizationThread)
+        public GameViewModel(Player player)
         {
-            _synchronizationThread = synchronizationThread;
-
-            _depGameState = new Dependent(UpdateGameState);
-
-            _gameState = new GameState(null);
-        }
-
-        public ICommand JoinGame
-        {
-            get
-            {
-                return null;
-            }
+            _player = player;
+            _gameState = new GameState(player);
         }
 
         public ICommand Resign
         {
             get
             {
-                return null;
+                return MakeCommand
+                    .Do(() => _player.Game.DeclareWinner(
+                        _player.Game.Players.FirstOrDefault(p => p != _player)));
             }
         }
 
         public PieceColor MyColor
         {
-            get
-            {
-                _depGameState.OnGet();
-                return _gameState.MyColor;
-            }
+            get { return _gameState.MyColor; }
         }
 
         public bool MyTurn
         {
-            get
-            {
-                _depGameState.OnGet();
-                return _gameState.MyTurn;
-            }
+            get { return _gameState.MyTurn; }
         }
 
         public bool IWon
         {
-            get
-            {
-                _depGameState.OnGet();
-                return _gameState.IWon;
-            }
+            get { return _gameState.IWon; }
         }
 
         public bool ILost
         {
-            get
-            {
-                _depGameState.OnGet();
-                return _gameState.ILost;
-            }
+            get { return _gameState.ILost; }
         }
 
         public bool IDrew
         {
-            get
-            {
-                _depGameState.OnGet();
-                return _gameState.IDrew;
-            }
+            get { return _gameState.IDrew; }
         }
 
         public IEnumerable<RowViewModel> Rows
         {
             get
             {
-                _depGameState.OnGet();
                 for (int row = 0; row < Square.NumberOfRows; row++)
                     yield return new RowViewModel(_gameState, row);
             }
         }
 
-        public string LastError
+        public override bool Equals(object obj)
         {
-            get
-            {
-                return _synchronizationThread.LastError;
-            }
+            if (obj == this)
+                return true;
+            GameViewModel that = obj as GameViewModel;
+            if (that == null)
+                return false;
+            return this._player == that._player;
         }
 
-        private void UpdateGameState()
+        public override int GetHashCode()
         {
+            return _player.GetHashCode();
         }
     }
 }

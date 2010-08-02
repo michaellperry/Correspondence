@@ -105,19 +105,23 @@
             <Label>Your Move:</Label>
             <ListBox
                 ItemTemplate="{StaticResource GameSummaryDataTemplate}"
-                ItemsSource="{Binding YourMove}"/>
+                ItemsSource="{Binding YourMove}"
+                SelectedItem="{Binding SelectedGame}"/>
             <Label>Their Move:</Label>
             <ListBox
                 ItemTemplate="{StaticResource GameSummaryDataTemplate}"
-                ItemsSource="{Binding TheirMove}"/>
+                ItemsSource="{Binding TheirMove}"
+                SelectedItem="{Binding SelectedGame}"/>
             <Label>Wins:</Label>
             <ListBox
                 ItemTemplate="{StaticResource GameSummaryDataTemplate}"
-                ItemsSource="{Binding Wins}"/>
+                ItemsSource="{Binding Wins}"
+                SelectedItem="{Binding SelectedGame}"/>
             <Label>Losses:</Label>
             <ListBox
                 ItemTemplate="{StaticResource GameSummaryDataTemplate}"
-                ItemsSource="{Binding Losses}"/>
+                ItemsSource="{Binding Losses}"
+                SelectedItem="{Binding SelectedGame}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

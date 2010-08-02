@@ -100,7 +100,7 @@ namespace Reversi.Client.ViewModel
             get
             {
                 _depGameBoard.OnGet();
-                return _gameBoard.BlackCount;
+                return _gameBoard.WhiteCount;
             }
         }
 
@@ -138,15 +138,15 @@ namespace Reversi.Client.ViewModel
                 foreach (Move move in moves)
                 {
                     if (move.Index != expectedIndex)
-                        throw new ApplicationException(string.Format("Expected move {0}, but found {1}.", expectedIndex, move.Index));
+                        return;
                     if (move.Player.Index == 0 && _gameBoard.ToMove != PieceColor.Black)
-                        throw new ApplicationException(string.Format("On move {0}, black was supposed to play.", move.Index));
+                        return;
                     if (move.Player.Index == 1 && _gameBoard.ToMove != PieceColor.White)
-                        throw new ApplicationException(string.Format("On move {0}, white was supposed to play.", move.Index));
+                        return;
 
                     Square square = Square.FromIndex(move.Square);
                     if (!_gameBoard.LegalMoves.Contains(square))
-                        throw new ApplicationException(string.Format("Move {0} to {1} is illegal.", move.Index, square));
+                        return;
 
                     _gameBoard = _gameBoard.AfterMove(square);
                     ++expectedIndex;

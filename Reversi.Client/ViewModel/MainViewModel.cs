@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Reversi.Client.Synchronization;
 using Reversi.Model;
 
@@ -11,6 +8,7 @@ namespace Reversi.Client.ViewModel
     {
         private Machine _machine;
         private SynchronizationThread _synchronizationThread;
+        private MainNavigationModel _mainNavigation = new MainNavigationModel();
 
         public MainViewModel(Machine machine, SynchronizationThread synchronizationThread)
         {
@@ -35,7 +33,17 @@ namespace Reversi.Client.ViewModel
                 LogOn activeLogOn = _machine.ActiveLogOns.LastOrDefault();
                 if (activeLogOn == null)
                     return null;
-                return new GameListViewModel(activeLogOn.User);
+                return new GameListViewModel(activeLogOn.User, _mainNavigation);
+            }
+        }
+
+        public GameViewModel SelectedGame
+        {
+            get
+            {
+                return _mainNavigation.SelectedPlayer == null
+                    ? null
+                    : new GameViewModel(_mainNavigation.SelectedPlayer);
             }
         }
     }
