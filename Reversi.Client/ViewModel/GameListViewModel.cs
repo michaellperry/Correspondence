@@ -30,7 +30,11 @@ namespace Reversi.Client.ViewModel
             {
                 return MakeCommand
                     .When(() => !string.IsNullOrEmpty(_navigation.OpponentName))
-                    .Do(() => _mainNavigation.SelectedPlayer = _user.Challenge(_navigation.OpponentName));
+                    .Do(() =>
+                    {
+                        _mainNavigation.SelectedPlayer = _user.Challenge(_navigation.OpponentName);
+                        _navigation.OpponentName = null;
+                    });
             }
         }
 
@@ -54,8 +58,25 @@ namespace Reversi.Client.ViewModel
             }
         }
 
-        //public IEnumerable<GameSummaryViewModel> Wins { get; private set; }
-        //public IEnumerable<GameSummaryViewModel> Losses { get; private set; }
+        public IEnumerable<GameSummaryViewModel> Wins
+        {
+            get
+            {
+                return _user.FinishedPlayers
+                    .Where(p => p.Game.Outcome.Winner == p)
+                    .Select(p => new GameSummaryViewModel(p));
+            }
+        }
+
+        public IEnumerable<GameSummaryViewModel> Losses
+        {
+            get
+            {
+                return _user.FinishedPlayers
+                    .Where(p => p.Game.Outcome.Winner != p)
+                    .Select(p => new GameSummaryViewModel(p));
+            }
+        }
 
         public GameSummaryViewModel SelectedGame
         {

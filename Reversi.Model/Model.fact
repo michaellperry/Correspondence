@@ -16,6 +16,11 @@ fact User {
 		Player p : p.user = this
 			where p.isActive
 	}
+
+	Player* finishedPlayers {
+		Player p : p.user = this
+			where p.isNotActive
+	}
 }
 
 fact LogOn {
@@ -59,6 +64,10 @@ fact Player {
 
 	bool isActive {
 		not exists Outcome o : o.game = this.game
+	}
+
+	bool isNotActive {
+		exists Outcome o : o.game = this.game
 	}
 }
 

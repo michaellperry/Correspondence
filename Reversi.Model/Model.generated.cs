@@ -87,6 +87,10 @@ namespace Reversi.Model
             .JoinSuccessors(Player.RoleUser, Condition.WhereIsEmpty(Player.QueryIsActive)
             )
             ;
+        public static Query QueryFinishedPlayers = new Query()
+            .JoinSuccessors(Player.RoleUser, Condition.WhereIsNotEmpty(Player.QueryIsNotActive)
+            )
+            ;
 
         // Predicates
 
@@ -98,6 +102,7 @@ namespace Reversi.Model
 
         // Results
         private Result<Player> _activePlayers;
+        private Result<Player> _finishedPlayers;
 
         // Business constructor
         public User(
@@ -118,6 +123,7 @@ namespace Reversi.Model
         private void InitializeResults()
         {
             _activePlayers = new Result<Player>(this, QueryActivePlayers);
+            _finishedPlayers = new Result<Player>(this, QueryFinishedPlayers);
         }
 
         // Predecessor access
@@ -132,6 +138,10 @@ namespace Reversi.Model
         public IEnumerable<Player> ActivePlayers
         {
             get { return _activePlayers; }
+        }
+        public IEnumerable<Player> FinishedPlayers
+        {
+            get { return _finishedPlayers; }
         }
     }
     
@@ -339,9 +349,14 @@ namespace Reversi.Model
             .JoinPredecessors(Player.RoleGame)
             .JoinSuccessors(Outcome.RoleGame)
             ;
+        public static Query QueryIsNotActive = new Query()
+            .JoinPredecessors(Player.RoleGame)
+            .JoinSuccessors(Outcome.RoleGame)
+            ;
 
         // Predicates
         public static Condition IsActive = Condition.WhereIsEmpty(QueryIsActive);
+        public static Condition IsNotActive = Condition.WhereIsNotEmpty(QueryIsNotActive);
 
         // Predecessors
         private PredecessorObj<User> _user;
