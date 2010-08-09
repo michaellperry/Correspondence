@@ -37,7 +37,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("where", Symbol.Where)
                 .AddSymbol("and", Symbol.And)
                 .AddSymbol("unique", Symbol.Unique)
-				.AddSymbol("pivot", Symbol.Pivot)
+				.AddSymbol("publish", Symbol.Publish)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -95,7 +95,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 				cardinalityRule, "Defect.",
 				(nativeType, cardinality) => new DataTypeNative(nativeType.NativeType, cardinality, nativeType.LineNumber));
 			var factTypeRule = Sequence(
-				Optional(Reduce(Terminal(Symbol.Pivot), t => true), false),
+				Optional(Reduce(Terminal(Symbol.Publish), t => true), false),
 				Terminal(Symbol.Identifier), "Defect.",
 				cardinalityRule, "Defect.",
 				(isPivot, identifier, cardinality) => new DataTypeFact(identifier.Value, cardinality, isPivot, identifier.LineNumber));

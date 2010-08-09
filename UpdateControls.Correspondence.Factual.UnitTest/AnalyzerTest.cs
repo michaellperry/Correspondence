@@ -114,7 +114,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
-                "  pivot GameQueue gameQueue;\r\n" +
+                "  publish GameQueue gameQueue;\r\n" +
                 "}"
             );
 

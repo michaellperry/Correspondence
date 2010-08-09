@@ -64,9 +64,14 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UpdateControls, Version=2.1.1.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionItems\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="MemoryStorageStrategy.cs" />
+    <Compile Include="MemoryCommunicationStrategy.cs" />
     <Compile Include="PeerIdentifier.cs" />
     <Compile Include="PeerPivotIdentifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

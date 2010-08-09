@@ -30,6 +30,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Where,
         And,
         Unique,
-		Pivot
+		Publish
     }
 }

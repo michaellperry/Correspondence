@@ -54,8 +54,8 @@ fact Game {
 }
 
 fact Player {
-	pivot User user;
-	pivot Game game;
+	publish User user;
+	publish Game game;
 	int index;
 
 	Move* moves {

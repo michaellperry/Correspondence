@@ -143,7 +143,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
-                "  pivot GameQueue gameQueue;\r\n" +
+                "  publish GameQueue gameQueue;\r\n" +
                 "}"
             ));
             Namespace result = AssertNoErrors(parser);
@@ -169,7 +169,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Game {\r\n" +
-                "  pivot User *players;\r\n" +
+                "  publish User *players;\r\n" +
                 "}"
             ));
             Namespace result = AssertNoErrors(parser);
