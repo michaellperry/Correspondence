@@ -11,7 +11,7 @@ namespace UpdateControls.Correspondence
 	{
 		private FactID _id;
         private IDictionary<RoleMemento, PredecessorBase> _predecessor = new Dictionary<RoleMemento, PredecessorBase>();
-        private IDictionary<QueryDefinition, IQueryResult> _resultByQueryDefinition = new Dictionary<QueryDefinition, IQueryResult>();
+        private IDictionary<QueryDefinition, List<IQueryResult>> _resultByQueryDefinition = new Dictionary<QueryDefinition, List<IQueryResult>>();
 
 		private Community _community;
 
@@ -58,14 +58,21 @@ namespace UpdateControls.Correspondence
 
         internal void AddQueryResult(QueryDefinition queryDefinition, IQueryResult queryResult)
         {
-            _resultByQueryDefinition.Add(queryDefinition, queryResult);
+			List<IQueryResult> results;
+			if (!_resultByQueryDefinition.TryGetValue(queryDefinition, out results))
+			{
+				results = new List<IQueryResult>();
+				_resultByQueryDefinition.Add(queryDefinition, results);
+			}
+			results.Add(queryResult);
         }
 
         internal void InvalidateQuery(QueryDefinition invalidQuery)
         {
-            IQueryResult results;
+            List<IQueryResult> results;
             if (_resultByQueryDefinition.TryGetValue(invalidQuery, out results))
-                results.Invalidate();
+				foreach (IQueryResult result in results)
+					result.Invalidate();
         }
 	}
 }
