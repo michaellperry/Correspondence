@@ -114,6 +114,5 @@ namespace UpdateControls.Correspondence.UnitTest
                 Assert.AreEqual("A fact's predecessors must be added to the community first.", exception.Message);
             }
         }
-
     }
 }
