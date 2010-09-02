@@ -15,6 +15,7 @@ namespace UpdateControls.Correspondence
             _cached = cached;
         }
 
+        internal abstract Community Community { get; }
         internal abstract IEnumerable<FactID> InternalFactIds { get; }
         protected abstract void PopulateCache(Community community);
         protected abstract void EmptyCache();

@@ -11,6 +11,7 @@ namespace UpdateControls.Correspondence
 		private RoleMemento _role;
         private FactID _factId;
 		private TFact _fact;
+        private Community _community;
 
 		public PredecessorOpt(
 			CorrespondenceFact subject,
@@ -18,9 +19,14 @@ namespace UpdateControls.Correspondence
 			TFact obj ) :
             base(subject, true)
 		{
+
+            if (obj!=null && obj.InternalCommunity == null)
+                throw new CorrespondenceException("A fact's predecessors must be added to the community first.");
+
 			_role = role.RoleMemento;
             _factId = obj == null ? new FactID() : obj.ID;
 			_fact = obj;
+            _community = obj == null ? null : obj.InternalCommunity;
 
             subject.SetPredecessor(_role, this);
 		}
@@ -41,6 +47,11 @@ namespace UpdateControls.Correspondence
             else
                 _factId = new FactID();
             subject.SetPredecessor(_role, this);
+        }
+
+        internal override Community Community
+        {
+            get { return _community; }
         }
 
 		public TFact Fact
@@ -75,5 +86,5 @@ namespace UpdateControls.Correspondence
         {
             get { return typeof(TFact); }
         }
-	}
+    }
 }

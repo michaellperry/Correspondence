@@ -53,6 +53,12 @@ fact Game {
 	}
 }
 
+fact GameName {
+	Game game;
+	string name;
+	GameName* prior;
+}
+
 fact Player {
 	publish User user;
 	publish Game game;

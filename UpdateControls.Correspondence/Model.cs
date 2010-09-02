@@ -70,6 +70,13 @@ namespace UpdateControls.Correspondence
                 if (prototype.InternalCommunity != null)
                     throw new CorrespondenceException("A fact may only belong to one community");
 
+                foreach (RoleMemento role in prototype.PredecessorRoles)
+                {
+                    PredecessorBase predecessor = prototype.GetPredecessor(role);
+                    if (predecessor.Community != null && predecessor.Community != _community)
+                        throw new CorrespondenceException("A fact cannot be added to a different community than its predecessors.");
+                }
+
                 FactMemento memento = CreateMementoFromFact(prototype);
 
                 // See if we already have the fact in memory.

@@ -12,6 +12,7 @@ namespace UpdateControls.Correspondence
 		private RoleMemento _role;
         private List<FactID> _factIds;
 		private List<TFact> _facts;
+        private Community _community;
 
 		public PredecessorList(
 			CorrespondenceFact subject,
@@ -21,6 +22,11 @@ namespace UpdateControls.Correspondence
 		{
             if (facts.Any(o => o == null))
                 throw new ArgumentException(string.Format("Predecessor list {0} cannot contain a null.", role));
+
+            if (facts.Any(o => o.InternalCommunity == null))
+                throw new CorrespondenceException("A fact's predecessors must be added to the community first.");
+
+            _community = facts.Select(fact => fact.InternalCommunity).FirstOrDefault();
             
             _role = role.RoleMemento;
 			_facts = facts.ToList();
@@ -40,6 +46,11 @@ namespace UpdateControls.Correspondence
             _factIds = memento.GetPredecessorIdsByRole(_role).ToList();
 			subject.SetPredecessor( _role, this );
 		}
+
+        internal override Community Community
+        {
+            get { return _community; }
+        }
 
         #region IEnumerable<FactType> Members
 

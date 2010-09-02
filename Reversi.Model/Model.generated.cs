@@ -12,6 +12,8 @@ digraph "Reversi.Model"
     LogOn -> User
     LogOn -> Machine
     LogOff -> LogOn
+    GameName -> Game
+    GameName -> GameName [label="  *"]
     Player -> User [color="red"]
     Player -> Game [color="red"]
     Move -> Player
@@ -332,6 +334,72 @@ namespace Reversi.Model
         {
             get { return _outcomes; }
         }
+    }
+    
+    [CorrespondenceType]
+    public partial class GameName : CorrespondenceFact
+    {
+        // Roles
+        public static Role<Game> RoleGame = new Role<Game>("game");
+        public static Role<GameName> RolePrior = new Role<GameName>("prior");
+
+        // Queries
+
+        // Predicates
+
+        // Predecessors
+        private PredecessorObj<Game> _game;
+        private PredecessorList<GameName> _prior;
+
+        // Fields
+        [CorrespondenceField]
+        private string _name;
+
+        // Results
+
+        // Business constructor
+        public GameName(
+            Game game
+            ,IEnumerable<GameName> prior
+            ,string name
+            )
+        {
+            InitializeResults();
+            _game = new PredecessorObj<Game>(this, RoleGame, game);
+            _prior = new PredecessorList<GameName>(this, RolePrior, prior);
+            _name = name;
+        }
+
+        // Hydration constructor
+        private GameName(FactMemento memento)
+        {
+            InitializeResults();
+            _game = new PredecessorObj<Game>(this, RoleGame, memento);
+            _prior = new PredecessorList<GameName>(this, RolePrior, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+        public Game Game
+        {
+            get { return _game.Fact; }
+        }
+        public IEnumerable<GameName> Prior
+        {
+            get { return _prior; }
+        }
+     
+        // Field access
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        // Query result access
     }
     
     [CorrespondenceType]
