@@ -98,6 +98,47 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
+        public void WhenListPredecessorFromADifferentCommunity_ShouldThrow()
+        {
+            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
+            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
+            Game playerOneGame = _playerOneCommuniy.AddFact(new Game());
+			GameName gameName = _playerOneCommuniy.AddFact(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
+			
+			Game playerTwoGame = _playerTwoCommuniy.AddFact(new Game());
+			try
+            {
+                GameName secondGame = _playerTwoCommuniy.AddFact(new GameName(playerTwoGame, new List<GameName>() { gameName }, "Fischer Spasky 1971, Game 3"));
+                Assert.Fail("AddFact should have thrown.");
+            }
+            catch (CorrespondenceException exception)
+            {
+				Assert.AreEqual("A fact cannot be added to a different community than its predecessors.", exception.Message);
+            }
+        }
+
+        [TestMethod]
+        public void WhenListPredecessorFromDifferentCommunities_ShouldThrow()
+        {
+            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
+            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
+            Game playerOneGame = _playerOneCommuniy.AddFact(new Game());
+			GameName gameName = _playerOneCommuniy.AddFact(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
+			
+			Game playerTwoGame = _playerTwoCommuniy.AddFact(new Game());
+			GameName secondName = _playerTwoCommuniy.AddFact(new GameName(playerTwoGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
+			try
+            {
+                GameName secondGame = _playerOneCommuniy.AddFact(new GameName(playerOneGame, new List<GameName>() { gameName, secondName }, "Fischer Spasky 1971, Game 3"));
+                Assert.Fail("AddFact should have thrown.");
+            }
+            catch (CorrespondenceException exception)
+            {
+				Assert.AreEqual("A fact cannot be added to a different community than its predecessors.", exception.Message);
+            }
+        }
+
+        [TestMethod]
         public void WhenOptionalPredecessorIsNotPartOfCommunity_ShouldThrow()
         {
             Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());

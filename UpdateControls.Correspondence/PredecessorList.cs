@@ -27,6 +27,9 @@ namespace UpdateControls.Correspondence
                 throw new CorrespondenceException("A fact's predecessors must be added to the community first.");
 
             _community = facts.Select(fact => fact.InternalCommunity).FirstOrDefault();
+
+			if (facts.Any(o => o.InternalCommunity != _community))
+				throw new CorrespondenceException("A fact cannot be added to a different community than its predecessors.");
             
             _role = role.RoleMemento;
 			_facts = facts.ToList();
