@@ -87,9 +87,14 @@
     <Compile Include="CorrespondenceFact.cs" />
     <Compile Include="CorrespondenceTypeAttribute.cs" />
     <Compile Include="FactMetadata.cs" />
+    <Compile Include="FieldSerializer\ByteFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\CharFieldSerializer.cs" />
     <Compile Include="FieldSerializer\DateTimeFieldSerializer.cs" />
     <Compile Include="FieldSerializer\DecimalFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DoubleFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\FloatFieldSerializer.cs" />
     <Compile Include="FieldSerializer\IntFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\LongFieldSerializer.cs" />
     <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
     <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
     <Compile Include="ICommunity.cs" />

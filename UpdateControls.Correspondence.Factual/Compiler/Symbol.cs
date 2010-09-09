@@ -30,6 +30,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Where,
         And,
         Unique,
-		Publish
+		Publish,
+		Double,
+		Decimal,
+		Long,
+		Byte
     }
 }

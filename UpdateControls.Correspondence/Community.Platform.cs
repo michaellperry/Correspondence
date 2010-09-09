@@ -12,7 +12,12 @@ namespace UpdateControls.Correspondence
 				.AddFieldSerializer<decimal>(new DecimalFieldSerializer())
 				.AddFieldSerializer<DateTime>(new DateTimeFieldSerializer())
 				.AddFieldSerializer<Guid>(new GuidFieldSerializer())
-				.AddFieldSerializer<int>(new IntFieldSerializer());
+				.AddFieldSerializer<int>(new IntFieldSerializer())
+				.AddFieldSerializer<float>(new FloatFieldSerializer())
+				.AddFieldSerializer<double>(new DoubleFieldSerializer())
+				.AddFieldSerializer<long>(new LongFieldSerializer())
+				.AddFieldSerializer<byte>(new ByteFieldSerializer())
+				.AddFieldSerializer<char>(new CharFieldSerializer());
 		}
 	}
 }
