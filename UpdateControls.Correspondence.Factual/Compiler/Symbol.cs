@@ -34,6 +34,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 		Double,
 		Decimal,
 		Long,
-		Byte
+        Byte,
+        Identity,
+        From,
+        To
     }
 }

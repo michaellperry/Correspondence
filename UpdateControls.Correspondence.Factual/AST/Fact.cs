@@ -9,6 +9,7 @@ namespace UpdateControls.Correspondence.Factual.AST
         private int _lineNumber;
         private string _name;
         private bool _unique;
+        private bool _identity;
         private List<FactMember> _members = new List<FactMember>();
 
         public Fact(string name, int lineNumber)
@@ -31,6 +32,12 @@ namespace UpdateControls.Correspondence.Factual.AST
         {
             get { return _unique; }
             set { _unique = value; }
+        }
+
+        public bool Identity
+        {
+            get { return _identity; }
+            set { _identity = value; }
         }
 
         public IEnumerable<FactMember> Members

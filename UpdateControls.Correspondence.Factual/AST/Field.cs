@@ -8,5 +8,7 @@ namespace UpdateControls.Correspondence.Factual.AST
             : base(lineNumber, name, type)
         {
         }
+
+        public FieldSecurityModifier SecurityModifier { get; set; }
     }
 }

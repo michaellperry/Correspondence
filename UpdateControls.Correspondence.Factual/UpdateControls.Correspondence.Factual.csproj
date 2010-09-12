@@ -85,6 +85,7 @@
     <Compile Include="AST\DataTypeNative.cs" />
     <Compile Include="AST\FactMember.cs" />
     <Compile Include="AST\Field.cs" />
+    <Compile Include="AST\FieldSecurityModifier.cs" />
     <Compile Include="AST\Identifier.cs" />
     <Compile Include="AST\NativeType.cs" />
     <Compile Include="AST\Path.cs" />
