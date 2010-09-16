@@ -12,7 +12,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenWhere_ConditionHasClause()
         {
-            FactualParser parser = new FactualParser(new StringReader(
+            Namespace result = AssertNoErrors(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
@@ -23,9 +23,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "		Request request : request.frame = this\r\n" +
                 "			where not request.isAccepted /*and not request.isCanceled*/\r\n" +
                 "	}\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
+                "}");
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
                     Has<FactMember>.Property(member => member.Name, Is.EqualTo("outstandingRequests")) &
@@ -50,7 +48,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenWhereAndAnd_ConditionHasTwoClauses()
         {
-            FactualParser parser = new FactualParser(new StringReader(
+            Namespace result = AssertNoErrors(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
@@ -62,8 +60,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "			where not request.isAccepted and not request.isCanceled\r\n" +
                 "	}\r\n" +
                 "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
+            );
             Pred.Assert(result.Facts, Contains<Fact>.That(
                 Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
                     Has<FactMember>.Property(member => member.Name, Is.EqualTo("outstandingRequests")) &

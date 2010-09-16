@@ -31,7 +31,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             return errors;
         }
 
-        protected static Analyzer CreateAnalyzer(string factual)
+        private static Analyzer CreateAnalyzer(string factual)
         {
             FactualParser parser = new FactualParser(new StringReader(factual));
             var source = parser.Parse();

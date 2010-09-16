@@ -74,6 +74,7 @@
     <Compile Include="ParserTests\FactTest.cs" />
     <Compile Include="ParserTests\FieldTest.cs" />
     <Compile Include="ParserTests\NamespaceTest.cs" />
+    <Compile Include="ParserTests\ParserTestExtensions.cs" />
     <Compile Include="ParserTests\PredicateTest.cs" />
     <Compile Include="ParserTests\PropertyTest.cs" />
     <Compile Include="ParserTests\QueryTest.cs" />

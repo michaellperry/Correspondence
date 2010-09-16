@@ -1,8 +1,5 @@
-﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Predassert;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Factual.AST;
-using UpdateControls.Correspondence.Factual.Compiler;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
@@ -12,113 +9,52 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenIdentity_IdentityIsRecognizes()
         {
-            FactualParser parser = new FactualParser(new StringReader(
-                "namespace IM.Model;\r\n" +
-                "\r\n" +
-                "fact User {\r\n" +
-                "    unique;\r\n" +
-                "    identity;\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("User")) &
-                Has<Fact>.Property(fact => fact.Identity, Is.EqualTo(true))
-            ));
+            Namespace result = AssertNoErrors(
+                "namespace IM.Model;" +
+                "fact User {        " +
+                "    identity;      " +
+                "}                  ");
+            Fact user = result.AssertHasFactNamed("User");
+            Assert.IsTrue(user.Identity);
         }
 
         [TestMethod]
         public void WhenUnmodified_FieldIsNotSecured()
         {
-            FactualParser parser = new FactualParser(new StringReader(
-                "namespace IM.Model;\r\n" +
-                "\r\n" +
-                "fact Tag {\r\n" +
-                "    string name;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "fact Message {\r\n" +
-                "    string body;\r\n" +
-                "    Tag tag;\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Message")) &
-                Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
-                    KindOf<FactMember, Field>.That(
-                        Has<Field>.Property(field => field.Name, Is.EqualTo("tag")) &
-                        Has<Field>.Property(field => field.SecurityModifier, Is.EqualTo(FieldSecurityModifier.None))
-                    )
-                ))
-            ));
+            Namespace result = AssertNoErrors(
+                "namespace IM.Model; " +
+                "fact Message {      " +
+                "    Tag tag;        " +
+                "}                   ");
+            Fact message = result.AssertHasFactNamed("Message");
+            Field tag = message.AssertHasFieldNamed("tag");
+            Assert.AreEqual(FieldSecurityModifier.None, tag.SecurityModifier);
         }
 
         [TestMethod]
         public void WhenTo_ToIsRecognized()
         {
-            FactualParser parser = new FactualParser(new StringReader(
-                "namespace IM.Model;\r\n" +
-                "\r\n" +
-                "fact Tag {\r\n" +
-                "    string name;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "fact User {\r\n" +
-                "    unique;\r\n" +
-                "    identity;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "fact Message {\r\n" +
-                "    string body;\r\n" +
-                "    Tag tag;\r\n" +
-                "    to User recipient;\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Message")) &
-                Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
-                    KindOf<FactMember, Field>.That(
-                        Has<Field>.Property(field => field.Name, Is.EqualTo("recipient")) &
-                        Has<Field>.Property(field => field.SecurityModifier, Is.EqualTo(FieldSecurityModifier.To))
-                    )
-                ))
-            ));
+            Namespace result = AssertNoErrors(
+                "namespace IM.Model;    " +
+                "fact Message {         " +
+                "    to User recipient; " +
+                "}                      ");
+            Fact message = result.AssertHasFactNamed("Message");
+            Field recipient = message.AssertHasFieldNamed("recipient");
+            Assert.AreEqual(FieldSecurityModifier.To, recipient.SecurityModifier);
         }
 
         [TestMethod]
         public void WhenFrom_FromIsRecognized()
         {
-            FactualParser parser = new FactualParser(new StringReader(
-                "namespace IM.Model;\r\n" +
-                "\r\n" +
-                "fact Tag {\r\n" +
-                "    string name;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "fact User {\r\n" +
-                "    unique;\r\n" +
-                "    identity;\r\n" +
-                "}\r\n" +
-                "\r\n" +
-                "fact Message {\r\n" +
-                "    string body;\r\n" +
-                "    Tag tag;\r\n" +
-                "    to User recipient;\r\n" +
-                "    from User sender;\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Message")) &
-                Has<Fact>.Property(fact => fact.Members, Contains<FactMember>.That(
-                    KindOf<FactMember, Field>.That(
-                        Has<Field>.Property(field => field.Name, Is.EqualTo("sender")) &
-                        Has<Field>.Property(field => field.SecurityModifier, Is.EqualTo(FieldSecurityModifier.From))
-                    )
-                ))
-            ));
+            Namespace result = AssertNoErrors(
+                "namespace IM.Model;   " +
+                "fact Message {        " +
+                "    from User sender; " +
+                "}                     ");
+            Fact message = result.AssertHasFactNamed("Message");
+            Field sender = message.AssertHasFieldNamed("sender");
+            Assert.AreEqual(FieldSecurityModifier.From, sender.SecurityModifier);
         }
     }
 }

@@ -2,6 +2,9 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Factual.AST;
 using UpdateControls.Correspondence.Factual.Compiler;
+using System;
+using System.IO;
+using QEDCode.LLOne;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
@@ -13,6 +16,11 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             if (result == null)
                 Assert.Fail(parser.Errors.First().Message);
             return result;
+        }
+
+        protected static Namespace AssertNoErrors(string code)
+        {
+            return AssertNoErrors(new FactualParser(new StringReader(code)));
         }
     }
 }
