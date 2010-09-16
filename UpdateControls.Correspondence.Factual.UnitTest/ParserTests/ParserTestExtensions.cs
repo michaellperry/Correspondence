@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
     public static class ParserTestExtensions
     {
-        public static Fact AssertHasFactNamed(this Namespace result, string name)
+        public static Fact WithFactNamed(this Namespace result, string name)
         {
             var facts = result.Facts.Where(fact => fact.Name == name);
             if (!facts.Any())
@@ -17,7 +17,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             return facts.Single();
         }
 
-        public static Field AssertHasFieldNamed(this Fact fact, string name)
+        public static Field WithFieldNamed(this Fact fact, string name)
         {
             var fields = fact.Members.OfType<Field>().Where(field => field.Name == name);
             if (!fields.Any())

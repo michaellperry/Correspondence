@@ -12,7 +12,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenWhere_ConditionHasClause()
         {
-            Namespace result = AssertNoErrors(
+            Namespace result = ParseToNamespace(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
@@ -48,7 +48,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenWhereAndAnd_ConditionHasTwoClauses()
         {
-            Namespace result = AssertNoErrors(
+            Namespace result = ParseToNamespace(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +

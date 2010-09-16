@@ -18,7 +18,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             return result;
         }
 
-        protected static Namespace AssertNoErrors(string code)
+        protected static Namespace ParseToNamespace(string code)
         {
             return AssertNoErrors(new FactualParser(new StringReader(code)));
         }
