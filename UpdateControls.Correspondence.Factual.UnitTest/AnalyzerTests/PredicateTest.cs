@@ -78,7 +78,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenWhere_QueryHasCondition()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
@@ -117,7 +117,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenWhereAndAnd_QueryHasMultipleCondition()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
@@ -166,7 +166,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenPredicateIsInverted_ConditionIsInverted()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +

@@ -13,7 +13,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenQueryIsDefined_QueryIsGenerated()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
@@ -43,7 +43,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenQueryIsDefined_ResultIsGenerated()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
@@ -120,7 +120,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenTwoSetsAreJoined_QueryZigZags()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace MagazineSubscriptions;\r\n" +
                 "\r\n" +
                 "fact Subscriber {\r\n" +

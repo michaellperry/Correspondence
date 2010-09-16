@@ -12,7 +12,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenNativeFieldIsFound_FieldIsCreated()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenFactFieldIsFound_PredecessorIsCreated()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
@@ -57,7 +57,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenFactFieldIsPivot_PredecessorIsPivot()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +

@@ -12,7 +12,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenNamespaceIsFound_NamespaceIsCreated()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;"
             );
 
@@ -23,7 +23,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenFactIsFound_ClassIsCreated()
         {
-            Namespace result = AssertNoError(
+            Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue { }"

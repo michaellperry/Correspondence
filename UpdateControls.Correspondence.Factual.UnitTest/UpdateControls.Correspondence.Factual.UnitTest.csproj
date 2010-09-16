@@ -64,6 +64,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyzerTests\AnalyzerTestExtensions.cs" />
+    <Compile Include="AnalyzerTests\AsymmetricSecurityAnalyzer.cs" />
     <Compile Include="AnalyzerTests\PredicateTest.cs" />
     <Compile Include="AnalyzerTests\FactTest.cs" />
     <Compile Include="AnalyzerTests\FieldTest.cs" />

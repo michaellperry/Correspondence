@@ -38,15 +38,15 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             get { return _errors; }
         }
 
-        public Target.Namespace Analyze()
+        public Target.Analyzed Analyze()
         {
-            Target.Namespace result = new Target.Namespace(_root.Identifier);
+            Target.Analyzed result = new Target.Analyzed(_root.Identifier);
 
             foreach (Source.Fact fact in _root.Facts)
             {
                 try
                 {
-                    AnalyzeFact(fact, result);
+                    EmbelishAnalyzedFromFact(result, fact);
                 }
                 catch (CompilerException ex)
                 {
@@ -60,7 +60,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 return result;
         }
 
-        private void AnalyzeFact(Source.Fact fact, Target.Namespace result)
+        private void EmbelishAnalyzedFromFact(Target.Analyzed result, Source.Fact fact)
         {
             if (_root.Facts.Any(f => f != fact && f.Name == fact.Name))
                 throw new CompilerException(string.Format("The fact \"{0}\" is defined more than once.", fact.Name), fact.LineNumber);
@@ -72,30 +72,37 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             foreach (Source.FactMember member in fact.Members)
             {
-                try
+                AnalyzeMember(fact, factClass, member);
+            }
+
+            factClass.HasPublicKey = fact.Identity;
+        }
+
+        private void AnalyzeMember(Source.Fact fact, Target.Class factClass, Source.FactMember member)
+        {
+            try
+            {
+                if (fact.Members.Any(m => m != member && m.Name == member.Name))
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Name, member.Name), member.LineNumber);
+                var field = member as Source.Field;
+                if (field != null)
+                    AnalyzeField(factClass, field);
+                else
                 {
-                    if (fact.Members.Any(m => m != member && m.Name == member.Name))
-                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Name, member.Name), member.LineNumber);
-                    var field = member as Source.Field;
-                    if (field != null)
-                        AnalyzeField(factClass, field);
+                    var query = member as Source.Query;
+                    if (query != null)
+                        AnalyzeQuery(factClass, fact, query);
                     else
                     {
-                        var query = member as Source.Query;
-                        if (query != null)
-                            AnalyzeQuery(factClass, fact, query);
-                        else
-                        {
-                            var predicate = member as Source.Predicate;
-                            if (predicate != null)
-                                AnalyzePredicate(factClass, fact, predicate);
-                        }
+                        var predicate = member as Source.Predicate;
+                        if (predicate != null)
+                            AnalyzePredicate(factClass, fact, predicate);
                     }
                 }
-                catch (CompilerException ex)
-                {
-                    _errors.Add(new Error(ex.Message, ex.LineNumber));
-                }
+            }
+            catch (CompilerException ex)
+            {
+                _errors.Add(new Error(ex.Message, ex.LineNumber));
             }
         }
 

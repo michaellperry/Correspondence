@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.Factual.Metadata
 {
-    public class Namespace
+    public class Analyzed
     {
         private string _name;
         private List<Class> _classes = new List<Class>();
 
-        public Namespace(string name)
+        public Analyzed(string name)
         {
             _name = name;
         }

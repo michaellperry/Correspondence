@@ -112,7 +112,7 @@
     <Compile Include="Metadata\Join.cs" />
     <Compile Include="Metadata\NativeType.cs" />
     <Compile Include="Metadata\Field.cs" />
-    <Compile Include="Metadata\Namespace.cs" />
+    <Compile Include="Metadata\Analyzed.cs" />
     <Compile Include="Metadata\Predecessor.cs" />
     <Compile Include="Metadata\Query.cs" />
     <Compile Include="Metadata\Result.cs" />

@@ -6,6 +6,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
     public class Class
     {
         private string _name;
+        private bool _publicKey;
         private bool _unique;
         private List<Field> _fields = new List<Field>();
         private List<Predecessor> _predecessors = new List<Predecessor>();
@@ -82,6 +83,17 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         {
             _predicates.Add(predicate);
             return this;
+        }
+
+        public bool HasPublicKey {
+            get
+            {
+                return _publicKey;
+            } 
+            set 
+            {
+                _publicKey = value;
+            } 
         }
     }
 }
