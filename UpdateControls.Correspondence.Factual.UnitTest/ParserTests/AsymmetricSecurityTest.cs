@@ -26,41 +26,35 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "fact Message {      " +
                 "    Tag tag;        " +
                 "}                   ";
-            Namespace ns = ParseToNamespace(source);
-            //ns2 = new NamespaceBuilder("IM.model").withFact("Message").withTag("tag").build();
-            //AsserDeepEquals(ns, ns2);
-            AssertNoSecurityModifier(ns.WithFactNamed("Message").WithFieldNamed("tag"));
+            Namespace result = ParseToNamespace(source);
+            Field tag = result.WithFactNamed("Message").WithFieldNamed("tag");
+            Assert.AreEqual(FieldSecurityModifier.None, tag.SecurityModifier);
         }
 
         [TestMethod]
         public void WhenTo_ToIsRecognized()
         {
-            Namespace result = ParseToNamespace(
+            string code =
                 "namespace IM.Model;    " +
                 "fact Message {         " +
                 "    to User recipient; " +
-                "}                      ");
-            Fact message = result.WithFactNamed("Message");
-            Field recipient = message.WithFieldNamed("recipient");
+                "}                      ";
+            Namespace result = ParseToNamespace(code);
+            Field recipient = result.WithFactNamed("Message").WithFieldNamed("recipient");
             Assert.AreEqual(FieldSecurityModifier.To, recipient.SecurityModifier);
         }
 
         [TestMethod]
         public void WhenFrom_FromIsRecognized()
         {
-            Namespace result = ParseToNamespace(
+            string code =
                 "namespace IM.Model;   " +
                 "fact Message {        " +
                 "    from User sender; " +
-                "}                     ");
-            Fact message = result.WithFactNamed("Message");
-            Field sender = message.WithFieldNamed("sender");
+                "}                     ";
+            Namespace result = ParseToNamespace(code);
+            Field sender = result.WithFactNamed("Message").WithFieldNamed("sender");
             Assert.AreEqual(FieldSecurityModifier.From, sender.SecurityModifier);
-        }
-
-        private static void AssertNoSecurityModifier(Field field)
-        {
-            Assert.AreEqual(FieldSecurityModifier.None, field.SecurityModifier);
         }
     }
 }

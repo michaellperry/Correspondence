@@ -1,8 +1,6 @@
-using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Predassert;
 using UpdateControls.Correspondence.Factual.AST;
-using UpdateControls.Correspondence.Factual.Compiler;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
@@ -12,44 +10,37 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenMultiLineCommentFound_CommentIsIgnored()
         {
-            FactualParser parser = new FactualParser(new StringReader(
-                "namespace ContactList;\r\n" +
-                "\r\n" +
-                "/*fact Ignored\r\n" +
-                "{\r\n" +
-                "}\r\n" +
-                "*/\r\n" +
-                "fact Person {\r\n" +
-                "  Address* addresses {\r\n" +
-                "    Address address : address.person = this\r\n" +
-                "  }\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Facts, ContainsNo<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Ignored"))
-            ));
+            string code =
+                "namespace ContactList;                      \r\n" +
+                "                                            \r\n" +
+                "/*fact Ignored                              \r\n" +
+                "{                                           \r\n" +
+                "}                                           \r\n" +
+                "*/                                          \r\n" +
+                "fact Person {                               \r\n" +
+                "  Address* addresses {                      \r\n" +
+                "    Address address : address.person = this \r\n" +
+                "  }                                         \r\n" +
+                "}";
+            Namespace result = ParseToNamespace(code);
+            Assert.IsFalse(result.Facts.Any(fact => fact.Name == "Ignored"), "The commented out fact was found.");
         }
 
         [TestMethod]
         public void WhenSingleLineCommentFound_CommentIsIgnored()
         {
-            FactualParser parser = new FactualParser(new StringReader(
-                "namespace ContactList;\r\n" +
-                "\r\n" +
-                "fact Person {\r\n" +
-                "  Address* addresses {\r\n" +
-                "    Address address : address.person = this\r\n" +
-                "  }\r\n" +
-                "  //string ignored;\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Members, ContainsNo<FactMember>.That(
-                    Has<FactMember>.Property(member => member.Name, Is.EqualTo("ignored"))
-                ))
-            ));
+            string code =
+                "namespace ContactList;                      \r\n" +
+                "                                            \r\n" +
+                "fact Person {                               \r\n" +
+                "  Address* addresses {                      \r\n" +
+                "    Address address : address.person = this \r\n" +
+                "  }                                         \r\n" +
+                "  //string ignored;                         \r\n" +
+                "}";
+            Namespace result = ParseToNamespace(code);
+            var person = result.WithFactNamed("Person");
+            Assert.IsFalse(person.Members.Any(member => member.Name == "ignored"), "The commented out field was found.");
         }
     }
 }

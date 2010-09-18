@@ -26,5 +26,27 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 Assert.Fail(String.Format("The fact {0} contains more than one field named {1}.", fact.Name, name));
             return fields.Single();
         }
+
+        public static Query WithQueryNamed(this Fact fact, string name)
+        {
+            var queries = fact.Members.OfType<Query>().Where(field => field.Name == name);
+            if (!queries.Any())
+                Assert.Fail(string.Format("The fact {0} contains no query named {1}.", fact.Name, name));
+            if (queries.Count() > 1)
+                Assert.Fail(String.Format("The fact {0} contains more than one query named {1}.", fact.Name, name));
+            return queries.Single();
+        }
+
+        public static DataTypeFact ThatIsDataTypeFact(this DataType dataType)
+        {
+            Assert.IsInstanceOfType(dataType, typeof(DataTypeFact));
+            return (DataTypeFact)dataType;
+        }
+
+        public static DataTypeNative ThatIsDataTypeNative(this DataType dataType)
+        {
+            Assert.IsInstanceOfType(dataType, typeof(DataTypeNative));
+            return (DataTypeNative)dataType;
+        }
     }
 }
