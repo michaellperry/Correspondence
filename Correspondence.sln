@@ -57,9 +57,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP7", "WP7", "{B146C09F-B4E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence (WP7)", "WP7\UpdateControls.Correspondence (WP7)\UpdateControls.Correspondence (WP7).csproj", "{DE3FFB60-CADE-4679-A53E-0541F707EA95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory (WP7)", "WP7\UpdateControls.Correspondence.Memory (WP7)\UpdateControls.Correspondence.Memory (WP7).csproj", "{D489015D-1272-4B18-BC26-645C720169F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.WebServiceClient (WP7)", "WP7\UpdateControls.Correspondence.WebServiceClient (WP7)\UpdateControls.Correspondence.WebServiceClient (WP7).csproj", "{285D68FA-6CA3-4757-B330-DE4EDC5B0849}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
+		SccNumberOfProjects = 24
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -130,6 +134,14 @@ Global
 		SccProjectTopLevelParentUniqueName21 = Correspondence.sln
 		SccProjectName21 = WP7/UpdateControls.Correspondence\u0020(WP7)
 		SccLocalPath21 = WP7\\UpdateControls.Correspondence\u0020(WP7)
+		SccProjectUniqueName22 = WP7\\UpdateControls.Correspondence.Memory\u0020(WP7)\\UpdateControls.Correspondence.Memory\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName22 = Correspondence.sln
+		SccProjectName22 = WP7/UpdateControls.Correspondence.Memory\u0020(WP7)
+		SccLocalPath22 = WP7\\UpdateControls.Correspondence.Memory\u0020(WP7)
+		SccProjectUniqueName23 = WP7\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7)\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName23 = Correspondence.sln
+		SccProjectName23 = WP7/UpdateControls.Correspondence.WebServiceClient\u0020(WP7)
+		SccLocalPath23 = WP7\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7)
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -220,6 +232,14 @@ Global
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D489015D-1272-4B18-BC26-645C720169F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D489015D-1272-4B18-BC26-645C720169F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D489015D-1272-4B18-BC26-645C720169F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D489015D-1272-4B18-BC26-645C720169F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{285D68FA-6CA3-4757-B330-DE4EDC5B0849}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{285D68FA-6CA3-4757-B330-DE4EDC5B0849}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{285D68FA-6CA3-4757-B330-DE4EDC5B0849}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{285D68FA-6CA3-4757-B330-DE4EDC5B0849}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -230,5 +250,7 @@ Global
 		{9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{90511DF3-3151-447E-9C2E-1B3E11CD788C} = {9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4}
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
+		{D489015D-1272-4B18-BC26-645C720169F9} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
+		{285D68FA-6CA3-4757-B330-DE4EDC5B0849} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 	EndGlobalSection
 EndGlobal
