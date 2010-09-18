@@ -1,8 +1,5 @@
-using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Predassert;
 using UpdateControls.Correspondence.Factual.AST;
-using UpdateControls.Correspondence.Factual.Compiler;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
@@ -12,18 +9,15 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenUnique_UniqueIsRecognized()
         {
-            FactualParser parser = new FactualParser(new StringReader(
-                "namespace Reversi.GameModel;\r\n" +
-                "\r\n" +
-                "fact Person {\r\n" +
-                "    unique;\r\n" +
-                "}"
-            ));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Facts, Contains<Fact>.That(
-                Has<Fact>.Property(fact => fact.Name, Is.EqualTo("Person")) &
-                Has<Fact>.Property(fact => fact.Unique, Is.EqualTo(true))
-            ));
+            string code =
+                "namespace Reversi.GameModel; " +
+                "                             " +
+                "fact Person {                " +
+                "    unique;                  " +
+                "}                            ";
+            Namespace result = ParseToNamespace(code);
+            Fact person = result.WithFactNamed("Person");
+            Assert.IsTrue(person.Unique, "The Person fact is not unique.");
         }
     }
 }

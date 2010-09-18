@@ -1,9 +1,6 @@
-using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Predassert;
 using QEDCode.LLOne;
 using UpdateControls.Correspondence.Factual.AST;
-using UpdateControls.Correspondence.Factual.Compiler;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
@@ -13,57 +10,45 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         [TestMethod]
         public void WhenInputIsEmpty_NamespaceIsRequired()
         {
-            FactualParser parser = new FactualParser(new StringReader(""));
-            Namespace result = parser.Parse();
-
-            Pred.Assert(result, Is.Null<Namespace>());
-            Pred.Assert(parser.Errors, Contains<ParserError>.That(
-                Has<ParserError>.Property(e => e.Message, Is.EqualTo("Add a 'namespace' declaration.")) &
-                Has<ParserError>.Property(e => e.LineNumber, Is.EqualTo(1))
-            ));
+            string code = "";
+            ParserError error = ParseToError(code);
+            Assert.AreEqual("Add a 'namespace' declaration.", error.Message);
+            Assert.AreEqual(1, error.LineNumber);
         }
 
         [TestMethod]
         public void WhenNamespaceIsGiven_DottedIdentifierIsRequired()
         {
-            FactualParser parser = new FactualParser(new StringReader("namespace"));
-            Namespace result = parser.Parse();
-
-            Pred.Assert(result, Is.Null<Namespace>());
-            Pred.Assert(parser.Errors, Contains<ParserError>.That(
-                Has<ParserError>.Property(e => e.Message, Is.EqualTo("Provide a dotted identifier for the namespace.")) &
-                Has<ParserError>.Property(e => e.LineNumber, Is.EqualTo(1))
-            ));
+            string code = "namespace";
+            ParserError error = ParseToError(code);
+            Assert.AreEqual("Provide a dotted identifier for the namespace.", error.Message);
+            Assert.AreEqual(1, error.LineNumber);
         }
 
         [TestMethod]
         public void WhenNamespaceIsGiven_SemicolonIsRequired()
         {
-            FactualParser parser = new FactualParser(new StringReader("namespace Reversi.GameModel"));
-            Namespace result = parser.Parse();
-
-            Pred.Assert(result, Is.Null<Namespace>());
-            Pred.Assert(parser.Errors, Contains<ParserError>.That(
-                Has<ParserError>.Property(e => e.Message, Is.EqualTo("Terminate the namespace declaration with a semicolon.")) &
-                Has<ParserError>.Property(e => e.LineNumber, Is.EqualTo(1))
-            ));
+            string code = "namespace Reversi.GameModel";
+            ParserError error = ParseToError(code);
+            Assert.AreEqual("Terminate the namespace declaration with a semicolon.", error.Message);
+            Assert.AreEqual(1, error.LineNumber);
         }
 
         [TestMethod]
         public void WhenNamespaceHasNoDot_NamepaceIsRecognized()
         {
-            FactualParser parser = new FactualParser(new StringReader("namespace GameModel;"));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Identifier, Is.EqualTo("GameModel"));
-            Pred.Assert(result.LineNumber, Is.EqualTo(1));
+            string code = "namespace GameModel;";
+            Namespace result = ParseToNamespace(code);
+            Assert.AreEqual("GameModel", result.Identifier);
+            Assert.AreEqual(1, result.LineNumber);
         }
 
         [TestMethod]
         public void WhenNamespaceIsGiven_NamepaceIsRecognized()
         {
-            FactualParser parser = new FactualParser(new StringReader("namespace Reversi.GameModel;"));
-            Namespace result = AssertNoErrors(parser);
-            Pred.Assert(result.Identifier, Is.EqualTo("Reversi.GameModel"));
+            string code = "namespace Reversi.GameModel;";
+            Namespace result = ParseToNamespace(code);
+            Assert.AreEqual("Reversi.GameModel", result.Identifier);
         }
     }
 }

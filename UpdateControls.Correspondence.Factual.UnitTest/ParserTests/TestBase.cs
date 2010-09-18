@@ -22,5 +22,13 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         {
             return AssertNoErrors(new FactualParser(new StringReader(code)));
         }
+
+        protected static ParserError ParseToError(string code)
+        {
+            FactualParser parser = new FactualParser(new StringReader(code));
+            Namespace result = parser.Parse();
+            Assert.IsNull(result);
+            return parser.Errors.Single();
+        }
     }
 }
