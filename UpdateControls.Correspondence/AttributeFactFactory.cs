@@ -29,7 +29,7 @@ namespace UpdateControls.Correspondence
             _fieldSerializerByType = fieldSerializerByType;
             _fields =
                 (
-                    from f in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
+                    from f in type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                     from a in f.GetCustomAttributes(typeof(CorrespondenceFieldAttribute), false)
                     orderby f.Name
                     select new FieldDefinition()
