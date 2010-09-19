@@ -46,7 +46,7 @@ namespace UpdateControls.Correspondence
 
         private static ConstructorInfo GetMementoConstructor(Type type)
         {
-            ConstructorInfo constructorInfo = type.GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new Type[] { typeof(FactMemento) }, null);
+            ConstructorInfo constructorInfo = type.GetConstructor(BindingFlags.NonPublic | BindingFlags.Public| BindingFlags.Instance, null, new Type[] { typeof(FactMemento) }, null);
             if (constructorInfo != null)
                 return constructorInfo;
             else
