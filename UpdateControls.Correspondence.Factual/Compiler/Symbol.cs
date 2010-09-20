@@ -35,7 +35,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 		Decimal,
 		Long,
         Byte,
-        Identity,
+        Principal,
         From,
         To,
         Strength

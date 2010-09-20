@@ -75,7 +75,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 AnalyzeMember(fact, factClass, member);
             }
 
-            factClass.HasPublicKey = fact.Identity;
+            factClass.HasPublicKey = fact.Principal;
         }
 
         private void AnalyzeMember(Source.Fact fact, Target.Class factClass, Source.FactMember member)

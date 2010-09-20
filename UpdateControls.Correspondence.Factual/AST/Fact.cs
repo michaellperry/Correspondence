@@ -34,7 +34,7 @@ namespace UpdateControls.Correspondence.Factual.AST
             set { _unique = value; }
         }
 
-        public bool Identity
+        public bool Principal
         {
             get { return _identity; }
             set { _identity = value; }

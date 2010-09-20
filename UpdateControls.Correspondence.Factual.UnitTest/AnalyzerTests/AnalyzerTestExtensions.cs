@@ -11,7 +11,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
     {
         public static Fact SetIdentity(this Fact fact, bool value)
         {
-            fact.Identity = value;
+            fact.Principal = value;
             return fact;
         }
 

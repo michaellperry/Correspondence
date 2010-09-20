@@ -43,7 +43,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("and", Symbol.And)
                 .AddSymbol("unique", Symbol.Unique)
 				.AddSymbol("publish", Symbol.Publish)
-                .AddSymbol("identity", Symbol.Identity)
+                .AddSymbol("principal", Symbol.Principal)
                 .AddSymbol("from", Symbol.From)
                 .AddSymbol("to", Symbol.To)
                 .AddSymbol(".", Symbol.Dot)
@@ -205,15 +205,15 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
                 Terminal(Symbol.OpenBracket), "Declare members of a fact within brackets.",
                 (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
-            var identityModifierRule = Sequence(
-                Terminal(Symbol.Identity),
-                Terminal(Symbol.Semicolon), "The identity modifier is followed by a semicolon.",
+            var principalModifierRule = Sequence(
+                Terminal(Symbol.Principal),
+                Terminal(Symbol.Semicolon), "The principal modifier is followed by a semicolon.",
                 (modifier, semicolon) => modifier);
             var uniqueModifierRule = Sequence(
                 Terminal(Symbol.Unique),
                 Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
                 (modifier, semicolon) => modifier);
-            var modifierRule = uniqueModifierRule | identityModifierRule;
+            var modifierRule = uniqueModifierRule | principalModifierRule;
             var modifiedFactHeader = Many(
                 factHeader, modifierRule, (fact, modifier) => ModifyFact(fact, modifier.Symbol));
             var factRule = Sequence(
@@ -249,8 +249,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
             if (modifier == Symbol.Unique)
                 fact.Unique = true;
-            else if (modifier == Symbol.Identity)
-                fact.Identity = true;
+            else if (modifier == Symbol.Principal)
+                fact.Principal = true;
             return fact;
         }
 

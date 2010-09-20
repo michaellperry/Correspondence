@@ -31,10 +31,10 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             Namespace result = ParseToNamespace(
                 "namespace IM.Model;" +
                 "fact User {        " +
-                "    identity;      " +
+                "    principal;      " +
                 "}                  ");
             Fact user = result.WithFactNamed("User");
-            Assert.IsTrue(user.Identity);
+            Assert.IsTrue(user.Principal);
         }
 
         [TestMethod]
