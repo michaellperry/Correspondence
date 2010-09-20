@@ -2,6 +2,7 @@
 using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using System;
 
 namespace UpdateControls.Correspondence
 {
@@ -90,6 +91,81 @@ namespace UpdateControls.Correspondence
             }
 
             return any;
+        }
+
+        class SynchronizeResult : IAsyncResult
+        {
+            private AsyncCallback _callback;
+            private object _state;
+            private bool _outgoingFinished = false;
+            private bool _incomingFinished = false;
+
+            public SynchronizeResult(AsyncCallback callback, object state)
+            {
+                _callback = callback;
+                _state = state;
+            }
+
+            public void OutgoingFinished()
+            {
+                _outgoingFinished = true;
+                Finish();
+            }
+
+            public void IncomingFinished()
+            {
+                _incomingFinished = true;
+                Finish();
+            }
+
+            private void Finish()
+            {
+                if (_outgoingFinished && _incomingFinished)
+                {
+                    _callback(this);
+                }
+            }
+
+            #region IAsyncResult Members
+
+            public object AsyncState
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public System.Threading.WaitHandle AsyncWaitHandle
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public bool CompletedSynchronously
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            public bool IsCompleted
+            {
+                get { throw new NotImplementedException(); }
+            }
+
+            #endregion
+        }
+
+        public void BeginSynchronize(AsyncCallback callback, object state)
+        {
+            SynchronizeResult result = new SynchronizeResult(callback, state);
+            BeginSynchronizeOutgoing(result);
+            BeginSynchronizeIncoming(result);
+        }
+
+        private void BeginSynchronizeOutgoing(SynchronizeResult result)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void BeginSynchronizeIncoming(SynchronizeResult result)
+        {
+            throw new NotImplementedException();
         }
 
         private IEnumerable<FactTreeMemento> GetMessageBodies(ref TimestampID timestamp)

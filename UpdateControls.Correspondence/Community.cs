@@ -111,6 +111,11 @@ namespace UpdateControls.Correspondence
             return _network.Synchronize();
         }
 
+        public void BeginSynchronize(AsyncCallback callback, object state)
+        {
+            _network.BeginSynchronize(callback, state);
+        }
+
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
         {
             get { return _fieldSerializerByType; }
