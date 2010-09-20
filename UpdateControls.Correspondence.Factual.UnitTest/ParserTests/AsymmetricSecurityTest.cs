@@ -7,6 +7,25 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
     public class AsymmetricSecurityTest : TestBase
     {
         [TestMethod]
+        public void WhenNoStrength_StrenthIsEmpty()
+        {
+            Namespace result = AssertNoErrors(
+                "namespace IM.Model;");
+
+            Assert.AreEqual(string.Empty, result.Strength);
+        }
+
+        [TestMethod]
+        public void WhenStrength_StrenthIsRecognized()
+        {
+            Namespace result = AssertNoErrors(
+                "namespace IM.Model;\r\n" +
+                "strength us_1_0;");
+
+            Assert.AreEqual("us_1_0", result.Strength);
+        }
+
+        [TestMethod]
         public void WhenIdentity_IdentityIsRecognizes()
         {
             Namespace result = ParseToNamespace(

@@ -37,6 +37,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Byte,
         Identity,
         From,
-        To
+        To,
+        Strength
     }
 }

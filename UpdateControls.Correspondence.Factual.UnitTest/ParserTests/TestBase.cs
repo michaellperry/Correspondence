@@ -10,6 +10,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
     public class TestBase
     {
+        protected static Namespace AssertNoErrors(string code)
+        {
+            FactualParser parser = new FactualParser(new StringReader(code));
+            return AssertNoErrors(parser);
+        }
+
         protected static Namespace AssertNoErrors(FactualParser parser)
         {
             Namespace result = parser.Parse();

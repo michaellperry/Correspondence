@@ -9,12 +9,14 @@ namespace UpdateControls.Correspondence.Factual.AST
     {
         private int _lineNumber;
         private string _identifier;
+        private string _strength;
         private List<Fact> _facts = new List<Fact>();
 
-        public Namespace(string identifier, int lineNumber)
+        public Namespace(string identifier, int lineNumber, string strength)
         {
             _lineNumber = lineNumber;
             _identifier = identifier;
+            _strength = strength;
         }
 
         public Namespace AddFact(Fact fact)
@@ -33,6 +35,10 @@ namespace UpdateControls.Correspondence.Factual.AST
             get { return _identifier; }
         }
 
+        public string Strength
+        {
+            get { return _strength; }
+        }
         public IEnumerable<Fact> Facts
         {
             get { return _facts; }

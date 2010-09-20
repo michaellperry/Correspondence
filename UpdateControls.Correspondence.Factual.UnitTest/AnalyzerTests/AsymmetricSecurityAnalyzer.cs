@@ -15,7 +15,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void IdentityFactHasPublicKey()
         {
-            Namespace root = new Namespace("IM.Model", 1)
+            Namespace root = new Namespace("IM.Model", 1, string.Empty)
                 .AddFact(new Fact("User", 2)
                     .SetIdentity(true)
                 );

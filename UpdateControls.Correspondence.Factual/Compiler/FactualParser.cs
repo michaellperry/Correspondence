@@ -22,6 +22,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
             return new Lexer<Symbol>(input, Symbol.Identifier, Symbol.EndOfFile)
                 .AddSymbol("namespace", Symbol.Namespace)
+                .AddSymbol("strength", Symbol.Strength)
                 .AddSymbol("fact", Symbol.Fact)
                 .AddSymbol("property", Symbol.Property)
                 .AddSymbol("this", Symbol.This)
@@ -58,17 +59,24 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         private static Rule<Symbol, Namespace> Rule()
         {
             // dotted_identifier -> identifier ("." identifier)*
-            // namespace_declaration -> "namespace" dotted_identifier ";"
+            // strength_declaration_opt -> ("strength" identifier ";")?
+            // namespace_declaration -> "namespace" dotted_identifier ";" strength_declaration_opt
             var dottedIdentifier = Separated(
                 Terminal(Symbol.Identifier),
                 Symbol.Dot,
                 identifier => new StringBuilder().Append(identifier.Value),
                 (stringBuilder, identifier) => stringBuilder.Append(".").Append(identifier.Value));
+            var strengthDeclaration = Sequence(
+                Terminal(Symbol.Strength),
+                Terminal(Symbol.Identifier), "Provide a strength identifier.",
+                Terminal(Symbol.Semicolon), "Terminate the strength declaration with a semicolon.",
+                (strengthToken, identifier, ignored) => identifier.Value);
             var namespaceRule = Sequence(
                 Terminal(Symbol.Namespace),
                 dottedIdentifier, "Provide a dotted identifier for the namespace.",
                 Terminal(Symbol.Semicolon), "Terminate the namespace declaration with a semicolon.",
-                (namespaceToken, identifier, ignored) => new Namespace(identifier.ToString(), namespaceToken.LineNumber));
+                Optional(strengthDeclaration, string.Empty), "Defect.",
+                (namespaceToken, identifier, ignored, strengthIdentifier) => new Namespace(identifier.ToString(), namespaceToken.LineNumber, strengthIdentifier));
 
             // path -> (identifier | "this") ("." identifier)*
             var pathRule =
