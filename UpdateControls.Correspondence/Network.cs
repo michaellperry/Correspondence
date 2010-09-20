@@ -3,6 +3,7 @@ using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using System;
+using UpdateControls.Correspondence.Async;
 
 namespace UpdateControls.Correspondence
 {
@@ -14,6 +15,7 @@ namespace UpdateControls.Correspondence
         private IStorageStrategy _storageStrategy;
         private List<Subscription> _subscriptions = new List<Subscription>();
         private List<ICommunicationStrategy> _communicationStrategies = new List<ICommunicationStrategy>();
+		private List<IAsynchronousCommunicationStrategy> _asynchronousCommunicationStrategies = new List<IAsynchronousCommunicationStrategy>();
 
         public Network(Model model, IStorageStrategy storageStrategy)
         {
@@ -29,6 +31,11 @@ namespace UpdateControls.Correspondence
         public void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
         {
             _communicationStrategies.Add(communicationStrategy);
+        }
+
+        public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
+        {
+            _asynchronousCommunicationStrategies.Add(asynchronousCommunicationStrategy);
         }
 
         public bool Synchronize()
@@ -93,80 +100,94 @@ namespace UpdateControls.Correspondence
             return any;
         }
 
-        class SynchronizeResult : IAsyncResult
-        {
-            private AsyncCallback _callback;
-            private object _state;
-            private bool _outgoingFinished = false;
-            private bool _incomingFinished = false;
-
-            public SynchronizeResult(AsyncCallback callback, object state)
-            {
-                _callback = callback;
-                _state = state;
-            }
-
-            public void OutgoingFinished()
-            {
-                _outgoingFinished = true;
-                Finish();
-            }
-
-            public void IncomingFinished()
-            {
-                _incomingFinished = true;
-                Finish();
-            }
-
-            private void Finish()
-            {
-                if (_outgoingFinished && _incomingFinished)
-                {
-                    _callback(this);
-                }
-            }
-
-            #region IAsyncResult Members
-
-            public object AsyncState
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public System.Threading.WaitHandle AsyncWaitHandle
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public bool CompletedSynchronously
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            public bool IsCompleted
-            {
-                get { throw new NotImplementedException(); }
-            }
-
-            #endregion
-        }
-
         public void BeginSynchronize(AsyncCallback callback, object state)
         {
-            SynchronizeResult result = new SynchronizeResult(callback, state);
+			if (!_asynchronousCommunicationStrategies.Any())
+				throw new CorrespondenceException("Register at least one asynchronous communication strategy before calling BeginSynchronize.");
+
+			SynchronizeResult result = new SynchronizeResult(callback, state);
             BeginSynchronizeOutgoing(result);
             BeginSynchronizeIncoming(result);
         }
 
+		public bool EndSynchronize(IAsyncResult result)
+		{
+			SynchronizeResult r = (SynchronizeResult)result;
+			return (r.IncomingResult ?? false) || (r.OutgoingResult ?? false);
+		}
+
         private void BeginSynchronizeOutgoing(SynchronizeResult result)
-        {
-            throw new NotImplementedException();
-        }
+		{
+			bool any = false;
+			ResultAggregate communicationStrategyAggregate = new ResultAggregate(delegate()
+			{
+				result.OutgoingFinished(any);
+			});
+			foreach (IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy in _asynchronousCommunicationStrategies)
+			{
+				string protocolName = asynchronousCommunicationStrategy.ProtocolName;
+				string peerName = asynchronousCommunicationStrategy.PeerName;
+
+				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
+				IEnumerable<FactTreeMemento> messageBodies = GetMessageBodies(ref timestamp);
+				if (messageBodies.Any())
+				{
+					any = true;
+					communicationStrategyAggregate.Begin();
+					ResultAggregate messageBodyAggregate = new ResultAggregate(delegate()
+					{
+						_storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
+						communicationStrategyAggregate.End();
+					});
+					foreach (FactTreeMemento messageBody in messageBodies)
+					{
+						messageBodyAggregate.Begin();
+						asynchronousCommunicationStrategy.BeginPost(messageBody, messageBodyAggregate.End);
+					}
+					messageBodyAggregate.Close();
+				}
+			}
+
+			communicationStrategyAggregate.Close();
+		}
 
         private void BeginSynchronizeIncoming(SynchronizeResult result)
-        {
-            throw new NotImplementedException();
-        }
+		{
+			bool any = false;
+			ResultAggregate communicationStragetyAggregate = new ResultAggregate(delegate()
+			{
+				result.IncomingFinished(any);
+			});
+			foreach (IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy in _asynchronousCommunicationStrategies)
+			{
+				string protocolName = asynchronousCommunicationStrategy.ProtocolName;
+				string peerName = asynchronousCommunicationStrategy.PeerName;
+
+				foreach (Subscription subscription in _subscriptions)
+				{
+					foreach (CorrespondenceFact pivot in subscription.Pivots)
+					{
+						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
+						FactID pivotId = pivot.ID;
+						AddToFactTree(pivotTree, pivotId);
+						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, pivotId);
+						communicationStragetyAggregate.Begin();
+						asynchronousCommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, delegate(FactTreeMemento messageBody)
+						{
+							if (messageBody.Facts.Any())
+							{
+								any = true;
+								TimestampID newTimestamp = ReceiveMessage(messageBody);
+								_storageStrategy.SaveIncomingTimestamp(protocolName, peerName, pivotId, newTimestamp);
+							}
+							communicationStragetyAggregate.End();
+						});
+					}
+				}
+			}
+
+			communicationStragetyAggregate.Close();
+		}
 
         private IEnumerable<FactTreeMemento> GetMessageBodies(ref TimestampID timestamp)
         {

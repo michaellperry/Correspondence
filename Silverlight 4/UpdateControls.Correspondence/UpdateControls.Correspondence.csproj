@@ -58,10 +58,17 @@
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
     <Reference Include="UpdateControls.Light, Version=2.1.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>C:\Projects\correspondence\Correspondence\SolutionItems\Silverlight\UpdateControls.Light.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SolutionItems\Silverlight4\UpdateControls.Light.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\UpdateControls.Correspondence\Async\ResultAggregate.cs">
+      <Link>Async\ResultAggregate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Async\SynchronizeResult.cs">
+      <Link>Async\SynchronizeResult.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\AttributeFactFactory.cs">
       <Link>AttributeFactFactory.cs</Link>
     </Compile>
@@ -214,6 +221,9 @@
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\Service\IService.cs">
       <Link>Service\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\IAsynchronousCommunicationStrategy.cs">
+      <Link>Strategy\IAsynchronousCommunicationStrategy.cs</Link>
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\Strategy\ICommunicationStrategy.cs">
       <Link>Strategy\ICommunicationStrategy.cs</Link>
