@@ -58,6 +58,12 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Async\ResultAggregate.cs">
+      <Link>Async\ResultAggregate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Async\SynchronizeResult.cs">
+      <Link>Async\SynchronizeResult.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\AttributeFactFactory.cs">
       <Link>AttributeFactFactory.cs</Link>
     </Compile>
@@ -210,6 +216,9 @@
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\Service\IService.cs">
       <Link>Service\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\IAsynchronousCommunicationStrategy.cs">
+      <Link>Strategy\IAsynchronousCommunicationStrategy.cs</Link>
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\Strategy\ICommunicationStrategy.cs">
       <Link>Strategy\ICommunicationStrategy.cs</Link>

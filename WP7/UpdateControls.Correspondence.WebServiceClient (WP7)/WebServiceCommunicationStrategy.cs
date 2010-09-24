@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Mementos;
+using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.WebServiceClient
 {
-    public class WebServiceCommunicationStrategy : ICommunicationStrategy
+    public class WebServiceCommunicationStrategy : IAsynchronousCommunicationStrategy
     {
-        private SynchronizationServiceClient _synchronizationService = new SynchronizationServiceClient();
+        private SynchronizationServiceClient _synchronizationServiceClient;
+        private ISynchronizationService _synchronizationService;
+
+        public WebServiceCommunicationStrategy()
+        {
+            _synchronizationServiceClient = new SynchronizationServiceClient();
+            _synchronizationService = _synchronizationServiceClient;
+        }
 
         public string ProtocolName
         {
@@ -24,21 +22,26 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         public string PeerName
         {
-            get { return _synchronizationService.Endpoint.Address.ToString(); }
+            get { return _synchronizationServiceClient.Endpoint.Address.ToString(); }
         }
 
-        public FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
+        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Action<FactTreeMemento> callback)
         {
-            throw new NotImplementedException();
-            //FactTree pivot = Translate.MementoToFactTree(pivotTree);
-            //FactTree result = _synchronizationService.CallService(service => service.Get(pivot, pivotId.key, timestamp.Key));
-            //return Translate.FactTreeToMemento(result);
+            FactTree pivot = Translate.MementoToFactTree(pivotTree);
+            _synchronizationService.BeginGet(pivot, pivotId.key, timestamp.Key, delegate(IAsyncResult result)
+            {
+                FactTree factTree = _synchronizationService.EndGet(result);
+                callback(Translate.FactTreeToMemento(factTree));
+            }, null);
         }
 
-        public void Post(FactTreeMemento messageBody)
+        public void BeginPost(FactTreeMemento messageBody, Action callback)
         {
-            throw new NotImplementedException();
-            //_synchronizationService.CallService(service => service.Post(Translate.MementoToFactTree(messageBody)));
+            _synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), delegate(IAsyncResult result)
+            {
+                _synchronizationService.EndPost(result);
+                callback();
+            }, null);
         }
     }
 }

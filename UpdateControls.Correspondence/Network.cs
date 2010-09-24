@@ -82,6 +82,9 @@ namespace UpdateControls.Correspondence
                 {
                     foreach (CorrespondenceFact pivot in subscription.Pivots)
                     {
+                        if (pivot == null)
+                            continue;
+
                         FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
                         FactID pivotId = pivot.ID;
                         AddToFactTree(pivotTree, pivotId);
@@ -167,6 +170,9 @@ namespace UpdateControls.Correspondence
 				{
 					foreach (CorrespondenceFact pivot in subscription.Pivots)
 					{
+                        if (pivot == null)
+                            continue;
+
 						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
 						FactID pivotId = pivot.ID;
 						AddToFactTree(pivotTree, pivotId);

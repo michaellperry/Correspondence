@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence.Mementos;
+using System.Collections.ObjectModel;
 
 namespace UpdateControls.Correspondence.WebServiceClient
 {
@@ -16,7 +17,10 @@ namespace UpdateControls.Correspondence.WebServiceClient
         {
             _targetFactTree = new FactTree()
             {
-                DatabaseId = databaseId
+                DatabaseId = databaseId,
+                Facts = new ObservableCollection<Fact>(),
+                Roles = new ObservableCollection<FactRole>(),
+                Types = new ObservableCollection<FactType>()
             };
         }
 
@@ -26,7 +30,8 @@ namespace UpdateControls.Correspondence.WebServiceClient
             {
                 FactId = fact.Id.key,
                 FactTypeId = AddFactType(fact.Memento.FactType),
-                Data = fact.Memento.Data
+                Data = fact.Memento.Data,
+                Predecessors = new ObservableCollection<Predecessor>()
             };
             foreach (PredecessorMemento predecessor in fact.Memento.Predecessors)
                 newFact.Predecessors.Add(TranslatePredecessor(predecessor));

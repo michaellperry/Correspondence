@@ -38,6 +38,12 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
+        public Community AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
+        {
+            _network.AddAsynchronousCommunicationStrategy(asynchronousCommunicationStrategy);
+            return this;
+        }
+
         public Community AddFieldSerializer<T>(IFieldSerializer fieldSerializer)
         {
             _fieldSerializerByType.Add(typeof(T), fieldSerializer);
