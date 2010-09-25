@@ -844,7 +844,7 @@ namespace UpdateControls.Correspondence.SSCE
                     return;
 
                 // No rows affected, so it's safe to insert.
-                session.Command.CommandText = "INSERT INTO Timestamp (FKPeerId, PivotId, DatabaseId, FactId) VALUES (@PeerId, 0, @DatabaseId, @FactId)";
+                session.Command.CommandText = "INSERT INTO Timestamp (FKPeerId, PivotId, DatabaseId, FactId) VALUES (@PeerId, @PivotId, @DatabaseId, @FactId)";
                 AddParameter(session.Command, "@PeerId", peerId);
                 AddParameter(session.Command, "@DatabaseId", timestamp.DatabaseId);
                 AddParameter(session.Command, "@FactId", timestamp.Key);
