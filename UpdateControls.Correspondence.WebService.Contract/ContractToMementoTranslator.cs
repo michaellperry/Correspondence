@@ -25,7 +25,7 @@ namespace UpdateControls.Correspondence.WebService.Contract
         public void AddRole(FactRole role)
         {
             CorrespondenceFactType declaringType = GetFactType(role.DeclaringTypeId);
-            CorrespondenceFactType targetType = GetFactType(role.TargetTypeId);
+            CorrespondenceFactType targetType = role.TargetTypeId == 0 ? null : GetFactType(role.TargetTypeId);
             _roleById.Add(role.RoleId, new RoleMemento(declaringType, role.RoleName, targetType, role.IsPivot));
         }
 

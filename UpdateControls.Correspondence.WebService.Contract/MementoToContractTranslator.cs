@@ -79,7 +79,7 @@ namespace UpdateControls.Correspondence.WebService.Contract
                     RoleId = id,
                     RoleName = role.RoleName,
                     DeclaringTypeId = AddFactType(role.DeclaringType),
-                    TargetTypeId = AddFactType(role.TargetType),
+                    TargetTypeId = role.TargetType == null ? 0 : AddFactType(role.TargetType),
                     IsPivot = role.IsPivot
                 });
                 _idByRole.Add(role, id);
