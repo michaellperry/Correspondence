@@ -12,6 +12,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
     public class IsolatedStorageStorageStrategy : IStorageStrategy
     {
         private const string FactTableFileName = "FactTable.bin";
+        private const string MessageTableFileName = "MessageTable.bin";
 
         private List<IdentifiedFactMemento> _factTable = new List<IdentifiedFactMemento>();
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
@@ -37,6 +38,16 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                             FileAccess.Read)))
                     {
                         ReadAllFactsFromStorage(result, factReader);
+                    }
+                }
+                if (store.FileExists(MessageTableFileName))
+                {
+                    using (BinaryReader messageReader = new BinaryReader(
+                        store.OpenFile(MessageTableFileName,
+                            FileMode.Open,
+                            FileAccess.Read)))
+                    {
+                        ReadAllMessagesFromStorage(result, messageReader);
                     }
                 }
             }
@@ -83,9 +94,9 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 WriteFactToStorage(fact);
 
                 // Store a message for each pivot.
-                _messageTable.AddRange(memento.Predecessors
+                IEnumerable<MessageMemento> directMessages = memento.Predecessors
                     .Where(predecessor => predecessor.Role.IsPivot)
-                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactID)));
+                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
 
                 // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
                 List<FactID> nonPivots = memento.Predecessors
@@ -97,8 +108,14 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     .Select(message => message.PivotId)
                     .Distinct()
                     .ToList();
-                _messageTable.AddRange(predecessorsPivots
-                    .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID)));
+                IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
+                    .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
+
+                List<MessageMemento> allMessages = directMessages
+                    .Union(indirectMessages)
+                    .ToList();
+                _messageTable.AddRange(allMessages);
+                WriteMessagesToStorage(allMessages);
 
                 return true;
             }
@@ -127,7 +144,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return new QueryExecutor(_factTable).ExecuteQuery(queryDefinition, startingId, options).Reverse();
+            return new QueryExecutor(_factTable).ExecuteQuery(queryDefinition, startingId, options)
+                .OrderByDescending(identifiedFact => identifiedFact.Id.key);
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
@@ -301,6 +319,50 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                         factWriter.Write(targetTypeVersion);
                         factWriter.Write(isPivot);
                         factWriter.Write(predecessorFactId);
+                    }
+                }
+            }
+        }
+
+        private static void ReadAllMessagesFromStorage(IsolatedStorageStorageStrategy result, BinaryReader messageReader)
+        {
+            long length = messageReader.BaseStream.Length;
+            while (messageReader.BaseStream.Position < length)
+            {
+                ReadMessageFromStorage(result, messageReader);
+            }
+        }
+
+        private static void ReadMessageFromStorage(IsolatedStorageStorageStrategy result, BinaryReader messageReader)
+        {
+            long pivotId;
+            long factId;
+
+            pivotId = messageReader.ReadInt64();
+            factId = messageReader.ReadInt64();
+
+            MessageMemento messageMemento = new MessageMemento(
+                new FactID() { key = pivotId },
+                new FactID() { key = factId });
+            result._messageTable.Add(messageMemento);
+        }
+
+        private static void WriteMessagesToStorage(IEnumerable<MessageMemento> messages)
+        {
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (BinaryWriter factWriter = new BinaryWriter(
+                        store.OpenFile(MessageTableFileName,
+                            FileMode.Append,
+                            FileAccess.Write)))
+                {
+                    foreach (MessageMemento message in messages)
+                    {
+                        long pivotId = message.PivotId.key;
+                        long factId = message.FactId.key;
+
+                        factWriter.Write(pivotId);
+                        factWriter.Write(factId);
                     }
                 }
             }
