@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UpdateControls.Correspondence
 {
     class Subscription
     {
-        private Func<IEnumerable<CorrespondenceFact>> _pivots;
+        private List<CorrespondenceFact> _pivots;
+        private Dependent _depPivots;
 
-        public Subscription(Func<IEnumerable<CorrespondenceFact>> pivots)
+        public Subscription(Func<IEnumerable<CorrespondenceFact>> pivotsFunction)
         {
-            _pivots = pivots;
+            _depPivots = new Dependent(() => _pivots = pivotsFunction().ToList());
         }
 
         public IEnumerable<CorrespondenceFact> Pivots
         {
-            get { return _pivots(); }
+            get { _depPivots.OnGet(); return _pivots; }
         }
     }
 }

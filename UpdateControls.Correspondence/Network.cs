@@ -4,6 +4,7 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using System;
 using UpdateControls.Correspondence.Async;
+using System.Threading;
 
 namespace UpdateControls.Correspondence
 {
@@ -15,7 +16,9 @@ namespace UpdateControls.Correspondence
         private IStorageStrategy _storageStrategy;
         private List<Subscription> _subscriptions = new List<Subscription>();
         private List<ICommunicationStrategy> _communicationStrategies = new List<ICommunicationStrategy>();
-		private List<IAsynchronousCommunicationStrategy> _asynchronousCommunicationStrategies = new List<IAsynchronousCommunicationStrategy>();
+        private List<IAsynchronousCommunicationStrategy> _asynchronousCommunicationStrategies = new List<IAsynchronousCommunicationStrategy>();
+
+        private Queue<SynchronizeResult> _synchronizeQueue = new Queue<SynchronizeResult>();
 
         public Network(Model model, IStorageStrategy storageStrategy)
         {
@@ -105,12 +108,26 @@ namespace UpdateControls.Correspondence
 
         public void BeginSynchronize(AsyncCallback callback, object state)
         {
-			if (!_asynchronousCommunicationStrategies.Any())
-				throw new CorrespondenceException("Register at least one asynchronous communication strategy before calling BeginSynchronize.");
+            if (!_asynchronousCommunicationStrategies.Any())
+                throw new CorrespondenceException("Register at least one asynchronous communication strategy before calling BeginSynchronize.");
 
-			SynchronizeResult result = new SynchronizeResult(callback, state);
-            BeginSynchronizeOutgoing(result);
-            BeginSynchronizeIncoming(result);
+            SynchronizeResult result = new SynchronizeResult(
+                delegate(IAsyncResult r)
+                {
+                    ServeNextSynchronize(r);
+                    callback(r);
+                }, state);
+            bool firstInLine = false;
+            lock (this)
+            {
+                firstInLine = !_synchronizeQueue.Any();
+                _synchronizeQueue.Enqueue(result);
+            }
+            if (firstInLine)
+            {
+                BeginSynchronizeOutgoing(result);
+                BeginSynchronizeIncoming(result);
+            }
         }
 
 		public bool EndSynchronize(IAsyncResult result)
@@ -118,6 +135,22 @@ namespace UpdateControls.Correspondence
 			SynchronizeResult r = (SynchronizeResult)result;
 			return (r.IncomingResult ?? false) || (r.OutgoingResult ?? false);
 		}
+
+        private void ServeNextSynchronize(IAsyncResult expected)
+        {
+            lock (this)
+            {
+                SynchronizeResult actual = _synchronizeQueue.Dequeue();
+                if (actual != expected)
+                    throw new CorrespondenceException("The synchronization queue is corrupt.");
+                if (_synchronizeQueue.Any())
+                {
+                    SynchronizeResult result = _synchronizeQueue.Peek();
+                    BeginSynchronizeOutgoing(result);
+                    BeginSynchronizeIncoming(result);
+                }
+            }
+        }
 
         private void BeginSynchronizeOutgoing(SynchronizeResult result)
 		{

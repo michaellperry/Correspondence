@@ -6,15 +6,6 @@ namespace UpdateControls.Correspondence.WebServiceClient
 {
     public class WebServiceCommunicationStrategy : IAsynchronousCommunicationStrategy
     {
-        private SynchronizationServiceClient _synchronizationServiceClient;
-        private ISynchronizationService _synchronizationService;
-
-        public WebServiceCommunicationStrategy()
-        {
-            _synchronizationServiceClient = new SynchronizationServiceClient();
-            _synchronizationService = _synchronizationServiceClient;
-        }
-
         public string ProtocolName
         {
             get { return "http://correspondence.updatecontrols.net"; }
@@ -22,24 +13,30 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         public string PeerName
         {
-            get { return _synchronizationServiceClient.Endpoint.Address.ToString(); }
+            get
+            {
+                return "http://localhost:9119/SyncExpress";
+                //return new SynchronizationServiceClient().Endpoint.Address.ToString();
+            }
         }
 
         public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Action<FactTreeMemento> callback)
         {
             FactTree pivot = Translate.MementoToFactTree(pivotTree);
-            _synchronizationService.BeginGet(pivot, pivotId.key, timestamp.Key, delegate(IAsyncResult result)
+            ISynchronizationService synchronizationService = new SynchronizationServiceClient();
+            synchronizationService.BeginGet(pivot, pivotId.key, timestamp.Key, delegate(IAsyncResult result)
             {
-                FactTree factTree = _synchronizationService.EndGet(result);
+                FactTree factTree = synchronizationService.EndGet(result);
                 callback(Translate.FactTreeToMemento(factTree));
             }, null);
         }
 
         public void BeginPost(FactTreeMemento messageBody, Action callback)
         {
-            _synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), delegate(IAsyncResult result)
+            ISynchronizationService synchronizationService = new SynchronizationServiceClient();
+            synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), delegate(IAsyncResult result)
             {
-                _synchronizationService.EndPost(result);
+                synchronizationService.EndPost(result);
                 callback();
             }, null);
         }
