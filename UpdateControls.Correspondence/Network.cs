@@ -41,11 +41,9 @@ namespace UpdateControls.Correspondence
  					FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
 					FactID pivotId = _pivot.ID;
 					_network.AddToFactTree(pivotTree, pivotId);
-                    TimestampID timestamp = _network._storageStrategy.LoadIncomingTimestamp(_strategy.ProtocolName, _strategy.PeerName, pivotId);
                     _pushSubscription = _strategy.SubscribeForPush(
                         pivotTree, 
                         pivotId, 
-                        timestamp, 
                         messageBody => _network.ReceiveMessage(messageBody));
                 }
             }

@@ -45,6 +45,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Phone" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows" />
@@ -66,6 +67,7 @@
     <Compile Include="SynchronizationService.cs" />
     <Compile Include="Translate.cs" />
     <Compile Include="WebServiceCommunicationStrategy.cs" />
+    <Compile Include="WindowsPhonePushSubscription.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence %28WP7%29\UpdateControls.Correspondence %28WP7%29.csproj">

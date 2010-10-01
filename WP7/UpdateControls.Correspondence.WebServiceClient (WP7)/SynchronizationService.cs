@@ -847,4 +847,369 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
     }
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace = "http://correspondence.updatecontrols.com", ConfigurationName = "UpdateControls.Correspondence.WebServiceClient.WindowsPhone.IWindowsPhonePushServ" +
+        "ice")]
+    public interface IWindowsPhonePushService
+    {
+
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "http://correspondence.updatecontrols.com/IWindowsPhonePushService/Subscribe", ReplyAction = "http://correspondence.updatecontrols.com/IWindowsPhonePushService/SubscribeRespon" +
+            "se")]
+        System.IAsyncResult BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState);
+
+        void EndSubscribe(System.IAsyncResult result);
+
+        [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "http://correspondence.updatecontrols.com/IWindowsPhonePushService/Unsubscribe", ReplyAction = "http://correspondence.updatecontrols.com/IWindowsPhonePushService/UnsubscribeResp" +
+            "onse")]
+        System.IAsyncResult BeginUnsubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState);
+
+        void EndUnsubscribe(System.IAsyncResult result);
+    }
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IWindowsPhonePushServiceChannel : IWindowsPhonePushService, System.ServiceModel.IClientChannel
+    {
+    }
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class WindowsPhonePushServiceClient : System.ServiceModel.ClientBase<IWindowsPhonePushService>, IWindowsPhonePushService
+    {
+
+        private BeginOperationDelegate onBeginSubscribeDelegate;
+
+        private EndOperationDelegate onEndSubscribeDelegate;
+
+        private System.Threading.SendOrPostCallback onSubscribeCompletedDelegate;
+
+        private BeginOperationDelegate onBeginUnsubscribeDelegate;
+
+        private EndOperationDelegate onEndUnsubscribeDelegate;
+
+        private System.Threading.SendOrPostCallback onUnsubscribeCompletedDelegate;
+
+        private BeginOperationDelegate onBeginOpenDelegate;
+
+        private EndOperationDelegate onEndOpenDelegate;
+
+        private System.Threading.SendOrPostCallback onOpenCompletedDelegate;
+
+        private BeginOperationDelegate onBeginCloseDelegate;
+
+        private EndOperationDelegate onEndCloseDelegate;
+
+        private System.Threading.SendOrPostCallback onCloseCompletedDelegate;
+
+        public WindowsPhonePushServiceClient()
+        {
+        }
+
+        public WindowsPhonePushServiceClient(string endpointConfigurationName) :
+            base(endpointConfigurationName)
+        {
+        }
+
+        public WindowsPhonePushServiceClient(string endpointConfigurationName, string remoteAddress) :
+            base(endpointConfigurationName, remoteAddress)
+        {
+        }
+
+        public WindowsPhonePushServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
+            base(endpointConfigurationName, remoteAddress)
+        {
+        }
+
+        public WindowsPhonePushServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
+            base(binding, remoteAddress)
+        {
+        }
+
+        public System.Net.CookieContainer CookieContainer
+        {
+            get
+            {
+                System.ServiceModel.Channels.IHttpCookieContainerManager httpCookieContainerManager = this.InnerChannel.GetProperty<System.ServiceModel.Channels.IHttpCookieContainerManager>();
+                if ((httpCookieContainerManager != null))
+                {
+                    return httpCookieContainerManager.CookieContainer;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                System.ServiceModel.Channels.IHttpCookieContainerManager httpCookieContainerManager = this.InnerChannel.GetProperty<System.ServiceModel.Channels.IHttpCookieContainerManager>();
+                if ((httpCookieContainerManager != null))
+                {
+                    httpCookieContainerManager.CookieContainer = value;
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("Unable to set the CookieContainer. Please make sure the binding contains an HttpC" +
+                            "ookieContainerBindingElement.");
+                }
+            }
+        }
+
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> SubscribeCompleted;
+
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> UnsubscribeCompleted;
+
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> OpenCompleted;
+
+        public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CloseCompleted;
+
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult IWindowsPhonePushService.BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState)
+        {
+            return base.Channel.BeginSubscribe(pivotTree, pivotId, deviceUri, callback, asyncState);
+        }
+
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void IWindowsPhonePushService.EndSubscribe(System.IAsyncResult result)
+        {
+            base.Channel.EndSubscribe(result);
+        }
+
+        private System.IAsyncResult OnBeginSubscribe(object[] inValues, System.AsyncCallback callback, object asyncState)
+        {
+            FactTree pivotTree = ((FactTree)(inValues[0]));
+            long pivotId = ((long)(inValues[1]));
+            string deviceUri = ((string)(inValues[2]));
+            return ((IWindowsPhonePushService)(this)).BeginSubscribe(pivotTree, pivotId, deviceUri, callback, asyncState);
+        }
+
+        private object[] OnEndSubscribe(System.IAsyncResult result)
+        {
+            ((IWindowsPhonePushService)(this)).EndSubscribe(result);
+            return null;
+        }
+
+        private void OnSubscribeCompleted(object state)
+        {
+            if ((this.SubscribeCompleted != null))
+            {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.SubscribeCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+
+        public void SubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri)
+        {
+            this.SubscribeAsync(pivotTree, pivotId, deviceUri, null);
+        }
+
+        public void SubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri, object userState)
+        {
+            if ((this.onBeginSubscribeDelegate == null))
+            {
+                this.onBeginSubscribeDelegate = new BeginOperationDelegate(this.OnBeginSubscribe);
+            }
+            if ((this.onEndSubscribeDelegate == null))
+            {
+                this.onEndSubscribeDelegate = new EndOperationDelegate(this.OnEndSubscribe);
+            }
+            if ((this.onSubscribeCompletedDelegate == null))
+            {
+                this.onSubscribeCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnSubscribeCompleted);
+            }
+            base.InvokeAsync(this.onBeginSubscribeDelegate, new object[] {
+                        pivotTree,
+                        pivotId,
+                        deviceUri}, this.onEndSubscribeDelegate, this.onSubscribeCompletedDelegate, userState);
+        }
+
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.IAsyncResult IWindowsPhonePushService.BeginUnsubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState)
+        {
+            return base.Channel.BeginUnsubscribe(pivotTree, pivotId, deviceUri, callback, asyncState);
+        }
+
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        void IWindowsPhonePushService.EndUnsubscribe(System.IAsyncResult result)
+        {
+            base.Channel.EndUnsubscribe(result);
+        }
+
+        private System.IAsyncResult OnBeginUnsubscribe(object[] inValues, System.AsyncCallback callback, object asyncState)
+        {
+            FactTree pivotTree = ((FactTree)(inValues[0]));
+            long pivotId = ((long)(inValues[1]));
+            string deviceUri = ((string)(inValues[2]));
+            return ((IWindowsPhonePushService)(this)).BeginUnsubscribe(pivotTree, pivotId, deviceUri, callback, asyncState);
+        }
+
+        private object[] OnEndUnsubscribe(System.IAsyncResult result)
+        {
+            ((IWindowsPhonePushService)(this)).EndUnsubscribe(result);
+            return null;
+        }
+
+        private void OnUnsubscribeCompleted(object state)
+        {
+            if ((this.UnsubscribeCompleted != null))
+            {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.UnsubscribeCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+
+        public void UnsubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri)
+        {
+            this.UnsubscribeAsync(pivotTree, pivotId, deviceUri, null);
+        }
+
+        public void UnsubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri, object userState)
+        {
+            if ((this.onBeginUnsubscribeDelegate == null))
+            {
+                this.onBeginUnsubscribeDelegate = new BeginOperationDelegate(this.OnBeginUnsubscribe);
+            }
+            if ((this.onEndUnsubscribeDelegate == null))
+            {
+                this.onEndUnsubscribeDelegate = new EndOperationDelegate(this.OnEndUnsubscribe);
+            }
+            if ((this.onUnsubscribeCompletedDelegate == null))
+            {
+                this.onUnsubscribeCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnUnsubscribeCompleted);
+            }
+            base.InvokeAsync(this.onBeginUnsubscribeDelegate, new object[] {
+                        pivotTree,
+                        pivotId,
+                        deviceUri}, this.onEndUnsubscribeDelegate, this.onUnsubscribeCompletedDelegate, userState);
+        }
+
+        private System.IAsyncResult OnBeginOpen(object[] inValues, System.AsyncCallback callback, object asyncState)
+        {
+            return ((System.ServiceModel.ICommunicationObject)(this)).BeginOpen(callback, asyncState);
+        }
+
+        private object[] OnEndOpen(System.IAsyncResult result)
+        {
+            ((System.ServiceModel.ICommunicationObject)(this)).EndOpen(result);
+            return null;
+        }
+
+        private void OnOpenCompleted(object state)
+        {
+            if ((this.OpenCompleted != null))
+            {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.OpenCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+
+        public void OpenAsync()
+        {
+            this.OpenAsync(null);
+        }
+
+        public void OpenAsync(object userState)
+        {
+            if ((this.onBeginOpenDelegate == null))
+            {
+                this.onBeginOpenDelegate = new BeginOperationDelegate(this.OnBeginOpen);
+            }
+            if ((this.onEndOpenDelegate == null))
+            {
+                this.onEndOpenDelegate = new EndOperationDelegate(this.OnEndOpen);
+            }
+            if ((this.onOpenCompletedDelegate == null))
+            {
+                this.onOpenCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnOpenCompleted);
+            }
+            base.InvokeAsync(this.onBeginOpenDelegate, null, this.onEndOpenDelegate, this.onOpenCompletedDelegate, userState);
+        }
+
+        private System.IAsyncResult OnBeginClose(object[] inValues, System.AsyncCallback callback, object asyncState)
+        {
+            return ((System.ServiceModel.ICommunicationObject)(this)).BeginClose(callback, asyncState);
+        }
+
+        private object[] OnEndClose(System.IAsyncResult result)
+        {
+            ((System.ServiceModel.ICommunicationObject)(this)).EndClose(result);
+            return null;
+        }
+
+        private void OnCloseCompleted(object state)
+        {
+            if ((this.CloseCompleted != null))
+            {
+                InvokeAsyncCompletedEventArgs e = ((InvokeAsyncCompletedEventArgs)(state));
+                this.CloseCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+            }
+        }
+
+        public void CloseAsync()
+        {
+            this.CloseAsync(null);
+        }
+
+        public void CloseAsync(object userState)
+        {
+            if ((this.onBeginCloseDelegate == null))
+            {
+                this.onBeginCloseDelegate = new BeginOperationDelegate(this.OnBeginClose);
+            }
+            if ((this.onEndCloseDelegate == null))
+            {
+                this.onEndCloseDelegate = new EndOperationDelegate(this.OnEndClose);
+            }
+            if ((this.onCloseCompletedDelegate == null))
+            {
+                this.onCloseCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnCloseCompleted);
+            }
+            base.InvokeAsync(this.onBeginCloseDelegate, null, this.onEndCloseDelegate, this.onCloseCompletedDelegate, userState);
+        }
+
+        protected override IWindowsPhonePushService CreateChannel()
+        {
+            return new WindowsPhonePushServiceClientChannel(this);
+        }
+
+        private class WindowsPhonePushServiceClientChannel : ChannelBase<IWindowsPhonePushService>, IWindowsPhonePushService
+        {
+
+            public WindowsPhonePushServiceClientChannel(System.ServiceModel.ClientBase<IWindowsPhonePushService> client) :
+                base(client)
+            {
+            }
+
+            public System.IAsyncResult BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState)
+            {
+                object[] _args = new object[3];
+                _args[0] = pivotTree;
+                _args[1] = pivotId;
+                _args[2] = deviceUri;
+                System.IAsyncResult _result = base.BeginInvoke("Subscribe", _args, callback, asyncState);
+                return _result;
+            }
+
+            public void EndSubscribe(System.IAsyncResult result)
+            {
+                object[] _args = new object[0];
+                base.EndInvoke("Subscribe", _args, result);
+            }
+
+            public System.IAsyncResult BeginUnsubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState)
+            {
+                object[] _args = new object[3];
+                _args[0] = pivotTree;
+                _args[1] = pivotId;
+                _args[2] = deviceUri;
+                System.IAsyncResult _result = base.BeginInvoke("Unsubscribe", _args, callback, asyncState);
+                return _result;
+            }
+
+            public void EndUnsubscribe(System.IAsyncResult result)
+            {
+                object[] _args = new object[0];
+                base.EndInvoke("Unsubscribe", _args, result);
+            }
+        }
+    }
 }
