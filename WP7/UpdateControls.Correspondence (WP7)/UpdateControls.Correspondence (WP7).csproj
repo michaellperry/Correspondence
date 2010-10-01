@@ -229,6 +229,9 @@
     <Compile Include="..\..\UpdateControls.Correspondence\Strategy\IFieldSerializer.cs">
       <Link>Strategy\IFieldSerializer.cs</Link>
     </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Strategy\IPushSubscription.cs">
+      <Link>Strategy\IPushSubscription.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\Strategy\IStorageStrategy.cs">
       <Link>Strategy\IStorageStrategy.cs</Link>
     </Compile>

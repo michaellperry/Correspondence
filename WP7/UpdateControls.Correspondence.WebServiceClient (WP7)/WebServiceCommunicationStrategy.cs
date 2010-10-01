@@ -40,5 +40,11 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 callback();
             }, null);
         }
+
+
+        public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Action<FactTreeMemento> callback)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

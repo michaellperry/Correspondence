@@ -9,5 +9,7 @@ namespace UpdateControls.Correspondence.Strategy
 		string PeerName { get; }
 		void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Action<FactTreeMemento> callback);
 		void BeginPost(FactTreeMemento messageBody, Action callback);
-	}
+   
+        IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Action<FactTreeMemento> callback);
+    }
 }

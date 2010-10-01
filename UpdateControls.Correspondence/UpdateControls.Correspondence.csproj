@@ -101,6 +101,7 @@
     <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
     <Compile Include="ICommunity.cs" />
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
+    <Compile Include="Strategy\IPushSubscription.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="IQueryResult.cs" />
     <Compile Include="Mementos\FactTreeMemento.cs" />

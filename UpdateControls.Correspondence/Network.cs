@@ -20,10 +20,69 @@ namespace UpdateControls.Correspondence
 
         private Queue<SynchronizeResult> _synchronizeQueue = new Queue<SynchronizeResult>();
 
+        internal class PushSubscriptionProxy : IDisposable
+        {
+            private Network _network;
+            private IAsynchronousCommunicationStrategy _strategy;
+            private CorrespondenceFact _pivot;
+            private IPushSubscription _pushSubscription = null;
+
+            public PushSubscriptionProxy(Network network, IAsynchronousCommunicationStrategy strategy, CorrespondenceFact pivot)
+            {
+                _network = network;
+                _strategy = strategy;
+                _pivot = pivot;
+            }
+
+            public void Subscribe()
+            {
+                if (_pushSubscription == null)
+                {
+ 					FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
+					FactID pivotId = _pivot.ID;
+					_network.AddToFactTree(pivotTree, pivotId);
+                    TimestampID timestamp = _network._storageStrategy.LoadIncomingTimestamp(_strategy.ProtocolName, _strategy.PeerName, pivotId);
+                    _pushSubscription = _strategy.SubscribeForPush(
+                        pivotTree, 
+                        pivotId, 
+                        timestamp, 
+                        messageBody => _network.ReceiveMessage(messageBody));
+                }
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (obj == this)
+                    return true;
+                PushSubscriptionProxy that = obj as PushSubscriptionProxy;
+                if (that == null)
+                    return false;
+                return this._strategy == that._strategy && this._pivot == that._pivot;
+            }
+
+            public override int GetHashCode()
+            {
+                return _strategy.GetHashCode() * 37 + _pivot.GetHashCode();
+            }
+
+            public void Dispose()
+            {
+                if (_pushSubscription != null)
+                    _pushSubscription.Unsubscribe();
+                _pushSubscription = null;
+            }
+        }
+
+        private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
+        private Dependent _depPushSubscriptions;
+
         public Network(Model model, IStorageStrategy storageStrategy)
         {
             _model = model;
             _storageStrategy = storageStrategy;
+
+            _depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
+            _depPushSubscriptions.Invalidated += TriggerAsync;
         }
 
         public void Subscribe(Subscription subscription)
@@ -146,6 +205,7 @@ namespace UpdateControls.Correspondence
                 if (_synchronizeQueue.Any())
                 {
                     SynchronizeResult result = _synchronizeQueue.Peek();
+                    _depPushSubscriptions.OnGet();
                     BeginSynchronizeOutgoing(result);
                     BeginSynchronizeIncoming(result);
                 }
@@ -273,6 +333,36 @@ namespace UpdateControls.Correspondence
             }
 
             return new TimestampID(messageBody.DatabaseId, messageBody.Timestamp);
+        }
+
+        private void UpdatePushSubscriptions()
+        {
+            using (var bin = _pushSubscriptions.Recycle())
+            {
+                var pivots = _subscriptions
+                    .SelectMany(subscription => subscription.Pivots)
+                    .Where(pivot => pivot != null);
+                var pushSubscriptions =
+                    from strategy in _asynchronousCommunicationStrategies
+                    from pivot in pivots
+                    select bin.Extract(new PushSubscriptionProxy(this, strategy, pivot));
+
+                _pushSubscriptions = pushSubscriptions.ToList();
+
+                foreach (PushSubscriptionProxy pushSubscription in _pushSubscriptions)
+                {
+                    pushSubscription.Subscribe();
+                }
+            }
+        }
+
+        private void TriggerAsync()
+        {
+            BeginSynchronize(a =>
+            {
+                if (EndSynchronize(a))
+                    TriggerAsync();
+            }, null);
         }
     }
 }
