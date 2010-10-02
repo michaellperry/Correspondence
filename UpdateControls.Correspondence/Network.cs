@@ -41,10 +41,7 @@ namespace UpdateControls.Correspondence
  					FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
 					FactID pivotId = _pivot.ID;
 					_network.AddToFactTree(pivotTree, pivotId);
-                    _pushSubscription = _strategy.SubscribeForPush(
-                        pivotTree, 
-                        pivotId, 
-                        messageBody => _network.ReceiveMessage(messageBody));
+                    _pushSubscription = _strategy.SubscribeForPush(pivotTree, pivotId);
                 }
             }
 
@@ -95,6 +92,7 @@ namespace UpdateControls.Correspondence
 
         public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
         {
+            asynchronousCommunicationStrategy.MessageReceived += messageBody => ReceiveMessage(messageBody);
             _asynchronousCommunicationStrategies.Add(asynchronousCommunicationStrategy);
         }
 

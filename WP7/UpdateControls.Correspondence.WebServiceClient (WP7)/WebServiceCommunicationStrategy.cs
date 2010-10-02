@@ -3,6 +3,7 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using Microsoft.Phone.Notification;
 using System.Collections.Generic;
+using System.IO;
 
 namespace UpdateControls.Correspondence.WebServiceClient
 {
@@ -11,6 +12,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
         private string _channelName;
         private HttpNotificationChannel _httpChannel;
         private List<WindowsPhonePushSubscription> _subscriptionQueue = new List<WindowsPhonePushSubscription>();
+        private bool _receivedChannelUri = false;
 
         public WebServiceCommunicationStrategy(string channelName)
         {
@@ -48,8 +50,9 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }, null);
         }
 
+        public event Action<FactTreeMemento> MessageReceived;
 
-        public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, Action<FactTreeMemento> callback)
+        public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId)
         {
             lock (this)
             {
@@ -69,16 +72,21 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 _httpChannel = HttpNotificationChannel.Find(_channelName);
                 if (null != _httpChannel)
                 {
+                    _receivedChannelUri = true;
                     SubscribeToChannelEvents();
                     SubscribeToService();
                 }
                 else
                 {
                     //Create the channel
-                    _httpChannel = new HttpNotificationChannel(_channelName, "HOLWeatherService");
+                    _httpChannel = new HttpNotificationChannel(_channelName, "UpdateControls.Correspondence");
                     SubscribeToChannelEvents();
                     _httpChannel.Open();
                 }
+            }
+            else if (_receivedChannelUri)
+            {
+                SubscribeToService();
             }
         }
 
@@ -96,12 +104,14 @@ namespace UpdateControls.Correspondence.WebServiceClient
             {
                 subscription.Subscribe(deviceUri);
             }
+            _subscriptionQueue.Clear();
         }
 
         void httpChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
         {
             lock (this)
             {
+                _receivedChannelUri = true;
                 SubscribeToService();
             }
         }
@@ -112,6 +122,70 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         void httpChannel_HttpNotificationReceived(object sender, HttpNotificationEventArgs e)
         {
+            if (MessageReceived != null)
+            {
+                using (BinaryReader factReader = new BinaryReader(e.Notification.Body))
+                {
+                    FactTreeMemento factTreeMemento = ReadFactTreeFromStorage(factReader);
+                    MessageReceived(factTreeMemento);
+                }
+            }
+        }
+
+        private static FactTreeMemento ReadFactTreeFromStorage(BinaryReader factReader)
+        {
+            FactTreeMemento factTreeMemento = new FactTreeMemento(0, 0);
+            int factCount = factReader.ReadInt32();
+            for (int i = 0; i < factCount; i++)
+            {
+                factTreeMemento.Add(ReadFactFromStorage(factReader));
+            }
+            return factTreeMemento;
+        }
+
+        private static IdentifiedFactMemento ReadFactFromStorage(BinaryReader factReader)
+        {
+            long factId;
+            string typeName;
+            int version;
+            short dataSize;
+            byte[] data;
+            short predecessorCount;
+
+            factId = factReader.ReadInt64();
+            typeName = factReader.ReadString();
+            version = factReader.ReadInt32();
+            dataSize = factReader.ReadInt16();
+            data = dataSize > 0 ? factReader.ReadBytes(dataSize) : new byte[0];
+            predecessorCount = factReader.ReadInt16();
+
+            FactMemento factMemento = new FactMemento(new CorrespondenceFactType(typeName, version));
+            factMemento.Data = data;
+            for (short i = 0; i < predecessorCount; i++)
+            {
+                string declaringTypeName;
+                int declaringTypeVersion;
+                string roleName;
+                bool isPivot;
+                long predecessorFactId;
+
+                declaringTypeName = factReader.ReadString();
+                declaringTypeVersion = factReader.ReadInt32();
+                roleName = factReader.ReadString();
+                isPivot = factReader.ReadBoolean();
+                predecessorFactId = factReader.ReadInt64();
+
+                factMemento.AddPredecessor(
+                    new RoleMemento(
+                        new CorrespondenceFactType(declaringTypeName, declaringTypeVersion),
+                        roleName,
+                        null,
+                        isPivot),
+                    new FactID() { key = predecessorFactId }
+                );
+            }
+
+            return new IdentifiedFactMemento(new FactID { key = factId }, factMemento);
         }
     }
 }
