@@ -10,7 +10,9 @@ namespace UpdateControls.Correspondence
 {
     class Model
     {
-        private Community _community;
+		private const long ClientDatabaseId = 0;
+
+		private Community _community;
 		private IStorageStrategy _storageStrategy;
         private ITypeStrategy _typeStrategy;
         private IDictionary<CorrespondenceFactType, ICorrespondenceFactFactory> _factoryByType =
@@ -179,17 +181,54 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SetID(factName, obj.ID);
         }
 
-        public FactMemento LoadFact(FactID factId)
-        {
-            return CreateMementoFromFact(GetFactByID(factId));
-        }
+		public IEnumerable<FactTreeMemento> GetMessageBodies(ref TimestampID timestamp)
+		{
+			IDictionary<FactID, FactTreeMemento> messageBodiesByPivotId = new Dictionary<FactID, FactTreeMemento>();
+			IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessages(timestamp);
+			foreach (MessageMemento message in recentMessages)
+			{
+				if (message.FactId.key > timestamp.Key)
+					timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
+				FactTreeMemento messageBody;
+				if (!messageBodiesByPivotId.TryGetValue(message.PivotId, out messageBody))
+				{
+					messageBody = new FactTreeMemento(ClientDatabaseId, 0L);
+					messageBodiesByPivotId.Add(message.PivotId, messageBody);
+				}
+				AddToFactTree(messageBody, message.FactId);
+			}
+			return messageBodiesByPivotId.Values;
+		}
 
-        public FactID SaveFact(FactMemento translatedMemento)
-        {
-            CorrespondenceFact fact = HydrateFact(translatedMemento);
-            fact = AddFact(fact);
-            return fact.ID;
-        }
+        public void AddToFactTree(FactTreeMemento messageBody, FactID factId)
+		{
+			if (!messageBody.Contains(factId))
+			{
+				FactMemento fact = CreateMementoFromFact(GetFactByID(factId));
+				foreach (PredecessorMemento predecessor in fact.Predecessors)
+					AddToFactTree(messageBody, predecessor.ID);
+				messageBody.Add(new IdentifiedFactMemento(factId, fact));
+			}
+		}
+
+		public TimestampID ReceiveMessage(FactTreeMemento messageBody)
+		{
+			IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
+			foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+			{
+				FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
+				translatedMemento.Data = identifiedFact.Memento.Data;
+				translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
+					.Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
+				CorrespondenceFact fact = HydrateFact(translatedMemento);
+				fact = AddFact(fact);
+				FactID localId = fact.ID;
+				FactID remoteId = identifiedFact.Id;
+				localIdByRemoteId.Add(remoteId, localId);
+			}
+
+			return new TimestampID(messageBody.DatabaseId, messageBody.Timestamp);
+		}
 
         public CorrespondenceFact GetFactByID(FactID id)
         {

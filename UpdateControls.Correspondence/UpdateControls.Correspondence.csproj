@@ -73,8 +73,9 @@
     <Compile Include="..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Async\ResultAggregate.cs" />
-    <Compile Include="Async\SynchronizeResult.cs" />
+    <Compile Include="Networking\AsynchronousNetwork.cs" />
+    <Compile Include="Networking\ResultAggregate.cs" />
+    <Compile Include="Networking\SynchronizeResult.cs" />
     <Compile Include="AttributeFactFactory.cs" />
     <Compile Include="AttributeObjectFactoryExtensions.cs" />
     <Compile Include="AttributeTypeStrategy.cs" />
@@ -100,6 +101,8 @@
     <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
     <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
     <Compile Include="ICommunity.cs" />
+    <Compile Include="Networking\PushSubscriptionProxy.cs" />
+    <Compile Include="Networking\ISubscriptionProvider.cs" />
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
     <Compile Include="Strategy\IPushSubscription.cs" />
     <Compile Include="Subscription.cs" />
@@ -112,7 +115,7 @@
     <Compile Include="Mementos\RoleMemento.cs" />
     <Compile Include="Mementos\TimestampID.cs" />
     <Compile Include="Model.cs" />
-    <Compile Include="Network.cs" />
+    <Compile Include="Networking\Network.cs" />
     <Compile Include="PredecessorObj.cs" />
     <Compile Include="Mementos\CorrespondenceFactType.cs" />
     <Compile Include="PredecessorBase.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Strategy\ITypeStrategy.cs" />
     <Compile Include="Condition.cs" />
     <Compile Include="Strategy\QueryOptions.cs" />
+    <Compile Include="Networking\SynchronousNetwork.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mallardsoft.snk" />

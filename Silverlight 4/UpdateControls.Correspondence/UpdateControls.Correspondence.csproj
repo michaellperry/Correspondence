@@ -63,12 +63,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\UpdateControls.Correspondence\Async\ResultAggregate.cs">
-      <Link>Async\ResultAggregate.cs</Link>
-    </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence\Async\SynchronizeResult.cs">
-      <Link>Async\SynchronizeResult.cs</Link>
-    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\AttributeFactFactory.cs">
       <Link>AttributeFactFactory.cs</Link>
     </Compile>
@@ -177,8 +171,26 @@
     <Compile Include="..\..\UpdateControls.Correspondence\Model.cs">
       <Link>Model.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence\Network.cs">
-      <Link>Network.cs</Link>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\AsynchronousNetwork.cs">
+      <Link>Networking\AsynchronousNetwork.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\ISubscriptionProvider.cs">
+      <Link>Networking\ISubscriptionProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\Network.cs">
+      <Link>Networking\Network.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\PushSubscriptionProxy.cs">
+      <Link>Networking\PushSubscriptionProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\ResultAggregate.cs">
+      <Link>Networking\ResultAggregate.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\SynchronizeResult.cs">
+      <Link>Networking\SynchronizeResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\SynchronousNetwork.cs">
+      <Link>Networking\SynchronousNetwork.cs</Link>
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\PredecessorBase.cs">
       <Link>PredecessorBase.cs</Link>

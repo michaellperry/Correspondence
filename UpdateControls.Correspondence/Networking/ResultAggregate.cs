@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UpdateControls.Correspondence.Async
+namespace UpdateControls.Correspondence.Networking
 {
 	internal class ResultAggregate
 	{

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UpdateControls.Correspondence.FieldSerializer;
 using UpdateControls.Correspondence.Mementos;
+using UpdateControls.Correspondence.Networking;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 
@@ -121,6 +121,11 @@ namespace UpdateControls.Correspondence
         {
             _network.BeginSynchronize(callback, state);
         }
+
+		public bool EndSynchronize(IAsyncResult asyncResult)
+		{
+			return _network.EndSynchronize(asyncResult);
+		}
 
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
         {

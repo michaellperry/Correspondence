@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace UpdateControls.Correspondence.Async
+namespace UpdateControls.Correspondence.Networking
 {
 	internal class SynchronizeResult : IAsyncResult
 	{
