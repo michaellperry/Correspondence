@@ -22,5 +22,20 @@ namespace UpdateControls.Correspondence.Mementos
         {
             get { return _factId; }
         }
+
+		public override bool Equals(object obj)
+		{
+			if (obj == this)
+				return true;
+			MessageMemento that = obj as MessageMemento;
+			if (that == null)
+				return false;
+			return _pivotId.Equals(that._pivotId) && _factId.Equals(that._factId);
+		}
+
+		public override int GetHashCode()
+		{
+			return _pivotId.GetHashCode() * 37 + _factId.GetHashCode();
+		}
     }
 }

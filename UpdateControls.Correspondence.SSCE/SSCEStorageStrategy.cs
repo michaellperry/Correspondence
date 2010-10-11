@@ -158,71 +158,78 @@ namespace UpdateControls.Correspondence.SSCE
 			return identifiedMemento.Memento;
 		}
 
-        public bool Save(FactMemento memento, out FactID id)
-        {
-            using (var session = new Session(_connectionString))
-            {
-                // First see if the fact is already in storage.
-                if (FindExistingFact(memento, out id, session))
-                    return false;
+		public bool Save(FactMemento memento, out FactID id)
+		{
+			using (var session = new Session(_connectionString))
+			{
+				// First see if the fact is already in storage.
+				if (FindExistingFact(memento, out id, session))
+					return false;
 
-                // It isn't there, so store it.
-                int typeId = SaveType(session, memento.FactType);
-                session.Command.CommandText = "INSERT Fact (FKTypeID, Data, Hashcode) VALUES (@TypeID, @Data, @Hashcode)";
-                AddParameter(session.Command, "@TypeID", typeId);
-                AddParameter(session.Command, "@Data", memento.Data);
-                AddParameter(session.Command, "@Hashcode", memento.GetHashCode());
-                session.Command.ExecuteNonQuery();
-                session.Command.Parameters.Clear();
+				// It isn't there, so store it.
+				int typeId = SaveType(session, memento.FactType);
+				session.Command.CommandText = "INSERT Fact (FKTypeID, Data, Hashcode) VALUES (@TypeID, @Data, @Hashcode)";
+				AddParameter(session.Command, "@TypeID", typeId);
+				AddParameter(session.Command, "@Data", memento.Data);
+				AddParameter(session.Command, "@Hashcode", memento.GetHashCode());
+				session.Command.ExecuteNonQuery();
+				session.Command.Parameters.Clear();
 
-                session.Command.CommandText = "SELECT @@IDENTITY";
-                decimal result = (decimal)session.Command.ExecuteScalar();
-                session.Command.Parameters.Clear();
-                id.key = (Int64)result;
+				session.Command.CommandText = "SELECT @@IDENTITY";
+				decimal result = (decimal)session.Command.ExecuteScalar();
+				session.Command.Parameters.Clear();
+				id.key = (Int64)result;
 
-                // Store the predecessors.
-                foreach (PredecessorMemento predecessor in memento.Predecessors)
-                {
-                    int roleId = SaveRole(session, predecessor.Role);
-                    session.Command.CommandText = "INSERT Predecessor (FKFactID, FKRoleID, FKPredecessorFactID) VALUES (@FactID, @RoleID, @PredecessorFactID)";
-                    AddParameter(session.Command, "@FactID", id.key);
-                    AddParameter(session.Command, "@RoleID", roleId);
-                    AddParameter(session.Command, "@PredecessorFactID", predecessor.ID.key);
-                    session.Command.ExecuteNonQuery();
-                    session.Command.Parameters.Clear();
-                }
+				// Store the predecessors.
+				foreach (PredecessorMemento predecessor in memento.Predecessors)
+				{
+					int roleId = SaveRole(session, predecessor.Role);
+					session.Command.CommandText = "INSERT Predecessor (FKFactID, FKRoleID, FKPredecessorFactID) VALUES (@FactID, @RoleID, @PredecessorFactID)";
+					AddParameter(session.Command, "@FactID", id.key);
+					AddParameter(session.Command, "@RoleID", roleId);
+					AddParameter(session.Command, "@PredecessorFactID", predecessor.ID.key);
+					session.Command.ExecuteNonQuery();
+					session.Command.Parameters.Clear();
+				}
 
-                // Store a message for each pivot.
-                FactID newFactId = id;
-                SaveMessages(session, memento.Predecessors
-                    .Where(predecessor => predecessor.Role.IsPivot)
-                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactId)));
+				// Store a message for each pivot.
+				FactID newFactId = id;
+				List<MessageMemento> pivotMessages = memento.Predecessors
+					.Where(predecessor => predecessor.Role.IsPivot)
+					.Select(predecessor => new MessageMemento(predecessor.ID, newFactId))
+					.ToList();
 
-                // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
-                string[] nonPivots = memento.Predecessors
-                    .Where(predecessor => !predecessor.Role.IsPivot)
-                    .Select(predecessor => predecessor.ID.key.ToString())
-                    .ToArray();
-                if (nonPivots.Length > 0)
-                {
-                    string nonPivotGroup = string.Join(",", nonPivots);
-                    session.Command.CommandText = string.Format(
-                        "SELECT DISTINCT PivotId FROM Message WHERE FactId IN ({0})",
-                        nonPivotGroup);
-                    List<FactID> predecessorsPivots;
-                    using (IDataReader predecessorPivotReader = session.Command.ExecuteReader())
-                    {
-                        session.Command.Parameters.Clear();
-                        predecessorsPivots = LoadIDsFromReader(predecessorPivotReader).ToList();
-                    }
+				// Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
+				string[] nonPivots = memento.Predecessors
+					.Where(predecessor => !predecessor.Role.IsPivot)
+					.Select(predecessor => predecessor.ID.key.ToString())
+					.ToArray();
+				List<MessageMemento> nonPivotMessages;
+				if (nonPivots.Length > 0)
+				{
+					string nonPivotGroup = string.Join(",", nonPivots);
+					session.Command.CommandText = string.Format(
+						"SELECT DISTINCT PivotId FROM Message WHERE FactId IN ({0})",
+						nonPivotGroup);
+					List<FactID> predecessorsPivots;
+					using (IDataReader predecessorPivotReader = session.Command.ExecuteReader())
+					{
+						session.Command.Parameters.Clear();
+						predecessorsPivots = LoadIDsFromReader(predecessorPivotReader).ToList();
+					}
 
-                    SaveMessages(session, predecessorsPivots
-                        .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactId)));
-                }
+					nonPivotMessages = predecessorsPivots
+						.Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactId))
+						.ToList();
+				}
+				else
+					nonPivotMessages = new List<MessageMemento>();
 
-                return true;
-            }
-        }
+				SaveMessages(session, pivotMessages.Union(nonPivotMessages).Distinct());
+
+				return true;
+			}
+		}
 
         public bool FindExistingFact(FactMemento memento, out FactID id)
         {
