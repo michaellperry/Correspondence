@@ -201,34 +201,53 @@ namespace UpdateControls.Correspondence
 		}
 
         public void AddToFactTree(FactTreeMemento messageBody, FactID factId)
-		{
-			if (!messageBody.Contains(factId))
-			{
-				FactMemento fact = CreateMementoFromFact(GetFactByID(factId));
-				foreach (PredecessorMemento predecessor in fact.Predecessors)
-					AddToFactTree(messageBody, predecessor.ID);
-				messageBody.Add(new IdentifiedFactMemento(factId, fact));
-			}
-		}
+        {
+            if (!messageBody.Contains(factId))
+            {
+                CorrespondenceFact fact = GetFactByID(factId);
+                if (fact != null)
+                {
+                    FactMemento factMemento = CreateMementoFromFact(fact);
+                    foreach (PredecessorMemento predecessor in factMemento.Predecessors)
+                        AddToFactTree(messageBody, predecessor.ID);
+                    messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
+                }
+            }
+        }
 
-		public TimestampID ReceiveMessage(FactTreeMemento messageBody)
-		{
-			IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-			foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
-			{
-				FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
-				translatedMemento.Data = identifiedFact.Memento.Data;
-				translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
-					.Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
-				CorrespondenceFact fact = HydrateFact(translatedMemento);
-				fact = AddFact(fact);
-				FactID localId = fact.ID;
-				FactID remoteId = identifiedFact.Id;
-				localIdByRemoteId.Add(remoteId, localId);
-			}
+        public TimestampID ReceiveMessage(FactTreeMemento messageBody)
+        {
+            IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
+            foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+            {
+                FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
+                translatedMemento.Data = identifiedFact.Memento.Data;
+                translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
+                    .Select(remote =>
+                    {
+                        FactID localFactId;
+                        return !localIdByRemoteId.TryGetValue(remote.ID, out localFactId)
+                            ? null
+                            : new PredecessorMemento(remote.Role, localFactId);
+                    })
+                    .Where(pred => pred != null));
 
-			return new TimestampID(messageBody.DatabaseId, messageBody.Timestamp);
-		}
+                try
+                {
+                    CorrespondenceFact fact = HydrateFact(translatedMemento);
+                    fact = AddFact(fact);
+                    FactID localId = fact.ID;
+                    FactID remoteId = identifiedFact.Id;
+                    localIdByRemoteId.Add(remoteId, localId);
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex);
+                }
+            }
+
+            return new TimestampID(messageBody.DatabaseId, messageBody.Timestamp);
+        }
 
         public CorrespondenceFact GetFactByID(FactID id)
         {
@@ -254,7 +273,10 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 List<IdentifiedFactMemento> facts = _storageStrategy.QueryForFacts(queryDefinition, startingId, options).ToList();
-                return facts.Select(m => GetFactByIdAndMemento(m.Id, m.Memento)).ToList();
+                return facts
+                    .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
+                    .Where(m => m != null)
+                    .ToList();
             }
         }
 
@@ -275,21 +297,29 @@ namespace UpdateControls.Correspondence
 
         private CorrespondenceFact CreateFactFromMemento(FactID id, FactMemento memento)
         {
-            System.Diagnostics.Debug.Assert(
-                !_factByMemento.ContainsKey(memento),
-                "A memento already in memory is being reloaded");
+            try
+            {
+                System.Diagnostics.Debug.Assert(
+                    !_factByMemento.ContainsKey(memento),
+                    "A memento already in memory is being reloaded");
 
-            // Invoke the factory to create the object.
-            if (memento == null)
-                throw new CorrespondenceException("Failed to load fact");
+                // Invoke the factory to create the object.
+                if (memento == null)
+                    throw new CorrespondenceException("Failed to load fact");
 
-            CorrespondenceFact fact = HydrateFact(memento);
+                CorrespondenceFact fact = HydrateFact(memento);
 
-            fact.ID = id;
-            fact.SetCommunity(_community);
-            _factByID.Add(fact.ID, fact);
-            _factByMemento.Add(memento, fact);
-            return fact;
+                fact.ID = id;
+                fact.SetCommunity(_community);
+                _factByID.Add(fact.ID, fact);
+                _factByMemento.Add(memento, fact);
+                return fact;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                return null;
+            }
         }
 
         private CorrespondenceFact HydrateFact(FactMemento memento)
@@ -332,6 +362,11 @@ namespace UpdateControls.Correspondence
             }
 
             return memento;
+        }
+
+        private void HandleException(Exception exception)
+        {
+            // TODO: Find some way of notifying the application developer without interrupting the process.
         }
     }
 }
