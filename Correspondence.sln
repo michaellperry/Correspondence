@@ -63,9 +63,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage (WP7)", "WP7\UpdateControls.Correspondence.IsolatedStorage (WP7)\UpdateControls.Correspondence.IsolatedStorage (WP7).csproj", "{80F0BD6B-2746-41B0-9CC0-ED8CDF1DA35B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{689AA250-D66C-4C63-AD1F-D76050BA5D82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "Desktop\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{9638F018-26C5-4E6B-B355-F8E37F86D1C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data.UnitTest", "Desktop\UpdateControls.Correspondence.Data.UnitTest\UpdateControls.Correspondence.Data.UnitTest.csproj", "{510D6813-AE9B-4F28-9B77-390F36DF958A}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 25
+		SccNumberOfProjects = 27
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -148,6 +154,14 @@ Global
 		SccProjectTopLevelParentUniqueName24 = Correspondence.sln
 		SccProjectName24 = WP7/UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)
 		SccLocalPath24 = WP7\\UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)
+		SccProjectUniqueName25 = Desktop\\UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data.csproj
+		SccProjectTopLevelParentUniqueName25 = Correspondence.sln
+		SccProjectName25 = Desktop/UpdateControls.Correspondence.Data
+		SccLocalPath25 = Desktop\\UpdateControls.Correspondence.Data
+		SccProjectUniqueName26 = Desktop\\UpdateControls.Correspondence.Data.UnitTest\\UpdateControls.Correspondence.Data.UnitTest.csproj
+		SccProjectTopLevelParentUniqueName26 = Correspondence.sln
+		SccProjectName26 = Desktop/UpdateControls.Correspondence.Data.UnitTest
+		SccLocalPath26 = Desktop\\UpdateControls.Correspondence.Data.UnitTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -250,6 +264,14 @@ Global
 		{80F0BD6B-2746-41B0-9CC0-ED8CDF1DA35B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80F0BD6B-2746-41B0-9CC0-ED8CDF1DA35B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80F0BD6B-2746-41B0-9CC0-ED8CDF1DA35B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9638F018-26C5-4E6B-B355-F8E37F86D1C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9638F018-26C5-4E6B-B355-F8E37F86D1C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9638F018-26C5-4E6B-B355-F8E37F86D1C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9638F018-26C5-4E6B-B355-F8E37F86D1C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{510D6813-AE9B-4F28-9B77-390F36DF958A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{510D6813-AE9B-4F28-9B77-390F36DF958A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{510D6813-AE9B-4F28-9B77-390F36DF958A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{510D6813-AE9B-4F28-9B77-390F36DF958A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -263,5 +285,7 @@ Global
 		{D489015D-1272-4B18-BC26-645C720169F9} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{285D68FA-6CA3-4757-B330-DE4EDC5B0849} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{80F0BD6B-2746-41B0-9CC0-ED8CDF1DA35B} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
+		{9638F018-26C5-4E6B-B355-F8E37F86D1C0} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{510D6813-AE9B-4F28-9B77-390F36DF958A} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 	EndGlobalSection
 EndGlobal
