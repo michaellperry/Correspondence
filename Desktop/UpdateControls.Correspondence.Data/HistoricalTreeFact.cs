@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.Data
@@ -17,6 +18,12 @@ namespace UpdateControls.Correspondence.Data
         public HistoricalTreeFact AddPredecessor(int roleId, long predecessorFactId)
         {
             _predecessors.Add(new HistoricalTreePredecessor(roleId, predecessorFactId));
+            return this;
+        }
+
+        public HistoricalTreeFact SetPredecessors(List<HistoricalTreePredecessor> predecessors)
+        {
+            _predecessors = predecessors;
             return this;
         }
 

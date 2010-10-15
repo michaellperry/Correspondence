@@ -8,8 +8,6 @@ namespace UpdateControls.Correspondence.Data
 {
     public class HistoricalTree : IDisposable
     {
-        const long HEAD_Null = 0;
-
         private byte[] _readBuffer = new byte[8];
         private Stream _stream;
 
@@ -41,7 +39,7 @@ namespace UpdateControls.Correspondence.Data
             }
 
             // Write the new fact.
-            WriteLong(HEAD_Null);
+            WriteLong(0L);
             WriteInt(fact.Predecessors.Count());
             i = 0;
             foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
@@ -51,7 +49,7 @@ namespace UpdateControls.Correspondence.Data
                 WriteLong(nextPointers[i]);
                 ++i;
             }
-            WriteLong(fact.FactTypeId);
+            WriteInt(fact.FactTypeId);
             WriteInt(fact.Data.Length);
             _stream.Write(fact.Data, 0, fact.Data.Length);
             _stream.Flush();
@@ -66,7 +64,33 @@ namespace UpdateControls.Correspondence.Data
             return position;
         }
 
-        public List<long> GetPredecessors(long factId, int roleId)
+        public HistoricalTreeFact Load(long factId)
+        {
+            // Skip the head pointer.
+            _stream.Seek(factId + 8, SeekOrigin.Begin);
+
+            // Load the predecessors.
+            int predecessorCount = ReadInt();
+            List<HistoricalTreePredecessor> predecessors = new List<HistoricalTreePredecessor>();
+            for (int i = 0; i < predecessorCount; i++)
+            {
+                int roleId = ReadInt();
+                int predecessorFactId = ReadInt();
+                long next = ReadLong();
+                predecessors.Add(new HistoricalTreePredecessor(roleId, predecessorFactId));
+            }
+
+            // Load the fact type and data.
+            int factTypeId = ReadInt();
+            int dataLength = ReadInt();
+            byte[] data = new byte[dataLength];
+            _stream.Read(data, 0, dataLength);
+
+            return new HistoricalTreeFact(factTypeId, data)
+                .SetPredecessors(predecessors);
+        }
+
+        public List<long> GetPredecessorsInRole(long factId, int roleId)
         {
             _stream.Seek(factId + 8, SeekOrigin.Begin);
 
@@ -83,7 +107,7 @@ namespace UpdateControls.Correspondence.Data
             return predecessors;
         }
 
-        public IEnumerable<long> GetSuccessors(long factId, int roleId)
+        public IEnumerable<long> GetSuccessorsInRole(long factId, int roleId)
         {
             _stream.Seek(factId, SeekOrigin.Begin);
 
