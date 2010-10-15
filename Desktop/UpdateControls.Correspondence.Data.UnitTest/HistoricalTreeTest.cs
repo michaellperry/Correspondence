@@ -203,5 +203,35 @@ namespace UpdateControls.Correspondence.Data.UnitTest
                 Assert.AreEqual(childFactId, successors[0]);
             }
         }
+
+        [TestMethod]
+        public void WalkGrandchildren()
+        {
+            long rootFactId = _tree.Save(new HistoricalTreeFact(1, null));
+            long[] childIds = new long[4];
+            for (int i = 0; i < 4; i++)
+            {
+                childIds[i] = _tree.Save(new HistoricalTreeFact(2, null).AddPredecessor(1, rootFactId));
+            }
+            long[] grandchildIds = new long[16];
+            for (int i = 0; i < 16; i++)
+            {
+                grandchildIds[i] = _tree.Save(new HistoricalTreeFact(3, null).AddPredecessor(2, childIds[i / 4]));
+            }
+
+            int expected = 15;
+            IEnumerable<long> children = _tree.GetSuccessorsInRole(rootFactId, 1);
+            foreach (long childId in children)
+            {
+                IEnumerable<long> grandchildren = _tree.GetSuccessorsInRole(childId, 2);
+                foreach (long grandchildId in grandchildren)
+                {
+                    Assert.AreEqual(grandchildIds[expected], grandchildId);
+                    --expected;
+                }
+            }
+
+            Assert.AreEqual(-1, expected);
+        }
     }
 }

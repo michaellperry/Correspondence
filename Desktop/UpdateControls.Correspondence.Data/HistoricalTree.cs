@@ -50,8 +50,9 @@ namespace UpdateControls.Correspondence.Data
                 ++i;
             }
             WriteInt(fact.FactTypeId);
-            WriteInt(fact.Data.Length);
-            _stream.Write(fact.Data, 0, fact.Data.Length);
+            WriteInt(fact.Data == null ? 0 : fact.Data.Length);
+            if (fact.Data != null)
+                _stream.Write(fact.Data, 0, fact.Data.Length);
             _stream.Flush();
 
             foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
