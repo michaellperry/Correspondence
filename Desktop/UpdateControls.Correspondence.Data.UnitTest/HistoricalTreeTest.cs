@@ -133,5 +133,60 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             Assert.AreEqual(37, fact.FactTypeId);
             Assert.AreEqual(0, fact.Predecessors.Count());
         }
+
+        [TestMethod]
+        public void ChildAppearsTwiceInSameRole()
+        {
+            int roleId = 42;
+            long rootFactId = _tree.Save(new HistoricalTreeFact(1, new byte[0]));
+            long childFactId = _tree.Save(new HistoricalTreeFact(2, new byte[0])
+                .AddPredecessor(roleId, rootFactId)
+                .AddPredecessor(roleId, rootFactId));
+
+            List<long> predecessors = _tree.GetPredecessorsInRole(childFactId, roleId);
+            Assert.AreEqual(2, predecessors.Count);
+            Assert.AreEqual(rootFactId, predecessors[0]);
+            Assert.AreEqual(rootFactId, predecessors[1]);
+
+            List<long> successors = _tree.GetSuccessorsInRole(rootFactId, roleId).ToList();
+            Assert.AreEqual(2, successors.Count);
+            Assert.AreEqual(childFactId, successors[0]);
+            Assert.AreEqual(childFactId, successors[1]);
+        }
+
+        [TestMethod]
+        public void ChildAppearsTwiceInDifferentRoles()
+        {
+            int firstRoleId = 42;
+            int secondRoleId = 43;
+            long rootFactId = _tree.Save(new HistoricalTreeFact(1, new byte[0]));
+            long childFactId = _tree.Save(new HistoricalTreeFact(2, new byte[0])
+                .AddPredecessor(firstRoleId, rootFactId)
+                .AddPredecessor(secondRoleId, rootFactId));
+
+            {
+                List<long> predecessors = _tree.GetPredecessorsInRole(childFactId, firstRoleId);
+                Assert.AreEqual(1, predecessors.Count);
+                Assert.AreEqual(rootFactId, predecessors[0]);
+            }
+
+            {
+                List<long> predecessors = _tree.GetPredecessorsInRole(childFactId, secondRoleId);
+                Assert.AreEqual(1, predecessors.Count);
+                Assert.AreEqual(rootFactId, predecessors[0]);
+            }
+
+            {
+                List<long> successors = _tree.GetSuccessorsInRole(rootFactId, firstRoleId).ToList();
+                Assert.AreEqual(1, successors.Count);
+                Assert.AreEqual(childFactId, successors[0]);
+            }
+
+            {
+                List<long> successors = _tree.GetSuccessorsInRole(rootFactId, secondRoleId).ToList();
+                Assert.AreEqual(1, successors.Count);
+                Assert.AreEqual(childFactId, successors[0]);
+            }
+        }
     }
 }

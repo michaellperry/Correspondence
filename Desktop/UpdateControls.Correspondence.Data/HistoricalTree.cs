@@ -116,6 +116,8 @@ namespace UpdateControls.Correspondence.Data
             {
                 _stream.Seek(successorFactId + 8, SeekOrigin.Begin);
                 int predecessorCount = ReadInt();
+                int numberOfMatches = 0;
+                long nextFactId = 0;
                 for (int i = 0; i < predecessorCount; i++)
                 {
                     int predecessorRoldId = ReadInt();
@@ -124,14 +126,17 @@ namespace UpdateControls.Correspondence.Data
                     if (predecessorFactId == factId)
                     {
                         if (predecessorRoldId == roleId)
-                            yield return successorFactId;
-                        // After I yield, I don't know where the stream pointer
-                        // is anymore, since the coroutine could reenter. But
-                        // that's OK, since the next thing I do is seek.
-                        successorFactId = next;
-                        break;
+                            ++numberOfMatches;
+                        nextFactId = next;
                     }
                 }
+                for (int i = 0; i < numberOfMatches; i++)
+                    yield return successorFactId;
+
+                // After I yield, I don't know where the stream pointer
+                // is anymore, since the coroutine could reenter. But
+                // that's OK, since the next thing I do is seek.
+                successorFactId = nextFactId;
             }
         }
 
