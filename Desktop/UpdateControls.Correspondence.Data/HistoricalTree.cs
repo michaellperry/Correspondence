@@ -75,7 +75,7 @@ namespace UpdateControls.Correspondence.Data
             for (int i = 0; i < predecessorCount; i++)
             {
                 int roleId = ReadInt();
-                int predecessorFactId = ReadInt();
+                long predecessorFactId = ReadLong();
                 long next = ReadLong();
                 predecessors.Add(new HistoricalTreePredecessor(roleId, predecessorFactId));
             }

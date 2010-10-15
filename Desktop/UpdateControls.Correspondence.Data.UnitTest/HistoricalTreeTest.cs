@@ -135,6 +135,21 @@ namespace UpdateControls.Correspondence.Data.UnitTest
         }
 
         [TestMethod]
+        public void CanReadPredecessors()
+        {
+            long rootFactId = _tree.Save(new HistoricalTreeFact(21, Encoding.ASCII.GetBytes("root")));
+            long factId = _tree.Save(new HistoricalTreeFact(37, Encoding.ASCII.GetBytes("Blob"))
+                .AddPredecessor(89, rootFactId));
+            HistoricalTreeFact fact = _tree.Load(factId);
+
+            Assert.AreEqual("Blob", Encoding.ASCII.GetString(fact.Data));
+            Assert.AreEqual(37, fact.FactTypeId);
+            Assert.AreEqual(1, fact.Predecessors.Count());
+            Assert.AreEqual(rootFactId, fact.Predecessors.ElementAt(0).PredecessorFactId);
+            Assert.AreEqual(89, fact.Predecessors.ElementAt(0).RoleId);
+        }
+
+        [TestMethod]
         public void ChildAppearsTwiceInSameRole()
         {
             int roleId = 42;
