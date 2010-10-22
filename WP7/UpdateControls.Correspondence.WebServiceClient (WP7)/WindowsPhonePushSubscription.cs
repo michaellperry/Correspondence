@@ -1,4 +1,5 @@
 using UpdateControls.Correspondence.Strategy;
+using System;
 
 namespace UpdateControls.Correspondence.WebServiceClient
 {
@@ -15,7 +16,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
             _pivotId = pivotId;
         }
 
-        public void Subscribe(string deviceUri)
+        public void Subscribe(string deviceUri, Action subscriptionSuccess)
         {
             lock (this)
             {
@@ -23,7 +24,23 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 {
                     _deviceUri = deviceUri;
                     IWindowsPhonePushService windowsPhonePushService = new WindowsPhonePushServiceClient();
-                    windowsPhonePushService.BeginSubscribe(_pivot, _pivotId, _deviceUri, a => { }, null);
+                    windowsPhonePushService.BeginSubscribe(
+                        _pivot,
+                        _pivotId,
+                        _deviceUri,
+                        delegate(IAsyncResult a)
+                        {
+                            try
+                            {
+                                windowsPhonePushService.EndSubscribe(a);
+                                subscriptionSuccess();
+                            }
+                            catch (Exception ex)
+                            {
+                                HandleException(ex);
+                            }
+                        },
+                        null);
                 }
             }
         }
@@ -35,10 +52,30 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 if (_deviceUri != null)
                 {
                     IWindowsPhonePushService windowsPhonePushService = new WindowsPhonePushServiceClient();
-                    windowsPhonePushService.BeginUnsubscribe(_pivot, _pivotId, _deviceUri, a => { }, null);
+                    windowsPhonePushService.BeginUnsubscribe(
+                        _pivot, 
+                        _pivotId, 
+                        _deviceUri,
+                        delegate(IAsyncResult a)
+                        {
+                            try
+                            {
+                                windowsPhonePushService.EndUnsubscribe(a);
+                            }
+                            catch (Exception ex)
+                            {
+                                HandleException(ex);
+                            }
+                        }, 
+                        null);
                 }
                 _doNotSubscribe = true;
             }
+        }
+
+        private void HandleException(Exception ex)
+        {
+            // TODO: Notify the application of an exception.
         }
     }
 }

@@ -35,9 +35,25 @@ namespace UpdateControls.Correspondence.WebServiceClient
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
             synchronizationService.BeginGet(pivot, pivotId.key, timestamp.Key, delegate(IAsyncResult result)
             {
-                FactTree factTree = synchronizationService.EndGet(result);
-                callback(Translate.FactTreeToMemento(factTree));
+                FactTreeMemento factTreeMemento;
+                try
+                {
+                    FactTree factTree = synchronizationService.EndGet(result);
+                    factTreeMemento = Translate.FactTreeToMemento(factTree);
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex);
+                    factTreeMemento = new FactTreeMemento(pivotTree.DatabaseId, timestamp.Key);
+                }
+                callback(factTreeMemento);
             }, null);
+
+            // Ensure that the subscription queue gets served.
+            lock (this)
+            {
+                OpenChannel();
+            }
         }
 
         public void BeginPost(FactTreeMemento messageBody, Action callback)
@@ -45,7 +61,14 @@ namespace UpdateControls.Correspondence.WebServiceClient
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
             synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), delegate(IAsyncResult result)
             {
-                synchronizationService.EndPost(result);
+                try
+                {
+                    synchronizationService.EndPost(result);
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex);
+                }
                 callback();
             }, null);
         }
@@ -102,9 +125,14 @@ namespace UpdateControls.Correspondence.WebServiceClient
             string deviceUri = _httpChannel.ChannelUri.ToString();
             foreach (WindowsPhonePushSubscription subscription in _subscriptionQueue)
             {
-                subscription.Subscribe(deviceUri);
+                subscription.Subscribe(deviceUri, delegate
+                {
+                    lock (this)
+                    {
+                        _subscriptionQueue.Remove(subscription);
+                    }
+                });
             }
-            _subscriptionQueue.Clear();
         }
 
         void httpChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
@@ -186,6 +214,11 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
 
             return new IdentifiedFactMemento(new FactID { key = factId }, factMemento);
+        }
+
+        private void HandleException(Exception ex)
+        {
+            // TODO: Notify the application about exceptions.
         }
     }
 }

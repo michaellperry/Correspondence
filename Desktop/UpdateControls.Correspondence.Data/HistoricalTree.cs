@@ -112,10 +112,10 @@ namespace UpdateControls.Correspondence.Data
         {
             _stream.Seek(factId, SeekOrigin.Begin);
 
-            long successorFactId = ReadInt();
+            long successorFactId = ReadLong();
             while (successorFactId != 0)
             {
-                _stream.Seek(successorFactId + 8, SeekOrigin.Begin);
+                _stream.Seek(successorFactId + sizeof(Int64), SeekOrigin.Begin);
                 int predecessorCount = ReadInt();
                 int numberOfMatches = 0;
                 long nextFactId = 0;
