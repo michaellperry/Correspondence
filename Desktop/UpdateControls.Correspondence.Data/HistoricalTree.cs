@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 
 namespace UpdateControls.Correspondence.Data
 {
-    public class HistoricalTree : IDisposable
+    public class HistoricalTree : StreamBasedDataStructure, IDisposable
     {
-        private byte[] _readBuffer = new byte[8];
-        private Stream _stream;
-
-        public HistoricalTree(Stream stream)
+        public HistoricalTree(Stream stream) :
+            base(stream)
         {
-            _stream = stream;
         }
 
         public long Save(HistoricalTreeFact fact)
@@ -139,35 +135,6 @@ namespace UpdateControls.Correspondence.Data
                 // that's OK, since the next thing I do is seek.
                 successorFactId = nextFactId;
             }
-        }
-
-        public void Dispose()
-        {
-            _stream.Dispose();
-        }
-
-        private int ReadInt()
-        {
-            _stream.Read(_readBuffer, 0, 4);
-            return BitConverter.ToInt32(_readBuffer, 0);
-        }
-
-        private void WriteInt(int value)
-        {
-            byte[] writeBuffer = BitConverter.GetBytes(value);
-            _stream.Write(writeBuffer, 0, 4);
-        }
-
-        private long ReadLong()
-        {
-            _stream.Read(_readBuffer, 0, 8);
-            return BitConverter.ToInt64(_readBuffer, 0);
-        }
-
-        private void WriteLong(long value)
-        {
-            byte[] writeBuffer = BitConverter.GetBytes(value);
-            _stream.Write(writeBuffer, 0, 8);
         }
     }
 }
