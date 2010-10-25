@@ -146,7 +146,10 @@ namespace UpdateControls.Correspondence.Data.UnitTest
         public void InOrderInsertion()
         {
             for (int i = 0; i < 16; i++)
+            {
                 _redBlackTree.AddFact(i, i);
+                _redBlackTree.CheckInvariant();
+            }
         }
     }
 }
