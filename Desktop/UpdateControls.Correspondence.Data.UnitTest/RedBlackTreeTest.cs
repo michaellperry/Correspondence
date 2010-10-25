@@ -19,18 +19,13 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             _redBlackTree = new RedBlackTree(memoryStream);
         }
 
-        [TestCleanup]
-        public void CheckInvariant()
-        {
-            _redBlackTree.CheckInvariant();
-        }
-
         [TestMethod]
         public void SearchEmptyTree()
         {
             int hashCode = 234;
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode);
             Assert.IsFalse(factIds.Any(), "There should be no facts in the tree.");
+			_redBlackTree.CheckInvariant(0);
         }
 
         [TestMethod]
@@ -43,7 +38,8 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode);
             Assert.AreEqual(1, factIds.Count());
             Assert.AreEqual(factId, factIds.Single());
-        }
+			_redBlackTree.CheckInvariant(1);
+		}
 
         [TestMethod]
         public void SearchBeforeTreeWithOneNode()
@@ -54,7 +50,8 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode-1);
             Assert.AreEqual(0, factIds.Count());
-        }
+			_redBlackTree.CheckInvariant(1);
+		}
 
         [TestMethod]
         public void SearchAfterTreeWithOneNode()
@@ -65,7 +62,8 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode + 1);
             Assert.AreEqual(0, factIds.Count());
-        }
+			_redBlackTree.CheckInvariant(1);
+		}
 
         [TestMethod]
         public void SearchTreeWithTwoNodes()
@@ -83,7 +81,8 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             IEnumerable<long> factIds2 = _redBlackTree.FindFacts(hashCode2);
             Assert.AreEqual(1, factIds2.Count());
             Assert.AreEqual(factId2, factIds2.Single());
-        }
+			_redBlackTree.CheckInvariant(2);
+		}
 
         [TestMethod]
         public void SearchBeforeTreeWithTwoNodes()
@@ -97,7 +96,8 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode1 - 1);
             Assert.AreEqual(0, factIds.Count());
-        }
+			_redBlackTree.CheckInvariant(2);
+		}
 
         [TestMethod]
         public void SearchMiddleTreeWithTwoNodes()
@@ -111,7 +111,8 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode1 + 1);
             Assert.AreEqual(0, factIds.Count());
-        }
+			_redBlackTree.CheckInvariant(2);
+		}
 
         [TestMethod]
         public void SearchAfterTreeWithTwoNodes()
@@ -125,7 +126,8 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode1 + 1);
             Assert.AreEqual(0, factIds.Count());
-        }
+			_redBlackTree.CheckInvariant(2);
+		}
 
         [TestMethod]
         public void SearchTreeWithTwoNodesSameHash()
@@ -140,16 +142,122 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             Assert.AreEqual(2, factIds.Count);
             Assert.IsTrue(factIds.Contains(factId1));
             Assert.IsTrue(factIds.Contains(factId2));
-        }
+			_redBlackTree.CheckInvariant(2);
+		}
 
         [TestMethod]
         public void InOrderInsertion()
         {
             for (int i = 0; i < 16; i++)
             {
-                _redBlackTree.AddFact(i, i);
-                _redBlackTree.CheckInvariant();
-            }
-        }
-    }
+				WriteNode(i);
+				_redBlackTree.CheckInvariant(i + 1);
+			}
+
+			for (int i = 0; i < 16; i++)
+			{
+				Assert.AreEqual((long)i, _redBlackTree.FindFacts(i).Single());
+			}
+		}
+
+        [TestMethod]
+        public void ReverseOrderInsertion()
+        {
+            for (int i = 15; i >= 0; i--)
+            {
+				WriteNode(i);
+				_redBlackTree.CheckInvariant(16 - i);
+			}
+
+			for (int i = 0; i < 16; i++)
+			{
+				Assert.AreEqual((long)i, _redBlackTree.FindFacts(i).Single());
+			}
+		}
+
+        [TestMethod]
+        public void OutsideInInsertion()
+        {
+			for (int i = 0; i < 16; i++)
+			{
+				WriteNode(i);
+				_redBlackTree.CheckInvariant(2 * i + 1);
+				WriteNode(31 - i);
+				_redBlackTree.CheckInvariant(2 * i + 2);
+			}
+
+			for (int i = 0; i < 32; i++)
+			{
+				Assert.AreEqual((long)i, _redBlackTree.FindFacts(i).Single());
+			}
+		}
+
+		[TestMethod]
+		public void InsideOutInsertion()
+		{
+			for (int i = 15; i >= 0; i--)
+			{
+				WriteNode(i);
+				_redBlackTree.CheckInvariant(31 - 2 * i);
+				WriteNode(31 - i);
+				_redBlackTree.CheckInvariant(32 - 2 * i);
+			}
+
+			for (int i = 0; i < 32; i++)
+			{
+				Assert.AreEqual((long)i, _redBlackTree.FindFacts(i).Single());
+			}
+		}
+
+		[TestMethod]
+		public void ShuffleForwardInsertion()
+		{
+			for (int i = 0; i < 16; i++)
+			{
+				WriteNode(i);
+				_redBlackTree.CheckInvariant(2 * i + 1);
+				WriteNode(i + 16);
+				_redBlackTree.CheckInvariant(2 * i + 2);
+			}
+
+			for (int i = 0; i < 32; i++)
+			{
+				Assert.AreEqual((long)i, _redBlackTree.FindFacts(i).Single());
+			}
+		}
+
+		[TestMethod]
+		public void ShuffleBackwardInsertion()
+		{
+			for (int i = 15; i >= 0; i--)
+			{
+				WriteNode(i);
+				_redBlackTree.CheckInvariant(31 - 2 * i);
+				WriteNode(i + 16);
+				_redBlackTree.CheckInvariant(32 - 2 * i);
+			}
+
+			for (int i = 0; i < 32; i++)
+			{
+				Assert.AreEqual((long)i, _redBlackTree.FindFacts(i).Single());
+			}
+		}
+
+		[TestMethod]
+		public void RandomInsertion()
+		{
+			Random rand = new Random(39869);
+			for (int i = 0; i < 10000; i++)
+			{
+				WriteNode(rand.Next());
+				_redBlackTree.CheckInvariant(i + 1);
+			}
+		}
+
+		private void WriteNode(int i)
+		{
+			//System.Diagnostics.Debug.WriteLine(String.Format("Write node {0}.", i));
+			_redBlackTree.AddFact(i, i);
+		}
+	}
 }
