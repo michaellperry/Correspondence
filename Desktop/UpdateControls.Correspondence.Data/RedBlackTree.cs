@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace UpdateControls.Correspondence.Data
@@ -274,17 +272,17 @@ namespace UpdateControls.Correspondence.Data
 				long root = ReadLong();
 				Node node = ReadNode(root);
 				if (node.Color != NodeColor.Black)
-					throw new ApplicationException("Invariant violated: The root node is black.");
+					throw new InvariantException("Invariant violated: The root node is black.");
 
 				int count = 1;
 				CheckInvariantNode(node.Color, node.Left, ref count, node.HashCode, true);
 				CheckInvariantNode(node.Color, node.Right, ref count, node.HashCode, false);
 
 				if (expectedCount != count)
-					throw new ApplicationException(String.Format("Expected count {0}. Actual {1}.", expectedCount, count));
+					throw new InvariantException(String.Format("Expected count {0}. Actual {1}.", expectedCount, count));
 			}
 			else if (expectedCount != 0)
-				throw new ApplicationException(String.Format("Expected count {0}. Actual 0.", expectedCount));
+				throw new InvariantException(String.Format("Expected count {0}. Actual 0.", expectedCount));
         }
 
         private int CheckInvariantNode(NodeColor parentColor, long position, ref int count, int parentHashCode, bool leftChild)
@@ -295,18 +293,18 @@ namespace UpdateControls.Correspondence.Data
 			++count;
             Node node = ReadNode(position);
             if (parentColor == NodeColor.Red && node.Color != NodeColor.Black)
-                throw new ApplicationException("Invariant violated: both children of every red node are black.");
+                throw new InvariantException("Invariant violated: both children of every red node are black.");
 
 			if (leftChild && node.HashCode >= parentHashCode)
-				throw new ApplicationException("Invariant violated: left hash code is less than parent hash code.");
+				throw new InvariantException("Invariant violated: left hash code is less than parent hash code.");
 			if (!leftChild && node.HashCode < parentHashCode)
-				throw new ApplicationException("Invariant violated: right hash code is greater than or equal to parent hash code.");
+				throw new InvariantException("Invariant violated: right hash code is greater than or equal to parent hash code.");
 
             int leftCount = CheckInvariantNode(node.Color, node.Left, ref count, node.HashCode, true);
 			int rightCount = CheckInvariantNode(node.Color, node.Right, ref count, node.HashCode, false);
 
             if (leftCount != rightCount)
-                throw new ApplicationException("Invariant violated: Every simple path from a given node to any of its descendant leaves contains the same number of black nodes.");
+                throw new InvariantException("Invariant violated: Every simple path from a given node to any of its descendant leaves contains the same number of black nodes.");
             return leftCount + (node.Color == NodeColor.Black ? 1 : 0);
         }
 
@@ -344,7 +342,7 @@ namespace UpdateControls.Correspondence.Data
 		{
 			byte b = ReadByte();
 			if (b != expected)
-				throw new ApplicationException(String.Format("Incorrect byte overwritten. Expected {0}. Actual {1}.", expected, b));
+				throw new InvariantException(String.Format("Incorrect byte overwritten. Expected {0}. Actual {1}.", expected, b));
 			_stream.Seek(-sizeof(byte), SeekOrigin.Current);
 		}
 
@@ -352,7 +350,7 @@ namespace UpdateControls.Correspondence.Data
 		{
 			long l = ReadLong();
 			if (l != expected)
-				throw new ApplicationException(String.Format("Incorrect long overwritten. Expected {0}. Actual {1}.", expected, l));
+				throw new InvariantException(String.Format("Incorrect long overwritten. Expected {0}. Actual {1}.", expected, l));
 			_stream.Seek(-sizeof(long), SeekOrigin.Current);
 		}
 	}

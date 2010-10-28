@@ -49,6 +49,7 @@
     <Compile Include="HistoricalTree.cs" />
     <Compile Include="HistoricalTreeFact.cs" />
     <Compile Include="HistoricalTreePredecessor.cs" />
+    <Compile Include="InvariantException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedBlackTree.cs" />
     <Compile Include="StreamBasedDataStructure.cs" />

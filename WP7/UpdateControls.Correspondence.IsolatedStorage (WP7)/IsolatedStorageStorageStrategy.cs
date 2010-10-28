@@ -367,5 +367,20 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 }
             }
         }
+
+        public static void DeleteAll()
+        {
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (store.FileExists(FactTableFileName))
+                {
+                    store.DeleteFile(FactTableFileName);
+                }
+                if (store.FileExists(MessageTableFileName))
+                {
+                    store.DeleteFile(MessageTableFileName);
+                }
+            }
+        }
     }
 }
