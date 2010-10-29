@@ -1,7 +1,8 @@
-﻿using Microsoft.Silverlight.Testing;
+﻿using System.Linq;
+using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Mementos;
-using System.Linq;
+using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
 {
@@ -10,7 +11,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
     {
         private const string STR_TypeName = "IM.Model.User";
         private const string STR_SuccessorTypeName = "IM.Model.Message";
-        private IsolatedStorageStorageStrategy _strategy;
+        private IStorageStrategy _strategy;
 
         [TestInitialize]
         public void Initialize()
@@ -72,12 +73,46 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             Assert.AreEqual(successor.Predecessors.Single().ID, predecessorId);
         }
 
+        [TestMethod]
+        public void ShouldFindSimpleFact()
+        {
+            FactID id;
+            FactMemento memento = CreateSimpleFactMemento();
+            _strategy.Save(memento, out id);
+
+            FactID copyId;
+            FactMemento copy = CreateSimpleFactMemento();
+            bool saved = _strategy.Save(copy, out copyId);
+
+            Assert.IsFalse(saved);
+            Assert.AreEqual(id, copyId);
+        }
+
+        [TestMethod]
+        public void ShouldFindSuccessorFact()
+        {
+            FactID id;
+            FactMemento memento = CreateSimpleFactMemento();
+            _strategy.Save(memento, out id);
+
+            FactID successorId;
+            FactMemento successor = CreateSuccessorFactMemento(id);
+            _strategy.Save(successor, out successorId);
+
+            FactID successorCopyId;
+            FactMemento successorCopy = CreateSuccessorFactMemento(id);
+            bool saved = _strategy.Save(successorCopy, out successorCopyId);
+
+            Assert.IsFalse(saved);
+            Assert.AreEqual(successorId, successorCopyId);
+        }
+
         private static FactMemento CreateSimpleFactMemento()
         {
             CorrespondenceFactType factType = new CorrespondenceFactType(STR_TypeName, 1);
             return new FactMemento(factType)
             {
-                Data = new byte[0]
+                Data = new byte[] { 0x12, 0xc3, 0x48, 0xf4 }
             };
         }
 
@@ -86,7 +121,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             CorrespondenceFactType factType = new CorrespondenceFactType(STR_SuccessorTypeName, 1);
             FactMemento fact = new FactMemento(factType)
             {
-                Data = new byte[0]
+                Data = new byte[] { 0x12, 0xc3, 0x48, 0xf4 }
             };
             fact.AddPredecessor(
                 new RoleMemento(
