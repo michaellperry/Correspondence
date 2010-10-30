@@ -92,5 +92,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     new CorrespondenceFactType(targetTypeName, targetTypeVersion),
                     isPivot));
         }
+
+        public static void DeleteAll(IsolatedStorageFile store)
+        {
+            if (store.FileExists(RoleTableFileName))
+                store.DeleteFile(RoleTableFileName);
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿using UpdateControls.Correspondence;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
@@ -19,8 +18,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         private MessageStore _messageStore;
         private FactTypeStore _factTypeStore;
         private RoleStore _roleStore;
-        private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier, TimestampID>();
-        private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
+        private OutgoingTimestampStore _outgoingTimestampStore;
+        private IncomingTimestampStore _incomingTimestampStore;
 
         private IsolatedStorageStorageStrategy()
         {
@@ -35,6 +34,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 result._messageStore = MessageStore.Load(store);
                 result._factTypeStore = FactTypeStore.Load(store);
                 result._roleStore = RoleStore.Load(store);
+                result._incomingTimestampStore = IncomingTimestampStore.Load(store);
+                result._outgoingTimestampStore = OutgoingTimestampStore.Load(store);
             }
 
             return result;
@@ -181,30 +182,28 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
         {
-            TimestampID timestamp;
-            if (_outgoingTimestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
-                return timestamp;
-            else
-                return new TimestampID();
+            return _outgoingTimestampStore.LoadOutgoingTimestamp(protocolName, peerName);
         }
 
         public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp)
         {
-            _outgoingTimestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                _outgoingTimestampStore.SaveOutgoingTimestamp(protocolName, peerName, timestamp, store);
+            }
         }
 
         public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId)
         {
-            TimestampID timestamp;
-            if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId), out timestamp))
-                return timestamp;
-            else
-                return new TimestampID();
+            return _incomingTimestampStore.LoadIncomingTimestamp(protocolName, peerName, pivotId);
         }
 
         public void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp)
         {
-            _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId)] = timestamp;
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                _incomingTimestampStore.SaveIncomingTimestamp(protocolName, peerName, pivotId, timestamp, store);
+            }
         }
 
         public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
@@ -282,6 +281,10 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     store.DeleteFile(IndexFileName);
                 }
                 MessageStore.DeleteAll(store);
+                FactTypeStore.DeleteAll(store);
+                RoleStore.DeleteAll(store);
+                IncomingTimestampStore.DeleteAll(store);
+                OutgoingTimestampStore.DeleteAll(store);
             }
         }
     }

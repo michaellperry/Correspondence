@@ -60,8 +60,10 @@
     </Compile>
     <Compile Include="Duration.cs" />
     <Compile Include="FactTypeStore.cs" />
+    <Compile Include="IncomingTimestampStore.cs" />
     <Compile Include="IsolatedStorageStorageStrategy.cs" />
     <Compile Include="MessageStore.cs" />
+    <Compile Include="OutgoingTimestampStore.cs" />
     <Compile Include="PeerIdentifier.cs" />
     <Compile Include="PeerPivotIdentifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -81,5 +81,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
             _factTypeById.Add(factTypeId, new CorrespondenceFactType(typeName, version));
         }
+
+        public static void DeleteAll(IsolatedStorageFile store)
+        {
+            if (store.FileExists(FactTypeTableFileName))
+                store.DeleteFile(FactTypeTableFileName);
+        }
     }
 }
