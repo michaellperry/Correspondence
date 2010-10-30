@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using UpdateControls.Correspondence.Mementos;
-using System.IO.IsolatedStorage;
 using System.IO;
+using System.IO.IsolatedStorage;
+using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence.IsolatedStorage
 {
