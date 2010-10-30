@@ -42,6 +42,9 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactID firstId;
             _strategy.Save(CreateSimpleFactMemento(), out firstId);
             FactID secondId;
+
+            Reload();
+
             bool saved = _strategy.Save(CreateSimpleFactMemento(), out secondId);
 
             Assert.IsFalse(saved);
@@ -53,6 +56,9 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         {
             FactID id;
             bool saved = _strategy.Save(CreateSimpleFactMemento(), out id);
+
+            Reload();
+
             FactMemento factMemento = _strategy.Load(id);
 
             Assert.AreEqual(STR_TypeName, factMemento.FactType.TypeName);
@@ -68,6 +74,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             _strategy.Save(CreateSimpleFactMemento(), out predecessorId);
             _strategy.Save(CreateSuccessorFactMemento(predecessorId), out id);
 
+            Reload();
+
             FactMemento successor = _strategy.Load(id);
 
             Assert.AreEqual(successor.Predecessors.Single().ID, predecessorId);
@@ -79,6 +87,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactID id;
             FactMemento memento = CreateSimpleFactMemento();
             _strategy.Save(memento, out id);
+
+            Reload();
 
             FactID copyId;
             FactMemento copy = CreateSimpleFactMemento();
@@ -98,6 +108,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactID successorId;
             FactMemento successor = CreateSuccessorFactMemento(id);
             _strategy.Save(successor, out successorId);
+
+            Reload();
 
             FactID successorCopyId;
             FactMemento successorCopy = CreateSuccessorFactMemento(id);
@@ -131,6 +143,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
                     true),
                 predecessorId);
             return fact;
+        }
+
+        private void Reload()
+        {
+            _strategy = IsolatedStorageStorageStrategy.Load();
         }
     }
 }

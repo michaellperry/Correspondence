@@ -12,9 +12,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 {
     public class IsolatedStorageStorageStrategy : IStorageStrategy
     {
-        private const string FactTreeFileName = "FactTable.bin";
+        private const string FactTreeFileName = "FactTree.bin";
         private const string IndexFileName = "Index.bin";
         private const string MessageTableFileName = "MessageTable.bin";
+        private const string FactTypeTableFileName = "FactTypeTable.bin";
+        private const string RoleTableFileName = "RoleTable.bin";
 
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
         private IDictionary<int, CorrespondenceFactType> _factTypeById = new Dictionary<int, CorrespondenceFactType>();
@@ -40,7 +42,29 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                             FileMode.Open,
                             FileAccess.Read)))
                     {
-                        ReadAllMessagesFromStorage(result, messageReader);
+                        result.ReadAllMessagesFromStorage(messageReader);
+                    }
+                }
+
+                if (store.FileExists(FactTypeTableFileName))
+                {
+                    using (BinaryReader factTypeReader = new BinaryReader(store.OpenFile(
+                        FactTypeTableFileName,
+                        FileMode.Open,
+                        FileAccess.Read)))
+                    {
+                        result.ReadAllFactTypesFromStorage(factTypeReader);
+                    }
+                }
+
+                if (store.FileExists(RoleTableFileName))
+                {
+                    using (BinaryReader roleReader = new BinaryReader(store.OpenFile(
+                        RoleTableFileName,
+                        FileMode.Open,
+                        FileAccess.Read)))
+                    {
+                        result.ReadAllRolesFromStorage(roleReader);
                     }
                 }
             }
@@ -94,21 +118,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     // It doesn't, so create it.
                     using (HistoricalTree factTree = OpenFactTree(store))
                     {
-                        int factTypeId = _factTypeById
-                            .Where(pair => pair.Value.Equals(memento.FactType))
-                            .Select(pair => pair.Key)
-                            .FirstOrDefault();
-                        if (factTypeId == 0)
-                        {
-                            factTypeId = _factTypeById.Count + 1;
-                            _factTypeById.Add(factTypeId, memento.FactType);
-                        }
-
+                        int factTypeId = GetFactTypeId(memento.FactType, store);
                         HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
                         foreach (PredecessorMemento predecessor in memento.Predecessors)
                         {
                             RoleMemento role = predecessor.Role;
-                            int roleId = GetRoleId(role);
+                            int roleId = GetRoleId(role, store);
                             historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
                         }
                         long newFactIDKey = factTree.Save(historicalTreeFact);
@@ -174,9 +189,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             {
                 using (HistoricalTree factTree = OpenFactTree(store))
                 {
-                    return new QueryExecutor(factTree, GetRoleId)
-                        .ExecuteQuery(queryDefinition, startingId.key, null)
-                        .OrderByDescending(key => key)
+                    return new QueryExecutor(factTree, role => GetRoleId(role, store))
+                        .ExecuteQuery(queryDefinition, startingId.key, options)
                         .Select(key => new IdentifiedFactMemento(new FactID { key = key }, LoadFactFromTree(factTree, key)))
                         .ToList();
                 }
@@ -189,9 +203,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             {
                 using (HistoricalTree factTree = OpenFactTree(store))
                 {
-                    return new QueryExecutor(factTree, GetRoleId)
+                    return new QueryExecutor(factTree, role => GetRoleId(role, store))
                         .ExecuteQuery(queryDefinition, startingId.key, null)
-                        .OrderByDescending(key => key)
                         .Select(key => new FactID { key = key })
                         .ToList();
                 }
@@ -304,16 +317,16 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             return factMemento;
         }
 
-        private static void ReadAllMessagesFromStorage(IsolatedStorageStorageStrategy result, BinaryReader messageReader)
+        private void ReadAllMessagesFromStorage(BinaryReader messageReader)
         {
             long length = messageReader.BaseStream.Length;
             while (messageReader.BaseStream.Position < length)
             {
-                ReadMessageFromStorage(result, messageReader);
+                ReadMessageFromStorage(messageReader);
             }
         }
 
-        private static void ReadMessageFromStorage(IsolatedStorageStorageStrategy result, BinaryReader messageReader)
+        private void ReadMessageFromStorage(BinaryReader messageReader)
         {
             long pivotId;
             long factId;
@@ -324,7 +337,53 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             MessageMemento messageMemento = new MessageMemento(
                 new FactID() { key = pivotId },
                 new FactID() { key = factId });
-            result._messageTable.Add(messageMemento);
+            _messageTable.Add(messageMemento);
+        }
+
+        public void ReadAllFactTypesFromStorage(BinaryReader factTypeReader)
+        {
+            long length = factTypeReader.BaseStream.Length;
+            while (factTypeReader.BaseStream.Position < length)
+            {
+                ReadFactTypeFromStorage(factTypeReader);
+            }
+        }
+
+        private void ReadFactTypeFromStorage(BinaryReader factTypeReader)
+        {
+            int factTypeId = factTypeReader.ReadInt32();
+            string typeName = factTypeReader.ReadString();
+            int version = factTypeReader.ReadInt32();
+
+            _factTypeById.Add(factTypeId, new CorrespondenceFactType(typeName, version));
+        }
+
+        public void ReadAllRolesFromStorage(BinaryReader roleReader)
+        {
+            long length = roleReader.BaseStream.Length;
+            while (roleReader.BaseStream.Position < length)
+            {
+                ReadRoleFromStorage(roleReader);
+            }
+        }
+
+        private void ReadRoleFromStorage(BinaryReader roleReader)
+        {
+            int roleId = roleReader.ReadInt32();
+            string declaringTypeName = roleReader.ReadString();
+            int declaringTypeVersion = roleReader.ReadInt32();
+            string roleName = roleReader.ReadString();
+            string targetTypeName = roleReader.ReadString();
+            int targetTypeVersion = roleReader.ReadInt32();
+            bool isPivot = roleReader.ReadByte() != 0;
+
+            _roleById.Add(
+                roleId,
+                new RoleMemento(
+                    new CorrespondenceFactType(declaringTypeName, declaringTypeVersion),
+                    roleName,
+                    new CorrespondenceFactType(targetTypeName, targetTypeVersion),
+                    isPivot));
         }
 
         private static void WriteMessagesToStorage(IEnumerable<MessageMemento> messages)
@@ -348,7 +407,29 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
-        private int GetRoleId(RoleMemento role)
+        private int GetFactTypeId(CorrespondenceFactType factType, IsolatedStorageFile store)
+        {
+            int factTypeId = _factTypeById
+                .Where(pair => pair.Value.Equals(factType))
+                .Select(pair => pair.Key)
+                .FirstOrDefault();
+            if (factTypeId == 0)
+            {
+                factTypeId = _factTypeById.Count + 1;
+                _factTypeById.Add(factTypeId, factType);
+
+                using (BinaryWriter writer = new BinaryWriter(
+                    store.OpenFile(FactTypeTableFileName, FileMode.Append)))
+                {
+                    writer.Write(factTypeId);
+                    writer.Write(factType.TypeName);
+                    writer.Write(factType.Version);
+                }
+            }
+            return factTypeId;
+        }
+
+        private int GetRoleId(RoleMemento role, IsolatedStorageFile store)
         {
             int roleId = _roleById
                 .Where(pair => pair.Value == role)
@@ -358,6 +439,17 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             {
                 roleId = _roleById.Count + 1;
                 _roleById.Add(roleId, role);
+
+                using (var writer = new BinaryWriter(store.OpenFile(RoleTableFileName, FileMode.Append)))
+                {
+                    writer.Write(roleId);
+                    writer.Write(role.DeclaringType.TypeName);
+                    writer.Write(role.DeclaringType.Version);
+                    writer.Write(role.RoleName);
+                    writer.Write(role.TargetType.TypeName);
+                    writer.Write(role.TargetType.Version);
+                    writer.Write(role.IsPivot ? (byte)1 : (byte)0);
+                }
             }
             return roleId;
         }
