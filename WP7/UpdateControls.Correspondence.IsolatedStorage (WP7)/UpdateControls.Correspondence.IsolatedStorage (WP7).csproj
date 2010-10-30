@@ -70,6 +70,10 @@
       <Project>{DE3FFB60-CADE-4679-A53E-0541F707EA95}</Project>
       <Name>UpdateControls.Correspondence %28WP7%29</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data %28WP7%29.csproj">
+      <Project>{426A7DF6-3C39-4125-9AD3-31D93208B269}</Project>
+      <Name>UpdateControls.Correspondence.Data %28WP7%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\UpdateControls.Correspondence.Memory\Mallardsoft.snk">

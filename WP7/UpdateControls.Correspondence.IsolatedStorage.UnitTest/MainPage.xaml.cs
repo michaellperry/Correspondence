@@ -28,7 +28,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             SystemTray.IsVisible = false;
 
             UnitTestSettings settings = UnitTestSystem.CreateDefaultSettings();
-            settings.StartRunImmediately = true;        // Has no effect!
+            //settings.StartRunImmediately = true;        // Has no effect!
             IMobileTestPage testPage = UnitTestSystem.CreateTestPage(settings) as IMobileTestPage;
             BackKeyPress += (x, xe) => xe.Cancel = testPage.NavigateBack();
             (Application.Current.RootVisual as PhoneApplicationFrame).Content = testPage;

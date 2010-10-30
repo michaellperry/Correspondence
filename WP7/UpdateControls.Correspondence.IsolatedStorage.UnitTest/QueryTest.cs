@@ -5,11 +5,12 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 using System;
+using Microsoft.Silverlight.Testing;
 
 namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
 {
     [TestClass]
-    public class QueryTest
+    public class QueryTest : SilverlightTest
     {
         private IStorageStrategy _storage;
 

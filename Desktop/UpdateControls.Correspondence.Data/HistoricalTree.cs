@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace UpdateControls.Correspondence.Data
 {
-    public class HistoricalTree : StreamBasedDataStructure, IDisposable
+    public class HistoricalTree : StreamBasedDataStructure
     {
         public HistoricalTree(Stream stream) :
             base(stream)

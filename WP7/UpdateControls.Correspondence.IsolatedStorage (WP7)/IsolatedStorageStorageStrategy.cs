@@ -6,16 +6,19 @@ using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Data;
 
 namespace UpdateControls.Correspondence.IsolatedStorage
 {
     public class IsolatedStorageStorageStrategy : IStorageStrategy
     {
-        private const string FactTableFileName = "FactTable.bin";
+        private const string FactTreeFileName = "FactTable.bin";
+        private const string IndexFileName = "Index.bin";
         private const string MessageTableFileName = "MessageTable.bin";
 
-        private List<IdentifiedFactMemento> _factTable = new List<IdentifiedFactMemento>();
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
+        private IDictionary<int, CorrespondenceFactType> _factTypeById = new Dictionary<int, CorrespondenceFactType>();
+        private IDictionary<int, RoleMemento> _roleById = new Dictionary<int, RoleMemento>();
         private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier, TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
         private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
@@ -30,16 +33,6 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (store.FileExists(FactTableFileName))
-                {
-                    using (BinaryReader factReader = new BinaryReader(
-                        store.OpenFile(FactTableFileName,
-                            FileMode.Open,
-                            FileAccess.Read)))
-                    {
-                        ReadAllFactsFromStorage(result, factReader);
-                    }
-                }
                 if (store.FileExists(MessageTableFileName))
                 {
                     using (BinaryReader messageReader = new BinaryReader(
@@ -72,80 +65,140 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public FactMemento Load(FactID id)
         {
-            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Id.Equals(id));
-            if (fact != null)
-                return fact.Memento;
-            else
-                throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (HistoricalTree factTree = OpenFactTree(store))
+                {
+                    HistoricalTreeFact factNode = factTree.Load(id.key);
+                    CorrespondenceFactType factType;
+                    if (!_factTypeById.TryGetValue(factNode.FactTypeId, out factType))
+                        throw new CorrespondenceException(String.Format("Fact type {0} is in tree, but is not recognized.", factNode.FactTypeId));
+
+                    FactMemento factMemento = new FactMemento(factType) { Data = factNode.Data };
+                    foreach (HistoricalTreePredecessor predecessorNode in factNode.Predecessors)
+                    {
+                        RoleMemento roleMemento;
+                        if (!_roleById.TryGetValue(predecessorNode.RoleId, out roleMemento))
+                            throw new CorrespondenceException(String.Format("Role {0} is in tree, but is not recognized.", predecessorNode.RoleId));
+
+                        factMemento.AddPredecessor(roleMemento, new FactID { key = predecessorNode.PredecessorFactId });
+                    }
+                    return factMemento;
+                }
+            }
         }
 
         public bool Save(FactMemento memento, out FactID id)
         {
-            // See if the fact already exists.
-            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
-            if (fact == null)
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                // It doesn't, so create it.
-                FactID newFactID = new FactID() { key = _factTable.Count + 1 };
-                id = newFactID;
-                fact = new IdentifiedFactMemento(id, memento);
-                _factTable.Add(fact);
+                using (RedBlackTree index = OpenIndex(store))
+                {
+                    // See if the fact already exists.
+                    foreach (long candidate in index.FindFacts(memento.GetHashCode()))
+                    {
+                        FactID candidateId = new FactID() { key = candidate };
+                        if (Load(candidateId).Equals(memento))
+                        {
+                            id = candidateId;
+                            return false;
+                        }
+                    }
 
-                WriteFactToStorage(fact);
+                    // It doesn't, so create it.
+                    using (HistoricalTree factTree = OpenFactTree(store))
+                    {
+                        int factTypeId = _factTypeById
+                            .Where(pair => pair.Value.Equals(memento.FactType))
+                            .Select(pair => pair.Key)
+                            .FirstOrDefault();
+                        if (factTypeId == 0)
+                        {
+                            factTypeId = _factTypeById.Count + 1;
+                            _factTypeById.Add(factTypeId, memento.FactType);
+                        }
 
-                // Store a message for each pivot.
-                IEnumerable<MessageMemento> directMessages = memento.Predecessors
-                    .Where(predecessor => predecessor.Role.IsPivot)
-                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
+                        HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
+                        foreach (PredecessorMemento predecessor in memento.Predecessors)
+                        {
+                            int roleId = _roleById
+                                .Where(pair => pair.Value == predecessor.Role)
+                                .Select(pair => pair.Key)
+                                .FirstOrDefault();
+                            if (roleId == 0)
+                            {
+                                roleId = _roleById.Count + 1;
+                                _roleById.Add(roleId, predecessor.Role);
+                            }
+                            historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
+                        }
+                        long newFactIDKey = factTree.Save(historicalTreeFact);
+                        index.AddFact(memento.GetHashCode(), newFactIDKey);
+                        FactID newFactID = new FactID() { key = newFactIDKey };
+                        id = newFactID;
 
-                // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
-                List<FactID> nonPivots = memento.Predecessors
-                    .Where(predecessor => !predecessor.Role.IsPivot)
-                    .Select(predecessor => predecessor.ID)
-                    .ToList();
-                List<FactID> predecessorsPivots = _messageTable
-                    .Where(message => nonPivots.Contains(message.FactId))
-                    .Select(message => message.PivotId)
-                    .Distinct()
-                    .ToList();
-                IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
-                    .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
+                        // Store a message for each pivot.
+                        IEnumerable<MessageMemento> directMessages = memento.Predecessors
+                            .Where(predecessor => predecessor.Role.IsPivot)
+                            .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
 
-                List<MessageMemento> allMessages = directMessages
-                    .Union(indirectMessages)
-                    .ToList();
-                _messageTable.AddRange(allMessages);
-                WriteMessagesToStorage(allMessages);
+                        // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
+                        List<FactID> nonPivots = memento.Predecessors
+                            .Where(predecessor => !predecessor.Role.IsPivot)
+                            .Select(predecessor => predecessor.ID)
+                            .ToList();
+                        List<FactID> predecessorsPivots = _messageTable
+                            .Where(message => nonPivots.Contains(message.FactId))
+                            .Select(message => message.PivotId)
+                            .Distinct()
+                            .ToList();
+                        IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
+                            .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
 
-                return true;
-            }
-            else
-            {
-                id = fact.Id;
-                return false;
+                        List<MessageMemento> allMessages = directMessages
+                            .Union(indirectMessages)
+                            .ToList();
+                        _messageTable.AddRange(allMessages);
+                        WriteMessagesToStorage(allMessages);
+
+                        return true;
+                    }
+                }
             }
         }
 
         public bool FindExistingFact(FactMemento memento, out FactID id)
         {
-            // See if the fact already exists.
-            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
-            if (fact == null)
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                id = new FactID();
-                return false;
-            }
-            else
-            {
-                id = fact.Id;
-                return true;
+                using (RedBlackTree index = OpenIndex(store))
+                {
+                    // See if the fact already exists.
+                    foreach (long candidate in index.FindFacts(memento.GetHashCode()))
+                    {
+                        FactID candidateId = new FactID() { key = candidate };
+                        if (Load(candidateId).Equals(memento))
+                        {
+                            id = candidateId;
+                            return false;
+                        }
+                    }
+                    id = new FactID();
+                    return false;
+                }
             }
         }
 
         public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return new QueryExecutor(_factTable).ExecuteQuery(queryDefinition, startingId, options)
-                .OrderByDescending(identifiedFact => identifiedFact.Id.key);
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (HistoricalTree factTree = OpenFactTree(store))
+                {
+                    return new QueryExecutor(factTree).ExecuteQuery(queryDefinition, startingId, options)
+                        .OrderByDescending(identifiedFact => identifiedFact.Id.key);
+                }
+            }
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
@@ -221,107 +274,23 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             throw new NotImplementedException();
         }
 
-        private static void ReadAllFactsFromStorage(IsolatedStorageStorageStrategy result, BinaryReader factReader)
+        private static HistoricalTree OpenFactTree(IsolatedStorageFile store)
         {
-            long length = factReader.BaseStream.Length;
-            while (factReader.BaseStream.Position < length)
-            {
-                ReadFactFromStorage(result, factReader);
-            }
+            Stream factTreeStream = store.OpenFile(
+                FactTreeFileName,
+                FileMode.OpenOrCreate,
+                FileAccess.ReadWrite);
+            HistoricalTree _factTree = new HistoricalTree(factTreeStream);
+            return _factTree;
         }
 
-        private static void ReadFactFromStorage(IsolatedStorageStorageStrategy result, BinaryReader factReader)
+        private static RedBlackTree OpenIndex(IsolatedStorageFile store)
         {
-            long factId;
-            string typeName;
-            int version;
-            short dataSize;
-            byte[] data;
-            short predecessorCount;
-
-            factId = factReader.ReadInt64();
-            typeName = factReader.ReadString();
-            version = factReader.ReadInt32();
-            dataSize = factReader.ReadInt16();
-            data = dataSize > 0 ? factReader.ReadBytes(dataSize) : new byte[0];
-            predecessorCount = factReader.ReadInt16();
-
-            FactMemento factMemento = new FactMemento(new CorrespondenceFactType(typeName, version));
-            factMemento.Data = data;
-            for (short i = 0; i < predecessorCount; i++)
-            {
-                string declaringTypeName;
-                int declaringTypeVersion;
-                string roleName;
-                string targetTypeName;
-                int targetTypeVersion;
-                bool isPivot;
-                long predecessorFactId;
-
-                declaringTypeName = factReader.ReadString();
-                declaringTypeVersion = factReader.ReadInt32();
-                roleName = factReader.ReadString();
-                targetTypeName = factReader.ReadString();
-                targetTypeVersion = factReader.ReadInt32();
-                isPivot = factReader.ReadBoolean();
-                predecessorFactId = factReader.ReadInt64();
-
-                factMemento.AddPredecessor(
-                    new RoleMemento(
-                        new CorrespondenceFactType(declaringTypeName, declaringTypeVersion),
-                        roleName,
-                        new CorrespondenceFactType(targetTypeName, targetTypeVersion),
-                        isPivot),
-                    new FactID() { key = predecessorFactId }
-                );
-            }
-            result._factTable.Add(new IdentifiedFactMemento(new FactID { key = factId }, factMemento));
-        }
-
-        private static void WriteFactToStorage(IdentifiedFactMemento fact)
-        {
-            long factId = fact.Id.key;
-            string typeName = fact.Memento.FactType.TypeName;
-            int version = fact.Memento.FactType.Version;
-            short dataSize = (short)fact.Memento.Data.Length;
-            byte[] data = fact.Memento.Data;
-            short predecessorCount = (short)fact.Memento.Predecessors.Count();
-
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                using (BinaryWriter factWriter = new BinaryWriter(
-                        store.OpenFile(FactTableFileName,
-                            FileMode.Append,
-                            FileAccess.Write)))
-                {
-                    factWriter.Write(factId);
-                    factWriter.Write(typeName);
-                    factWriter.Write(version);
-                    factWriter.Write(dataSize);
-                    if (dataSize > 0)
-                        factWriter.Write(data);
-                    factWriter.Write(predecessorCount);
-
-                    foreach (PredecessorMemento predecessor in fact.Memento.Predecessors)
-                    {
-                        string declaringTypeName = predecessor.Role.DeclaringType.TypeName;
-                        int declaringTypeVersion = predecessor.Role.DeclaringType.Version;
-                        string roleName = predecessor.Role.RoleName;
-                        string targetTypeName = predecessor.Role.TargetType.TypeName;
-                        int targetTypeVersion = predecessor.Role.TargetType.Version;
-                        bool isPivot = predecessor.Role.IsPivot;
-                        long predecessorFactId = predecessor.ID.key;
-
-                        factWriter.Write(declaringTypeName);
-                        factWriter.Write(declaringTypeVersion);
-                        factWriter.Write(roleName);
-                        factWriter.Write(targetTypeName);
-                        factWriter.Write(targetTypeVersion);
-                        factWriter.Write(isPivot);
-                        factWriter.Write(predecessorFactId);
-                    }
-                }
-            }
+            Stream indexStream = store.OpenFile(
+                IndexFileName,
+                FileMode.OpenOrCreate,
+                FileAccess.ReadWrite);
+            return new RedBlackTree(indexStream);
         }
 
         private static void ReadAllMessagesFromStorage(IsolatedStorageStorageStrategy result, BinaryReader messageReader)
@@ -372,9 +341,13 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (store.FileExists(FactTableFileName))
+                if (store.FileExists(FactTreeFileName))
                 {
-                    store.DeleteFile(FactTableFileName);
+                    store.DeleteFile(FactTreeFileName);
+                }
+                if (store.FileExists(IndexFileName))
+                {
+                    store.DeleteFile(IndexFileName);
                 }
                 if (store.FileExists(MessageTableFileName))
                 {

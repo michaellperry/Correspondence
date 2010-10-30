@@ -4,17 +4,26 @@ using UpdateControls.Correspondence.Conditions;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using System;
+using UpdateControls.Correspondence.Data;
 
 namespace UpdateControls.Correspondence.IsolatedStorage
 {
     internal class QueryExecutor : IConditionVisitor
     {
-        private IEnumerable<IdentifiedFactMemento> _facts;
+        private IEnumerable<IdentifiedFactMemento> _facts = Enumerable.Empty<IdentifiedFactMemento>();
 
         private IEnumerable<IdentifiedFactMemento> _match;
+        private HistoricalTree _factTree;
+
         public QueryExecutor(IEnumerable<IdentifiedFactMemento> facts)
         {
             _facts = facts;
+        }
+
+        public QueryExecutor(HistoricalTree factTree)
+        {
+            _factTree = factTree;
         }
 
         public IEnumerable<IdentifiedFactMemento> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
