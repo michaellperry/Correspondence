@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using UpdateControls.Correspondence.Data;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
-using UpdateControls.Correspondence.Data;
 
 namespace UpdateControls.Correspondence.IsolatedStorage
 {
@@ -14,16 +14,14 @@ namespace UpdateControls.Correspondence.IsolatedStorage
     {
         private const string FactTreeFileName = "FactTree.bin";
         private const string IndexFileName = "Index.bin";
-        private const string MessageTableFileName = "MessageTable.bin";
         private const string FactTypeTableFileName = "FactTypeTable.bin";
         private const string RoleTableFileName = "RoleTable.bin";
 
-        private List<MessageMemento> _messageTable = new List<MessageMemento>();
+        private MessageStore _messageStore;
         private IDictionary<int, CorrespondenceFactType> _factTypeById = new Dictionary<int, CorrespondenceFactType>();
         private IDictionary<int, RoleMemento> _roleById = new Dictionary<int, RoleMemento>();
         private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier, TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
-        private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
 
         private IsolatedStorageStorageStrategy()
         {
@@ -35,16 +33,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                if (store.FileExists(MessageTableFileName))
-                {
-                    using (BinaryReader messageReader = new BinaryReader(
-                        store.OpenFile(MessageTableFileName,
-                            FileMode.Open,
-                            FileAccess.Read)))
-                    {
-                        result.ReadAllMessagesFromStorage(messageReader);
-                    }
-                }
+                result._messageStore = MessageStore.Load(store);
 
                 if (store.FileExists(FactTypeTableFileName))
                 {
@@ -79,12 +68,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public bool GetID(string factName, out FactID id)
         {
-            return _namedFacts.TryGetValue(factName, out id);
+            throw new NotImplementedException();
         }
 
         public void SetID(string factName, FactID id)
         {
-            _namedFacts[factName] = id;
+            throw new NotImplementedException();
         }
 
         public FactMemento Load(FactID id)
@@ -141,20 +130,14 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                             .Where(predecessor => !predecessor.Role.IsPivot)
                             .Select(predecessor => predecessor.ID)
                             .ToList();
-                        List<FactID> predecessorsPivots = _messageTable
-                            .Where(message => nonPivots.Contains(message.FactId))
-                            .Select(message => message.PivotId)
-                            .Distinct()
-                            .ToList();
+                        List<FactID> predecessorsPivots = _messageStore.GetPivotsOfFacts(nonPivots);
                         IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
                             .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
 
                         List<MessageMemento> allMessages = directMessages
                             .Union(indirectMessages)
                             .ToList();
-                        _messageTable.AddRange(allMessages);
-                        WriteMessagesToStorage(allMessages);
-
+                        _messageStore.AddMessages(store, allMessages);
                         return true;
                     }
                 }
@@ -247,16 +230,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
         {
-            return _messageTable
-                .Where(message => message.FactId.key > timestamp.Key)
-                .ToList();
+            return _messageStore.LoadRecentMessages(timestamp);
         }
 
         public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
         {
-            return _messageTable
-                .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.Key)
-                .Select(message => message.FactId);
+            return _messageStore.LoadRecentMessages(pivotId, timestamp);
         }
 
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
@@ -317,29 +296,6 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             return factMemento;
         }
 
-        private void ReadAllMessagesFromStorage(BinaryReader messageReader)
-        {
-            long length = messageReader.BaseStream.Length;
-            while (messageReader.BaseStream.Position < length)
-            {
-                ReadMessageFromStorage(messageReader);
-            }
-        }
-
-        private void ReadMessageFromStorage(BinaryReader messageReader)
-        {
-            long pivotId;
-            long factId;
-
-            pivotId = messageReader.ReadInt64();
-            factId = messageReader.ReadInt64();
-
-            MessageMemento messageMemento = new MessageMemento(
-                new FactID() { key = pivotId },
-                new FactID() { key = factId });
-            _messageTable.Add(messageMemento);
-        }
-
         public void ReadAllFactTypesFromStorage(BinaryReader factTypeReader)
         {
             long length = factTypeReader.BaseStream.Length;
@@ -384,27 +340,6 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     roleName,
                     new CorrespondenceFactType(targetTypeName, targetTypeVersion),
                     isPivot));
-        }
-
-        private static void WriteMessagesToStorage(IEnumerable<MessageMemento> messages)
-        {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                using (BinaryWriter factWriter = new BinaryWriter(
-                        store.OpenFile(MessageTableFileName,
-                            FileMode.Append,
-                            FileAccess.Write)))
-                {
-                    foreach (MessageMemento message in messages)
-                    {
-                        long pivotId = message.PivotId.key;
-                        long factId = message.FactId.key;
-
-                        factWriter.Write(pivotId);
-                        factWriter.Write(factId);
-                    }
-                }
-            }
         }
 
         private int GetFactTypeId(CorrespondenceFactType factType, IsolatedStorageFile store)
@@ -466,10 +401,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 {
                     store.DeleteFile(IndexFileName);
                 }
-                if (store.FileExists(MessageTableFileName))
-                {
-                    store.DeleteFile(MessageTableFileName);
-                }
+                MessageStore.DeleteAll(store);
             }
         }
     }
