@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UpdateControls.Correspondence;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
@@ -14,12 +15,10 @@ namespace UpdateControls.Correspondence.IsolatedStorage
     {
         private const string FactTreeFileName = "FactTree.bin";
         private const string IndexFileName = "Index.bin";
-        private const string FactTypeTableFileName = "FactTypeTable.bin";
-        private const string RoleTableFileName = "RoleTable.bin";
 
         private MessageStore _messageStore;
-        private IDictionary<int, CorrespondenceFactType> _factTypeById = new Dictionary<int, CorrespondenceFactType>();
-        private IDictionary<int, RoleMemento> _roleById = new Dictionary<int, RoleMemento>();
+        private FactTypeStore _factTypeStore;
+        private RoleStore _roleStore;
         private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier, TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
 
@@ -34,28 +33,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
                 result._messageStore = MessageStore.Load(store);
-
-                if (store.FileExists(FactTypeTableFileName))
-                {
-                    using (BinaryReader factTypeReader = new BinaryReader(store.OpenFile(
-                        FactTypeTableFileName,
-                        FileMode.Open,
-                        FileAccess.Read)))
-                    {
-                        result.ReadAllFactTypesFromStorage(factTypeReader);
-                    }
-                }
-
-                if (store.FileExists(RoleTableFileName))
-                {
-                    using (BinaryReader roleReader = new BinaryReader(store.OpenFile(
-                        RoleTableFileName,
-                        FileMode.Open,
-                        FileAccess.Read)))
-                    {
-                        result.ReadAllRolesFromStorage(roleReader);
-                    }
-                }
+                result._factTypeStore = FactTypeStore.Load(store);
+                result._roleStore = RoleStore.Load(store);
             }
 
             return result;
@@ -107,12 +86,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     // It doesn't, so create it.
                     using (HistoricalTree factTree = OpenFactTree(store))
                     {
-                        int factTypeId = GetFactTypeId(memento.FactType, store);
+                        int factTypeId = _factTypeStore.GetFactTypeId(memento.FactType, store);
                         HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
                         foreach (PredecessorMemento predecessor in memento.Predecessors)
                         {
                             RoleMemento role = predecessor.Role;
-                            int roleId = GetRoleId(role, store);
+                            int roleId = _roleStore.GetRoleId(role, store);
                             historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
                         }
                         long newFactIDKey = factTree.Save(historicalTreeFact);
@@ -172,7 +151,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             {
                 using (HistoricalTree factTree = OpenFactTree(store))
                 {
-                    return new QueryExecutor(factTree, role => GetRoleId(role, store))
+                    return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
                         .ExecuteQuery(queryDefinition, startingId.key, options)
                         .Select(key => new IdentifiedFactMemento(new FactID { key = key }, LoadFactFromTree(factTree, key)))
                         .ToList();
@@ -186,7 +165,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             {
                 using (HistoricalTree factTree = OpenFactTree(store))
                 {
-                    return new QueryExecutor(factTree, role => GetRoleId(role, store))
+                    return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
                         .ExecuteQuery(queryDefinition, startingId.key, null)
                         .Select(key => new FactID { key = key })
                         .ToList();
@@ -280,113 +259,14 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         private FactMemento LoadFactFromTree(HistoricalTree factTree, long key)
         {
             HistoricalTreeFact factNode = factTree.Load(key);
-            CorrespondenceFactType factType;
-            if (!_factTypeById.TryGetValue(factNode.FactTypeId, out factType))
-                throw new CorrespondenceException(String.Format("Fact type {0} is in tree, but is not recognized.", factNode.FactTypeId));
-
+            CorrespondenceFactType factType = _factTypeStore.GetFactType(factNode.FactTypeId);
             FactMemento factMemento = new FactMemento(factType) { Data = factNode.Data };
             foreach (HistoricalTreePredecessor predecessorNode in factNode.Predecessors)
             {
-                RoleMemento roleMemento;
-                if (!_roleById.TryGetValue(predecessorNode.RoleId, out roleMemento))
-                    throw new CorrespondenceException(String.Format("Role {0} is in tree, but is not recognized.", predecessorNode.RoleId));
-
-                factMemento.AddPredecessor(roleMemento, new FactID { key = predecessorNode.PredecessorFactId });
+                RoleMemento role = _roleStore.GetRole(predecessorNode.RoleId);
+                factMemento.AddPredecessor(role, new FactID { key = predecessorNode.PredecessorFactId });
             }
             return factMemento;
-        }
-
-        public void ReadAllFactTypesFromStorage(BinaryReader factTypeReader)
-        {
-            long length = factTypeReader.BaseStream.Length;
-            while (factTypeReader.BaseStream.Position < length)
-            {
-                ReadFactTypeFromStorage(factTypeReader);
-            }
-        }
-
-        private void ReadFactTypeFromStorage(BinaryReader factTypeReader)
-        {
-            int factTypeId = factTypeReader.ReadInt32();
-            string typeName = factTypeReader.ReadString();
-            int version = factTypeReader.ReadInt32();
-
-            _factTypeById.Add(factTypeId, new CorrespondenceFactType(typeName, version));
-        }
-
-        public void ReadAllRolesFromStorage(BinaryReader roleReader)
-        {
-            long length = roleReader.BaseStream.Length;
-            while (roleReader.BaseStream.Position < length)
-            {
-                ReadRoleFromStorage(roleReader);
-            }
-        }
-
-        private void ReadRoleFromStorage(BinaryReader roleReader)
-        {
-            int roleId = roleReader.ReadInt32();
-            string declaringTypeName = roleReader.ReadString();
-            int declaringTypeVersion = roleReader.ReadInt32();
-            string roleName = roleReader.ReadString();
-            string targetTypeName = roleReader.ReadString();
-            int targetTypeVersion = roleReader.ReadInt32();
-            bool isPivot = roleReader.ReadByte() != 0;
-
-            _roleById.Add(
-                roleId,
-                new RoleMemento(
-                    new CorrespondenceFactType(declaringTypeName, declaringTypeVersion),
-                    roleName,
-                    new CorrespondenceFactType(targetTypeName, targetTypeVersion),
-                    isPivot));
-        }
-
-        private int GetFactTypeId(CorrespondenceFactType factType, IsolatedStorageFile store)
-        {
-            int factTypeId = _factTypeById
-                .Where(pair => pair.Value.Equals(factType))
-                .Select(pair => pair.Key)
-                .FirstOrDefault();
-            if (factTypeId == 0)
-            {
-                factTypeId = _factTypeById.Count + 1;
-                _factTypeById.Add(factTypeId, factType);
-
-                using (BinaryWriter writer = new BinaryWriter(
-                    store.OpenFile(FactTypeTableFileName, FileMode.Append)))
-                {
-                    writer.Write(factTypeId);
-                    writer.Write(factType.TypeName);
-                    writer.Write(factType.Version);
-                }
-            }
-            return factTypeId;
-        }
-
-        private int GetRoleId(RoleMemento role, IsolatedStorageFile store)
-        {
-            int roleId = _roleById
-                .Where(pair => pair.Value == role)
-                .Select(pair => pair.Key)
-                .FirstOrDefault();
-            if (roleId == 0)
-            {
-                roleId = _roleById.Count + 1;
-                _roleById.Add(roleId, role);
-
-                using (var writer = new BinaryWriter(store.OpenFile(RoleTableFileName, FileMode.Append)))
-                {
-                    writer.Write(roleId);
-                    writer.Write(role.DeclaringType.TypeName);
-                    writer.Write(role.DeclaringType.Version);
-                    writer.Write(role.RoleName);
-                    writer.Write(role.TargetType.TypeName);
-                    writer.Write(role.TargetType.Version);
-                    writer.Write(role.IsPivot ? (byte)1 : (byte)0);
-                }
-            }
-            return roleId;
         }
 
         public static void DeleteAll()
