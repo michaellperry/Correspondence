@@ -11,64 +11,44 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 {
     internal class QueryExecutor : IConditionVisitor
     {
-        private IEnumerable<IdentifiedFactMemento> _facts = Enumerable.Empty<IdentifiedFactMemento>();
-
-        private IEnumerable<IdentifiedFactMemento> _match;
+        private IEnumerable<long> _match;
         private HistoricalTree _factTree;
+        private Func<RoleMemento, int> _getRoleId;
 
-        public QueryExecutor(IEnumerable<IdentifiedFactMemento> facts)
-        {
-            _facts = facts;
-        }
-
-        public QueryExecutor(HistoricalTree factTree)
+        public QueryExecutor(HistoricalTree factTree, Func<RoleMemento, int> getRoleId)
         {
             _factTree = factTree;
+            _getRoleId = getRoleId;
         }
 
-        public IEnumerable<IdentifiedFactMemento> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public IEnumerable<long> ExecuteQuery(QueryDefinition queryDefinition, long startingId, QueryOptions options)
         {
             // Push.
-            IEnumerable<IdentifiedFactMemento> pushMatch = _match;
+            IEnumerable<long> pushMatch = _match;
 
             // Start with the initial id.
-            _match = _facts.Where(m => m.Id.Equals(startingId));
+            _match = Enumerable.Repeat(startingId, 1);
 
             // Each step of the query yields a set of matching facts.
             foreach (Join join in queryDefinition.Joins)
             {
-                // Declare a new variable to hold this join instance.
-                // The variable itself is included within the closure of tha lambda expression.
-                // Without this, all of the lambda expressions will use the last join of the
-                // query definition, because they will all include the same variable.
-                Join finalJoin = join;
-                if (finalJoin.Successor)
+                int roleId = _getRoleId(join.Role);
+                if (join.Successor)
                 {
-                    // Find all of the objects for which this object is a predecessor
-                    // in the given role.
-                    _match = _match.SelectMany(predecessor => _facts
-                        .Where(successor =>
-                            successor.Memento.Predecessors.Any(pm =>
-                                pm.Role.Equals(finalJoin.Role) &&
-                                pm.ID.Equals(predecessor.Id))
-                        )
+                    _match = _match.SelectMany(predecessor =>
+                        _factTree.GetSuccessorsInRole(predecessor, roleId)
                     );
                 }
                 else
                 {
-                    // Find all predecessors in the given role.
-                    _match = _match.SelectMany(successor => _facts
-                        .Where(predecessor =>
-                            successor.Memento.Predecessors.Any(pm =>
-                                pm.Role.Equals(finalJoin.Role) &&
-                                pm.ID.Equals(predecessor.Id))
-                        )
+                    _match = _match.SelectMany(predecessor =>
+                        _factTree.GetPredecessorsInRole(predecessor, roleId)
                     );
                 }
 
                 // Include the condition, if specified.
-                if (finalJoin.Condition != null)
-                    finalJoin.Condition.Accept(this);
+                if (join.Condition != null)
+                    join.Condition.Accept(this);
             }
 
             // Pop.
@@ -91,9 +71,9 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         public void VisitSimple(bool isEmpty, QueryDefinition subQuery)
         {
             if (isEmpty)
-                _match = _match.Where(f => !ExecuteQuery(subQuery, f.Id, null).Any());
+                _match = _match.Where(f => !ExecuteQuery(subQuery, f, null).Any());
             else
-                _match = _match.Where(f => ExecuteQuery(subQuery, f.Id, null).Any());
+                _match = _match.Where(f => ExecuteQuery(subQuery, f, null).Any());
         }
     }
 }

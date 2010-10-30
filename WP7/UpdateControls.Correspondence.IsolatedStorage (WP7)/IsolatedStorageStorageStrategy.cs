@@ -69,21 +69,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             {
                 using (HistoricalTree factTree = OpenFactTree(store))
                 {
-                    HistoricalTreeFact factNode = factTree.Load(id.key);
-                    CorrespondenceFactType factType;
-                    if (!_factTypeById.TryGetValue(factNode.FactTypeId, out factType))
-                        throw new CorrespondenceException(String.Format("Fact type {0} is in tree, but is not recognized.", factNode.FactTypeId));
-
-                    FactMemento factMemento = new FactMemento(factType) { Data = factNode.Data };
-                    foreach (HistoricalTreePredecessor predecessorNode in factNode.Predecessors)
-                    {
-                        RoleMemento roleMemento;
-                        if (!_roleById.TryGetValue(predecessorNode.RoleId, out roleMemento))
-                            throw new CorrespondenceException(String.Format("Role {0} is in tree, but is not recognized.", predecessorNode.RoleId));
-
-                        factMemento.AddPredecessor(roleMemento, new FactID { key = predecessorNode.PredecessorFactId });
-                    }
-                    return factMemento;
+                    return LoadFactFromTree(factTree, id.key);
                 }
             }
         }
@@ -121,15 +107,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                         HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
                         foreach (PredecessorMemento predecessor in memento.Predecessors)
                         {
-                            int roleId = _roleById
-                                .Where(pair => pair.Value == predecessor.Role)
-                                .Select(pair => pair.Key)
-                                .FirstOrDefault();
-                            if (roleId == 0)
-                            {
-                                roleId = _roleById.Count + 1;
-                                _roleById.Add(roleId, predecessor.Role);
-                            }
+                            RoleMemento role = predecessor.Role;
+                            int roleId = GetRoleId(role);
                             historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
                         }
                         long newFactIDKey = factTree.Save(historicalTreeFact);
@@ -195,15 +174,28 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             {
                 using (HistoricalTree factTree = OpenFactTree(store))
                 {
-                    return new QueryExecutor(factTree).ExecuteQuery(queryDefinition, startingId, options)
-                        .OrderByDescending(identifiedFact => identifiedFact.Id.key);
+                    return new QueryExecutor(factTree, GetRoleId)
+                        .ExecuteQuery(queryDefinition, startingId.key, null)
+                        .OrderByDescending(key => key)
+                        .Select(key => new IdentifiedFactMemento(new FactID { key = key }, LoadFactFromTree(factTree, key)))
+                        .ToList();
                 }
             }
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
         {
-            return QueryForFacts(queryDefinition, startingId, null).Select(im => im.Id);
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                using (HistoricalTree factTree = OpenFactTree(store))
+                {
+                    return new QueryExecutor(factTree, GetRoleId)
+                        .ExecuteQuery(queryDefinition, startingId.key, null)
+                        .OrderByDescending(key => key)
+                        .Select(key => new FactID { key = key })
+                        .ToList();
+                }
+            }
         }
 
 
@@ -293,6 +285,25 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             return new RedBlackTree(indexStream);
         }
 
+        private FactMemento LoadFactFromTree(HistoricalTree factTree, long key)
+        {
+            HistoricalTreeFact factNode = factTree.Load(key);
+            CorrespondenceFactType factType;
+            if (!_factTypeById.TryGetValue(factNode.FactTypeId, out factType))
+                throw new CorrespondenceException(String.Format("Fact type {0} is in tree, but is not recognized.", factNode.FactTypeId));
+
+            FactMemento factMemento = new FactMemento(factType) { Data = factNode.Data };
+            foreach (HistoricalTreePredecessor predecessorNode in factNode.Predecessors)
+            {
+                RoleMemento roleMemento;
+                if (!_roleById.TryGetValue(predecessorNode.RoleId, out roleMemento))
+                    throw new CorrespondenceException(String.Format("Role {0} is in tree, but is not recognized.", predecessorNode.RoleId));
+
+                factMemento.AddPredecessor(roleMemento, new FactID { key = predecessorNode.PredecessorFactId });
+            }
+            return factMemento;
+        }
+
         private static void ReadAllMessagesFromStorage(IsolatedStorageStorageStrategy result, BinaryReader messageReader)
         {
             long length = messageReader.BaseStream.Length;
@@ -335,6 +346,20 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     }
                 }
             }
+        }
+
+        private int GetRoleId(RoleMemento role)
+        {
+            int roleId = _roleById
+                .Where(pair => pair.Value == role)
+                .Select(pair => pair.Key)
+                .FirstOrDefault();
+            if (roleId == 0)
+            {
+                roleId = _roleById.Count + 1;
+                _roleById.Add(roleId, role);
+            }
+            return roleId;
         }
 
         public static void DeleteAll()
