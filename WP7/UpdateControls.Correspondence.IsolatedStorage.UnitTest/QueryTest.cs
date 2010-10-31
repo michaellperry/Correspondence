@@ -17,11 +17,13 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         private CorrespondenceFactType _userType;
         private CorrespondenceFactType _messageType;
         private CorrespondenceFactType _acknowledgeType;
+        private CorrespondenceFactType _conversationType;
 
         private RoleMemento _fromRole;
         private RoleMemento _toRole;
         private RoleMemento _messageRole;
         private RoleMemento _userRole;
+        private RoleMemento _participantRole;
 
         [TestInitialize]
         public void Initialize()
@@ -29,11 +31,13 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             _userType = new CorrespondenceFactType("IM.Model.User", 1);
             _messageType = new CorrespondenceFactType("IM.Model.Message", 1);
             _acknowledgeType = new CorrespondenceFactType("IM.Model.Acknowledge", 1);
+            _conversationType = new CorrespondenceFactType("IM.Model.Conversation", 1);
             _fromRole = new RoleMemento(_messageType, "from", _userType, true);
             _toRole = new RoleMemento(_messageType, "to", _userType, true);
             _messageRole = new RoleMemento(_acknowledgeType, "message", _messageType, false);
             _userRole = new RoleMemento(_acknowledgeType, "user", _userType, false);
-
+            _participantRole = new RoleMemento(_conversationType, "participants", _userType, true);
+            
             IsolatedStorageStorageStrategy.DeleteAll();
             _storage = IsolatedStorageStorageStrategy.Load();
 
@@ -47,6 +51,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             Acknowledge(message2, michael);
             FactID message3 = SaveMessage(jenny, michael, "How are you?");
             SaveMessage(michael, russell, "On line tonight?");
+
+            SaveConversation(michael, russell);
+            SaveConversation(michael, jenny);
+
+            _storage = IsolatedStorageStorageStrategy.Load();
         }
 
         [TestMethod]
@@ -134,6 +143,17 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             Assert.AreEqual("Jenny", Decode(friends.ElementAt(1).Memento.Data));
         }
 
+        [TestMethod]
+        public void ShouldFindConversations()
+        {
+            FactID michael = SaveUser("Michael");
+            QueryDefinition conversationsQuery = new QueryDefinition();
+            conversationsQuery.AddJoin(true, _participantRole, null);
+            var conversations = _storage.QueryForIds(conversationsQuery, michael);
+
+            Assert.AreEqual(2, conversations.Count());
+        }
+
         private FactID SaveUser(string userName)
         {
             FactID userId;
@@ -163,6 +183,20 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             acknowledge.AddPredecessor(_messageRole, message);
             acknowledge.AddPredecessor(_userRole, user);
             _storage.Save(acknowledge, out acknowledgeId);
+        }
+
+        private FactID SaveConversation(FactID userA, FactID userB)
+        {
+            FactMemento conversation = new FactMemento(_conversationType)
+            {
+                Data = new byte[0]
+            };
+            conversation.AddPredecessor(_participantRole, userA);
+            conversation.AddPredecessor(_participantRole, userB);
+
+            FactID id;
+            _storage.Save(conversation, out id);
+            return id;
         }
 
         private byte[] Encode(string value)

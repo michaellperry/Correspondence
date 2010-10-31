@@ -27,7 +27,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         public int GetRoleId(RoleMemento role, IsolatedStorageFile store)
         {
             int roleId = _roleById
-                .Where(pair => pair.Value == role)
+                .Where(pair => pair.Value.Equals(role))
                 .Select(pair => pair.Key)
                 .FirstOrDefault();
             if (roleId == 0)
