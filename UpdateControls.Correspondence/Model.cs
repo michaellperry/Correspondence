@@ -181,7 +181,7 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SetID(factName, obj.ID);
         }
 
-		public IEnumerable<FactTreeMemento> GetMessageBodies(ref TimestampID timestamp)
+		public FactTreeMemento GetMessageBodies(ref TimestampID timestamp)
 		{
 			IDictionary<FactID, FactTreeMemento> messageBodiesByPivotId = new Dictionary<FactID, FactTreeMemento>();
 			IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessages(timestamp);
@@ -197,7 +197,9 @@ namespace UpdateControls.Correspondence
 				}
 				AddToFactTree(messageBody, message.FactId);
 			}
-			return messageBodiesByPivotId.Values;
+			return messageBodiesByPivotId.Values.Any()
+                ? messageBodiesByPivotId.Values.Aggregate((a,b) => a.Merge(b))
+                : null;
 		}
 
 

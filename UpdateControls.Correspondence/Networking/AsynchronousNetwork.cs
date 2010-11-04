@@ -97,22 +97,16 @@ namespace UpdateControls.Correspondence.Networking
 				string peerName = asynchronousCommunicationStrategy.PeerName;
 
 				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
-				IEnumerable<FactTreeMemento> messageBodies = _model.GetMessageBodies(ref timestamp);
-				if (messageBodies.Any())
+				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp);
+				if (messageBodies != null && messageBodies.Facts.Any())
 				{
 					any = true;
 					communicationStrategyAggregate.Begin();
-					ResultAggregate messageBodyAggregate = new ResultAggregate(delegate()
-					{
-						_storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
-						communicationStrategyAggregate.End();
-					});
-					foreach (FactTreeMemento messageBody in messageBodies)
-					{
-						messageBodyAggregate.Begin();
-						asynchronousCommunicationStrategy.BeginPost(messageBody, messageBodyAggregate.End);
-					}
-					messageBodyAggregate.Close();
+                    asynchronousCommunicationStrategy.BeginPost(messageBodies, delegate()
+                    {
+                        _storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
+                        communicationStrategyAggregate.End();
+                    });
 				}
 			}
 

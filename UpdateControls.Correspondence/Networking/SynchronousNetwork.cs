@@ -46,11 +46,10 @@ namespace UpdateControls.Correspondence.Networking
 				string peerName = communicationStrategy.PeerName;
 
 				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
-				IEnumerable<FactTreeMemento> messageBodies = _model.GetMessageBodies(ref timestamp);
-				if (messageBodies.Any())
+				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp);
+                if (messageBodies != null && messageBodies.Facts.Any())
 				{
-					foreach (FactTreeMemento messageBody in messageBodies)
-						communicationStrategy.Post(messageBody);
+                    communicationStrategy.Post(messageBodies);
 					_storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
 					any = true;
 				}
