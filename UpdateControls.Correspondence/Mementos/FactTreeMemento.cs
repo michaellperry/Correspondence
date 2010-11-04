@@ -40,5 +40,20 @@ namespace UpdateControls.Correspondence.Mementos
         {
             _facts.Add(identifiedFact);
         }
+
+        public FactTreeMemento Merge(FactTreeMemento inputTree)
+        {
+            FactTreeMemento merged = new FactTreeMemento(0,0);
+            foreach (IdentifiedFactMemento firstTreeFact in this.Facts)
+            {
+                merged.Add(firstTreeFact);
+            }
+            IEnumerable<IdentifiedFactMemento> inputTreeFacts = inputTree.Facts;
+            foreach (IdentifiedFactMemento inputTreeFact in inputTreeFacts)
+            {
+                merged.Add(inputTreeFact);
+            }
+            return merged;
+        }
     }
 }

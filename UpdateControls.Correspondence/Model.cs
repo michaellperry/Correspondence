@@ -200,6 +200,7 @@ namespace UpdateControls.Correspondence
 			return messageBodiesByPivotId.Values;
 		}
 
+
         public void AddToFactTree(FactTreeMemento messageBody, FactID factId)
         {
             if (!messageBody.Contains(factId))
