@@ -40,30 +40,5 @@ namespace UpdateControls.Correspondence.Mementos
         {
             _facts.Add(identifiedFact);
         }
-
-        public FactTreeMemento Merge(FactTreeMemento inputTree)
-        {
-            long databaseId = _databaseId;
-            long timestamp = _timestamp;
-            if (inputTree._databaseId > _databaseId ||
-                inputTree._databaseId == _databaseId && inputTree._timestamp > _timestamp)
-            {
-                databaseId = inputTree._databaseId;
-                timestamp = inputTree._timestamp;
-            }
-
-            FactTreeMemento merged = new FactTreeMemento(databaseId, timestamp);
-            foreach (IdentifiedFactMemento firstTreeFact in this.Facts)
-            {
-                if (!merged.Contains(firstTreeFact.Id))
-                    merged.Add(firstTreeFact);
-            }
-            foreach (IdentifiedFactMemento inputTreeFact in inputTree.Facts)
-            {
-                if (!merged.Contains(inputTreeFact.Id))
-                    merged.Add(inputTreeFact);
-            }
-            return merged;
-        }
     }
 }

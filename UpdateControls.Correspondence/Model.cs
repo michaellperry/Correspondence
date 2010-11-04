@@ -183,23 +183,15 @@ namespace UpdateControls.Correspondence
 
 		public FactTreeMemento GetMessageBodies(ref TimestampID timestamp)
 		{
-			IDictionary<FactID, FactTreeMemento> messageBodiesByPivotId = new Dictionary<FactID, FactTreeMemento>();
+			FactTreeMemento result = new FactTreeMemento(ClientDatabaseId, 0L);
 			IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessages(timestamp);
 			foreach (MessageMemento message in recentMessages)
 			{
 				if (message.FactId.key > timestamp.Key)
 					timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
-				FactTreeMemento messageBody;
-				if (!messageBodiesByPivotId.TryGetValue(message.PivotId, out messageBody))
-				{
-					messageBody = new FactTreeMemento(ClientDatabaseId, 0L);
-					messageBodiesByPivotId.Add(message.PivotId, messageBody);
-				}
-				AddToFactTree(messageBody, message.FactId);
+				AddToFactTree(result, message.FactId);
 			}
-			return messageBodiesByPivotId.Values.Any()
-                ? messageBodiesByPivotId.Values.Aggregate((a,b) => a.Merge(b))
-                : null;
+			return result;
 		}
 
 

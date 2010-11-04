@@ -247,7 +247,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 		public void RandomInsertion()
 		{
 			Random rand = new Random(39869);
-			for (int i = 0; i < 10000; i++)
+			for (int i = 0; i < 2000; i++)
 			{
 				WriteNode(rand.Next());
 				_redBlackTree.CheckInvariant(i + 1);
