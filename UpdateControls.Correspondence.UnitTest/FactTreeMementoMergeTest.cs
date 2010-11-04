@@ -57,6 +57,58 @@ namespace UpdateControls.Correspondence.UnitTest
             Assert.AreEqual(identifiedMemento, resultMemento);
         }
 
+        [TestMethod]
+        public void GivenFullTreeAndOneEmptyTreeIsTheResultTheSameAsTheFullTree()
+        {
+            FactTreeMemento emptyTree = new FactTreeMemento(0, 0);
+            FactTreeMemento fullTree;
+            IdentifiedFactMemento identifiedMemento;
+            GitFullTree(out fullTree, out identifiedMemento);
+            FactTreeMemento mergedTree = emptyTree.Merge(fullTree);
+
+            Assert.IsNotNull(mergedTree);
+            IEnumerable<IdentifiedFactMemento> facts = mergedTree.Facts;
+            Assert.IsNotNull(facts);
+            Assert.AreEqual(1, facts.Count());
+            IdentifiedFactMemento resultMemento = facts.Single();
+            Assert.AreEqual(identifiedMemento, resultMemento);
+        }
+
+        [TestMethod]
+        public void GivenTwoTreesTheResultsTimeStampShouldBeTheMoreRecent()
+        {
+            FactTreeMemento emptyTree = new FactTreeMemento(0, 0);
+            FactTreeMemento fullTree;
+            IdentifiedFactMemento identifiedMemento;
+            GitFullTree(out fullTree, out identifiedMemento);
+            FactTreeMemento mergedTree = emptyTree.Merge(fullTree);
+
+            Assert.IsNotNull(mergedTree);
+            IEnumerable<IdentifiedFactMemento> facts = mergedTree.Facts;
+            Assert.IsNotNull(facts);
+            Assert.AreEqual(1, facts.Count());
+            IdentifiedFactMemento resultMemento = facts.Single();
+            Assert.AreEqual(identifiedMemento, resultMemento);
+            Assert.Fail;
+        }
+
+        [TestMethod]
+        public void GivenTwoTreesTheResultsDataBaseIdShouldBeTheGreater()
+        {
+            FactTreeMemento emptyTree = new FactTreeMemento(0, 0);
+            FactTreeMemento fullTree;
+            IdentifiedFactMemento identifiedMemento;
+            GitFullTree(out fullTree, out identifiedMemento);
+            FactTreeMemento mergedTree = emptyTree.Merge(fullTree);
+
+            Assert.IsNotNull(mergedTree);
+            IEnumerable<IdentifiedFactMemento> facts = mergedTree.Facts;
+            Assert.IsNotNull(facts);
+            Assert.AreEqual(1, facts.Count());
+            IdentifiedFactMemento resultMemento = facts.Single();
+            Assert.AreEqual(identifiedMemento, resultMemento);
+            Assert.Fail;
+        }
 
         //test capture timestamp the merge should be the most recent of the two
         private static void GitFullTree(out FactTreeMemento fullTree, out IdentifiedFactMemento identifiedMemento)

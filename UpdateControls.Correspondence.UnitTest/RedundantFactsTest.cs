@@ -32,4 +32,6 @@ namespace UpdateControls.Correspondence.UnitTest
             Assert.AreEqual(3, recorder.Posted.ElementAt(0).Facts.Count());
         }
     }
+
+
 }
