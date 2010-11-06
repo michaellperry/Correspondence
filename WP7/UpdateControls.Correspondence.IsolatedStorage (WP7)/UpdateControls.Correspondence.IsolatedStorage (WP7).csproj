@@ -62,6 +62,7 @@
     <Compile Include="FactTypeStore.cs" />
     <Compile Include="IncomingTimestampStore.cs" />
     <Compile Include="IsolatedStorageStorageStrategy.cs" />
+    <Compile Include="MessageRecord.cs" />
     <Compile Include="MessageStore.cs" />
     <Compile Include="OutgoingTimestampStore.cs" />
     <Compile Include="PeerIdentifier.cs" />

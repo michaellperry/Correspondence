@@ -9,38 +9,47 @@ namespace UpdateControls.Correspondence.IsolatedStorage
     public class MessageStore
     {
         private const string MessageTableFileName = "MessageTable.bin";
-        private List<MessageMemento> _messageTable = new List<MessageMemento>();
+        private List<MessageRecord> _messageTable = new List<MessageRecord>();
 
         private MessageStore()
         {
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp)
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
         {
             return _messageTable
-                .Where(message => message.FactId.key > timestamp.Key)
+                .Where(message =>
+                    message.MessageMemento.FactId.key > timestamp.Key &&
+                    message.SourcePeerId != peerId)
+                .Select(message => message.MessageMemento)
                 .ToList();
         }
 
         public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
         {
             return _messageTable
-                .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.Key)
-                .Select(message => message.FactId);
+                .Where(message =>
+                    message.MessageMemento.PivotId.Equals(pivotId) &&
+                    message.MessageMemento.FactId.key > timestamp.Key)
+                .Select(message => message.MessageMemento.FactId);
         }
 
         public List<FactID> GetPivotsOfFacts(List<FactID> factIds)
         {
             return _messageTable
-                .Where(message => factIds.Contains(message.FactId))
-                .Select(message => message.PivotId)
+                .Where(message => factIds.Contains(message.MessageMemento.FactId))
+                .Select(message => message.MessageMemento.PivotId)
                 .Distinct()
                 .ToList();
         }
 
-        public void AddMessages(IsolatedStorageFile store, List<MessageMemento> messages)
+        public void AddMessages(IsolatedStorageFile store, List<MessageMemento> messages, int peerId)
         {
-            _messageTable.AddRange(messages);
+            _messageTable.AddRange(messages.Select(message => new MessageRecord
+            {
+                MessageMemento = message,
+                SourcePeerId = peerId
+            }));
 
             using (BinaryWriter factWriter = new BinaryWriter(
                 store.OpenFile(MessageTableFileName,
@@ -54,6 +63,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
                     factWriter.Write(pivotId);
                     factWriter.Write(factId);
+                    factWriter.Write(peerId);
                 }
             }
         }
@@ -82,16 +92,18 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         private void ReadMessageFromStorage(BinaryReader messageReader)
         {
-            long pivotId;
-            long factId;
-
-            pivotId = messageReader.ReadInt64();
-            factId = messageReader.ReadInt64();
+            long pivotId = messageReader.ReadInt64();
+            long factId = messageReader.ReadInt64();
+            int sourcePeerId = messageReader.ReadInt32();
 
             MessageMemento messageMemento = new MessageMemento(
                 new FactID() { key = pivotId },
                 new FactID() { key = factId });
-            _messageTable.Add(messageMemento);
+            _messageTable.Add(new MessageRecord
+            {
+                MessageMemento = messageMemento,
+                SourcePeerId = sourcePeerId
+            });
         }
 
         public static void DeleteAll(IsolatedStorageFile store)

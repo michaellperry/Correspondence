@@ -119,7 +119,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                         List<MessageMemento> allMessages = directMessages
                             .Union(indirectMessages)
                             .ToList();
-                        _messageStore.AddMessages(store, allMessages);
+                        _messageStore.AddMessages(store, allMessages, peerId);
                         return true;
                     }
                 }
@@ -212,7 +212,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
         {
-            return _messageStore.LoadRecentMessagesForServer(timestamp);
+            return _messageStore.LoadRecentMessagesForServer(peerId, timestamp);
         }
 
         public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
