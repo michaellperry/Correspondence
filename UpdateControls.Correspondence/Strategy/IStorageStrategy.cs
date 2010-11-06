@@ -15,18 +15,18 @@ namespace UpdateControls.Correspondence.Strategy
         bool GetID(string factName, out FactID id);
         void SetID(string factName, FactID id);
         FactMemento Load(FactID id);
-        bool Save(FactMemento memento, string protocolName, string peerName, out FactID id);
+        bool Save(FactMemento memento, int peerId, out FactID id);
         bool FindExistingFact(FactMemento memento, out FactID id);
         IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
         IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId);
         IEnumerable<IdentifiedFactMemento> LoadAllFacts();
 
         // Messages.
-        TimestampID LoadOutgoingTimestamp(string protocolName, string peerName);
-        void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp);
-        TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId);
-        void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp);
-        IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp, string protocolName, string peerName);
+        TimestampID LoadOutgoingTimestamp(int peerId);
+        void SaveOutgoingTimestamp(int peerId, TimestampID timestamp);
+        TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId);
+        void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp);
+        IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp);
         IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp);
 
         // Networking.

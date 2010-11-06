@@ -65,6 +65,9 @@
     <Compile Include="..\..\UpdateControls.Correspondence.Memory\Duration.cs">
       <Link>Duration.cs</Link>
     </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence.Memory\FactRecord.cs">
+      <Link>FactRecord.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
       <Link>MemoryStorageStrategy.cs</Link>
     </Compile>
@@ -73,6 +76,9 @@
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
       <Link>PeerPivotIdentifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerRecord.cs">
+      <Link>PeerRecord.cs</Link>
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
       <Link>QueryExecutor.cs</Link>

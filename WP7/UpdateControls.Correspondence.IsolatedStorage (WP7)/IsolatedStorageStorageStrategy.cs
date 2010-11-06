@@ -67,7 +67,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
-        public bool Save(FactMemento memento, string protocolName, string peerName, out FactID id)
+        public bool Save(FactMemento memento, int peerId, out FactID id)
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -180,33 +180,33 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             throw new NotImplementedException();
         }
 
-        public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
+        public TimestampID LoadOutgoingTimestamp(int peerId)
         {
-            return _outgoingTimestampStore.LoadOutgoingTimestamp(protocolName, peerName);
+            return _outgoingTimestampStore.LoadOutgoingTimestamp(peerId);
         }
 
-        public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp)
-        {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-            {
-                _outgoingTimestampStore.SaveOutgoingTimestamp(protocolName, peerName, timestamp, store);
-            }
-        }
-
-        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId)
-        {
-            return _incomingTimestampStore.LoadIncomingTimestamp(protocolName, peerName, pivotId);
-        }
-
-        public void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp)
+        public void SaveOutgoingTimestamp(int peerId, TimestampID timestamp)
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
-                _incomingTimestampStore.SaveIncomingTimestamp(protocolName, peerName, pivotId, timestamp, store);
+                _outgoingTimestampStore.SaveOutgoingTimestamp(peerId, timestamp, store);
             }
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp, string protocolName, string peerName)
+        public TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId)
+        {
+            return _incomingTimestampStore.LoadIncomingTimestamp(peerId, pivotId);
+        }
+
+        public void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp)
+        {
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                _incomingTimestampStore.SaveIncomingTimestamp(peerId, pivotId, timestamp, store);
+            }
+        }
+
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
         {
             return _messageStore.LoadRecentMessagesForServer(timestamp);
         }

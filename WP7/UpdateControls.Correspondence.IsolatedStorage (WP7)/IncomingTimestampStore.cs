@@ -14,18 +14,18 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
         }
 
-        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId)
+        public TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId)
         {
             TimestampID timestamp;
-            if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId), out timestamp))
+            if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(peerId, pivotId), out timestamp))
                 return timestamp;
             else
                 return new TimestampID();
         }
 
-        public void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp, IsolatedStorageFile store)
+        public void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp, IsolatedStorageFile store)
         {
-            _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId)] = timestamp;
+            _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(peerId, pivotId)] = timestamp;
 
             using (BinaryWriter writer = new BinaryWriter(
                 store.OpenFile(IncomingTimestampTableFileName,
@@ -35,8 +35,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 IEnumerable<KeyValuePair<PeerPivotIdentifier, TimestampID>> timestamps = _incomingTimestampByPeerAndPivot;
                 foreach (var entry in timestamps)
                 {
-                    writer.Write(entry.Key.PeerIdentifier.ProtocolName);
-                    writer.Write(entry.Key.PeerIdentifier.PeerName);
+                    writer.Write(entry.Key.PeerId);
                     writer.Write(entry.Key.PivotId.key);
                     writer.Write(entry.Value.DatabaseId);
                     writer.Write(entry.Value.Key);
@@ -67,15 +66,14 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         private void ReadTimestampFromStorage(BinaryReader timestampReader)
         {
-            string protocolName = timestampReader.ReadString();
-            string peerName = timestampReader.ReadString();
+            int peerId = timestampReader.ReadInt32();
             long pivotKey = timestampReader.ReadInt64();
             long databaseId = timestampReader.ReadInt64();
             long timestamp = timestampReader.ReadInt64();
 
             _incomingTimestampByPeerAndPivot.Add(
                 new PeerPivotIdentifier(
-                    new PeerIdentifier(protocolName, peerName),
+                    peerId,
                     new FactID { key = pivotKey }),
                 new TimestampID(databaseId, timestamp));
         }

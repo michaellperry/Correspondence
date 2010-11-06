@@ -8,18 +8,18 @@ namespace UpdateControls.Correspondence.Memory
 {
     public class PeerPivotIdentifier
     {
-        private PeerIdentifier _peerIdentifier;
+        private int _peerId;
         private FactID _pivotId;
 
-        public PeerPivotIdentifier(PeerIdentifier peerIdentifier, FactID pivotId)
+        public PeerPivotIdentifier(int peerId, FactID pivotId)
         {
-            _peerIdentifier = peerIdentifier;
+            _peerId = peerId;
             _pivotId = pivotId;
         }
 
-        public PeerIdentifier PeerIdentifier
+        public int PeerId
         {
-            get { return _peerIdentifier; }
+            get { return _peerId; }
         }
 
         public FactID PivotId
@@ -35,13 +35,13 @@ namespace UpdateControls.Correspondence.Memory
             if (that == null)
                 return false;
             return
-                object.Equals(this.PeerIdentifier, that.PeerIdentifier) &&
+                object.Equals(this.PeerId, that.PeerId) &&
                 object.Equals(this.PivotId, that.PivotId);
         }
 
         public override int GetHashCode()
         {
-            return _peerIdentifier.GetHashCode() * 37 + _pivotId.GetHashCode();
+            return _peerId * 37 + _pivotId.GetHashCode();
         }
     }
 }

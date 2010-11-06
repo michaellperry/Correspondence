@@ -8,24 +8,24 @@ namespace UpdateControls.Correspondence.IsolatedStorage
     public class OutgoingTimestampStore
     {
         private const string OutgoingTimestampTableFileName = "OutgoingTimestampTable.bin";
-        private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier, TimestampID>();
+        private IDictionary<int, TimestampID> _outgoingTimestampByPeer = new Dictionary<int, TimestampID>();
 
         private OutgoingTimestampStore()
         {
         }
 
-        public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
+        public TimestampID LoadOutgoingTimestamp(int peerId)
         {
             TimestampID timestamp;
-            if (_outgoingTimestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
+            if (_outgoingTimestampByPeer.TryGetValue(peerId, out timestamp))
                 return timestamp;
             else
                 return new TimestampID();
         }
 
-        public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp, IsolatedStorageFile store)
+        public void SaveOutgoingTimestamp(int peerId, TimestampID timestamp, IsolatedStorageFile store)
         {
-            _outgoingTimestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
+            _outgoingTimestampByPeer[peerId] = timestamp;
 
             using (BinaryWriter writer = new BinaryWriter(
                 store.OpenFile(OutgoingTimestampTableFileName,
@@ -35,8 +35,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 var timestamps = _outgoingTimestampByPeer;
                 foreach (var entry in timestamps)
                 {
-                    writer.Write(entry.Key.ProtocolName);
-                    writer.Write(entry.Key.PeerName);
+                    writer.Write(entry.Key);
                     writer.Write(entry.Value.DatabaseId);
                     writer.Write(entry.Value.Key);
                 }
@@ -67,13 +66,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         private void ReadTimestampFromStorage(BinaryReader timestampReader)
         {
-            string protocolName = timestampReader.ReadString();
-            string peerName = timestampReader.ReadString();
+            int peerId = timestampReader.ReadInt32();
             long databaseId = timestampReader.ReadInt64();
             long timestamp = timestampReader.ReadInt64();
 
             _outgoingTimestampByPeer.Add(
-                new PeerIdentifier(protocolName, peerName),
+                peerId,
                 new TimestampID(databaseId, timestamp));
         }
 

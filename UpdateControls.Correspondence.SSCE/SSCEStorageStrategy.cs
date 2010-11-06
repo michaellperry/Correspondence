@@ -158,7 +158,7 @@ namespace UpdateControls.Correspondence.SSCE
 			return identifiedMemento.Memento;
 		}
 
-		public bool Save(FactMemento memento, string protocolName, string peerName, out FactID id)
+		public bool Save(FactMemento memento, int peerId, out FactID id)
 		{
 			using (var session = new Session(_connectionString))
 			{
@@ -368,27 +368,27 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
-        public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
+        public TimestampID LoadOutgoingTimestamp(int peerId)
         {
-            return LoadTimestamp(protocolName, peerName, 0);
+            return LoadTimestamp(peerId, 0);
         }
 
-        public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        public void SaveOutgoingTimestamp(int peerId, TimestampID timestamp)
         {
-            SaveTimestamp(protocolName, peerName, 0, timestamp);
+            SaveTimestamp(peerId, 0, timestamp);
         }
 
-        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId)
+        public TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId)
         {
-            return LoadTimestamp(protocolName, peerName, pivotId.key);
+            return LoadTimestamp(peerId, pivotId.key);
         }
 
-        public void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp)
+        public void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp)
         {
-            SaveTimestamp(protocolName, peerName, pivotId.key, timestamp);
+            SaveTimestamp(peerId, pivotId.key, timestamp);
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp, string protocolName, string peerName)
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
         {
             using (var session = new Session(_connectionString))
             {
@@ -808,10 +808,8 @@ namespace UpdateControls.Correspondence.SSCE
 			return protocolId;
         }
 
-        private TimestampID LoadTimestamp(string protocolName, string peerName, long pivotId)
+        private TimestampID LoadTimestamp(int peerId, long pivotId)
         {
-            int peerId = SavePeer(protocolName, peerName);
-
             using (var session = new Session(_connectionString))
             {
                 session.Command.CommandText = "SELECT DatabaseId, FactId FROM Timestamp WHERE FKPeerId=@PeerId AND PivotId=@PivotId";
@@ -833,10 +831,8 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
-        private void SaveTimestamp(string protocolName, string peerName, long pivotId, TimestampID timestamp)
+        private void SaveTimestamp(int peerId, long pivotId, TimestampID timestamp)
         {
-            int peerId = SavePeer(protocolName, peerName);
-
             using (var session = new Session(_connectionString))
             {
                 // First try an update.

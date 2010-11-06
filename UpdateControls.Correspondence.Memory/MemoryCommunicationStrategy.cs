@@ -45,7 +45,7 @@ namespace UpdateControls.Correspondence.Memory
                 translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
                     .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
                 FactID localId;
-                _repository.Save(translatedMemento, string.Empty, string.Empty, out localId);
+                _repository.Save(translatedMemento, 0, out localId);
                 FactID remoteId = identifiedFact.Id;
                 localIdByRemoteId.Add(remoteId, localId);
             }

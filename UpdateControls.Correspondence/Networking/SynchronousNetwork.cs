@@ -5,6 +5,11 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Networking
 {
+    internal class ServerProxy
+    {
+        public ICommunicationStrategy CommunicationStrategy;
+        public int PeerId;
+    }
 	internal class SynchronousNetwork
 	{
 		private const long ClientDatabaseId = 0;
@@ -13,7 +18,7 @@ namespace UpdateControls.Correspondence.Networking
 		private Model _model;
 		private IStorageStrategy _storageStrategy;
 
-		private List<ICommunicationStrategy> _communicationStrategies = new List<ICommunicationStrategy>();
+		private List<ServerProxy> _serverProxies = new List<ServerProxy>();
 
 		public SynchronousNetwork(ISubscriptionProvider subscriptionProvider, Model model, IStorageStrategy storageStrategy)
 		{
@@ -24,7 +29,11 @@ namespace UpdateControls.Correspondence.Networking
 
 		public void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
 		{
-			_communicationStrategies.Add(communicationStrategy);
+            _serverProxies.Add(new ServerProxy
+            {
+                CommunicationStrategy = communicationStrategy,
+                PeerId = _storageStrategy.SavePeer(communicationStrategy.ProtocolName, communicationStrategy.PeerName)
+            });
 		}
 
 		public bool Synchronize()
@@ -40,17 +49,14 @@ namespace UpdateControls.Correspondence.Networking
 		private bool SynchronizeOutgoing()
 		{
 			bool any = false;
-			foreach (ICommunicationStrategy communicationStrategy in _communicationStrategies)
+			foreach (ServerProxy serverProxy in _serverProxies)
 			{
-				string protocolName = communicationStrategy.ProtocolName;
-				string peerName = communicationStrategy.PeerName;
-
-				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
-				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, protocolName, peerName);
+				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
+				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId);
                 if (messageBodies != null && messageBodies.Facts.Any())
 				{
-                    communicationStrategy.Post(messageBodies);
-					_storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
+                    serverProxy.CommunicationStrategy.Post(messageBodies);
+					_storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
 					any = true;
 				}
 			}
@@ -61,11 +67,8 @@ namespace UpdateControls.Correspondence.Networking
 		private bool SynchronizeIncoming()
 		{
 			bool any = false;
-			foreach (ICommunicationStrategy communicationStrategy in _communicationStrategies)
+			foreach (ServerProxy serverProxy in _serverProxies)
 			{
-				string protocolName = communicationStrategy.ProtocolName;
-				string peerName = communicationStrategy.PeerName;
-
 				foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
 				{
 					foreach (CorrespondenceFact pivot in subscription.Pivots)
@@ -76,12 +79,12 @@ namespace UpdateControls.Correspondence.Networking
 						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId, 0L);
 						FactID pivotId = pivot.ID;
 						_model.AddToFactTree(pivotTree, pivotId);
-						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, pivotId);
-						FactTreeMemento messageBody = communicationStrategy.Get(pivotTree, pivotId, timestamp);
+						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
+						FactTreeMemento messageBody = serverProxy.CommunicationStrategy.Get(pivotTree, pivotId, timestamp);
 						if (messageBody.Facts.Any())
 						{
-							timestamp = _model.ReceiveMessage(messageBody, protocolName, peerName);
-							_storageStrategy.SaveIncomingTimestamp(protocolName, peerName, pivotId, timestamp);
+							timestamp = _model.ReceiveMessage(messageBody, serverProxy.PeerId);
+							_storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, timestamp);
 							any = true;
 						}
 					}

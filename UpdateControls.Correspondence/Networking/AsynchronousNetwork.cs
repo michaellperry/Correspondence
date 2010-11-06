@@ -7,6 +7,11 @@ using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence.Networking
 {
+    internal class AsynchronousServerProxy
+    {
+        public IAsynchronousCommunicationStrategy CommunicationStrategy;
+        public int PeerId;
+    }
 	class AsynchronousNetwork
 	{
 		private const long ClientDatabaseId = 0;
@@ -15,7 +20,7 @@ namespace UpdateControls.Correspondence.Networking
 		private Model _model;
 		private IStorageStrategy _storageStrategy;
 
-		private List<IAsynchronousCommunicationStrategy> _asynchronousCommunicationStrategies = new List<IAsynchronousCommunicationStrategy>();
+        private List<AsynchronousServerProxy> _serverProxies = new List<AsynchronousServerProxy>();
 		private Queue<SynchronizeResult> _synchronizeQueue = new Queue<SynchronizeResult>();
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
@@ -33,17 +38,21 @@ namespace UpdateControls.Correspondence.Networking
 
 		public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
 		{
+            int peerId = _storageStrategy.SavePeer(
+                asynchronousCommunicationStrategy.ProtocolName,
+                asynchronousCommunicationStrategy.PeerName);
             asynchronousCommunicationStrategy.MessageReceived += messageBody =>
-                _model.ReceiveMessage(
-                    messageBody, 
-                    asynchronousCommunicationStrategy.ProtocolName, 
-                    asynchronousCommunicationStrategy.PeerName);
-			_asynchronousCommunicationStrategies.Add(asynchronousCommunicationStrategy);
+                _model.ReceiveMessage(messageBody, peerId);
+            _serverProxies.Add(new AsynchronousServerProxy
+            {
+                CommunicationStrategy = asynchronousCommunicationStrategy,
+                PeerId = peerId
+            });
 		}
 
 		public void BeginSynchronize(AsyncCallback callback, object state)
 		{
-			if (!_asynchronousCommunicationStrategies.Any())
+			if (!_serverProxies.Any())
 				throw new CorrespondenceException("Register at least one asynchronous communication strategy before calling BeginSynchronize.");
 
 			SynchronizeResult result = new SynchronizeResult(
@@ -95,20 +104,17 @@ namespace UpdateControls.Correspondence.Networking
 			{
 				result.OutgoingFinished(any);
 			});
-			foreach (IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy in _asynchronousCommunicationStrategies)
+			foreach (AsynchronousServerProxy serverProxy in _serverProxies)
 			{
-				string protocolName = asynchronousCommunicationStrategy.ProtocolName;
-				string peerName = asynchronousCommunicationStrategy.PeerName;
-
-				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
-				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, String.Empty, String.Empty);
+				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
+				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId);
 				if (messageBodies != null && messageBodies.Facts.Any())
 				{
 					any = true;
 					communicationStrategyAggregate.Begin();
-                    asynchronousCommunicationStrategy.BeginPost(messageBodies, delegate()
+                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, delegate()
                     {
-                        _storageStrategy.SaveOutgoingTimestamp(protocolName, peerName, timestamp);
+                        _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
                         communicationStrategyAggregate.End();
                     });
 				}
@@ -124,11 +130,8 @@ namespace UpdateControls.Correspondence.Networking
 			{
 				result.IncomingFinished(any);
 			});
-			foreach (IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy in _asynchronousCommunicationStrategies)
+			foreach (AsynchronousServerProxy serverProxy in _serverProxies)
 			{
-				string protocolName = asynchronousCommunicationStrategy.ProtocolName;
-				string peerName = asynchronousCommunicationStrategy.PeerName;
-
 				foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
 				{
 					foreach (CorrespondenceFact pivot in subscription.Pivots)
@@ -139,15 +142,15 @@ namespace UpdateControls.Correspondence.Networking
 						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId, 0L);
 						FactID pivotId = pivot.ID;
 						_model.AddToFactTree(pivotTree, pivotId);
-						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(protocolName, peerName, pivotId);
+						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
 						communicationStragetyAggregate.Begin();
-						asynchronousCommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, delegate(FactTreeMemento messageBody)
+						serverProxy.CommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, delegate(FactTreeMemento messageBody)
 						{
 							if (messageBody.Facts.Any())
 							{
 								any = true;
-								TimestampID newTimestamp = _model.ReceiveMessage(messageBody, protocolName, peerName);
-								_storageStrategy.SaveIncomingTimestamp(protocolName, peerName, pivotId, newTimestamp);
+								TimestampID newTimestamp = _model.ReceiveMessage(messageBody, serverProxy.PeerId);
+								_storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, newTimestamp);
 							}
 							communicationStragetyAggregate.End();
 						});
@@ -166,9 +169,9 @@ namespace UpdateControls.Correspondence.Networking
 					.SelectMany(subscription => subscription.Pivots)
 					.Where(pivot => pivot != null);
 				var pushSubscriptions =
-					from strategy in _asynchronousCommunicationStrategies
+					from serverProxy in _serverProxies
 					from pivot in pivots
-					select bin.Extract(new PushSubscriptionProxy(_model, strategy, pivot));
+					select bin.Extract(new PushSubscriptionProxy(_model, serverProxy.CommunicationStrategy, pivot));
 
 				_pushSubscriptions = pushSubscriptions.ToList();
 

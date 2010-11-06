@@ -7,17 +7,12 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Memory
 {
-    public class FactRecord
-    {
-        public IdentifiedFactMemento IdentifiedFactMemento;
-        public string ProtocolName;
-        public string PeerName;
-    }
     public class MemoryStorageStrategy : IStorageStrategy
     {
         private List<FactRecord> _factTable = new List<FactRecord>();
+        private List<PeerRecord> _peerTable = new List<PeerRecord>();
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
-        private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier,TimestampID>();
+        private IDictionary<int, TimestampID> _outgoingTimestampByPeer = new Dictionary<int,TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
         private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
 
@@ -45,7 +40,7 @@ namespace UpdateControls.Correspondence.Memory
                 throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
 
-        public bool Save(FactMemento memento, string protocolName, string peerName, out FactID id)
+        public bool Save(FactMemento memento, int peerId, out FactID id)
         {
             // See if the fact already exists.
             FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
@@ -57,8 +52,7 @@ namespace UpdateControls.Correspondence.Memory
                 fact = new FactRecord()
                 {
                     IdentifiedFactMemento = new IdentifiedFactMemento(id, memento),
-                    ProtocolName = protocolName,
-                    PeerName = peerName
+                    PeerId = peerId
                 };
 
                 _factTable.Add(fact);
@@ -118,49 +112,59 @@ namespace UpdateControls.Correspondence.Memory
             return QueryForFacts(queryDefinition, startingId, null).Select(im => im.Id);
         }
 
-
         public int SavePeer(string protocolName, string peerName)
         {
-            throw new NotImplementedException();
+            PeerRecord peerRecord = _peerTable.FirstOrDefault(peer =>
+                peer.ProtocolName == protocolName &&
+                peer.PeerName == peerName);
+            if (peerRecord == null)
+            {
+                peerRecord = new PeerRecord
+                {
+                    PeerId = _peerTable.Count + 1,
+                    ProtocolName = protocolName,
+                    PeerName = peerName
+                };
+            }
+            return peerRecord.PeerId;
         }
 
-        public TimestampID LoadOutgoingTimestamp(string protocolName, string peerName)
+        public TimestampID LoadOutgoingTimestamp(int peerId)
         {
             TimestampID timestamp;
-            if (_outgoingTimestampByPeer.TryGetValue(new PeerIdentifier(protocolName, peerName), out timestamp))
+            if (_outgoingTimestampByPeer.TryGetValue(peerId, out timestamp))
                 return timestamp;
             else
                 return new TimestampID();
         }
 
-        public void SaveOutgoingTimestamp(string protocolName, string peerName, TimestampID timestamp)
+        public void SaveOutgoingTimestamp(int peerId, TimestampID timestamp)
         {
-            _outgoingTimestampByPeer[new PeerIdentifier(protocolName, peerName)] = timestamp;
+            _outgoingTimestampByPeer[peerId] = timestamp;
         }
 
-        public TimestampID LoadIncomingTimestamp(string protocolName, string peerName, FactID pivotId)
+        public TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId)
         {
             TimestampID timestamp;
-            if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId), out timestamp))
+            if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(peerId, pivotId), out timestamp))
                 return timestamp;
             else
                 return new TimestampID();
         }
 
-        public void SaveIncomingTimestamp(string protocolName, string peerName, FactID pivotId, TimestampID timestamp)
+        public void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp)
         {
-            _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId)] = timestamp;
+            _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(peerId, pivotId)] = timestamp;
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp, string protocolName, string peerName)
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
         {
             return _messageTable
                 .Where(message =>
                     message.FactId.key > timestamp.Key &&
                     !_factTable.Any(fact =>
                         fact.IdentifiedFactMemento.Id.Equals(message.FactId) &&
-                        fact.PeerName == peerName &&
-                        fact.ProtocolName == protocolName))
+                        fact.PeerId == peerId))
                 .ToList();
         }
 

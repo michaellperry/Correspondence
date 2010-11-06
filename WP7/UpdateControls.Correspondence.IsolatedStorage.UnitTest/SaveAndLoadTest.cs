@@ -3,6 +3,7 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
 {
@@ -31,7 +32,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         public void SaveASimpleFact()
         {
             FactID id;
-            bool saved = _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out id);
+            bool saved = _strategy.Save(CreateSimpleFactMemento(), 0, out id);
 
             Assert.IsTrue(saved);
         }
@@ -40,12 +41,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         public void SaveASimpleFactTwice()
         {
             FactID firstId;
-            _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out firstId);
+            _strategy.Save(CreateSimpleFactMemento(), 0, out firstId);
             FactID secondId;
 
             Reload();
 
-            bool saved = _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out secondId);
+            bool saved = _strategy.Save(CreateSimpleFactMemento(), 0, out secondId);
 
             Assert.IsFalse(saved);
             Assert.AreEqual(firstId, secondId);
@@ -55,7 +56,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         public void SaveAndLoadASimpleFact()
         {
             FactID id;
-            bool saved = _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out id);
+            bool saved = _strategy.Save(CreateSimpleFactMemento(), 0, out id);
 
             Reload();
 
@@ -71,8 +72,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactID id;
             FactID predecessorId;
 
-            _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out predecessorId);
-            _strategy.Save(CreateSuccessorFactMemento(predecessorId), string.Empty, string.Empty, out id);
+            _strategy.Save(CreateSimpleFactMemento(), 0, out predecessorId);
+            _strategy.Save(CreateSuccessorFactMemento(predecessorId), 0, out id);
 
             Reload();
 
@@ -86,13 +87,13 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         {
             FactID id;
             FactMemento memento = CreateSimpleFactMemento();
-            _strategy.Save(memento, string.Empty, string.Empty, out id);
+            _strategy.Save(memento, 0, out id);
 
             Reload();
 
             FactID copyId;
             FactMemento copy = CreateSimpleFactMemento();
-            bool saved = _strategy.Save(copy, string.Empty, string.Empty, out copyId);
+            bool saved = _strategy.Save(copy, 0, out copyId);
 
             Assert.IsFalse(saved);
             Assert.AreEqual(id, copyId);
@@ -103,20 +104,43 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         {
             FactID id;
             FactMemento memento = CreateSimpleFactMemento();
-            _strategy.Save(memento, string.Empty, string.Empty, out id);
+            _strategy.Save(memento, 0, out id);
 
             FactID successorId;
             FactMemento successor = CreateSuccessorFactMemento(id);
-            _strategy.Save(successor, string.Empty, string.Empty, out successorId);
+            _strategy.Save(successor, 0, out successorId);
 
             Reload();
 
             FactID successorCopyId;
             FactMemento successorCopy = CreateSuccessorFactMemento(id);
-            bool saved = _strategy.Save(successorCopy, string.Empty, string.Empty, out successorCopyId);
+            bool saved = _strategy.Save(successorCopy, 0, out successorCopyId);
 
             Assert.IsFalse(saved);
             Assert.AreEqual(successorId, successorCopyId);
+        }
+
+        [TestMethod]
+        public void ShouldSkipMessagesFromServer()
+        {
+            int peerId = 1;
+
+            FactMemento predecessor = CreateSimpleFactMemento();
+            FactID predecessorId;
+            _strategy.Save(predecessor, peerId, out predecessorId);
+
+            FactMemento localSuccessor = CreateSuccessorFactMemento(predecessorId, new byte[] { 0x23, 0x34 });
+            FactID localSuccessorId;
+            _strategy.Save(localSuccessor, 0, out localSuccessorId);
+
+            FactMemento remoteSuccessor = CreateSuccessorFactMemento(predecessorId, new byte[] { 0x34, 0x45 });
+            FactID remoteSuccessorId;
+            _strategy.Save(remoteSuccessor, peerId, out remoteSuccessorId);
+
+            IEnumerable<MessageMemento> messages = _strategy.LoadRecentMessagesForServer(peerId, new TimestampID(0L, 0L));
+
+            Assert.AreEqual(peerId, messages.Count());
+            Assert.AreEqual(localSuccessorId, messages.Single().FactId);
         }
 
         private static FactMemento CreateSimpleFactMemento()
@@ -130,16 +154,21 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
 
         private static FactMemento CreateSuccessorFactMemento(FactID predecessorId)
         {
+            return CreateSuccessorFactMemento(predecessorId, new byte[] { 0x12, 0xc3, 0x48, 0xf4 });
+        }
+
+        private static FactMemento CreateSuccessorFactMemento(FactID predecessorId, byte[] data)
+        {
             CorrespondenceFactType factType = new CorrespondenceFactType(STR_SuccessorTypeName, 1);
             FactMemento fact = new FactMemento(factType)
             {
-                Data = new byte[] { 0x12, 0xc3, 0x48, 0xf4 }
+                Data = data
             };
             fact.AddPredecessor(
                 new RoleMemento(
-                    factType, 
-                    "user", 
-                    new CorrespondenceFactType(STR_TypeName, 1), 
+                    factType,
+                    "user",
+                    new CorrespondenceFactType(STR_TypeName, 1),
                     true),
                 predecessorId);
             return fact;
