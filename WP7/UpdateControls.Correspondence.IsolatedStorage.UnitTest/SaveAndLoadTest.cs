@@ -121,6 +121,33 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         }
 
         [TestMethod]
+        public void WhenProtocolNameIsDifferent_PeerIdShouldBeDifferent()
+        {
+            int firstPeerId = _strategy.SavePeer("firstProtocol", "peerName");
+            int secondPeerId = _strategy.SavePeer("secondProtocol", "peerName");
+
+            Assert.AreNotEqual(firstPeerId, secondPeerId);
+        }
+
+        [TestMethod]
+        public void WhenPeerNameIsDifferent_PeerIdShouldBeDifferent()
+        {
+            int firstPeerId = _strategy.SavePeer("protocol", "firstPeerName");
+            int secondPeerId = _strategy.SavePeer("protocol", "secondPeerName");
+
+            Assert.AreNotEqual(firstPeerId, secondPeerId);
+        }
+
+        [TestMethod]
+        public void WhenProtocolAndPeerNameAreSame_PeerIdShouldBeSame()
+        {
+            int firstPeerId = _strategy.SavePeer("protocol", "peerName");
+            int secondPeerId = _strategy.SavePeer("protocol", "peerName");
+
+            Assert.AreEqual(firstPeerId, secondPeerId);
+        }
+
+        [TestMethod]
         public void ShouldSkipMessagesFromServer()
         {
             int peerId = 1;

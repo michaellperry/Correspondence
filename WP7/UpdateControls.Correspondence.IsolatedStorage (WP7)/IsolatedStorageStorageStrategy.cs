@@ -18,6 +18,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         private MessageStore _messageStore;
         private FactTypeStore _factTypeStore;
         private RoleStore _roleStore;
+        private PeerStore _peerStore;
         private OutgoingTimestampStore _outgoingTimestampStore;
         private IncomingTimestampStore _incomingTimestampStore;
 
@@ -34,6 +35,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 result._messageStore = MessageStore.Load(store);
                 result._factTypeStore = FactTypeStore.Load(store);
                 result._roleStore = RoleStore.Load(store);
+                result._peerStore = PeerStore.Load(store);
                 result._incomingTimestampStore = IncomingTimestampStore.Load(store);
                 result._outgoingTimestampStore = OutgoingTimestampStore.Load(store);
             }
@@ -174,10 +176,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
-
         public int SavePeer(string protocolName, string peerName)
         {
-            throw new NotImplementedException();
+            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                return _peerStore.SavePeer(protocolName, peerName, store);
+            }
         }
 
         public TimestampID LoadOutgoingTimestamp(int peerId)
@@ -283,6 +287,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 MessageStore.DeleteAll(store);
                 FactTypeStore.DeleteAll(store);
                 RoleStore.DeleteAll(store);
+                PeerStore.DeleteAll(store);
                 IncomingTimestampStore.DeleteAll(store);
                 OutgoingTimestampStore.DeleteAll(store);
             }
