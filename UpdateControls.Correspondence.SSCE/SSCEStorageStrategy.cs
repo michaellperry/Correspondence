@@ -158,7 +158,7 @@ namespace UpdateControls.Correspondence.SSCE
 			return identifiedMemento.Memento;
 		}
 
-		public bool Save(FactMemento memento, out FactID id)
+		public bool Save(FactMemento memento, string protocolName, string peerName, out FactID id)
 		{
 			using (var session = new Session(_connectionString))
 			{
@@ -388,7 +388,7 @@ namespace UpdateControls.Correspondence.SSCE
             SaveTimestamp(protocolName, peerName, pivotId.key, timestamp);
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp, string protocolName, string peerName)
         {
             using (var session = new Session(_connectionString))
             {
@@ -403,7 +403,7 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
-        public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
+        public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
         {
             using (var session = new Session(_connectionString))
             {

@@ -26,7 +26,7 @@ namespace UpdateControls.Correspondence.Memory
             if (!localPivotId.HasValue)
                 return new FactTreeMemento(_databaseId, timestamp.Key);
 
-            IEnumerable<FactID> recentMessages = _repository.LoadRecentMessages(localPivotId.Value, timestamp);
+            IEnumerable<FactID> recentMessages = _repository.LoadRecentMessagesForClient(localPivotId.Value, timestamp);
             long nextTimestamp = recentMessages.Any() ? recentMessages.Max(message => message.key) : timestamp.Key;
             FactTreeMemento messageBody = new FactTreeMemento(_databaseId, nextTimestamp);
             foreach (FactID recentMessage in recentMessages)
@@ -45,7 +45,7 @@ namespace UpdateControls.Correspondence.Memory
                 translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
                     .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
                 FactID localId;
-                _repository.Save(translatedMemento, out localId);
+                _repository.Save(translatedMemento, string.Empty, string.Empty, out localId);
                 FactID remoteId = identifiedFact.Id;
                 localIdByRemoteId.Add(remoteId, localId);
             }

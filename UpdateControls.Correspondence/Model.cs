@@ -63,6 +63,13 @@ namespace UpdateControls.Correspondence
 
         public T AddFact<T>(T prototype) where T : CorrespondenceFact
         {
+            string protocolName = string.Empty;
+            string peerName = string.Empty;
+            return AddFact<T>(prototype, protocolName, peerName);
+        }
+
+        private T AddFact<T>(T prototype, string protocolName, string peerName) where T : CorrespondenceFact
+        {
             // Save invalidate actions until after the lock
             // because they reenter if a fact is removed.
             List<Action> invalidateActions = new List<Action>();
@@ -88,7 +95,7 @@ namespace UpdateControls.Correspondence
 
                 // Set the ID and add the object to the community.
                 FactID id;
-                if (_storageStrategy.Save(memento, out id))
+                if (_storageStrategy.Save(memento, protocolName, peerName, out id))
                 {
                     // Invalidate all of the queries affected by the new object.
                     List<QueryInvalidator> invalidators;
@@ -181,10 +188,10 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SetID(factName, obj.ID);
         }
 
-		public FactTreeMemento GetMessageBodies(ref TimestampID timestamp)
+        public FactTreeMemento GetMessageBodies(ref TimestampID timestamp, string protocolName, string peerName)
 		{
 			FactTreeMemento result = new FactTreeMemento(ClientDatabaseId, 0L);
-			IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessages(timestamp);
+            IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessagesForServer(timestamp, protocolName, peerName);
 			foreach (MessageMemento message in recentMessages)
 			{
 				if (message.FactId.key > timestamp.Key)
@@ -210,7 +217,7 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public TimestampID ReceiveMessage(FactTreeMemento messageBody)
+        public TimestampID ReceiveMessage(FactTreeMemento messageBody, string protocolName, string peerName)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
             foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
@@ -230,7 +237,7 @@ namespace UpdateControls.Correspondence
                 try
                 {
                     CorrespondenceFact fact = HydrateFact(translatedMemento);
-                    fact = AddFact(fact);
+                    fact = AddFact(fact, protocolName, peerName);
                     FactID localId = fact.ID;
                     FactID remoteId = identifiedFact.Id;
                     localIdByRemoteId.Add(remoteId, localId);

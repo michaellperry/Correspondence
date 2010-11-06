@@ -31,7 +31,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         public void SaveASimpleFact()
         {
             FactID id;
-            bool saved = _strategy.Save(CreateSimpleFactMemento(), out id);
+            bool saved = _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out id);
 
             Assert.IsTrue(saved);
         }
@@ -40,12 +40,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         public void SaveASimpleFactTwice()
         {
             FactID firstId;
-            _strategy.Save(CreateSimpleFactMemento(), out firstId);
+            _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out firstId);
             FactID secondId;
 
             Reload();
 
-            bool saved = _strategy.Save(CreateSimpleFactMemento(), out secondId);
+            bool saved = _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out secondId);
 
             Assert.IsFalse(saved);
             Assert.AreEqual(firstId, secondId);
@@ -55,7 +55,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         public void SaveAndLoadASimpleFact()
         {
             FactID id;
-            bool saved = _strategy.Save(CreateSimpleFactMemento(), out id);
+            bool saved = _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out id);
 
             Reload();
 
@@ -71,8 +71,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactID id;
             FactID predecessorId;
 
-            _strategy.Save(CreateSimpleFactMemento(), out predecessorId);
-            _strategy.Save(CreateSuccessorFactMemento(predecessorId), out id);
+            _strategy.Save(CreateSimpleFactMemento(), string.Empty, string.Empty, out predecessorId);
+            _strategy.Save(CreateSuccessorFactMemento(predecessorId), string.Empty, string.Empty, out id);
 
             Reload();
 
@@ -86,13 +86,13 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         {
             FactID id;
             FactMemento memento = CreateSimpleFactMemento();
-            _strategy.Save(memento, out id);
+            _strategy.Save(memento, string.Empty, string.Empty, out id);
 
             Reload();
 
             FactID copyId;
             FactMemento copy = CreateSimpleFactMemento();
-            bool saved = _strategy.Save(copy, out copyId);
+            bool saved = _strategy.Save(copy, string.Empty, string.Empty, out copyId);
 
             Assert.IsFalse(saved);
             Assert.AreEqual(id, copyId);
@@ -103,17 +103,17 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         {
             FactID id;
             FactMemento memento = CreateSimpleFactMemento();
-            _strategy.Save(memento, out id);
+            _strategy.Save(memento, string.Empty, string.Empty, out id);
 
             FactID successorId;
             FactMemento successor = CreateSuccessorFactMemento(id);
-            _strategy.Save(successor, out successorId);
+            _strategy.Save(successor, string.Empty, string.Empty, out successorId);
 
             Reload();
 
             FactID successorCopyId;
             FactMemento successorCopy = CreateSuccessorFactMemento(id);
-            bool saved = _strategy.Save(successorCopy, out successorCopyId);
+            bool saved = _strategy.Save(successorCopy, string.Empty, string.Empty, out successorCopyId);
 
             Assert.IsFalse(saved);
             Assert.AreEqual(successorId, successorCopyId);

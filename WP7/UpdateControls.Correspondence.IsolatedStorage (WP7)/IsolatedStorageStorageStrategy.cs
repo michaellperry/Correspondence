@@ -67,7 +67,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
-        public bool Save(FactMemento memento, out FactID id)
+        public bool Save(FactMemento memento, string protocolName, string peerName, out FactID id)
         {
             using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
             {
@@ -206,14 +206,14 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp, string protocolName, string peerName)
         {
-            return _messageStore.LoadRecentMessages(timestamp);
+            return _messageStore.LoadRecentMessagesForServer(timestamp);
         }
 
-        public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
+        public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
         {
-            return _messageStore.LoadRecentMessages(pivotId, timestamp);
+            return _messageStore.LoadRecentMessagesForClient(pivotId, timestamp);
         }
 
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()

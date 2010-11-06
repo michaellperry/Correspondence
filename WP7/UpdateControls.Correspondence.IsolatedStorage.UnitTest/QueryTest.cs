@@ -62,7 +62,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         public void ShouldFindUser()
         {
             FactID michael;
-            bool saved = _storage.Save(CreateUser("Michael"), out michael);
+            bool saved = _storage.Save(CreateUser("Michael"), string.Empty, string.Empty, out michael);
 
             Assert.IsFalse(saved);
         }
@@ -157,7 +157,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         private FactID SaveUser(string userName)
         {
             FactID userId;
-            _storage.Save(CreateUser(userName), out userId);
+            _storage.Save(CreateUser(userName), string.Empty, string.Empty, out userId);
             return userId;
         }
 
@@ -172,7 +172,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactMemento message = new FactMemento(_messageType) { Data = Encode(body) };
             message.AddPredecessor(_fromRole, from);
             message.AddPredecessor(_toRole, to);
-            _storage.Save(message, out messageId);
+            _storage.Save(message, string.Empty, string.Empty, out messageId);
             return messageId;
         }
 
@@ -182,7 +182,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactMemento acknowledge = new FactMemento(_acknowledgeType) { Data = new byte[0] };
             acknowledge.AddPredecessor(_messageRole, message);
             acknowledge.AddPredecessor(_userRole, user);
-            _storage.Save(acknowledge, out acknowledgeId);
+            _storage.Save(acknowledge, string.Empty, string.Empty, out acknowledgeId);
         }
 
         private FactID SaveConversation(FactID userA, FactID userB)
@@ -195,7 +195,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             conversation.AddPredecessor(_participantRole, userB);
 
             FactID id;
-            _storage.Save(conversation, out id);
+            _storage.Save(conversation, string.Empty, string.Empty, out id);
             return id;
         }
 

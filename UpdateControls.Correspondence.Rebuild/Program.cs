@@ -93,7 +93,7 @@ namespace UpdateControls.Correspondence.Rebuild
                         p.Role,
                         destination.GetFactIDFromShare(peerId, p.ID))));
                 FactID destinationFactId;
-                destination.Save(destinationFact, out destinationFactId);
+                destination.Save(destinationFact, string.Empty, string.Empty, out destinationFactId);
                 destination.SaveShare(peerId, sourceFact.Id, destinationFactId);
             }
 

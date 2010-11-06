@@ -15,14 +15,14 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp)
         {
             return _messageTable
                 .Where(message => message.FactId.key > timestamp.Key)
                 .ToList();
         }
 
-        public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
+        public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
         {
             return _messageTable
                 .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.Key)

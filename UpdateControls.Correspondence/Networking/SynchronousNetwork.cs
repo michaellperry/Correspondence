@@ -46,7 +46,7 @@ namespace UpdateControls.Correspondence.Networking
 				string peerName = communicationStrategy.PeerName;
 
 				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
-				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp);
+				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, protocolName, peerName);
                 if (messageBodies != null && messageBodies.Facts.Any())
 				{
                     communicationStrategy.Post(messageBodies);
@@ -80,7 +80,7 @@ namespace UpdateControls.Correspondence.Networking
 						FactTreeMemento messageBody = communicationStrategy.Get(pivotTree, pivotId, timestamp);
 						if (messageBody.Facts.Any())
 						{
-							timestamp = _model.ReceiveMessage(messageBody);
+							timestamp = _model.ReceiveMessage(messageBody, protocolName, peerName);
 							_storageStrategy.SaveIncomingTimestamp(protocolName, peerName, pivotId, timestamp);
 							any = true;
 						}

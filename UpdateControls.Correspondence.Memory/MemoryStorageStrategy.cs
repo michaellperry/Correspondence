@@ -7,9 +7,15 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Memory
 {
+    public class FactRecord
+    {
+        public IdentifiedFactMemento IdentifiedFactMemento;
+        public string ProtocolName;
+        public string PeerName;
+    }
     public class MemoryStorageStrategy : IStorageStrategy
     {
-        private List<IdentifiedFactMemento> _factTable = new List<IdentifiedFactMemento>();
+        private List<FactRecord> _factTable = new List<FactRecord>();
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
         private IDictionary<PeerIdentifier, TimestampID> _outgoingTimestampByPeer = new Dictionary<PeerIdentifier,TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
@@ -32,23 +38,29 @@ namespace UpdateControls.Correspondence.Memory
 
         public FactMemento Load(FactID id)
         {
-            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Id.Equals(id));
+            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id)).IdentifiedFactMemento;
             if (fact != null)
                 return fact.Memento;
             else
                 throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
 
-        public bool Save(FactMemento memento, out FactID id)
+        public bool Save(FactMemento memento, string protocolName, string peerName, out FactID id)
         {
             // See if the fact already exists.
-            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
+            FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
             if (fact == null)
             {
                 // It doesn't, so create it.
                 FactID newFactID = new FactID() { key = _factTable.Count + 1 };
                 id = newFactID;
-                fact = new IdentifiedFactMemento(id, memento);
+                fact = new FactRecord()
+                {
+                    IdentifiedFactMemento = new IdentifiedFactMemento(id, memento),
+                    ProtocolName = protocolName,
+                    PeerName = peerName
+                };
+
                 _factTable.Add(fact);
 
                 // Store a message for each pivot.
@@ -73,7 +85,7 @@ namespace UpdateControls.Correspondence.Memory
             }
             else
             {
-                id = fact.Id;
+                id = fact.IdentifiedFactMemento.Id;
                 return false;
             }
         }
@@ -81,7 +93,7 @@ namespace UpdateControls.Correspondence.Memory
         public bool FindExistingFact(FactMemento memento, out FactID id)
         {
             // See if the fact already exists.
-            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.Memento.Equals(memento));
+            FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
             if (fact == null)
             {
                 id = new FactID();
@@ -89,14 +101,16 @@ namespace UpdateControls.Correspondence.Memory
             }
             else
             {
-                id = fact.Id;
+                id = fact.IdentifiedFactMemento.Id;
                 return true;
             }
         }
 
         public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return new QueryExecutor(_factTable).ExecuteQuery(queryDefinition, startingId, options).Reverse();
+            return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento))
+                .ExecuteQuery(queryDefinition, startingId, options)
+                .Reverse();
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
@@ -138,14 +152,19 @@ namespace UpdateControls.Correspondence.Memory
             _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(new PeerIdentifier(protocolName, peerName), pivotId)] = timestamp;
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessages(TimestampID timestamp)
+        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(TimestampID timestamp, string protocolName, string peerName)
         {
             return _messageTable
-                .Where(message => message.FactId.key > timestamp.Key)
+                .Where(message =>
+                    message.FactId.key > timestamp.Key &&
+                    !_factTable.Any(fact =>
+                        fact.IdentifiedFactMemento.Id.Equals(message.FactId) &&
+                        fact.PeerName == peerName &&
+                        fact.ProtocolName == protocolName))
                 .ToList();
         }
 
-        public IEnumerable<FactID> LoadRecentMessages(FactID pivotId, TimestampID timestamp)
+        public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
         {
             return _messageTable
                 .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.Key)

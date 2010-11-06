@@ -33,7 +33,11 @@ namespace UpdateControls.Correspondence.Networking
 
 		public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
 		{
-			asynchronousCommunicationStrategy.MessageReceived += messageBody => _model.ReceiveMessage(messageBody);
+            asynchronousCommunicationStrategy.MessageReceived += messageBody =>
+                _model.ReceiveMessage(
+                    messageBody, 
+                    asynchronousCommunicationStrategy.ProtocolName, 
+                    asynchronousCommunicationStrategy.PeerName);
 			_asynchronousCommunicationStrategies.Add(asynchronousCommunicationStrategy);
 		}
 
@@ -97,7 +101,7 @@ namespace UpdateControls.Correspondence.Networking
 				string peerName = asynchronousCommunicationStrategy.PeerName;
 
 				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(protocolName, peerName);
-				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp);
+				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, String.Empty, String.Empty);
 				if (messageBodies != null && messageBodies.Facts.Any())
 				{
 					any = true;
@@ -142,7 +146,7 @@ namespace UpdateControls.Correspondence.Networking
 							if (messageBody.Facts.Any())
 							{
 								any = true;
-								TimestampID newTimestamp = _model.ReceiveMessage(messageBody);
+								TimestampID newTimestamp = _model.ReceiveMessage(messageBody, protocolName, peerName);
 								_storageStrategy.SaveIncomingTimestamp(protocolName, peerName, pivotId, newTimestamp);
 							}
 							communicationStragetyAggregate.End();
