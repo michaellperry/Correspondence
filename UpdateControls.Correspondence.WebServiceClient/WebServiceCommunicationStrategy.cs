@@ -9,6 +9,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
     {
         private IServiceClientFactory<ISynchronizationService> _synchronizationService =
             new ServiceClientFactory<ISynchronizationService>();
+        private Guid _clientGuid = Guid.NewGuid();
 
         public string ProtocolName
         {
@@ -23,13 +24,13 @@ namespace UpdateControls.Correspondence.WebServiceClient
         public FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
             FactTree pivot = Translate.MementoToFactTree(pivotTree);
-            FactTree result = _synchronizationService.CallService(service => service.Get(pivot, pivotId.key, timestamp.Key));
+            FactTree result = _synchronizationService.CallService(service => service.Get(pivot, pivotId.key, timestamp.Key, _clientGuid));
             return Translate.FactTreeToMemento(result);
         }
 
         public void Post(FactTreeMemento messageBody)
         {
-            _synchronizationService.CallService(service => service.Post(Translate.MementoToFactTree(messageBody)));
+            _synchronizationService.CallService(service => service.Post(Translate.MementoToFactTree(messageBody), _clientGuid));
         }
     }
 }
