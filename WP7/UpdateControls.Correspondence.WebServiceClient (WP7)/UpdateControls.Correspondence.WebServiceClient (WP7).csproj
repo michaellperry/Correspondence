@@ -53,8 +53,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
-    <Reference Include="UpdateControls, Version=2.1.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>C:\Projects\correspondence\Correspondence\SolutionItems\WP7\UpdateControls.dll</HintPath>
+    <Reference Include="UpdateControls, Version=2.1.1.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
   </ItemGroup>
   <ItemGroup>
