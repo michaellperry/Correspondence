@@ -257,6 +257,7 @@
       <Link>Subscription.cs</Link>
     </Compile>
     <Compile Include="Community.Platform.cs" />
+    <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

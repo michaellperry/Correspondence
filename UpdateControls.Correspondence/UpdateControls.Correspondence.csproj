@@ -68,12 +68,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SolutionItems\Desktop\UpdateControls.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Networking\AsynchronousNetwork.cs" />
+    <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
     <Compile Include="Networking\ResultAggregate.cs" />
     <Compile Include="Networking\SynchronizeResult.cs" />
     <Compile Include="AttributeFactFactory.cs" />

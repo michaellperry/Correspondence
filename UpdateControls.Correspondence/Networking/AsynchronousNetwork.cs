@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 
@@ -12,7 +13,7 @@ namespace UpdateControls.Correspondence.Networking
         public IAsynchronousCommunicationStrategy CommunicationStrategy;
         public int PeerId;
     }
-	class AsynchronousNetwork
+	partial class AsynchronousNetwork
 	{
 		private const long ClientDatabaseId = 0;
 
@@ -188,14 +189,14 @@ namespace UpdateControls.Correspondence.Networking
 
         private void TriggerAsync()
         {
-            Deployment.Current.Dispatcher.BeginInvoke(delegate
+            GetDispatcher().BeginInvoke(new Action(delegate
             {
                 BeginSynchronize(a =>
                 {
                     if (EndSynchronize(a))
                         TriggerAsync();
                 }, null);
-            });
+            }));
         }
-	}
+    }
 }
