@@ -11,8 +11,11 @@ namespace UpdateControls.Correspondence.WebServiceClient
     {
         private string _channelName;
         private HttpNotificationChannel _httpChannel;
-        private List<WindowsPhonePushSubscription> _subscriptionQueue = new List<WindowsPhonePushSubscription>();
+        private Dictionary<FactID, WindowsPhonePushSubscription> _subscriptionByFactId = new Dictionary<FactID, WindowsPhonePushSubscription>();
         private bool _receivedChannelUri = false;
+        private bool _openPending = false;
+
+        private object _monitor = new object();
 
         public WebServiceCommunicationStrategy(string channelName)
         {
@@ -50,9 +53,9 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }, null);
 
             // Ensure that the subscription queue gets served.
-            lock (this)
+            lock (_monitor)
             {
-                OpenChannel();
+                UpdateSubscriptions();
             }
         }
 
@@ -77,39 +80,55 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId)
         {
-            lock (this)
+            lock (_monitor)
             {
-                FactTree pivot = Translate.MementoToFactTree(pivotTree);
-                WindowsPhonePushSubscription subscription = new WindowsPhonePushSubscription(pivot, pivotId.key);
-                _subscriptionQueue.Add(subscription);
-                OpenChannel();
+                WindowsPhonePushSubscription subscription;
+                if (!_subscriptionByFactId.TryGetValue(pivotId, out subscription))
+                {
+                    FactTree pivot = Translate.MementoToFactTree(pivotTree);
+                    subscription = new WindowsPhonePushSubscription(pivot, pivotId.key, _monitor);
+                    _subscriptionByFactId.Add(pivotId, subscription);
+                }
+                subscription.ShouldBeSubscribed = true;
+                UpdateSubscriptions();
                 return subscription;
             }
         }
 
-        private void OpenChannel()
+        private void UpdateSubscriptions()
         {
             if (_httpChannel == null)
             {
                 //First, try to pick up existing channel
                 _httpChannel = HttpNotificationChannel.Find(_channelName);
-                if (null != _httpChannel)
+                if (_httpChannel != null)
                 {
                     _receivedChannelUri = true;
                     SubscribeToChannelEvents();
-                    SubscribeToService();
                 }
                 else
                 {
                     //Create the channel
                     _httpChannel = new HttpNotificationChannel(_channelName, "UpdateControls.Correspondence");
                     SubscribeToChannelEvents();
+                }
+            }
+
+            if (!_receivedChannelUri)
+            {
+                if (!_openPending)
+                {
+                    _openPending = true;
                     _httpChannel.Open();
                 }
             }
-            else if (_receivedChannelUri)
+            else
             {
-                SubscribeToService();
+                string deviceUri = _httpChannel.ChannelUri.ToString();
+                foreach (WindowsPhonePushSubscription subscription in _subscriptionByFactId.Values)
+                {
+                    subscription.UpdateSubscription(deviceUri);
+                }
             }
         }
 
@@ -120,35 +139,25 @@ namespace UpdateControls.Correspondence.WebServiceClient
             _httpChannel.ErrorOccurred += httpChannel_ExceptionOccurred;
         }
 
-        private void SubscribeToService()
+        private void httpChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
         {
-            string deviceUri = _httpChannel.ChannelUri.ToString();
-            foreach (WindowsPhonePushSubscription subscription in _subscriptionQueue)
-            {
-                subscription.Subscribe(deviceUri, delegate
-                {
-                    lock (this)
-                    {
-                        _subscriptionQueue.Remove(subscription);
-                    }
-                });
-            }
-        }
-
-        void httpChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
-        {
-            lock (this)
+            lock (_monitor)
             {
                 _receivedChannelUri = true;
-                SubscribeToService();
+                _openPending = false;
+                UpdateSubscriptions();
             }
         }
 
-        void httpChannel_ExceptionOccurred(object sender, NotificationChannelErrorEventArgs e)
+        private void httpChannel_ExceptionOccurred(object sender, NotificationChannelErrorEventArgs e)
         {
+            lock (_monitor)
+            {
+                _openPending = false;
+            }
         }
 
-        void httpChannel_HttpNotificationReceived(object sender, HttpNotificationEventArgs e)
+        private void httpChannel_HttpNotificationReceived(object sender, HttpNotificationEventArgs e)
         {
             if (MessageReceived != null)
             {

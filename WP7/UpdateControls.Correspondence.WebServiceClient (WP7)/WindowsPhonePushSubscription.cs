@@ -7,69 +7,116 @@ namespace UpdateControls.Correspondence.WebServiceClient
     {
         private FactTree _pivot;
         private long _pivotId;
-        private string _deviceUri;
-        private bool _doNotSubscribe = false;
+        private string _subscribedTo = null;
+        private bool _callPending = false;
 
-        public WindowsPhonePushSubscription(FactTree pivot, long pivotId)
+        private object _monitor;
+
+        public WindowsPhonePushSubscription(FactTree pivot, long pivotId, object monitor)
         {
             _pivot = pivot;
             _pivotId = pivotId;
+            _monitor = monitor;
         }
 
-        public void Subscribe(string deviceUri, Action subscriptionSuccess)
+        public bool ShouldBeSubscribed { get; set; }
+
+        public void UpdateSubscription(string deviceUri)
         {
-            lock (this)
+            lock (_monitor)
             {
-                if (!_doNotSubscribe)
+                if (!_callPending)
                 {
-                    _deviceUri = deviceUri;
-                    IWindowsPhonePushService windowsPhonePushService = new WindowsPhonePushServiceClient();
-                    windowsPhonePushService.BeginSubscribe(
-                        _pivot,
-                        _pivotId,
-                        _deviceUri,
-                        delegate(IAsyncResult a)
-                        {
-                            try
+                    if ((_subscribedTo != null && !ShouldBeSubscribed) || (_subscribedTo != deviceUri))
+                    {
+                        IWindowsPhonePushService windowsPhonePushService = new WindowsPhonePushServiceClient();
+                        _callPending = true;
+                        windowsPhonePushService.BeginUnsubscribe(
+                            _pivot,
+                            _pivotId,
+                            _subscribedTo,
+                            delegate(IAsyncResult a)
                             {
-                                windowsPhonePushService.EndSubscribe(a);
-                                subscriptionSuccess();
-                            }
-                            catch (Exception ex)
+                                try
+                                {
+                                    windowsPhonePushService.EndUnsubscribe(a);
+                                    UnsubscribeSuccess();
+                                }
+                                catch (Exception ex)
+                                {
+                                    UnsubscribeError();
+                                    HandleException(ex);
+                                }
+                            },
+                            null);
+                    }
+
+                    if (_subscribedTo == null && ShouldBeSubscribed)
+                    {
+                        IWindowsPhonePushService windowsPhonePushService = new WindowsPhonePushServiceClient();
+                        _callPending = true;
+                        windowsPhonePushService.BeginSubscribe(
+                            _pivot,
+                            _pivotId,
+                            deviceUri,
+                            delegate(IAsyncResult a)
                             {
-                                HandleException(ex);
-                            }
-                        },
-                        null);
+                                try
+                                {
+                                    windowsPhonePushService.EndSubscribe(a);
+                                    SubscribeSuccess(deviceUri);
+                                }
+                                catch (Exception ex)
+                                {
+                                    SubscribeError();
+                                    HandleException(ex);
+                                }
+                            },
+                            null);
+                    }
                 }
+            }
+        }
+
+        private void SubscribeSuccess(string deviceUri)
+        {
+            lock (_monitor)
+            {
+                _callPending = false;
+                _subscribedTo = deviceUri;
+            }
+        }
+
+        private void SubscribeError()
+        {
+            lock (_monitor)
+            {
+                _callPending = false;
+            }
+        }
+
+        private void UnsubscribeSuccess()
+        {
+            lock (_monitor)
+            {
+                _callPending = false;
+                _subscribedTo = null;
+            }
+        }
+
+        private void UnsubscribeError()
+        {
+            lock (_monitor)
+            {
+                _callPending = false;
             }
         }
 
         public void Unsubscribe()
         {
-            lock (this)
+            lock (_monitor)
             {
-                if (_deviceUri != null)
-                {
-                    IWindowsPhonePushService windowsPhonePushService = new WindowsPhonePushServiceClient();
-                    windowsPhonePushService.BeginUnsubscribe(
-                        _pivot, 
-                        _pivotId, 
-                        _deviceUri,
-                        delegate(IAsyncResult a)
-                        {
-                            try
-                            {
-                                windowsPhonePushService.EndUnsubscribe(a);
-                            }
-                            catch (Exception ex)
-                            {
-                                HandleException(ex);
-                            }
-                        }, 
-                        null);
-                }
-                _doNotSubscribe = true;
+                ShouldBeSubscribed = false;
             }
         }
 

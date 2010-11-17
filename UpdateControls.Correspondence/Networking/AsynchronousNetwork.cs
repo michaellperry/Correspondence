@@ -1,9 +1,9 @@
-﻿using UpdateControls.Correspondence;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UpdateControls.Correspondence.Strategy;
-using System;
+using System.Windows;
 using UpdateControls.Correspondence.Mementos;
+using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -69,8 +69,7 @@ namespace UpdateControls.Correspondence.Networking
 			}
 			if (firstInLine)
 			{
-				BeginSynchronizeOutgoing(result);
-				BeginSynchronizeIncoming(result);
+				BeginSynchronize(result);
 			}
 		}
 
@@ -90,14 +89,19 @@ namespace UpdateControls.Correspondence.Networking
 				if (_synchronizeQueue.Any())
 				{
 					SynchronizeResult result = _synchronizeQueue.Peek();
-					_depPushSubscriptions.OnGet();
-					BeginSynchronizeOutgoing(result);
-					BeginSynchronizeIncoming(result);
-				}
+                    BeginSynchronize(result);
+                }
 			}
 		}
 
-		private void BeginSynchronizeOutgoing(SynchronizeResult result)
+        private void BeginSynchronize(SynchronizeResult result)
+        {
+            _depPushSubscriptions.OnGet();
+            BeginSynchronizeOutgoing(result);
+            BeginSynchronizeIncoming(result);
+        }
+
+        private void BeginSynchronizeOutgoing(SynchronizeResult result)
 		{
 			bool any = false;
 			ResultAggregate communicationStrategyAggregate = new ResultAggregate(delegate()
@@ -182,13 +186,16 @@ namespace UpdateControls.Correspondence.Networking
 			}
 		}
 
-		private void TriggerAsync()
-		{
-			BeginSynchronize(a =>
-			{
-				if (EndSynchronize(a))
-					TriggerAsync();
-			}, null);
-		}
+        private void TriggerAsync()
+        {
+            Deployment.Current.Dispatcher.BeginInvoke(delegate
+            {
+                BeginSynchronize(a =>
+                {
+                    if (EndSynchronize(a))
+                        TriggerAsync();
+                }, null);
+            });
+        }
 	}
 }
