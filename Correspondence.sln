@@ -73,6 +73,30 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data (WP7)", "wp7\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data (WP7).csproj", "{426A7DF6-3C39-4125-9AD3-31D93208B269}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{CC15F72D-91A4-43A7-8009-F66A60B2CDD9}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\Desktop\UpdateControls.dll = SolutionItems\Desktop\UpdateControls.dll
+		SolutionItems\Desktop\UpdateControls.XAML.dll = SolutionItems\Desktop\UpdateControls.XAML.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{1AE51ED6-CA71-4944-933C-C14E36B88C6F}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\Silverlight\System.ComponentModel.DataAnnotations.dll = SolutionItems\Silverlight\System.ComponentModel.DataAnnotations.dll
+		SolutionItems\Silverlight\UpdateControls.Light.dll = SolutionItems\Silverlight\UpdateControls.Light.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight4", "Silverlight4", "{49134CA0-E167-44FF-BC27-BFCE0696922B}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\Silverlight4\UpdateControls.Light.dll = SolutionItems\Silverlight4\UpdateControls.Light.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP7", "WP7", "{434A2555-8566-495D-BCFA-4AD0E5E42C37}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\WP7\Microsoft.Silverlight.Testing.dll = SolutionItems\WP7\Microsoft.Silverlight.Testing.dll
+		SolutionItems\WP7\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = SolutionItems\WP7\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
+		SolutionItems\WP7\UpdateControls.dll = SolutionItems\WP7\UpdateControls.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 29
@@ -299,6 +323,10 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{CC15F72D-91A4-43A7-8009-F66A60B2CDD9} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
+		{1AE51ED6-CA71-4944-933C-C14E36B88C6F} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
+		{49134CA0-E167-44FF-BC27-BFCE0696922B} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
+		{434A2555-8566-495D-BCFA-4AD0E5E42C37} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4} = {B08999A9-59D8-4790-A084-515E40DDF472}

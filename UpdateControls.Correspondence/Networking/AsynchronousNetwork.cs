@@ -155,7 +155,10 @@ namespace UpdateControls.Correspondence.Networking
 							{
 								any = true;
 								TimestampID newTimestamp = _model.ReceiveMessage(messageBody, serverProxy.PeerId);
-								_storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, newTimestamp);
+								lock (this)
+								{
+								    _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, newTimestamp);
+								}
 							}
 							communicationStragetyAggregate.End();
 						});
