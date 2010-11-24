@@ -21,6 +21,11 @@ namespace UpdateControls.Correspondence.Memory
             return new Duration();
         }
 
+		public Guid ClientDatabaseGuid
+		{
+			get { throw new NotImplementedException(); }
+		}
+
         public bool GetID(string factName, out FactID id)
         {
             return _namedFacts.TryGetValue(factName, out id);
@@ -194,5 +199,5 @@ namespace UpdateControls.Correspondence.Memory
         {
             throw new NotImplementedException();
         }
-    }
+	}
 }

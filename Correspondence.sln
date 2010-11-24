@@ -97,9 +97,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP7", "WP7", "{434A2555-856
 		SolutionItems\WP7\UpdateControls.dll = SolutionItems\WP7\UpdateControls.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient", "Desktop\UpdateControls.Correspondence.POXClient\UpdateControls.Correspondence.POXClient.csproj", "{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 29
+		SccNumberOfProjects = 30
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -198,6 +200,10 @@ Global
 		SccProjectTopLevelParentUniqueName28 = Correspondence.sln
 		SccProjectName28 = wp7/UpdateControls.Correspondence.Data
 		SccLocalPath28 = wp7\\UpdateControls.Correspondence.Data
+		SccProjectUniqueName29 = Desktop\\UpdateControls.Correspondence.POXClient\\UpdateControls.Correspondence.POXClient.csproj
+		SccProjectTopLevelParentUniqueName29 = Correspondence.sln
+		SccProjectName29 = Desktop/UpdateControls.Correspondence.POXClient
+		SccLocalPath29 = Desktop\\UpdateControls.Correspondence.POXClient
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -318,6 +324,10 @@ Global
 		{426A7DF6-3C39-4125-9AD3-31D93208B269}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{426A7DF6-3C39-4125-9AD3-31D93208B269}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{426A7DF6-3C39-4125-9AD3-31D93208B269}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -339,5 +349,6 @@ Global
 		{426A7DF6-3C39-4125-9AD3-31D93208B269} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{9638F018-26C5-4E6B-B355-F8E37F86D1C0} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{510D6813-AE9B-4F28-9B77-390F36DF958A} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 	EndGlobalSection
 EndGlobal

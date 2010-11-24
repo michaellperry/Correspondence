@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="Networking\AsynchronousNetwork.cs" />
     <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
+    <Compile Include="Networking\AsynchronousServerProxy.cs" />
     <Compile Include="Networking\ResultAggregate.cs" />
     <Compile Include="Networking\SynchronizeResult.cs" />
     <Compile Include="AttributeFactFactory.cs" />

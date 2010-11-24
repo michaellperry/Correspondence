@@ -90,6 +90,11 @@ namespace UpdateControls.Correspondence.SSCE
             return Duration.Begin();
         }
 
+		public Guid ClientDatabaseGuid
+		{
+			get { throw new NotImplementedException(); }
+		}
+
         public bool GetID(string factName, out FactID id)
         {
 			id = new FactID();

@@ -10,8 +10,9 @@ namespace UpdateControls.Correspondence.Strategy
 	public interface IStorageStrategy
     {
         IDisposable BeginDuration();
+		Guid ClientDatabaseGuid { get; }
 
-        // Facts.
+		// Facts.
         bool GetID(string factName, out FactID id);
         void SetID(string factName, FactID id);
         FactMemento Load(FactID id);

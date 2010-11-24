@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
-using System.Windows.Threading;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Networking
 {
-    internal class AsynchronousServerProxy
-    {
-        public IAsynchronousCommunicationStrategy CommunicationStrategy;
-        public int PeerId;
-    }
 	partial class AsynchronousNetwork
 	{
 		private const long ClientDatabaseId = 0;
@@ -117,7 +110,7 @@ namespace UpdateControls.Correspondence.Networking
 				{
 					any = true;
 					communicationStrategyAggregate.Begin();
-                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, delegate(bool succeeded)
+                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, delegate(bool succeeded)
                     {
 						if (succeeded)
 	                        _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
@@ -150,7 +143,7 @@ namespace UpdateControls.Correspondence.Networking
 						_model.AddToFactTree(pivotTree, pivotId);
 						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
 						communicationStragetyAggregate.Begin();
-						serverProxy.CommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, delegate(FactTreeMemento messageBody)
+						serverProxy.CommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody)
 						{
 							if (messageBody.Facts.Any())
 							{

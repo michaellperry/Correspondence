@@ -268,6 +268,11 @@ namespace UpdateControls.Correspondence
             }
         }
 
+		public Guid ClientDatabaseGuid
+		{
+			get { return _storageStrategy.ClientDatabaseGuid; }
+		}
+
         internal IEnumerable<CorrespondenceFact> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             lock (this)
