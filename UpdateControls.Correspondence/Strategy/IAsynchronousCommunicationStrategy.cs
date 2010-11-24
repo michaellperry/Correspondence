@@ -8,7 +8,7 @@ namespace UpdateControls.Correspondence.Strategy
 		string ProtocolName { get; }
 		string PeerName { get; }
 		void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Action<FactTreeMemento> callback);
-		void BeginPost(FactTreeMemento messageBody, Action callback);
+		void BeginPost(FactTreeMemento messageBody, Action<bool> callback);
 
         event Action<FactTreeMemento> MessageReceived;
         IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId);

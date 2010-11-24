@@ -117,9 +117,10 @@ namespace UpdateControls.Correspondence.Networking
 				{
 					any = true;
 					communicationStrategyAggregate.Begin();
-                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, delegate()
+                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, delegate(bool succeeded)
                     {
-                        _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
+						if (succeeded)
+	                        _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
                         communicationStrategyAggregate.End();
                     });
 				}

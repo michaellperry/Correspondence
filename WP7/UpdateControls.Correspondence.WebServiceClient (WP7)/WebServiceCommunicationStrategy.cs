@@ -59,7 +59,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
 
-        public void BeginPost(FactTreeMemento messageBody, Action callback)
+        public void BeginPost(FactTreeMemento messageBody, Action<bool> callback)
         {
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
             synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), delegate(IAsyncResult result)
@@ -67,12 +67,13 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 try
                 {
                     synchronizationService.EndPost(result);
-                }
+					callback(true);
+				}
                 catch (Exception ex)
                 {
                     HandleException(ex);
-                }
-                callback();
+					callback(false);
+				}
             }, null);
         }
 
