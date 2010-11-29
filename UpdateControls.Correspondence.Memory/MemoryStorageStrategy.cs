@@ -21,7 +21,7 @@ namespace UpdateControls.Correspondence.Memory
             return new Duration();
         }
 
-		public Guid ClientDatabaseGuid
+		public Guid ClientGuid
 		{
 			get { throw new NotImplementedException(); }
 		}

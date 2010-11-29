@@ -169,6 +169,9 @@
     <Compile Include="..\..\UpdateControls.Correspondence\Networking\AsynchronousNetwork.cs">
       <Link>Networking\AsynchronousNetwork.cs</Link>
     </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Networking\AsynchronousServerProxy.cs">
+      <Link>Networking\AsynchronousServerProxy.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\Networking\ISubscriptionProvider.cs">
       <Link>Networking\ISubscriptionProvider.cs</Link>
     </Compile>

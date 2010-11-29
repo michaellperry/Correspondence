@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
             get { return new SynchronizationServiceClient().Endpoint.Address.ToString(); }
         }
 
-        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Action<FactTreeMemento> callback)
+        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento> callback)
         {
             FactTree pivot = Translate.MementoToFactTree(pivotTree);
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
@@ -59,7 +59,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
 
-        public void BeginPost(FactTreeMemento messageBody, Action<bool> callback)
+        public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback)
         {
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
             synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), delegate(IAsyncResult result)
@@ -79,7 +79,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         public event Action<FactTreeMemento> MessageReceived;
 
-        public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId)
+        public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
         {
             lock (_monitor)
             {

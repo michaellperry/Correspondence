@@ -90,7 +90,7 @@ namespace UpdateControls.Correspondence.SSCE
             return Duration.Begin();
         }
 
-		public Guid ClientDatabaseGuid
+		public Guid ClientGuid
 		{
 			get { throw new NotImplementedException(); }
 		}

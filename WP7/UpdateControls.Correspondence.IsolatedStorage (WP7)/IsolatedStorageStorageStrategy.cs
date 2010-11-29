@@ -12,9 +12,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 {
     public class IsolatedStorageStorageStrategy : IStorageStrategy
     {
+        private const string ClientGuidFileName = "ClientGuid.bin";
         private const string FactTreeFileName = "FactTree.bin";
         private const string IndexFileName = "Index.bin";
 
+        private Guid _clientGuid;
         private MessageStore _messageStore;
         private FactTypeStore _factTypeStore;
         private RoleStore _roleStore;
@@ -38,6 +40,21 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 result._peerStore = PeerStore.Load(store);
                 result._incomingTimestampStore = IncomingTimestampStore.Load(store);
                 result._outgoingTimestampStore = OutgoingTimestampStore.Load(store);
+                if (store.FileExists(ClientGuidFileName))
+                {
+                    using (BinaryReader input = new BinaryReader(store.OpenFile(ClientGuidFileName, FileMode.Open)))
+                    {
+                        result._clientGuid = new Guid(input.ReadBytes(16));
+                    }
+                }
+                else
+                {
+                    result._clientGuid = Guid.NewGuid();
+                    using (BinaryWriter output = new BinaryWriter(store.OpenFile(ClientGuidFileName, FileMode.Create)))
+                    {
+                        output.Write(result._clientGuid.ToByteArray());
+                    }
+                }
             }
 
             return result;
@@ -46,6 +63,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         public IDisposable BeginDuration()
         {
             return new Duration();
+        }
+
+        public Guid ClientGuid
+        {
+            get { return _clientGuid; }
         }
 
         public bool GetID(string factName, out FactID id)

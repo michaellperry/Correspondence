@@ -10,7 +10,7 @@ namespace UpdateControls.Correspondence.Strategy
 	public interface IStorageStrategy
     {
         IDisposable BeginDuration();
-		Guid ClientDatabaseGuid { get; }
+		Guid ClientGuid { get; }
 
 		// Facts.
         bool GetID(string factName, out FactID id);
