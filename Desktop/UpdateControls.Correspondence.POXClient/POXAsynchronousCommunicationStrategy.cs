@@ -41,7 +41,7 @@ namespace UpdateControls.Correspondence.POXClient
 				Timestamp = timestamp.Key,
 				ClientGuid = clientGuid.ToString()
 			};
-			WebRequest webRequest = WebRequest.CreateDefault(new Uri(_configuration.EndpointBase + "/get"));
+			WebRequest webRequest = WebRequest.CreateDefault(new Uri(_configuration.EndpointBase));
 			webRequest.Method = "POST";
 			webRequest.BeginGetRequestStream(a1 =>
 			{
@@ -80,7 +80,7 @@ namespace UpdateControls.Correspondence.POXClient
 				MessageBody = Translate.MementoToFactTree(messageBody),
 				ClientGuid = clientGuid.ToString()
 			};
-			WebRequest webRequest = WebRequest.CreateDefault(new Uri(_configuration.EndpointBase + "/post"));
+			WebRequest webRequest = WebRequest.CreateDefault(new Uri(_configuration.EndpointBase));
 			webRequest.Method = "POST";
 			webRequest.BeginGetRequestStream(a1 =>
 			{
