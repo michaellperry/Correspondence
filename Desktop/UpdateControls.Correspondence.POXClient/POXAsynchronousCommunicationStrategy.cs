@@ -10,6 +10,7 @@ namespace UpdateControls.Correspondence.POXClient
 {
     public class POXAsynchronousCommunicationStrategy : IAsynchronousCommunicationStrategy
 	{
+        private static XmlSerializerNamespaces DefaultNamespaces = DefineNamespaces();
 		private static XmlSerializer GetRequestSerializer = new XmlSerializer(typeof(GetRequest));
 		private static XmlSerializer GetResponseSerializer = new XmlSerializer(typeof(GetResponse));
 		private static XmlSerializer PostRequestSerializer = new XmlSerializer(typeof(PostRequest));
@@ -48,7 +49,7 @@ namespace UpdateControls.Correspondence.POXClient
 				try
 				{
 					Stream requestStream = webRequest.EndGetRequestStream(a1);
-					GetRequestSerializer.Serialize(requestStream, request);
+                    GetRequestSerializer.Serialize(requestStream, request, DefaultNamespaces);
 					webRequest.BeginGetResponse(a2 =>
 					{
 						try
@@ -87,7 +88,7 @@ namespace UpdateControls.Correspondence.POXClient
 				try
 				{
 					Stream requestStream = webRequest.EndGetRequestStream(a1);
-					PostRequestSerializer.Serialize(requestStream, request);
+                    PostRequestSerializer.Serialize(requestStream, request, DefaultNamespaces);
 					webRequest.BeginGetResponse(a2 =>
 					{
 						try
@@ -124,5 +125,12 @@ namespace UpdateControls.Correspondence.POXClient
 		{
 			// TODO
 		}
-	}
+
+        private static XmlSerializerNamespaces DefineNamespaces()
+        {
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("c", "http://correspondence.updatecontrols.com/pox/1.0");
+            return namespaces;
+        }
+    }
 }
