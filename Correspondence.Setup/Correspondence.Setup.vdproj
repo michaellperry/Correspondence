@@ -40,7 +40,7 @@
         "Entry"
         {
         "MsmKey" = "8:_17DC2099371F10B0EAF1D9359A831032"
-        "OwnerKey" = "8:_CA2F4637A9BE978F428575C467304410"
+        "OwnerKey" = "8:_785F74BBD99C2001CEE987E2F33E9E0A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -77,12 +77,6 @@
         {
         "MsmKey" = "8:_2282C7B64E93B84B908E6E90444763A6"
         "OwnerKey" = "8:_9B9F3F7CE20145EF8F3B86FA95F9B582"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_2A807649D2432B0A23EEDC7D8789D030"
-        "OwnerKey" = "8:_ED16B0F3DBE64B97AE8CA3F5481AFCB4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -238,7 +232,7 @@
         "Entry"
         {
         "MsmKey" = "8:_74079C782F337DB2E4A56523A29D08EA"
-        "OwnerKey" = "8:_CA2F4637A9BE978F428575C467304410"
+        "OwnerKey" = "8:_785F74BBD99C2001CEE987E2F33E9E0A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -255,14 +249,32 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7D88287918500FBCB09578E6A455414E"
-        "OwnerKey" = "8:_72C457857B374E9CA08C8E947E1F5533"
+        "MsmKey" = "8:_785F74BBD99C2001CEE987E2F33E9E0A"
+        "OwnerKey" = "8:_76FEE334A5944D1482633BC42EDC481B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_785F74BBD99C2001CEE987E2F33E9E0A"
+        "OwnerKey" = "8:_ED16B0F3DBE64B97AE8CA3F5481AFCB4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_785F74BBD99C2001CEE987E2F33E9E0A"
+        "OwnerKey" = "8:_B70FC7A62647455EA3733A275B9D1B89"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_7D8F8F76B4B64A37BA9953A07DDDED50"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_82A0B9B38FF34FFC9BB439517F2A6E53"
+        "OwnerKey" = "8:_72C457857B374E9CA08C8E947E1F5533"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -285,6 +297,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B03DE6F0039425EAAD83F93F470073D8"
+        "OwnerKey" = "8:_ED16B0F3DBE64B97AE8CA3F5481AFCB4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B70E40336DD14131B26AC1DF0D1FCA1E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -299,24 +317,6 @@
         {
         "MsmKey" = "8:_C5797A1D1B49C0C9245B88C4C444AFF0"
         "OwnerKey" = "8:_E292FFE16532DE1F7653A69C9225A3B5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CA2F4637A9BE978F428575C467304410"
-        "OwnerKey" = "8:_76FEE334A5944D1482633BC42EDC481B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CA2F4637A9BE978F428575C467304410"
-        "OwnerKey" = "8:_ED16B0F3DBE64B97AE8CA3F5481AFCB4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_CA2F4637A9BE978F428575C467304410"
-        "OwnerKey" = "8:_B70FC7A62647455EA3733A275B9D1B89"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -382,7 +382,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2A807649D2432B0A23EEDC7D8789D030"
+        "OwnerKey" = "8:_B03DE6F0039425EAAD83F93F470073D8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -418,7 +418,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CA2F4637A9BE978F428575C467304410"
+        "OwnerKey" = "8:_785F74BBD99C2001CEE987E2F33E9E0A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -460,7 +460,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7D88287918500FBCB09578E6A455414E"
+        "OwnerKey" = "8:_82A0B9B38FF34FFC9BB439517F2A6E53"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -592,7 +592,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UpdateControls, Version=2.1.1.4, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:UpdateControls, Version=2.1.1.5, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_17DC2099371F10B0EAF1D9359A831032"
@@ -674,7 +674,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UpdateControls, Version=2.1.1.4, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:UpdateControls, Version=2.1.1.5, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_2282C7B64E93B84B908E6E90444763A6"
@@ -687,37 +687,6 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_800DAAC8F474405B9B90FAE150BED101"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2A807649D2432B0A23EEDC7D8789D030"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UpdateControls.Correspondence.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_2A807649D2432B0A23EEDC7D8789D030"
-                    {
-                    "Name" = "8:UpdateControls.Correspondence.Data.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:UpdateControls.Correspondence.Data.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -916,23 +885,23 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7D88287918500FBCB09578E6A455414E"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_785F74BBD99C2001CEE987E2F33E9E0A"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:QEDCode.LLOne, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:UpdateControls.Correspondence, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7D88287918500FBCB09578E6A455414E"
+                    "_785F74BBD99C2001CEE987E2F33E9E0A"
                     {
-                    "Name" = "8:QEDCode.LLOne.dll"
+                    "Name" = "8:UpdateControls.Correspondence.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:QEDCode.LLOne.dll"
+            "SourcePath" = "8:UpdateControls.Correspondence.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
-            "Folder" = "8:_5767BAEFB18C4BAD90A5BD0B25EE7A7D"
+            "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -967,6 +936,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_82A0B9B38FF34FFC9BB439517F2A6E53"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:QEDCode.LLOne, Version=1.0.0.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_82A0B9B38FF34FFC9BB439517F2A6E53"
+                    {
+                    "Name" = "8:QEDCode.LLOne.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:QEDCode.LLOne.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_5767BAEFB18C4BAD90A5BD0B25EE7A7D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_85BB86AB5DB14C72A386368CF9EFA43C"
             {
             "SourcePath" = "8:..\\Project Templates\\Visual Studio 2010\\Correspondence Unit Test.zip"
@@ -991,7 +991,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UpdateControls.XAML, Version=2.1.1.4, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:UpdateControls.XAML, Version=2.1.1.5, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_9B9F3F7CE20145EF8F3B86FA95F9B582"
@@ -1038,6 +1038,37 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B03DE6F0039425EAAD83F93F470073D8"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:UpdateControls.Correspondence.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_B03DE6F0039425EAAD83F93F470073D8"
+                    {
+                    "Name" = "8:UpdateControls.Correspondence.Data.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:UpdateControls.Correspondence.Data.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B70E40336DD14131B26AC1DF0D1FCA1E"
             {
             "SourcePath" = "8:..\\Project Templates\\Visual Studio 2008\\Correspondence View Model.zip"
@@ -1072,37 +1103,6 @@
                     }
                 }
             "SourcePath" = "8:System.Xml.Serialization.DLL"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CA2F4637A9BE978F428575C467304410"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:UpdateControls.Correspondence, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_CA2F4637A9BE978F428575C467304410"
-                    {
-                    "Name" = "8:UpdateControls.Correspondence.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:UpdateControls.Correspondence.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
@@ -2166,7 +2166,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_72C457857B374E9CA08C8E947E1F5533"
             {
-            "SourcePath" = "8:..\\UpdateControls.Correspondence.Factual\\obj\\Release\\UpdateControls.Correspondence.Factual.dll"
+            "SourcePath" = "8:..\\UpdateControls.Correspondence.Factual\\obj\\Debug\\UpdateControls.Correspondence.Factual.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_5767BAEFB18C4BAD90A5BD0B25EE7A7D"
@@ -2194,7 +2194,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_76FEE334A5944D1482633BC42EDC481B"
             {
-            "SourcePath" = "8:..\\WP7\\UpdateControls.Correspondence.Memory (WP7)\\obj\\Release\\UpdateControls.Correspondence.Memory.dll"
+            "SourcePath" = "8:..\\WP7\\UpdateControls.Correspondence.Memory (WP7)\\obj\\Debug\\UpdateControls.Correspondence.Memory.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
@@ -2222,7 +2222,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B70FC7A62647455EA3733A275B9D1B89"
             {
-            "SourcePath" = "8:..\\WP7\\UpdateControls.Correspondence.WebServiceClient (WP7)\\obj\\Release\\UpdateControls.Correspondence.WebServiceClient.dll"
+            "SourcePath" = "8:..\\WP7\\UpdateControls.Correspondence.WebServiceClient (WP7)\\obj\\Debug\\UpdateControls.Correspondence.WebServiceClient.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
@@ -2250,7 +2250,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_ED16B0F3DBE64B97AE8CA3F5481AFCB4"
             {
-            "SourcePath" = "8:..\\WP7\\UpdateControls.Correspondence.IsolatedStorage (WP7)\\obj\\Release\\UpdateControls.Correspondence.IsolatedStorage.dll"
+            "SourcePath" = "8:..\\WP7\\UpdateControls.Correspondence.IsolatedStorage (WP7)\\obj\\Debug\\UpdateControls.Correspondence.IsolatedStorage.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_F59AA9EB166E421F84EED8502C83803E"
