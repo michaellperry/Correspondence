@@ -49,11 +49,6 @@
     <Compile Include="Contract\Contract.cs">
       <DependentUpon>Contract.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Contract\Contract.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Contract.xsd</DependentUpon>
-    </Compile>
     <Compile Include="IPOXConfigurationProvider.cs" />
     <Compile Include="MementoToContractTranslator.cs" />
     <Compile Include="NoOpPushSubscription.cs" />
@@ -71,7 +66,6 @@
   <ItemGroup>
     <None Include="Contract\Contract.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Contract.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

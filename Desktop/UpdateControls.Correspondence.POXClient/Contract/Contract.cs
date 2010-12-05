@@ -33,7 +33,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private string clientGuidField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public FactTree PivotTree {
             get {
                 return this.pivotTreeField;
@@ -44,6 +44,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public long PivotId {
             get {
                 return this.pivotIdField;
@@ -54,6 +55,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public long Timestamp {
             get {
                 return this.timestampField;
@@ -64,6 +66,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ClientGuid {
             get {
                 return this.clientGuidField;
@@ -92,6 +95,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private FactType[] typesField;
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public long DatabaseId {
             get {
                 return this.databaseIdField;
@@ -102,7 +106,8 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public Fact[] Facts {
             get {
                 return this.factsField;
@@ -113,7 +118,8 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public FactRole[] Roles {
             get {
                 return this.rolesField;
@@ -124,7 +130,8 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public FactType[] Types {
             get {
                 return this.typesField;
@@ -153,7 +160,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private Predecessor[] predecessorsField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(DataType="base64Binary", IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, DataType="base64Binary", IsNullable=true)]
         public byte[] Data {
             get {
                 return this.dataField;
@@ -164,6 +171,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public long FactId {
             get {
                 return this.factIdField;
@@ -174,6 +182,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int FactTypeId {
             get {
                 return this.factTypeIdField;
@@ -184,7 +193,8 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public Predecessor[] Predecessors {
             get {
                 return this.predecessorsField;
@@ -209,6 +219,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private int roleIdField;
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public long PredecessorId {
             get {
                 return this.predecessorIdField;
@@ -219,6 +230,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int RoleId {
             get {
                 return this.roleIdField;
@@ -249,6 +261,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private int targetTypeIdField;
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int DeclaringTypeId {
             get {
                 return this.declaringTypeIdField;
@@ -259,6 +272,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public bool IsPivot {
             get {
                 return this.isPivotField;
@@ -269,6 +283,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int RoleId {
             get {
                 return this.roleIdField;
@@ -279,7 +294,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public string RoleName {
             get {
                 return this.roleNameField;
@@ -290,6 +305,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int TargetTypeId {
             get {
                 return this.targetTypeIdField;
@@ -316,6 +332,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private int versionField;
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int TypeId {
             get {
                 return this.typeIdField;
@@ -326,7 +343,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public string TypeName {
             get {
                 return this.typeNameField;
@@ -337,6 +354,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int Version {
             get {
                 return this.versionField;
@@ -359,7 +377,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private Fact[] factField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Fact", IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute("Fact", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public Fact[] Fact {
             get {
                 return this.factField;
@@ -382,7 +400,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private Predecessor[] predecessorField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Predecessor", IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute("Predecessor", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public Predecessor[] Predecessor {
             get {
                 return this.predecessorField;
@@ -405,7 +423,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private FactRole[] factRoleField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FactRole", IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute("FactRole", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public FactRole[] FactRole {
             get {
                 return this.factRoleField;
@@ -428,7 +446,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private FactType[] factTypeField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("FactType", IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute("FactType", Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public FactType[] FactType {
             get {
                 return this.factTypeField;
@@ -453,7 +471,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private long timestampField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public FactTree FactTree {
             get {
                 return this.factTreeField;
@@ -464,6 +482,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public long Timestamp {
             get {
                 return this.timestampField;
@@ -488,7 +507,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         private string clientGuidField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified, IsNullable=true)]
         public FactTree MessageBody {
             get {
                 return this.messageBodyField;
@@ -499,6 +518,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public string ClientGuid {
             get {
                 return this.clientGuidField;

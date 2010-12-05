@@ -43,9 +43,11 @@ namespace UpdateControls.Correspondence.POXClient.UnitTest
                 Timestamp = 34
             };
 
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("c", "http://correspondence.updatecontrols.com/pox/1.0");
             XmlSerializer getRequestSerializer = new XmlSerializer(typeof(GetRequest));
             MemoryStream outputStream = new MemoryStream();
-            getRequestSerializer.Serialize(outputStream, getRequest);
+            getRequestSerializer.Serialize(outputStream, getRequest, namespaces);
             string getRequestXml;
             using (StreamReader reader = new StreamReader(new MemoryStream(outputStream.ToArray())))
             {
@@ -54,7 +56,7 @@ namespace UpdateControls.Correspondence.POXClient.UnitTest
 
             ShouldEqual(
                 "<?xml version=\"1.0\"?>\r\n" +
-                "<GetRequest xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns=\"http://correspondence.updatecontrols.com/pox/1.0\">\r\n" +
+                "<c:GetRequest xmlns:c=\"http://correspondence.updatecontrols.com/pox/1.0\">\r\n" +
                 "  <PivotTree>\r\n" +
                 "    <DatabaseId>1</DatabaseId>\r\n" +
                 "    <Facts>\r\n" +
@@ -77,7 +79,7 @@ namespace UpdateControls.Correspondence.POXClient.UnitTest
                 "  <PivotId>23</PivotId>\r\n" +
                 "  <Timestamp>34</Timestamp>\r\n" +
                 "  <ClientGuid>25a0ff9b-478c-4bf7-8ce5-0e87832f0ff5</ClientGuid>\r\n" +
-                "</GetRequest>",
+                "</c:GetRequest>",
                 getRequestXml);
         }
 
@@ -117,7 +119,7 @@ namespace UpdateControls.Correspondence.POXClient.UnitTest
 
         private static string Snippet(string value, int position)
         {
-            int startingIndex = position - 1;
+            int startingIndex = position - 9;
             if (startingIndex < 0)
                 startingIndex = 0;
             int endingIndex = position + 9;

@@ -6,7 +6,7 @@ namespace Reversi.Client
     {
         public POXConfiguration Configuration
         {
-            get { return new POXConfiguration("http://localhost:14112/correspondence_server_web/pox"); }
+            get { return new POXConfiguration("http://localhost:14112/correspondence_server_web/pox/"); }
         }
     }
 }
