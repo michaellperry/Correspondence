@@ -1,6 +1,5 @@
-using System;
-using System.Runtime.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace UpdateControls.Correspondence.WebService.Contract
 {
@@ -9,9 +8,6 @@ namespace UpdateControls.Correspondence.WebService.Contract
     {
         [DataMember]
         public long DatabaseId { get; set; }
-
-        [DataMember]
-        public long Timestamp { get; set; }
 
         [DataMember]
         public List<FactType> Types { set; get; }

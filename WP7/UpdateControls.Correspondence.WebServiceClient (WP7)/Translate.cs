@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
     {
         public static FactTreeMemento FactTreeToMemento(FactTree tree)
         {
-            ContractToMementoTranslator translator = new ContractToMementoTranslator(tree.DatabaseId, tree.Timestamp);
+            ContractToMementoTranslator translator = new ContractToMementoTranslator(tree.DatabaseId);
             if (tree.Types != null)
             {
                 foreach (FactType type in tree.Types)
@@ -28,7 +28,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         public static FactTree MementoToFactTree(FactTreeMemento memento)
         {
-            var translator = new MementoToContractTranslator(memento.DatabaseId, memento.Timestamp);
+            var translator = new MementoToContractTranslator(memento.DatabaseId);
             foreach (IdentifiedFactMemento fact in memento.Facts)
                 translator.AddFact(fact);
             return translator.TargetFactTree;

@@ -84,6 +84,7 @@
     <Compile Include="FactRole.cs" />
     <Compile Include="FactTree.cs" />
     <Compile Include="FactType.cs" />
+    <Compile Include="GetResult.cs" />
     <Compile Include="ISynchronizationService.cs" />
     <Compile Include="MementoToContractTranslator.cs" />
     <Compile Include="Predecessor.cs" />

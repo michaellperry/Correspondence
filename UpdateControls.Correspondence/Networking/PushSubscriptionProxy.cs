@@ -24,7 +24,7 @@ namespace UpdateControls.Correspondence.Networking
 		{
 			if (_pushSubscription == null)
 			{
-				FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId, 0L);
+				FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
 				FactID pivotId = _pivot.ID;
 				_model.AddToFactTree(pivotTree, pivotId);
 				_pushSubscription = _strategy.SubscribeForPush(pivotTree, pivotId, _model.ClientDatabaseGuid);

@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema elementFormDefault="unqualified" targetNamespace="http://correspondence.updatecontrols.com/pox/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://correspondence.updatecontrols.com/pox/1.0">
+<xs:schema elementFormDefault="qualified" targetNamespace="http://correspondence.updatecontrols.com/pox/1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://correspondence.updatecontrols.com/pox/1.0">
 	<xs:element name="GetRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element minOccurs="0" name="PivotTree" nillable="true" type="tns:FactTree"/>
-				<xs:element minOccurs="0" name="PivotId" type="xs:long"/>
-				<xs:element minOccurs="0" name="Timestamp" type="xs:long"/>
-				<xs:element minOccurs="0" name="ClientGuid" type="xs:string"/>
+				<xs:element name="PivotTree" nillable="true" type="tns:FactTree"/>
+				<xs:element name="PivotId" type="xs:long"/>
+				<xs:element name="Timestamp" type="xs:long"/>
+				<xs:element name="ClientGuid" type="xs:string"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="FactTree">
 		<xs:sequence>
-			<xs:element minOccurs="0" name="DatabaseId" type="xs:long"/>
-			<xs:element minOccurs="0" name="Facts" nillable="true" type="tns:ArrayOfFact"/>
-			<xs:element minOccurs="0" name="Roles" nillable="true" type="tns:ArrayOfFactRole"/>
-			<xs:element minOccurs="0" name="Timestamp" type="xs:long"/>
-			<xs:element minOccurs="0" name="Types" nillable="true" type="tns:ArrayOfFactType"/>
+			<xs:element name="DatabaseId" type="xs:long"/>
+			<xs:element name="Facts" nillable="true" type="tns:ArrayOfFact"/>
+			<xs:element name="Roles" nillable="true" type="tns:ArrayOfFactRole"/>
+			<xs:element name="Types" nillable="true" type="tns:ArrayOfFactType"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="FactTree" nillable="true" type="tns:FactTree"/>
@@ -28,10 +27,10 @@
 	<xs:element name="ArrayOfFact" nillable="true" type="tns:ArrayOfFact"/>
 	<xs:complexType name="Fact">
 		<xs:sequence>
-			<xs:element minOccurs="0" name="Data" nillable="true" type="xs:base64Binary"/>
-			<xs:element minOccurs="0" name="FactId" type="xs:long"/>
-			<xs:element minOccurs="0" name="FactTypeId" type="xs:int"/>
-			<xs:element minOccurs="0" name="Predecessors" nillable="true" type="tns:ArrayOfPredecessor"/>
+			<xs:element name="Data" nillable="true" type="xs:base64Binary"/>
+			<xs:element name="FactId" type="xs:long"/>
+			<xs:element name="FactTypeId" type="xs:int"/>
+			<xs:element name="Predecessors" nillable="true" type="tns:ArrayOfPredecessor"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Fact" nillable="true" type="tns:Fact"/>
@@ -43,8 +42,8 @@
 	<xs:element name="ArrayOfPredecessor" nillable="true" type="tns:ArrayOfPredecessor"/>
 	<xs:complexType name="Predecessor">
 		<xs:sequence>
-			<xs:element minOccurs="0" name="PredecessorId" type="xs:long"/>
-			<xs:element minOccurs="0" name="RoleId" type="xs:int"/>
+			<xs:element name="PredecessorId" type="xs:long"/>
+			<xs:element name="RoleId" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Predecessor" nillable="true" type="tns:Predecessor"/>
@@ -56,11 +55,11 @@
 	<xs:element name="ArrayOfFactRole" nillable="true" type="tns:ArrayOfFactRole"/>
 	<xs:complexType name="FactRole">
 		<xs:sequence>
-			<xs:element minOccurs="0" name="DeclaringTypeId" type="xs:int"/>
-			<xs:element minOccurs="0" name="IsPivot" type="xs:boolean"/>
-			<xs:element minOccurs="0" name="RoleId" type="xs:int"/>
-			<xs:element minOccurs="0" name="RoleName" nillable="true" type="xs:string"/>
-			<xs:element minOccurs="0" name="TargetTypeId" type="xs:int"/>
+			<xs:element name="DeclaringTypeId" type="xs:int"/>
+			<xs:element name="IsPivot" type="xs:boolean"/>
+			<xs:element name="RoleId" type="xs:int"/>
+			<xs:element name="RoleName" nillable="true" type="xs:string"/>
+			<xs:element name="TargetTypeId" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="FactRole" nillable="true" type="tns:FactRole"/>
@@ -72,24 +71,25 @@
 	<xs:element name="ArrayOfFactType" nillable="true" type="tns:ArrayOfFactType"/>
 	<xs:complexType name="FactType">
 		<xs:sequence>
-			<xs:element minOccurs="0" name="TypeId" type="xs:int"/>
-			<xs:element minOccurs="0" name="TypeName" nillable="true" type="xs:string"/>
-			<xs:element minOccurs="0" name="Version" type="xs:int"/>
+			<xs:element name="TypeId" type="xs:int"/>
+			<xs:element name="TypeName" nillable="true" type="xs:string"/>
+			<xs:element name="Version" type="xs:int"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="FactType" nillable="true" type="tns:FactType"/>
 	<xs:element name="GetResponse">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element minOccurs="0" name="GetResult" nillable="true" type="tns:FactTree"/>
-			</xs:sequence>
+				<xs:element name="FactTree" nillable="true" type="tns:FactTree"/>
+        <xs:element name="Timestamp" type="xs:long"/>
+      </xs:sequence>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="PostRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element minOccurs="0" name="MessageBody" nillable="true" type="tns:FactTree"/>
-				<xs:element minOccurs="0" name="ClientGuid" type="xs:string"/>
+				<xs:element name="MessageBody" nillable="true" type="tns:FactTree"/>
+				<xs:element name="ClientGuid" type="xs:string"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

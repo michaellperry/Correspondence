@@ -74,6 +74,7 @@
     <Compile Include="..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Mementos\GetResultMemento.cs" />
     <Compile Include="Networking\AsynchronousNetwork.cs" />
     <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
     <Compile Include="Networking\AsynchronousServerProxy.cs" />

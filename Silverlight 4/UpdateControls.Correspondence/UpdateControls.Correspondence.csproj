@@ -150,6 +150,9 @@
     <Compile Include="..\..\UpdateControls.Correspondence\Mementos\FactTreeMemento.cs">
       <Link>Mementos\FactTreeMemento.cs</Link>
     </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\Mementos\GetResultMemento.cs">
+      <Link>Mementos\GetResultMemento.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\Mementos\IdentifiedFactMemento.cs">
       <Link>Mementos\IdentifiedFactMemento.cs</Link>
     </Compile>

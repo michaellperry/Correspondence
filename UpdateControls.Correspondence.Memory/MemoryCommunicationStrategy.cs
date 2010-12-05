@@ -20,19 +20,19 @@ namespace UpdateControls.Correspondence.Memory
             get { return "Local"; }
         }
 
-        public FactTreeMemento Get(FactTreeMemento pivotTree, FactID remotePivotId, TimestampID timestamp)
+        public GetResultMemento Get(FactTreeMemento pivotTree, FactID remotePivotId, TimestampID timestamp)
         {
             FactID? localPivotId = FindExistingFact(remotePivotId, pivotTree);
             if (!localPivotId.HasValue)
-                return new FactTreeMemento(_databaseId, timestamp.Key);
+                return new GetResultMemento(new FactTreeMemento(_databaseId), new TimestampID(_databaseId, timestamp.Key));
 
             IEnumerable<FactID> recentMessages = _repository.LoadRecentMessagesForClient(localPivotId.Value, timestamp);
             long nextTimestamp = recentMessages.Any() ? recentMessages.Max(message => message.key) : timestamp.Key;
-            FactTreeMemento messageBody = new FactTreeMemento(_databaseId, nextTimestamp);
+            FactTreeMemento messageBody = new FactTreeMemento(_databaseId);
             foreach (FactID recentMessage in recentMessages)
                 AddToFactTree(messageBody, recentMessage);
 
-            return messageBody;
+            return new GetResultMemento(messageBody, new TimestampID(_databaseId, nextTimestamp));
         }
 
         public void Post(FactTreeMemento messageBody)

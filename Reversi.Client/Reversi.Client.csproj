@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Reversi.Client</RootNamespace>
     <AssemblyName>Reversi.Client</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -39,6 +39,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <Utf8Output>true</Utf8Output>
     <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,6 +65,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -113,6 +115,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="POXClientConfigurationProvider.cs" />
     <Compile Include="ViewModel\GameListNavigationModel.cs" />
     <Compile Include="ViewModel\GameListViewModel.cs" />
     <Compile Include="ViewModel\GameSummaryViewModel.cs" />
@@ -166,6 +169,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Desktop\UpdateControls.Correspondence.POXClient\UpdateControls.Correspondence.POXClient.csproj">
+      <Project>{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}</Project>
+      <Name>UpdateControls.Correspondence.POXClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reversi.GameLogic\Reversi.GameLogic.csproj">
       <Project>{15C2C87D-3996-480B-8576-1E04C20B1D09}</Project>
       <Name>Reversi.GameLogic</Name>
@@ -177,14 +184,6 @@
     <ProjectReference Include="..\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj">
       <Project>{E318C58A-0EB8-4FFB-9547-DD5F73760989}</Project>
       <Name>UpdateControls.Correspondence.Memory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UpdateControls.Correspondence.WebService.Contract\UpdateControls.Correspondence.WebService.Contract.csproj">
-      <Project>{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}</Project>
-      <Name>UpdateControls.Correspondence.WebService.Contract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UpdateControls.Correspondence.WebServiceClient\UpdateControls.Correspondence.WebServiceClient.csproj">
-      <Project>{6B3FD9E5-3D50-4DD8-9656-F9B9F1EB138D}</Project>
-      <Name>UpdateControls.Correspondence.WebServiceClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>

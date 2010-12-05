@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
-using Reversi.Model;
 using Reversi.Client.Synchronization;
 using Reversi.Client.View;
 using Reversi.Client.ViewModel;
+using Reversi.Model;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Memory;
-using UpdateControls.Correspondence.WebServiceClient;
+using UpdateControls.Correspondence.POXClient;
 using UpdateControls.XAML;
-using System.Linq;
 
 namespace Reversi.Client
 {
@@ -22,7 +22,7 @@ namespace Reversi.Client
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             Community community = new Community(new MemoryStorageStrategy())
-                .AddCommunicationStrategy(new WebServiceCommunicationStrategy())
+                .AddAsynchronousCommunicationStrategy(new POXAsynchronousCommunicationStrategy(new POXClientConfigurationProvider()))
                 .RegisterAssembly(typeof(Machine))
                 .Subscribe(() => _thisMachine.ActiveLogOns
                     .Select(l => l.User)

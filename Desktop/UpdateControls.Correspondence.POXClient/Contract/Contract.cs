@@ -28,11 +28,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private long pivotIdField;
         
-        private bool pivotIdFieldSpecified;
-        
         private long timestampField;
-        
-        private bool timestampFieldSpecified;
         
         private string clientGuidField;
         
@@ -58,34 +54,12 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PivotIdSpecified {
-            get {
-                return this.pivotIdFieldSpecified;
-            }
-            set {
-                this.pivotIdFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
         public long Timestamp {
             get {
                 return this.timestampField;
             }
             set {
                 this.timestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TimestampSpecified {
-            get {
-                return this.timestampFieldSpecified;
-            }
-            set {
-                this.timestampFieldSpecified = value;
             }
         }
         
@@ -111,15 +85,9 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private long databaseIdField;
         
-        private bool databaseIdFieldSpecified;
-        
         private Fact[] factsField;
         
         private FactRole[] rolesField;
-        
-        private long timestampField;
-        
-        private bool timestampFieldSpecified;
         
         private FactType[] typesField;
         
@@ -130,17 +98,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.databaseIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DatabaseIdSpecified {
-            get {
-                return this.databaseIdFieldSpecified;
-            }
-            set {
-                this.databaseIdFieldSpecified = value;
             }
         }
         
@@ -163,27 +120,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.rolesField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public long Timestamp {
-            get {
-                return this.timestampField;
-            }
-            set {
-                this.timestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TimestampSpecified {
-            get {
-                return this.timestampFieldSpecified;
-            }
-            set {
-                this.timestampFieldSpecified = value;
             }
         }
         
@@ -212,11 +148,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private long factIdField;
         
-        private bool factIdFieldSpecified;
-        
         private int factTypeIdField;
-        
-        private bool factTypeIdFieldSpecified;
         
         private Predecessor[] predecessorsField;
         
@@ -242,34 +174,12 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FactIdSpecified {
-            get {
-                return this.factIdFieldSpecified;
-            }
-            set {
-                this.factIdFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
         public int FactTypeId {
             get {
                 return this.factTypeIdField;
             }
             set {
                 this.factTypeIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool FactTypeIdSpecified {
-            get {
-                return this.factTypeIdFieldSpecified;
-            }
-            set {
-                this.factTypeIdFieldSpecified = value;
             }
         }
         
@@ -296,11 +206,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private long predecessorIdField;
         
-        private bool predecessorIdFieldSpecified;
-        
         private int roleIdField;
-        
-        private bool roleIdFieldSpecified;
         
         /// <remarks/>
         public long PredecessorId {
@@ -313,34 +219,12 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PredecessorIdSpecified {
-            get {
-                return this.predecessorIdFieldSpecified;
-            }
-            set {
-                this.predecessorIdFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
         public int RoleId {
             get {
                 return this.roleIdField;
             }
             set {
                 this.roleIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleIdSpecified {
-            get {
-                return this.roleIdFieldSpecified;
-            }
-            set {
-                this.roleIdFieldSpecified = value;
             }
         }
     }
@@ -356,21 +240,13 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private int declaringTypeIdField;
         
-        private bool declaringTypeIdFieldSpecified;
-        
         private bool isPivotField;
         
-        private bool isPivotFieldSpecified;
-        
         private int roleIdField;
-        
-        private bool roleIdFieldSpecified;
         
         private string roleNameField;
         
         private int targetTypeIdField;
-        
-        private bool targetTypeIdFieldSpecified;
         
         /// <remarks/>
         public int DeclaringTypeId {
@@ -379,17 +255,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.declaringTypeIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DeclaringTypeIdSpecified {
-            get {
-                return this.declaringTypeIdFieldSpecified;
-            }
-            set {
-                this.declaringTypeIdFieldSpecified = value;
             }
         }
         
@@ -404,34 +269,12 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IsPivotSpecified {
-            get {
-                return this.isPivotFieldSpecified;
-            }
-            set {
-                this.isPivotFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
         public int RoleId {
             get {
                 return this.roleIdField;
             }
             set {
                 this.roleIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool RoleIdSpecified {
-            get {
-                return this.roleIdFieldSpecified;
-            }
-            set {
-                this.roleIdFieldSpecified = value;
             }
         }
         
@@ -455,17 +298,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
                 this.targetTypeIdField = value;
             }
         }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TargetTypeIdSpecified {
-            get {
-                return this.targetTypeIdFieldSpecified;
-            }
-            set {
-                this.targetTypeIdFieldSpecified = value;
-            }
-        }
     }
     
     /// <remarks/>
@@ -479,13 +311,9 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private int typeIdField;
         
-        private bool typeIdFieldSpecified;
-        
         private string typeNameField;
         
         private int versionField;
-        
-        private bool versionFieldSpecified;
         
         /// <remarks/>
         public int TypeId {
@@ -494,17 +322,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.typeIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TypeIdSpecified {
-            get {
-                return this.typeIdFieldSpecified;
-            }
-            set {
-                this.typeIdFieldSpecified = value;
             }
         }
         
@@ -526,17 +343,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.versionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool VersionSpecified {
-            get {
-                return this.versionFieldSpecified;
-            }
-            set {
-                this.versionFieldSpecified = value;
             }
         }
     }
@@ -642,16 +448,28 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class GetResponse {
         
-        private FactTree getResultField;
+        private FactTree factTreeField;
+        
+        private long timestampField;
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public FactTree GetResult {
+        public FactTree FactTree {
             get {
-                return this.getResultField;
+                return this.factTreeField;
             }
             set {
-                this.getResultField = value;
+                this.factTreeField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public long Timestamp {
+            get {
+                return this.timestampField;
+            }
+            set {
+                this.timestampField = value;
             }
         }
     }

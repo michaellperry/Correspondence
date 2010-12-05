@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
             get { return new SynchronizationServiceClient().Endpoint.Address.ToString(); }
         }
 
-        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento> callback)
+        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback)
         {
             FactTree pivot = Translate.MementoToFactTree(pivotTree);
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
@@ -47,9 +47,9 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 catch (Exception ex)
                 {
                     HandleException(ex);
-                    factTreeMemento = new FactTreeMemento(pivotTree.DatabaseId, timestamp.Key);
+                    factTreeMemento = new FactTreeMemento(pivotTree.DatabaseId);
                 }
-                callback(factTreeMemento);
+                callback(factTreeMemento, new TimestampID(pivotTree.DatabaseId, timestamp.Key));
             }, null);
 
             // Ensure that the subscription queue gets served.
@@ -172,7 +172,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         private static FactTreeMemento ReadFactTreeFromStorage(BinaryReader factReader)
         {
-            FactTreeMemento factTreeMemento = new FactTreeMemento(0, 0);
+            FactTreeMemento factTreeMemento = new FactTreeMemento(0);
             int factCount = factReader.ReadInt32();
             for (int i = 0; i < factCount; i++)
             {

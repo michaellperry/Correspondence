@@ -16,6 +16,8 @@ namespace UpdateControls.Correspondence.Memory
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
         private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
 
+        private Guid _clientGuid = Guid.NewGuid();
+
         public IDisposable BeginDuration()
         {
             return new Duration();
@@ -23,7 +25,7 @@ namespace UpdateControls.Correspondence.Memory
 
 		public Guid ClientGuid
 		{
-			get { throw new NotImplementedException(); }
+            get { return _clientGuid; }
 		}
 
         public bool GetID(string factName, out FactID id)

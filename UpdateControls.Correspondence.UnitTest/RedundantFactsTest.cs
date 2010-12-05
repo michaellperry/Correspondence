@@ -52,7 +52,7 @@ namespace UpdateControls.Correspondence.UnitTest
 		[TestMethod]
 		public void WhenAFactIsReceived_ThenThatFactIsNotPosted()
 		{
-			FactTreeMemento gameTreeMemento = new FactTreeMemento(0L, 0L);
+			FactTreeMemento gameTreeMemento = new FactTreeMemento(0L);
 			IdentifiedFactMemento gameMemento = CreateGameMemento();
 			IdentifiedFactMemento userMemento = CreateUserMemento("michael");
 			IdentifiedFactMemento playerMemento = CreatePlayerMemento(gameMemento.Id, userMemento.Id, 1);

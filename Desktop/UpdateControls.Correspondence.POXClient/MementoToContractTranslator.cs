@@ -16,12 +16,11 @@ namespace UpdateControls.Correspondence.POXClient
 		private List<FactRole> _roles = new List<FactRole>();
 		private List<Fact> _facts = new List<Fact>();
 
-        public MementoToContractTranslator(long databaseId, long timestampID)
+        public MementoToContractTranslator(long databaseId)
         {
             _targetFactTree = new FactTree()
             {
-                DatabaseId = databaseId,
-                Timestamp = timestampID
+                DatabaseId = databaseId
             };
         }
 

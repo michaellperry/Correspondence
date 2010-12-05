@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence.POXClient
 			get { return _configuration.EndpointBase; }
 		}
 
-		public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento> callback)
+		public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback)
 		{
 			GetRequest request = new GetRequest
 			{
@@ -56,19 +56,19 @@ namespace UpdateControls.Correspondence.POXClient
 							WebResponse webResponse = webRequest.EndGetResponse(a2);
 							Stream responseStream = webResponse.GetResponseStream();
 							GetResponse response = (GetResponse)GetResponseSerializer.Deserialize(responseStream);
-							callback(Translate.FactTreeToMemento(response.GetResult));
+							callback(Translate.FactTreeToMemento(response.FactTree), new TimestampID(response.FactTree.DatabaseId, response.Timestamp));
 						}
 						catch (Exception ex)
 						{
 							HandleException(ex);
-							callback(new FactTreeMemento(pivotTree.DatabaseId, timestamp.Key));
+                            callback(new FactTreeMemento(pivotTree.DatabaseId), new TimestampID(pivotTree.DatabaseId, timestamp.Key));
 						}
 					}, null);
 				}
 				catch (Exception ex)
 				{
 					HandleException(ex);
-					callback(new FactTreeMemento(pivotTree.DatabaseId, timestamp.Key));
+                    callback(new FactTreeMemento(pivotTree.DatabaseId), new TimestampID(pivotTree.DatabaseId, timestamp.Key));
 				}
 			}, null);
 		}

@@ -9,38 +9,26 @@ namespace Reversi.Client.Synchronization
     {
         private Community _community;
 
-        private Thread _thread;
-        private ManualResetEvent _stopping;
-        private AutoResetEvent _wake;
-        private WaitHandle[] _handles;
-
         private string _lastError;
         private Independent _indLastError = new Independent();
 
         public SynchronizationThread(Community community)
         {
             _community = community;
-            _thread = new Thread(SynchronizeProc);
-            _thread.Name = "Correspondence synchronization thread";
-            _stopping = new ManualResetEvent(false);
-            _wake = new AutoResetEvent(false);
-            _handles = new WaitHandle[] { _stopping, _wake };
         }
 
         public void Start()
         {
-            _thread.Start();
+            Wake();
         }
 
         public void Stop()
         {
-            _stopping.Set();
-            _thread.Join();
         }
 
         public void Wake()
         {
-            _wake.Set();
+            _community.BeginSynchronize(SynchronizeCompleted, null);
         }
 
         public string LastError
@@ -64,28 +52,19 @@ namespace Reversi.Client.Synchronization
             }
         }
 
-        private void SynchronizeProc()
+        private void SynchronizeCompleted(IAsyncResult a)
         {
-            while (ShouldContinue())
+            try
             {
-                try
-                {
-                    _community.Synchronize();
-                    LastError = null;
-                }
-                catch (Exception ex)
-                {
-                    LastError = ex.Message;
-                }
+                bool synchronized = _community.EndSynchronize(a);
+                LastError = null;
+                if (synchronized)
+                    Wake();
             }
-        }
-
-        private bool ShouldContinue()
-        {
-            int signalledHandle = WaitHandle.WaitAny(_handles, 1000);
-            return
-                signalledHandle == WaitHandle.WaitTimeout ||
-                _handles[signalledHandle] == _wake;
+            catch (Exception ex)
+            {
+                LastError = ex.Message;
+            }
         }
     }
 }

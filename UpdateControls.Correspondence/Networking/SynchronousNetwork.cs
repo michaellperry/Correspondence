@@ -64,34 +64,34 @@ namespace UpdateControls.Correspondence.Networking
 			return any;
 		}
 
-		private bool SynchronizeIncoming()
-		{
-			bool any = false;
-			foreach (ServerProxy serverProxy in _serverProxies)
-			{
-				foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
-				{
-					foreach (CorrespondenceFact pivot in subscription.Pivots)
-					{
-						if (pivot == null)
-							continue;
+        private bool SynchronizeIncoming()
+        {
+            bool any = false;
+            foreach (ServerProxy serverProxy in _serverProxies)
+            {
+                foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
+                {
+                    foreach (CorrespondenceFact pivot in subscription.Pivots)
+                    {
+                        if (pivot == null)
+                            continue;
 
-						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId, 0L);
-						FactID pivotId = pivot.ID;
-						_model.AddToFactTree(pivotTree, pivotId);
-						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
-						FactTreeMemento messageBody = serverProxy.CommunicationStrategy.Get(pivotTree, pivotId, timestamp);
-						if (messageBody.Facts.Any())
-						{
-							timestamp = _model.ReceiveMessage(messageBody, serverProxy.PeerId);
-							_storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, timestamp);
-							any = true;
-						}
-					}
-				}
-			}
+                        FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+                        FactID pivotId = pivot.ID;
+                        _model.AddToFactTree(pivotTree, pivotId);
+                        TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
+                        GetResultMemento result = serverProxy.CommunicationStrategy.Get(pivotTree, pivotId, timestamp);
+                        if (result.FactTree.Facts.Any())
+                        {
+                            _model.ReceiveMessage(result.FactTree, serverProxy.PeerId);
+                            _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, result.Timestamp);
+                            any = true;
+                        }
+                    }
+                }
+            }
 
-			return any;
-		}
+            return any;
+        }
 	}
 }

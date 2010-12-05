@@ -1,4 +1,5 @@
 ﻿using UpdateControls.Correspondence.Mementos;
+using System;
 
 namespace UpdateControls.Correspondence.Strategy
 {
@@ -6,7 +7,7 @@ namespace UpdateControls.Correspondence.Strategy
     {
         string ProtocolName { get; }
         string PeerName { get; }
-        FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp);
+        GetResultMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp);
         void Post(FactTreeMemento messageBody);
     }
 }

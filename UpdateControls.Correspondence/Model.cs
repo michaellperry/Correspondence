@@ -188,7 +188,7 @@ namespace UpdateControls.Correspondence
 
         public FactTreeMemento GetMessageBodies(ref TimestampID timestamp, int peerId)
 		{
-			FactTreeMemento result = new FactTreeMemento(ClientDatabaseId, 0L);
+			FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
             IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessagesForServer(peerId, timestamp);
 			foreach (MessageMemento message in recentMessages)
 			{
@@ -215,7 +215,7 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public TimestampID ReceiveMessage(FactTreeMemento messageBody, int peerId)
+        public void ReceiveMessage(FactTreeMemento messageBody, int peerId)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
             foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
@@ -245,8 +245,6 @@ namespace UpdateControls.Correspondence
                     HandleException(ex);
                 }
             }
-
-            return new TimestampID(messageBody.DatabaseId, messageBody.Timestamp);
         }
 
         public CorrespondenceFact GetFactByID(FactID id)

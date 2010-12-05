@@ -21,11 +21,11 @@ namespace UpdateControls.Correspondence.WebServiceClient
             get { return _synchronizationService.Address.ToString(); }
         }
 
-        public FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
+        public GetResultMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
             FactTree pivot = Translate.MementoToFactTree(pivotTree);
-            FactTree result = _synchronizationService.CallService(service => service.Get(pivot, pivotId.key, timestamp.Key, _clientGuid));
-            return Translate.FactTreeToMemento(result);
+            GetResult result = _synchronizationService.CallService(service => service.Get(pivot, pivotId.key, timestamp.Key, _clientGuid));
+            return new GetResultMemento(Translate.FactTreeToMemento(result.FactTree), new TimestampID(result.FactTree.DatabaseId, result.Timestamp));
         }
 
         public void Post(FactTreeMemento messageBody)

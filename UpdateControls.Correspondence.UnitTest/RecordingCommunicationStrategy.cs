@@ -30,7 +30,7 @@ namespace UpdateControls.Correspondence.UnitTest
             get { return _innerCommunicationStrategy.PeerName; }
         }
 
-        public FactTreeMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
+        public GetResultMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
             return _innerCommunicationStrategy.Get(pivotTree, pivotId, timestamp);
         }

@@ -138,17 +138,17 @@ namespace UpdateControls.Correspondence.Networking
 						if (pivot == null)
 							continue;
 
-						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId, 0L);
+						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
 						FactID pivotId = pivot.ID;
 						_model.AddToFactTree(pivotTree, pivotId);
 						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
 						communicationStragetyAggregate.Begin();
-						serverProxy.CommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody)
+						serverProxy.CommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, TimestampID newTimestamp)
 						{
 							if (messageBody.Facts.Any())
 							{
 								any = true;
-								TimestampID newTimestamp = _model.ReceiveMessage(messageBody, serverProxy.PeerId);
+                                _model.ReceiveMessage(messageBody, serverProxy.PeerId);
 								lock (this)
 								{
 								    _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, newTimestamp);
