@@ -28,8 +28,6 @@ namespace UpdateControls.Correspondence.WebServiceClient
 
         private System.Collections.ObjectModel.ObservableCollection<FactRole> RolesField;
 
-        private long TimestampField;
-
         private System.Collections.ObjectModel.ObservableCollection<FactType> TypesField;
 
         [System.Runtime.Serialization.DataMemberAttribute()]
@@ -79,23 +77,6 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 {
                     this.RolesField = value;
                     this.RaisePropertyChanged("Roles");
-                }
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public long Timestamp
-        {
-            get
-            {
-                return this.TimestampField;
-            }
-            set
-            {
-                if ((this.TimestampField.Equals(value) != true))
-                {
-                    this.TimestampField = value;
-                    this.RaisePropertyChanged("Timestamp");
                 }
             }
         }
@@ -467,18 +448,74 @@ namespace UpdateControls.Correspondence.WebServiceClient
         }
     }
 
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name = "GetResult", Namespace = "http://correspondence.updatecontrols.com")]
+    public partial class GetResult : object, System.ComponentModel.INotifyPropertyChanged
+    {
+
+        private FactTree FactTreeField;
+
+        private long TimestampField;
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public FactTree FactTree
+        {
+            get
+            {
+                return this.FactTreeField;
+            }
+            set
+            {
+                if ((object.ReferenceEquals(this.FactTreeField, value) != true))
+                {
+                    this.FactTreeField = value;
+                    this.RaisePropertyChanged("FactTree");
+                }
+            }
+        }
+
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Timestamp
+        {
+            get
+            {
+                return this.TimestampField;
+            }
+            set
+            {
+                if ((this.TimestampField.Equals(value) != true))
+                {
+                    this.TimestampField = value;
+                    this.RaisePropertyChanged("Timestamp");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName)
+        {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null))
+            {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace = "http://correspondence.updatecontrols.com", ConfigurationName = "UpdateControls.Correspondence.WebServiceClient.ISynchronizationService")]
     public interface ISynchronizationService
     {
 
         [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "http://correspondence.updatecontrols.com/ISynchronizationService/Get", ReplyAction = "http://correspondence.updatecontrols.com/ISynchronizationService/GetResponse")]
-        System.IAsyncResult BeginGet(FactTree pivotTree, long pivotId, long timestamp, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginGet(FactTree pivotTree, long pivotId, long timestamp, System.Guid clientGuid, System.AsyncCallback callback, object asyncState);
 
-        FactTree EndGet(System.IAsyncResult result);
+        GetResult EndGet(System.IAsyncResult result);
 
         [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "http://correspondence.updatecontrols.com/ISynchronizationService/Post", ReplyAction = "http://correspondence.updatecontrols.com/ISynchronizationService/PostResponse")]
-        System.IAsyncResult BeginPost(FactTree messageBody, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginPost(FactTree messageBody, System.Guid clientGuid, System.AsyncCallback callback, object asyncState);
 
         void EndPost(System.IAsyncResult result);
     }
@@ -501,12 +538,12 @@ namespace UpdateControls.Correspondence.WebServiceClient
             this.results = results;
         }
 
-        public FactTree Result
+        public GetResult Result
         {
             get
             {
                 base.RaiseExceptionIfNecessary();
-                return ((FactTree)(this.results[0]));
+                return ((GetResult)(this.results[0]));
             }
         }
     }
@@ -602,13 +639,13 @@ namespace UpdateControls.Correspondence.WebServiceClient
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CloseCompleted;
 
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult ISynchronizationService.BeginGet(FactTree pivotTree, long pivotId, long timestamp, System.AsyncCallback callback, object asyncState)
+        System.IAsyncResult ISynchronizationService.BeginGet(FactTree pivotTree, long pivotId, long timestamp, System.Guid clientGuid, System.AsyncCallback callback, object asyncState)
         {
-            return base.Channel.BeginGet(pivotTree, pivotId, timestamp, callback, asyncState);
+            return base.Channel.BeginGet(pivotTree, pivotId, timestamp, clientGuid, callback, asyncState);
         }
 
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        FactTree ISynchronizationService.EndGet(System.IAsyncResult result)
+        GetResult ISynchronizationService.EndGet(System.IAsyncResult result)
         {
             return base.Channel.EndGet(result);
         }
@@ -618,12 +655,13 @@ namespace UpdateControls.Correspondence.WebServiceClient
             FactTree pivotTree = ((FactTree)(inValues[0]));
             long pivotId = ((long)(inValues[1]));
             long timestamp = ((long)(inValues[2]));
-            return ((ISynchronizationService)(this)).BeginGet(pivotTree, pivotId, timestamp, callback, asyncState);
+            System.Guid clientGuid = ((System.Guid)(inValues[3]));
+            return ((ISynchronizationService)(this)).BeginGet(pivotTree, pivotId, timestamp, clientGuid, callback, asyncState);
         }
 
         private object[] OnEndGet(System.IAsyncResult result)
         {
-            FactTree retVal = ((ISynchronizationService)(this)).EndGet(result);
+            GetResult retVal = ((ISynchronizationService)(this)).EndGet(result);
             return new object[] {
                     retVal};
         }
@@ -637,12 +675,12 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
 
-        public void GetAsync(FactTree pivotTree, long pivotId, long timestamp)
+        public void GetAsync(FactTree pivotTree, long pivotId, long timestamp, System.Guid clientGuid)
         {
-            this.GetAsync(pivotTree, pivotId, timestamp, null);
+            this.GetAsync(pivotTree, pivotId, timestamp, clientGuid, null);
         }
 
-        public void GetAsync(FactTree pivotTree, long pivotId, long timestamp, object userState)
+        public void GetAsync(FactTree pivotTree, long pivotId, long timestamp, System.Guid clientGuid, object userState)
         {
             if ((this.onBeginGetDelegate == null))
             {
@@ -659,13 +697,14 @@ namespace UpdateControls.Correspondence.WebServiceClient
             base.InvokeAsync(this.onBeginGetDelegate, new object[] {
                         pivotTree,
                         pivotId,
-                        timestamp}, this.onEndGetDelegate, this.onGetCompletedDelegate, userState);
+                        timestamp,
+                        clientGuid}, this.onEndGetDelegate, this.onGetCompletedDelegate, userState);
         }
 
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult ISynchronizationService.BeginPost(FactTree messageBody, System.AsyncCallback callback, object asyncState)
+        System.IAsyncResult ISynchronizationService.BeginPost(FactTree messageBody, System.Guid clientGuid, System.AsyncCallback callback, object asyncState)
         {
-            return base.Channel.BeginPost(messageBody, callback, asyncState);
+            return base.Channel.BeginPost(messageBody, clientGuid, callback, asyncState);
         }
 
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -677,7 +716,8 @@ namespace UpdateControls.Correspondence.WebServiceClient
         private System.IAsyncResult OnBeginPost(object[] inValues, System.AsyncCallback callback, object asyncState)
         {
             FactTree messageBody = ((FactTree)(inValues[0]));
-            return ((ISynchronizationService)(this)).BeginPost(messageBody, callback, asyncState);
+            System.Guid clientGuid = ((System.Guid)(inValues[1]));
+            return ((ISynchronizationService)(this)).BeginPost(messageBody, clientGuid, callback, asyncState);
         }
 
         private object[] OnEndPost(System.IAsyncResult result)
@@ -695,12 +735,12 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
 
-        public void PostAsync(FactTree messageBody)
+        public void PostAsync(FactTree messageBody, System.Guid clientGuid)
         {
-            this.PostAsync(messageBody, null);
+            this.PostAsync(messageBody, clientGuid, null);
         }
 
-        public void PostAsync(FactTree messageBody, object userState)
+        public void PostAsync(FactTree messageBody, System.Guid clientGuid, object userState)
         {
             if ((this.onBeginPostDelegate == null))
             {
@@ -715,7 +755,8 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 this.onPostCompletedDelegate = new System.Threading.SendOrPostCallback(this.OnPostCompleted);
             }
             base.InvokeAsync(this.onBeginPostDelegate, new object[] {
-                        messageBody}, this.onEndPostDelegate, this.onPostCompletedDelegate, userState);
+                        messageBody,
+                        clientGuid}, this.onEndPostDelegate, this.onPostCompletedDelegate, userState);
         }
 
         private System.IAsyncResult OnBeginOpen(object[] inValues, System.AsyncCallback callback, object asyncState)
@@ -815,27 +856,29 @@ namespace UpdateControls.Correspondence.WebServiceClient
             {
             }
 
-            public System.IAsyncResult BeginGet(FactTree pivotTree, long pivotId, long timestamp, System.AsyncCallback callback, object asyncState)
+            public System.IAsyncResult BeginGet(FactTree pivotTree, long pivotId, long timestamp, System.Guid clientGuid, System.AsyncCallback callback, object asyncState)
             {
-                object[] _args = new object[3];
+                object[] _args = new object[4];
                 _args[0] = pivotTree;
                 _args[1] = pivotId;
                 _args[2] = timestamp;
+                _args[3] = clientGuid;
                 System.IAsyncResult _result = base.BeginInvoke("Get", _args, callback, asyncState);
                 return _result;
             }
 
-            public FactTree EndGet(System.IAsyncResult result)
+            public GetResult EndGet(System.IAsyncResult result)
             {
                 object[] _args = new object[0];
-                FactTree _result = ((FactTree)(base.EndInvoke("Get", _args, result)));
+                GetResult _result = ((GetResult)(base.EndInvoke("Get", _args, result)));
                 return _result;
             }
 
-            public System.IAsyncResult BeginPost(FactTree messageBody, System.AsyncCallback callback, object asyncState)
+            public System.IAsyncResult BeginPost(FactTree messageBody, System.Guid clientGuid, System.AsyncCallback callback, object asyncState)
             {
-                object[] _args = new object[1];
+                object[] _args = new object[2];
                 _args[0] = messageBody;
+                _args[1] = clientGuid;
                 System.IAsyncResult _result = base.BeginInvoke("Post", _args, callback, asyncState);
                 return _result;
             }
@@ -849,14 +892,13 @@ namespace UpdateControls.Correspondence.WebServiceClient
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace = "http://correspondence.updatecontrols.com", ConfigurationName = "UpdateControls.Correspondence.WebServiceClient.WindowsPhone.IWindowsPhonePushServ" +
-        "ice")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace = "http://correspondence.updatecontrols.com", ConfigurationName = "UpdateControls.Correspondence.WebServiceClient.IWindowsPhonePushService")]
     public interface IWindowsPhonePushService
     {
 
         [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "http://correspondence.updatecontrols.com/IWindowsPhonePushService/Subscribe", ReplyAction = "http://correspondence.updatecontrols.com/IWindowsPhonePushService/SubscribeRespon" +
             "se")]
-        System.IAsyncResult BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState);
+        System.IAsyncResult BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.Guid clientGuid, System.AsyncCallback callback, object asyncState);
 
         void EndSubscribe(System.IAsyncResult result);
 
@@ -963,9 +1005,9 @@ namespace UpdateControls.Correspondence.WebServiceClient
         public event System.EventHandler<System.ComponentModel.AsyncCompletedEventArgs> CloseCompleted;
 
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.IAsyncResult IWindowsPhonePushService.BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState)
+        System.IAsyncResult IWindowsPhonePushService.BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.Guid clientGuid, System.AsyncCallback callback, object asyncState)
         {
-            return base.Channel.BeginSubscribe(pivotTree, pivotId, deviceUri, callback, asyncState);
+            return base.Channel.BeginSubscribe(pivotTree, pivotId, deviceUri, clientGuid, callback, asyncState);
         }
 
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -979,7 +1021,8 @@ namespace UpdateControls.Correspondence.WebServiceClient
             FactTree pivotTree = ((FactTree)(inValues[0]));
             long pivotId = ((long)(inValues[1]));
             string deviceUri = ((string)(inValues[2]));
-            return ((IWindowsPhonePushService)(this)).BeginSubscribe(pivotTree, pivotId, deviceUri, callback, asyncState);
+            System.Guid clientGuid = ((System.Guid)(inValues[3]));
+            return ((IWindowsPhonePushService)(this)).BeginSubscribe(pivotTree, pivotId, deviceUri, clientGuid, callback, asyncState);
         }
 
         private object[] OnEndSubscribe(System.IAsyncResult result)
@@ -997,12 +1040,12 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
 
-        public void SubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri)
+        public void SubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri, System.Guid clientGuid)
         {
-            this.SubscribeAsync(pivotTree, pivotId, deviceUri, null);
+            this.SubscribeAsync(pivotTree, pivotId, deviceUri, clientGuid, null);
         }
 
-        public void SubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri, object userState)
+        public void SubscribeAsync(FactTree pivotTree, long pivotId, string deviceUri, System.Guid clientGuid, object userState)
         {
             if ((this.onBeginSubscribeDelegate == null))
             {
@@ -1019,7 +1062,8 @@ namespace UpdateControls.Correspondence.WebServiceClient
             base.InvokeAsync(this.onBeginSubscribeDelegate, new object[] {
                         pivotTree,
                         pivotId,
-                        deviceUri}, this.onEndSubscribeDelegate, this.onSubscribeCompletedDelegate, userState);
+                        deviceUri,
+                        clientGuid}, this.onEndSubscribeDelegate, this.onSubscribeCompletedDelegate, userState);
         }
 
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -1179,12 +1223,13 @@ namespace UpdateControls.Correspondence.WebServiceClient
             {
             }
 
-            public System.IAsyncResult BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.AsyncCallback callback, object asyncState)
+            public System.IAsyncResult BeginSubscribe(FactTree pivotTree, long pivotId, string deviceUri, System.Guid clientGuid, System.AsyncCallback callback, object asyncState)
             {
-                object[] _args = new object[3];
+                object[] _args = new object[4];
                 _args[0] = pivotTree;
                 _args[1] = pivotId;
                 _args[2] = deviceUri;
+                _args[3] = clientGuid;
                 System.IAsyncResult _result = base.BeginInvoke("Subscribe", _args, callback, asyncState);
                 return _result;
             }

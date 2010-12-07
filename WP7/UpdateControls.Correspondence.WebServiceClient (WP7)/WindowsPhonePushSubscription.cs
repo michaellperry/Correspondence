@@ -9,14 +9,16 @@ namespace UpdateControls.Correspondence.WebServiceClient
         private long _pivotId;
         private string _subscribedTo = null;
         private bool _callPending = false;
+        private Guid _clientGuid;
 
         private object _monitor;
 
-        public WindowsPhonePushSubscription(FactTree pivot, long pivotId, object monitor)
+        public WindowsPhonePushSubscription(FactTree pivot, long pivotId, Guid clientGuid, object monitor)
         {
             _pivot = pivot;
             _pivotId = pivotId;
             _monitor = monitor;
+            _clientGuid = clientGuid;
         }
 
         public bool ShouldBeSubscribed { get; set; }
@@ -59,6 +61,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
                             _pivot,
                             _pivotId,
                             deviceUri,
+                            _clientGuid,
                             delegate(IAsyncResult a)
                             {
                                 try

@@ -36,20 +36,23 @@ namespace UpdateControls.Correspondence.WebServiceClient
         {
             FactTree pivot = Translate.MementoToFactTree(pivotTree);
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
-            synchronizationService.BeginGet(pivot, pivotId.key, timestamp.Key, delegate(IAsyncResult result)
+            synchronizationService.BeginGet(pivot, pivotId.key, timestamp.Key, clientGuid, delegate(IAsyncResult result)
             {
                 FactTreeMemento factTreeMemento;
+                TimestampID newTimestamp;
                 try
                 {
-                    FactTree factTree = synchronizationService.EndGet(result);
-                    factTreeMemento = Translate.FactTreeToMemento(factTree);
+                    GetResult getResult = synchronizationService.EndGet(result);
+                    factTreeMemento = Translate.FactTreeToMemento(getResult.FactTree);
+                    newTimestamp = new TimestampID(getResult.FactTree.DatabaseId, getResult.Timestamp);
                 }
                 catch (Exception ex)
                 {
                     HandleException(ex);
                     factTreeMemento = new FactTreeMemento(pivotTree.DatabaseId);
+                    newTimestamp = timestamp;
                 }
-                callback(factTreeMemento, new TimestampID(pivotTree.DatabaseId, timestamp.Key));
+                callback(factTreeMemento, newTimestamp);
             }, null);
 
             // Ensure that the subscription queue gets served.
@@ -62,7 +65,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
         public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback)
         {
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
-            synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), delegate(IAsyncResult result)
+            synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), clientGuid, delegate(IAsyncResult result)
             {
                 try
                 {
@@ -87,7 +90,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 if (!_subscriptionByFactId.TryGetValue(pivotId, out subscription))
                 {
                     FactTree pivot = Translate.MementoToFactTree(pivotTree);
-                    subscription = new WindowsPhonePushSubscription(pivot, pivotId.key, _monitor);
+                    subscription = new WindowsPhonePushSubscription(pivot, pivotId.key, clientGuid, _monitor);
                     _subscriptionByFactId.Add(pivotId, subscription);
                 }
                 subscription.ShouldBeSubscribed = true;
