@@ -17,9 +17,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class FactTree {
@@ -82,9 +80,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class Fact {
@@ -145,9 +141,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class Predecessor {
@@ -181,9 +175,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class FactRole {
@@ -256,9 +248,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class FactType {
@@ -305,9 +295,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class ArrayOfFact {
@@ -328,9 +316,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class ArrayOfPredecessor {
@@ -351,9 +337,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class ArrayOfFactRole {
@@ -374,9 +358,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=true)]
     public partial class ArrayOfFactType {
@@ -397,9 +379,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class GetRequest {
@@ -459,9 +439,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class GetResponse {
@@ -495,9 +473,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class PostRequest {
@@ -531,9 +507,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class PostResponse {
@@ -541,9 +515,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class SubscribeRequest {
@@ -616,9 +588,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class UnsubscribeRequest {
@@ -678,9 +648,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class SubscribeResponse {
@@ -688,9 +656,7 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
     
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://correspondence.updatecontrols.com/pox/1.0")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://correspondence.updatecontrols.com/pox/1.0", IsNullable=false)]
     public partial class UnsubscribeResponse {

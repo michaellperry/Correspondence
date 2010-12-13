@@ -99,9 +99,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient.UnitTest", "Desktop\UpdateControls.Correspondence.POXClient.UnitTest\UpdateControls.Correspondence.POXClient.UnitTest.csproj", "{3F7356A7-C107-4497-A89E-3E1C21A23718}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient (WP7)", "WP7\UpdateControls.Correspondence.POXClient (WP7)\UpdateControls.Correspondence.POXClient (WP7).csproj", "{896FC2DB-34B3-4F20-812E-15AE88D7398C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 30
+		SccNumberOfProjects = 31
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -205,6 +207,10 @@ Global
 		SccProjectTopLevelParentUniqueName29 = Correspondence.sln
 		SccProjectName29 = Desktop/UpdateControls.Correspondence.POXClient.UnitTest
 		SccLocalPath29 = Desktop\\UpdateControls.Correspondence.POXClient.UnitTest
+		SccProjectUniqueName30 = WP7\\UpdateControls.Correspondence.POXClient\u0020(WP7)\\UpdateControls.Correspondence.POXClient\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName30 = Correspondence.sln
+		SccProjectName30 = WP7/UpdateControls.Correspondence.POXClient\u0020(WP7)
+		SccLocalPath30 = WP7\\UpdateControls.Correspondence.POXClient\u0020(WP7)
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -331,6 +337,10 @@ Global
 		{3F7356A7-C107-4497-A89E-3E1C21A23718}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F7356A7-C107-4497-A89E-3E1C21A23718}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F7356A7-C107-4497-A89E-3E1C21A23718}.Release|Any CPU.Build.0 = Release|Any CPU
+		{896FC2DB-34B3-4F20-812E-15AE88D7398C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896FC2DB-34B3-4F20-812E-15AE88D7398C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896FC2DB-34B3-4F20-812E-15AE88D7398C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896FC2DB-34B3-4F20-812E-15AE88D7398C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -350,6 +360,7 @@ Global
 		{80F0BD6B-2746-41B0-9CC0-ED8CDF1DA35B} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{B4245EFD-8EEE-4D38-AA3A-F5D51516037C} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{426A7DF6-3C39-4125-9AD3-31D93208B269} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
+		{896FC2DB-34B3-4F20-812E-15AE88D7398C} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{9638F018-26C5-4E6B-B355-F8E37F86D1C0} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{510D6813-AE9B-4F28-9B77-390F36DF958A} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}

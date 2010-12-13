@@ -8,7 +8,7 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.POXClient
 {
-    public class POXAsynchronousCommunicationStrategy : IAsynchronousCommunicationStrategy
+    public partial class POXAsynchronousCommunicationStrategy : IAsynchronousCommunicationStrategy
 	{
         private static XmlSerializerNamespaces DefaultNamespaces = DefineNamespaces();
 		private static XmlSerializer GetRequestSerializer = new XmlSerializer(typeof(GetRequest));
@@ -42,7 +42,7 @@ namespace UpdateControls.Correspondence.POXClient
 				Timestamp = timestamp.Key,
 				ClientGuid = clientGuid.ToString()
 			};
-			WebRequest webRequest = WebRequest.CreateDefault(new Uri(_configuration.EndpointBase));
+			WebRequest webRequest = WebRequest.Create(new Uri(_configuration.EndpointBase));
 			webRequest.Method = "POST";
 			webRequest.BeginGetRequestStream(a1 =>
 			{
@@ -81,7 +81,7 @@ namespace UpdateControls.Correspondence.POXClient
 				MessageBody = Translate.MementoToFactTree(messageBody),
 				ClientGuid = clientGuid.ToString()
 			};
-			WebRequest webRequest = WebRequest.CreateDefault(new Uri(_configuration.EndpointBase));
+			WebRequest webRequest = WebRequest.Create(new Uri(_configuration.EndpointBase));
 			webRequest.Method = "POST";
 			webRequest.BeginGetRequestStream(a1 =>
 			{
@@ -114,12 +114,6 @@ namespace UpdateControls.Correspondence.POXClient
 		}
 
 		public event Action<FactTreeMemento> MessageReceived;
-
-		public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
-		{
-			// Push notification is not supported in the desktop version.
-			return new NoOpPushSubscription();
-		}
 
 		private void HandleException(Exception ex)
 		{
