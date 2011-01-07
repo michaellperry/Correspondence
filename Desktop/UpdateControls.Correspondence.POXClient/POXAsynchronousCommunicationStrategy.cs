@@ -30,7 +30,7 @@ namespace UpdateControls.Correspondence.POXClient
 
 		public string PeerName
 		{
-			get { return _configuration.EndpointBase; }
+			get { return _configuration.Endpoint; }
 		}
 
 		public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback)
@@ -42,7 +42,7 @@ namespace UpdateControls.Correspondence.POXClient
 				Timestamp = timestamp.Key,
 				ClientGuid = clientGuid.ToString()
 			};
-			WebRequest webRequest = WebRequest.Create(new Uri(_configuration.EndpointBase));
+			WebRequest webRequest = WebRequest.Create(new Uri(_configuration.Endpoint));
 			webRequest.Method = "POST";
 			webRequest.BeginGetRequestStream(a1 =>
 			{
@@ -81,7 +81,7 @@ namespace UpdateControls.Correspondence.POXClient
 				MessageBody = Translate.MementoToFactTree(messageBody),
 				ClientGuid = clientGuid.ToString()
 			};
-			WebRequest webRequest = WebRequest.Create(new Uri(_configuration.EndpointBase));
+			WebRequest webRequest = WebRequest.Create(new Uri(_configuration.Endpoint));
 			webRequest.Method = "POST";
 			webRequest.BeginGetRequestStream(a1 =>
 			{

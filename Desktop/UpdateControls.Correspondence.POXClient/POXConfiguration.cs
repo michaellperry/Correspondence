@@ -3,16 +3,16 @@ namespace UpdateControls.Correspondence.POXClient
 {
 	public class POXConfiguration
 	{
-		private string _endpointBase;
+		private string _endpoint;
 
-		public POXConfiguration(string endpointBase)
+		public POXConfiguration(string endpoint)
 		{
-			_endpointBase = endpointBase;
+			_endpoint = endpoint;
 		}
 
-		public string EndpointBase
+		public string Endpoint
 		{
-			get { return _endpointBase; }
+			get { return _endpoint; }
 		}
 	}
 }

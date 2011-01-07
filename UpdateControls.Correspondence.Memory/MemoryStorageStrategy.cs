@@ -40,9 +40,9 @@ namespace UpdateControls.Correspondence.Memory
 
         public FactMemento Load(FactID id)
         {
-            IdentifiedFactMemento fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id)).IdentifiedFactMemento;
-            if (fact != null)
-                return fact.Memento;
+            FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
+            if (factRecord != null)
+                return factRecord.IdentifiedFactMemento.Memento;
             else
                 throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
