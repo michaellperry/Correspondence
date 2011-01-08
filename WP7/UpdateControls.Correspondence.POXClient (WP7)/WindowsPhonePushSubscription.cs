@@ -52,7 +52,7 @@ namespace UpdateControls.Correspondence.POXClient
                             PivotId = _pivotId,
                             DeviceUri = deviceUri
                         };
-                        WebRequest webRequest = WebRequest.Create(new Uri(_configuration.EndpointBase));
+                        WebRequest webRequest = WebRequest.Create(new Uri(_configuration.Endpoint));
                         webRequest.Method = "POST";
                         webRequest.BeginGetRequestStream(a1 =>
                         {
@@ -94,7 +94,7 @@ namespace UpdateControls.Correspondence.POXClient
                             DeviceUri = deviceUri,
                             ClientGuid = _clientGuid.ToString()
                         };
-                        WebRequest webRequest = WebRequest.Create(new Uri(_configuration.EndpointBase));
+                        WebRequest webRequest = WebRequest.Create(new Uri(_configuration.Endpoint));
                         webRequest.Method = "POST";
                         webRequest.BeginGetRequestStream(a1 =>
                         {
