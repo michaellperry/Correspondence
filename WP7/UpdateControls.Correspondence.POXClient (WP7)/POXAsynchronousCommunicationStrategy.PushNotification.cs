@@ -10,7 +10,6 @@ namespace UpdateControls.Correspondence.POXClient
 {
     public partial class POXAsynchronousCommunicationStrategy
     {
-        private string _channelName;
         private HttpNotificationChannel _httpChannel;
         private Dictionary<FactID, WindowsPhonePushSubscription> _subscriptionByFactId = new Dictionary<FactID, WindowsPhonePushSubscription>();
         private bool _receivedChannelUri = false;
@@ -40,7 +39,7 @@ namespace UpdateControls.Correspondence.POXClient
             if (_httpChannel == null)
             {
                 //First, try to pick up existing channel
-                _httpChannel = HttpNotificationChannel.Find(_channelName);
+                _httpChannel = HttpNotificationChannel.Find(_configuration.ChannelName);
                 if (_httpChannel != null)
                 {
                     _receivedChannelUri = true;
@@ -49,7 +48,7 @@ namespace UpdateControls.Correspondence.POXClient
                 else
                 {
                     //Create the channel
-                    _httpChannel = new HttpNotificationChannel(_channelName, "UpdateControls.Correspondence");
+                    _httpChannel = new HttpNotificationChannel(_configuration.ChannelName, "UpdateControls.Correspondence");
                     SubscribeToChannelEvents();
                 }
             }
