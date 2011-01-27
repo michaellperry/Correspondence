@@ -54,6 +54,7 @@
     <Compile Include="POXAsynchronousCommunicationStrategy.cs" />
     <Compile Include="POXAsynchronousCommunicationStrategy.PushNotification.cs" />
     <Compile Include="POXConfiguration.cs" />
+    <Compile Include="POXHttpRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Translate.cs" />
   </ItemGroup>

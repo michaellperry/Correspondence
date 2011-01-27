@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="Contract\Contract.cs" />
     <Compile Include="POXAsynchronousCommunicationStrategy.PushNotification.cs" />
+    <Compile Include="POXHttpRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WindowsPhonePushSubscription.cs" />
   </ItemGroup>
