@@ -34,7 +34,7 @@ namespace UpdateControls.Correspondence.POXClient
                 _webRequest.ContentType = "text/xml";
             }
 
-            private void Begin()
+            public void Begin()
             {
                 _webRequest.BeginGetRequestStream(GetRequestStream, null);
             }
@@ -80,7 +80,7 @@ namespace UpdateControls.Correspondence.POXClient
             Action<TResponse> success,
             Action<Exception> failure)
         {
-            var handler = new POXHttpRequestHandler<TRequest, TResponse>(endpoint, request, success, failure);
+            new POXHttpRequestHandler<TRequest, TResponse>(endpoint, request, success, failure).Begin();
         }
 
         private static XmlSerializerNamespaces DefineNamespaces()
