@@ -26,8 +26,7 @@ namespace UpdateControls.Correspondence.POXClient
         public void AddRole(FactRole role)
         {
             CorrespondenceFactType declaringType = GetFactType(role.DeclaringTypeId);
-            CorrespondenceFactType targetType = role.TargetTypeId == 0 ? null : GetFactType(role.TargetTypeId);
-            _roleById.Add(role.RoleId, new RoleMemento(declaringType, role.RoleName, targetType, role.IsPivot));
+            _roleById.Add(role.RoleId, new RoleMemento(declaringType, role.RoleName, null, role.IsPivot));
         }
 
         public void AddFact(Fact fact)

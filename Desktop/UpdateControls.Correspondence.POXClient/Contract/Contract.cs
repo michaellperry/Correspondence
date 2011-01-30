@@ -196,8 +196,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private string roleNameField;
         
-        private int targetTypeIdField;
-        
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
         public int DeclaringTypeId {
@@ -239,17 +237,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.roleNameField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-        public int TargetTypeId {
-            get {
-                return this.targetTypeIdField;
-            }
-            set {
-                this.targetTypeIdField = value;
             }
         }
     }

@@ -87,7 +87,6 @@ namespace UpdateControls.Correspondence.POXClient
                     RoleId = id,
                     RoleName = role.RoleName,
                     DeclaringTypeId = AddFactType(role.DeclaringType),
-                    TargetTypeId = role.TargetType == null ? 0 : AddFactType(role.TargetType),
                     IsPivot = role.IsPivot
                 });
                 _idByRole.Add(role, id);
