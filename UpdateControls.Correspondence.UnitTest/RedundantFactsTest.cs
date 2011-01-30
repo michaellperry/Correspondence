@@ -8,6 +8,7 @@ using Reversi.Model;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Mementos;
 using System.IO;
+using UpdateControls.Correspondence.FieldSerializer;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -125,18 +126,20 @@ namespace UpdateControls.Correspondence.UnitTest
 
 		private static byte[] StringToBinary(string value)
 		{
+            StringFieldSerializer serializer = new StringFieldSerializer();
 			MemoryStream memoryStream = new MemoryStream();
 			BinaryWriter writer = new BinaryWriter(memoryStream);
-			writer.Write(value);
+            serializer.WriteData(writer, value);
 			writer.Flush();
 			return memoryStream.ToArray();
 		}
 
 		private static byte[] IntToBinary(int value)
 		{
+            IntFieldSerializer serializer = new IntFieldSerializer();
 			MemoryStream memoryStream = new MemoryStream();
 			BinaryWriter writer = new BinaryWriter(memoryStream);
-			writer.Write(value);
+            serializer.WriteData(writer, value);
 			writer.Flush();
 			return memoryStream.ToArray();
 		}
