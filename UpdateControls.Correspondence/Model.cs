@@ -10,7 +10,9 @@ namespace UpdateControls.Correspondence
 {
     class Model
     {
-		private const long ClientDatabaseId = 0;
+        public const short MaxDataLength = 1024;
+
+        private const long ClientDatabaseId = 0;
 
 		private Community _community;
 		private IStorageStrategy _storageStrategy;
@@ -362,6 +364,8 @@ namespace UpdateControls.Correspondence
                     factory.WriteFactData(prototype, output);
                 }
                 memento.Data = data.ToArray();
+                if (memento.Data.Length > MaxDataLength)
+                    throw new CorrespondenceException(string.Format("Fact data length {0} exceeded the maximum bytes allowable ({1}).", memento.Data.Length, Model.MaxDataLength));
             }
 
             return memento;

@@ -9,7 +9,7 @@ namespace UpdateControls.Correspondence
 	/// </summary>
 	public class CorrespondenceFact
 	{
-		private FactID _id;
+        private FactID _id;
         private IDictionary<RoleMemento, PredecessorBase> _predecessor = new Dictionary<RoleMemento, PredecessorBase>();
         private IDictionary<QueryDefinition, List<IQueryResult>> _resultByQueryDefinition = new Dictionary<QueryDefinition, List<IQueryResult>>();
 

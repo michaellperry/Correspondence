@@ -7,12 +7,12 @@ namespace UpdateControls.Correspondence.FieldSerializer
 	{
 		public object ReadData(BinaryReader input)
 		{
-			return input.ReadInt64();
+			return BinaryHelper.ReadLong(input);
 		}
 
 		public void WriteData(BinaryWriter output, object value)
 		{
-			output.Write((long)value);
+            BinaryHelper.WriteLong((long)value, output);
 		}
 	}
 }

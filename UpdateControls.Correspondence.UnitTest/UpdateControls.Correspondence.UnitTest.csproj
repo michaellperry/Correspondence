@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChallengeTest.cs" />
+    <Compile Include="FieldSerializerTest.cs" />
     <Compile Include="MultiCommunityTest.cs" />
     <Compile Include="OutcomeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

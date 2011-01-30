@@ -4,16 +4,16 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.FieldSerializer
 {
-    class IntFieldSerializer : IFieldSerializer
+    public class IntFieldSerializer : IFieldSerializer
     {
         public object ReadData(BinaryReader input)
         {
-            return input.ReadInt32();
+            return BinaryHelper.ReadInt(input);
         }
 
         public void WriteData(BinaryWriter output, object value)
         {
-            output.Write((int)value);
+            BinaryHelper.WriteInt((int)value, output);
         }
     }
 }

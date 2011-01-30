@@ -100,6 +100,9 @@
     <Compile Include="..\..\UpdateControls.Correspondence\FactMetadata.cs">
       <Link>FactMetadata.cs</Link>
     </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence\FieldSerializer\BinaryHelper.cs">
+      <Link>FieldSerializer\BinaryHelper.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence\FieldSerializer\ByteFieldSerializer.cs">
       <Link>FieldSerializer\ByteFieldSerializer.cs</Link>
     </Compile>
