@@ -25,7 +25,7 @@ namespace UpdateControls.Correspondence.POXClient
                 if (!_subscriptionByFactId.TryGetValue(pivotId, out subscription))
                 {
                     FactTree pivot = Translate.MementoToFactTree(pivotTree);
-                    subscription = new WindowsPhonePushSubscription(_configuration, pivot, pivotId.key, clientGuid, _monitor);
+                    subscription = new WindowsPhonePushSubscription(_configuration, pivot, pivotId.key, clientGuid, _monitor, UpdateSubscriptions);
                     _subscriptionByFactId.Add(pivotId, subscription);
                 }
                 subscription.ShouldBeSubscribed = true;

@@ -100,19 +100,19 @@
   <xs:element name="SubscribeRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="PivotTree" nillable="true" type="tns:FactTree" />
-        <xs:element minOccurs="0" name="PivotId" type="xs:long" />
-        <xs:element minOccurs="0" name="DeviceUri" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="ClientGuid" type="xs:string" />
+        <xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
+        <xs:element name="PivotId" type="xs:long" />
+        <xs:element name="DeviceUri" nillable="true" type="xs:string" />
+        <xs:element name="ClientGuid" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="UnsubscribeRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="PivotTree" nillable="true" type="tns:FactTree" />
-        <xs:element minOccurs="0" name="PivotId" type="xs:long" />
-        <xs:element minOccurs="0" name="DeviceUri" nillable="true" type="xs:string" />
+        <xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
+        <xs:element name="PivotId" type="xs:long" />
+        <xs:element name="DeviceUri" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

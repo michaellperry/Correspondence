@@ -539,8 +539,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private long pivotIdField;
         
-        private bool pivotIdFieldSpecified;
-        
         private string deviceUriField;
         
         private string clientGuidField;
@@ -564,17 +562,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.pivotIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PivotIdSpecified {
-            get {
-                return this.pivotIdFieldSpecified;
-            }
-            set {
-                this.pivotIdFieldSpecified = value;
             }
         }
         
@@ -614,8 +601,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
         
         private long pivotIdField;
         
-        private bool pivotIdFieldSpecified;
-        
         private string deviceUriField;
         
         /// <remarks/>
@@ -637,17 +622,6 @@ namespace UpdateControls.Correspondence.POXClient.Contract {
             }
             set {
                 this.pivotIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool PivotIdSpecified {
-            get {
-                return this.pivotIdFieldSpecified;
-            }
-            set {
-                this.pivotIdFieldSpecified = value;
             }
         }
         

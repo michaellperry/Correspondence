@@ -1,8 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Net;
-using System.Xml.Serialization;
-using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.POXClient.Contract;
 using UpdateControls.Correspondence.Strategy;
 
@@ -10,12 +6,6 @@ namespace UpdateControls.Correspondence.POXClient
 {
     public class WindowsPhonePushSubscription : IPushSubscription
     {
-        private static XmlSerializerNamespaces DefaultNamespaces = DefineNamespaces();
-        private static XmlSerializer SubscribeRequestSerializer = new XmlSerializer(typeof(SubscribeRequest));
-        private static XmlSerializer SubscribeResponseSerializer = new XmlSerializer(typeof(SubscribeResponse));
-        private static XmlSerializer UnsubscribeRequestSerializer = new XmlSerializer(typeof(UnsubscribeRequest));
-        private static XmlSerializer UnsubscribeResponseSerializer = new XmlSerializer(typeof(UnsubscribeResponse));
-
         private POXConfiguration _configuration;
 
         private FactTree _pivot;
@@ -25,9 +15,11 @@ namespace UpdateControls.Correspondence.POXClient
         private bool _callPending = false;
 
         private object _monitor;
+        private Action _updateSubscriptions;
 
-        public WindowsPhonePushSubscription(POXConfiguration configuration, FactTree pivot, long pivotId, Guid clientGuid, object monitor)
+        public WindowsPhonePushSubscription(POXConfiguration configuration, FactTree pivot, long pivotId, Guid clientGuid, object monitor, Action updateSubscriptions)
         {
+            _updateSubscriptions = updateSubscriptions;
             _configuration = configuration;
             _pivot = pivot;
             _pivotId = pivotId;
@@ -43,7 +35,7 @@ namespace UpdateControls.Correspondence.POXClient
             {
                 if (!_callPending)
                 {
-                    if ((_subscribedTo != null && !ShouldBeSubscribed) || (_subscribedTo != deviceUri))
+                    if (_subscribedTo != null && (!ShouldBeSubscribed || _subscribedTo != deviceUri))
                     {
                         _callPending = true;
                         UnsubscribeRequest request = new UnsubscribeRequest
@@ -52,39 +44,14 @@ namespace UpdateControls.Correspondence.POXClient
                             PivotId = _pivotId,
                             DeviceUri = deviceUri
                         };
-                        WebRequest webRequest = WebRequest.Create(new Uri(_configuration.Endpoint));
-                        webRequest.Method = "POST";
-                        webRequest.BeginGetRequestStream(a1 =>
-                        {
-                            try
-                            {
-                                Stream requestStream = webRequest.EndGetRequestStream(a1);
-                                UnsubscribeRequestSerializer.Serialize(requestStream, request, DefaultNamespaces);
-                                webRequest.BeginGetResponse(a2 =>
-                                {
-                                    try
-                                    {
-                                        WebResponse webResponse = webRequest.EndGetResponse(a2);
-                                        Stream responseStream = webResponse.GetResponseStream();
-                                        UnsubscribeResponse response = (UnsubscribeResponse)UnsubscribeResponseSerializer.Deserialize(responseStream);
-                                        UnsubscribeSuccess();
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        UnsubscribeError();
-                                        HandleException(ex);
-                                    }
-                                }, null);
-                            }
-                            catch (Exception ex)
-                            {
-                                UnsubscribeError();
-                                HandleException(ex);
-                            }
-                        }, null);
+                        POXHttpRequest.Begin<UnsubscribeRequest, UnsubscribeResponse>(
+                            _configuration.Endpoint,
+                            request,
+                            response => UnsubscribeSuccess(),
+                            ex => UnsubscribeError(ex));
                     }
 
-                    if (_subscribedTo == null && ShouldBeSubscribed)
+                    else if (_subscribedTo == null && ShouldBeSubscribed)
                     {
                         _callPending = true;
                         SubscribeRequest request = new SubscribeRequest
@@ -94,36 +61,11 @@ namespace UpdateControls.Correspondence.POXClient
                             DeviceUri = deviceUri,
                             ClientGuid = _clientGuid.ToString()
                         };
-                        WebRequest webRequest = WebRequest.Create(new Uri(_configuration.Endpoint));
-                        webRequest.Method = "POST";
-                        webRequest.BeginGetRequestStream(a1 =>
-                        {
-                            try
-                            {
-                                Stream requestStream = webRequest.EndGetRequestStream(a1);
-                                SubscribeRequestSerializer.Serialize(requestStream, request, DefaultNamespaces);
-                                webRequest.BeginGetResponse(a2 =>
-                                {
-                                    try
-                                    {
-                                        WebResponse webResponse = webRequest.EndGetResponse(a2);
-                                        Stream responseStream = webResponse.GetResponseStream();
-                                        SubscribeResponse response = (SubscribeResponse)SubscribeResponseSerializer.Deserialize(responseStream);
-                                        SubscribeSuccess(deviceUri);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        SubscribeError();
-                                        HandleException(ex);
-                                    }
-                                }, null);
-                            }
-                            catch (Exception ex)
-                            {
-                                SubscribeError();
-                                HandleException(ex);
-                            }
-                        }, null);
+                        POXHttpRequest.Begin<SubscribeRequest, SubscribeResponse>(
+                            _configuration.Endpoint,
+                            request,
+                            response => SubscribeSuccess(deviceUri),
+                            ex => SubscribeError(ex));
                     }
                 }
             }
@@ -138,7 +80,7 @@ namespace UpdateControls.Correspondence.POXClient
             }
         }
 
-        private void SubscribeError()
+        private void SubscribeError(Exception ex)
         {
             lock (_monitor)
             {
@@ -152,10 +94,11 @@ namespace UpdateControls.Correspondence.POXClient
             {
                 _callPending = false;
                 _subscribedTo = null;
+                _updateSubscriptions();
             }
         }
 
-        private void UnsubscribeError()
+        private void UnsubscribeError(Exception ex)
         {
             lock (_monitor)
             {
@@ -169,18 +112,6 @@ namespace UpdateControls.Correspondence.POXClient
             {
                 ShouldBeSubscribed = false;
             }
-        }
-
-        private void HandleException(Exception ex)
-        {
-            // TODO: Notify the application of an exception.
-        }
-
-        private static XmlSerializerNamespaces DefineNamespaces()
-        {
-            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
-            namespaces.Add("c", "http://correspondence.updatecontrols.com/pox/1.0");
-            return namespaces;
         }
     }
 }
