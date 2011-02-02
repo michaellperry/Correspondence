@@ -41,13 +41,6 @@ namespace UpdateControls.Correspondence.FieldSerializer
                 byte fourthByte = input.ReadByte();
                 data = new byte[4] { firstByte, secondByte, thirdByte, fourthByte };
             }
-            else if ((firstByte & 0xf8) == 0xf0)
-            {
-                byte secondByte = input.ReadByte();
-                byte thirdByte = input.ReadByte();
-                byte fourthByte = input.ReadByte();
-                data = new byte[4] { firstByte, secondByte, thirdByte, fourthByte };
-            }
             else if ((firstByte & 0xfc) == 0xf8)
             {
                 byte secondByte = input.ReadByte();
