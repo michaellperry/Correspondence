@@ -59,6 +59,9 @@ namespace UpdateControls.Correspondence.POXClient
                 {
                     _openPending = true;
                     _httpChannel.Open();
+
+                    if (!_httpChannel.IsShellToastBound)
+                        _httpChannel.BindToShellToast();
                 }
             }
             else
