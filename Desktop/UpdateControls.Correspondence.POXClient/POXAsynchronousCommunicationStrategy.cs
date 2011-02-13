@@ -11,11 +11,17 @@ namespace UpdateControls.Correspondence.POXClient
     public partial class POXAsynchronousCommunicationStrategy : IAsynchronousCommunicationStrategy
 	{
         private POXConfiguration _configuration;
+        private IPOXConfigurationProvider _configurationProvider;
 
 		public POXAsynchronousCommunicationStrategy(IPOXConfigurationProvider configurationProvider)
 		{
+            _configurationProvider = configurationProvider;
 			_configuration = configurationProvider.Configuration;
+
+            Initialize();
 		}
+
+        partial void Initialize();
 
 		public string ProtocolName
 		{

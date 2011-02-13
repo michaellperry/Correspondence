@@ -15,7 +15,14 @@ namespace UpdateControls.Correspondence.POXClient
         private bool _receivedChannelUri = false;
         private bool _openPending = false;
 
+        private ToastNotificationObserver _toastNotificationObserver;
+
         private object _monitor = new object();
+
+        partial void Initialize()
+        {
+            _toastNotificationObserver = new ToastNotificationObserver(_configurationProvider);
+        }
 
         public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
         {
@@ -44,6 +51,7 @@ namespace UpdateControls.Correspondence.POXClient
                 {
                     _receivedChannelUri = true;
                     SubscribeToChannelEvents();
+                    _toastNotificationObserver.HttpChannel = _httpChannel;
                 }
                 else
                 {
@@ -59,9 +67,7 @@ namespace UpdateControls.Correspondence.POXClient
                 {
                     _openPending = true;
                     _httpChannel.Open();
-
-                    if (!_httpChannel.IsShellToastBound)
-                        _httpChannel.BindToShellToast();
+                    _toastNotificationObserver.HttpChannel = _httpChannel;
                 }
             }
             else
