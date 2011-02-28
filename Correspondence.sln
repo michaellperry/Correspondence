@@ -9,27 +9,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		UpdateControls.Correspondence.Rebuild\UpdateControls.Correspondence.Rebuild.csproj = UpdateControls.Correspondence.Rebuild\UpdateControls.Correspondence.Rebuild.csproj
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{8A2EE5D2-BFAB-4DA6-9F1B-AD5645329313}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "Desktop\UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{8A2EE5D2-BFAB-4DA6-9F1B-AD5645329313}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{04178710-8BE6-416F-9D41-909258CDE242}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Desktop\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{04178710-8BE6-416F-9D41-909258CDE242}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SSCE", "UpdateControls.Correspondence.SSCE\UpdateControls.Correspondence.SSCE.csproj", "{A418955B-D3B5-4F05-A1A2-7864E92B6C4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SSCE", "Desktop\UpdateControls.Correspondence.SSCE\UpdateControls.Correspondence.SSCE.csproj", "{A418955B-D3B5-4F05-A1A2-7864E92B6C4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{E318C58A-0EB8-4FFB-9547-DD5F73760989}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Desktop\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{E318C58A-0EB8-4FFB-9547-DD5F73760989}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Rebuild", "UpdateControls.Correspondence.Rebuild\UpdateControls.Correspondence.Rebuild.csproj", "{4D0E4C15-A2AD-456D-BCF3-496EBB20E76B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Rebuild", "Desktop\UpdateControls.Correspondence.Rebuild\UpdateControls.Correspondence.Rebuild.csproj", "{4D0E4C15-A2AD-456D-BCF3-496EBB20E76B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Predassert", "Predassert\Predassert.csproj", "{6D277F24-3DF5-4DCE-9CEA-22ED68ADEBE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.WebServiceClient", "UpdateControls.Correspondence.WebServiceClient\UpdateControls.Correspondence.WebServiceClient.csproj", "{6B3FD9E5-3D50-4DD8-9656-F9B9F1EB138D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.WebServiceClient", "Desktop\UpdateControls.Correspondence.WebServiceClient\UpdateControls.Correspondence.WebServiceClient.csproj", "{6B3FD9E5-3D50-4DD8-9656-F9B9F1EB138D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.WebService.Contract", "UpdateControls.Correspondence.WebService.Contract\UpdateControls.Correspondence.WebService.Contract.csproj", "{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameLogic.UnitTest", "Reversi.GameLogic.UnitTest\Reversi.GameLogic.UnitTest.csproj", "{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.GameLogic", "Reversi.GameLogic\Reversi.GameLogic.csproj", "{15C2C87D-3996-480B-8576-1E04C20B1D09}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.Client", "Reversi.Client\Reversi.Client.csproj", "{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.WebService.Contract", "Desktop\UpdateControls.Correspondence.WebService.Contract\UpdateControls.Correspondence.WebService.Contract.csproj", "{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual", "UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj", "{5DE5E950-C19C-4588-80EC-5C60A50D352C}"
 EndProject
@@ -39,17 +33,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEDCode.LLOne", "QEDCode.LL
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Correspondence.Setup", "Correspondence.Setup\Correspondence.Setup.vdproj", "{51624E7F-2AAB-40F9-9979-23695F20A7CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.Model", "Reversi.Model\Reversi.Model.csproj", "{B6D2F677-390D-4D0E-8905-A840804FDFB5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight 4", "Silverlight 4", "{B08999A9-59D8-4790-A084-515E40DDF472}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Silverlight 4\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Silverlight 4\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reversi", "Reversi", "{9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reversi.Model", "Silverlight 4\Reversi\Reversi.Model\Reversi.Model.csproj", "{90511DF3-3151-447E-9C2E-1B3E11CD788C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP7", "WP7", "{B146C09F-B4E0-4740-AB5F-10FCA3AC4537}"
 EndProject
@@ -103,114 +91,105 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 31
+		SccNumberOfProjects = 26
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = UpdateControls.Correspondence.UnitTest\\UpdateControls.Correspondence.UnitTest.csproj
-		SccProjectName1 = UpdateControls.Correspondence.UnitTest
-		SccLocalPath1 = UpdateControls.Correspondence.UnitTest
-		SccProjectUniqueName2 = UpdateControls.Correspondence\\UpdateControls.Correspondence.csproj
-		SccProjectName2 = UpdateControls.Correspondence
-		SccLocalPath2 = UpdateControls.Correspondence
-		SccProjectUniqueName3 = UpdateControls.Correspondence.SSCE\\UpdateControls.Correspondence.SSCE.csproj
-		SccProjectName3 = UpdateControls.Correspondence.SSCE
-		SccLocalPath3 = UpdateControls.Correspondence.SSCE
-		SccProjectUniqueName4 = UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
-		SccProjectName4 = UpdateControls.Correspondence.Memory
-		SccLocalPath4 = UpdateControls.Correspondence.Memory
-		SccProjectUniqueName5 = UpdateControls.Correspondence.Rebuild\\UpdateControls.Correspondence.Rebuild.csproj
-		SccProjectName5 = UpdateControls.Correspondence.Rebuild
-		SccLocalPath5 = UpdateControls.Correspondence.Rebuild
-		SccProjectUniqueName6 = Predassert\\Predassert.csproj
-		SccProjectName6 = Predassert
-		SccLocalPath6 = Predassert
-		SccProjectUniqueName7 = UpdateControls.Correspondence.WebServiceClient\\UpdateControls.Correspondence.WebServiceClient.csproj
-		SccProjectName7 = UpdateControls.Correspondence.WebServiceClient
-		SccLocalPath7 = UpdateControls.Correspondence.WebServiceClient
-		SccProjectUniqueName8 = UpdateControls.Correspondence.WebService.Contract\\UpdateControls.Correspondence.WebService.Contract.csproj
-		SccProjectName8 = UpdateControls.Correspondence.WebService.Contract
-		SccLocalPath8 = UpdateControls.Correspondence.WebService.Contract
-		SccProjectUniqueName9 = Reversi.GameLogic\\Reversi.GameLogic.csproj
-		SccProjectName9 = Reversi.GameLogic
-		SccLocalPath9 = Reversi.GameLogic
-		SccProjectUniqueName10 = Reversi.GameLogic.UnitTest\\Reversi.GameLogic.UnitTest.csproj
-		SccProjectName10 = Reversi.GameLogic.UnitTest
-		SccLocalPath10 = Reversi.GameLogic.UnitTest
-		SccProjectUniqueName11 = Reversi.Client\\Reversi.Client.csproj
-		SccProjectName11 = Reversi.Client
-		SccLocalPath11 = Reversi.Client
-		SccProjectUniqueName12 = UpdateControls.Correspondence.Factual\\UpdateControls.Correspondence.Factual.csproj
-		SccProjectName12 = UpdateControls.Correspondence.Factual
-		SccLocalPath12 = UpdateControls.Correspondence.Factual
-		SccProjectUniqueName13 = UpdateControls.Correspondence.Factual.UnitTest\\UpdateControls.Correspondence.Factual.UnitTest.csproj
-		SccProjectName13 = UpdateControls.Correspondence.Factual.UnitTest
-		SccLocalPath13 = UpdateControls.Correspondence.Factual.UnitTest
-		SccProjectUniqueName14 = QEDCode.LLOne\\QEDCode.LLOne.csproj
-		SccProjectName14 = QEDCode.LLOne
-		SccLocalPath14 = QEDCode.LLOne
-		SccProjectUniqueName15 = Correspondence.Setup\\Correspondence.Setup.vdproj
-		SccProjectName15 = Correspondence.Setup
-		SccLocalPath15 = Correspondence.Setup
-		SccProjectUniqueName16 = Reversi.Model\\Reversi.Model.csproj
-		SccProjectName16 = Reversi.Model
-		SccLocalPath16 = Reversi.Model
-		SccProjectUniqueName17 = Silverlight\u00204\\UpdateControls.Correspondence\\UpdateControls.Correspondence.csproj
+		SccProjectUniqueName1 = Predassert\\Predassert.csproj
+		SccProjectName1 = Predassert
+		SccLocalPath1 = Predassert
+		SccProjectUniqueName2 = UpdateControls.Correspondence.Factual\\UpdateControls.Correspondence.Factual.csproj
+		SccProjectName2 = UpdateControls.Correspondence.Factual
+		SccLocalPath2 = UpdateControls.Correspondence.Factual
+		SccProjectUniqueName3 = UpdateControls.Correspondence.Factual.UnitTest\\UpdateControls.Correspondence.Factual.UnitTest.csproj
+		SccProjectName3 = UpdateControls.Correspondence.Factual.UnitTest
+		SccLocalPath3 = UpdateControls.Correspondence.Factual.UnitTest
+		SccProjectUniqueName4 = QEDCode.LLOne\\QEDCode.LLOne.csproj
+		SccProjectName4 = QEDCode.LLOne
+		SccLocalPath4 = QEDCode.LLOne
+		SccProjectUniqueName5 = Correspondence.Setup\\Correspondence.Setup.vdproj
+		SccProjectName5 = Correspondence.Setup
+		SccLocalPath5 = Correspondence.Setup
+		SccProjectUniqueName6 = Silverlight\u00204\\UpdateControls.Correspondence\\UpdateControls.Correspondence.csproj
+		SccProjectTopLevelParentUniqueName6 = Correspondence.sln
+		SccProjectName6 = Silverlight\u00204/UpdateControls.Correspondence
+		SccLocalPath6 = Silverlight\u00204\\UpdateControls.Correspondence
+		SccProjectUniqueName7 = Silverlight\u00204\\UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
+		SccProjectTopLevelParentUniqueName7 = Correspondence.sln
+		SccProjectName7 = Silverlight\u00204/UpdateControls.Correspondence.Memory
+		SccLocalPath7 = Silverlight\u00204\\UpdateControls.Correspondence.Memory
+		SccProjectUniqueName8 = WP7\\UpdateControls.Correspondence\u0020(WP7)\\UpdateControls.Correspondence\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName8 = Correspondence.sln
+		SccProjectName8 = WP7/UpdateControls.Correspondence\u0020(WP7)
+		SccLocalPath8 = WP7\\UpdateControls.Correspondence\u0020(WP7)
+		SccProjectUniqueName9 = WP7\\UpdateControls.Correspondence.Memory\u0020(WP7)\\UpdateControls.Correspondence.Memory\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName9 = Correspondence.sln
+		SccProjectName9 = WP7/UpdateControls.Correspondence.Memory\u0020(WP7)
+		SccLocalPath9 = WP7\\UpdateControls.Correspondence.Memory\u0020(WP7)
+		SccProjectUniqueName10 = WP7\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7)\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName10 = Correspondence.sln
+		SccProjectName10 = WP7/UpdateControls.Correspondence.WebServiceClient\u0020(WP7)
+		SccLocalPath10 = WP7\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7)
+		SccProjectUniqueName11 = WP7\\UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)\\UpdateControls.Correspondence.IsolatedStorage\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName11 = Correspondence.sln
+		SccProjectName11 = WP7/UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)
+		SccLocalPath11 = WP7\\UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)
+		SccProjectUniqueName12 = Desktop\\UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data.csproj
+		SccProjectTopLevelParentUniqueName12 = Correspondence.sln
+		SccProjectName12 = Desktop/UpdateControls.Correspondence.Data
+		SccLocalPath12 = Desktop\\UpdateControls.Correspondence.Data
+		SccProjectUniqueName13 = Desktop\\UpdateControls.Correspondence.Data.UnitTest\\UpdateControls.Correspondence.Data.UnitTest.csproj
+		SccProjectTopLevelParentUniqueName13 = Correspondence.sln
+		SccProjectName13 = Desktop/UpdateControls.Correspondence.Data.UnitTest
+		SccLocalPath13 = Desktop\\UpdateControls.Correspondence.Data.UnitTest
+		SccProjectUniqueName14 = WP7\\UpdateControls.Correspondence.IsolatedStorage.UnitTest\\UpdateControls.Correspondence.IsolatedStorage.UnitTest\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName14 = Correspondence.sln
+		SccProjectName14 = WP7/UpdateControls.Correspondence.IsolatedStorage.UnitTest
+		SccLocalPath14 = WP7\\UpdateControls.Correspondence.IsolatedStorage.UnitTest
+		SccProjectUniqueName15 = wp7\\UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data\u0020(WP7).csproj
+		SccProjectTopLevelParentUniqueName15 = Correspondence.sln
+		SccProjectName15 = wp7/UpdateControls.Correspondence.Data
+		SccLocalPath15 = wp7\\UpdateControls.Correspondence.Data
+		SccProjectUniqueName16 = Desktop\\UpdateControls.Correspondence.POXClient\\UpdateControls.Correspondence.POXClient.csproj
+		SccProjectTopLevelParentUniqueName16 = Correspondence.sln
+		SccProjectName16 = Desktop/UpdateControls.Correspondence.POXClient
+		SccLocalPath16 = Desktop\\UpdateControls.Correspondence.POXClient
+		SccProjectUniqueName17 = Desktop\\UpdateControls.Correspondence.POXClient.UnitTest\\UpdateControls.Correspondence.POXClient.UnitTest.csproj
 		SccProjectTopLevelParentUniqueName17 = Correspondence.sln
-		SccProjectName17 = Silverlight\u00204/UpdateControls.Correspondence
-		SccLocalPath17 = Silverlight\u00204\\UpdateControls.Correspondence
-		SccProjectUniqueName18 = Silverlight\u00204\\UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
+		SccProjectName17 = Desktop/UpdateControls.Correspondence.POXClient.UnitTest
+		SccLocalPath17 = Desktop\\UpdateControls.Correspondence.POXClient.UnitTest
+		SccProjectUniqueName18 = WP7\\UpdateControls.Correspondence.POXClient\u0020(WP7)\\UpdateControls.Correspondence.POXClient\u0020(WP7).csproj
 		SccProjectTopLevelParentUniqueName18 = Correspondence.sln
-		SccProjectName18 = Silverlight\u00204/UpdateControls.Correspondence.Memory
-		SccLocalPath18 = Silverlight\u00204\\UpdateControls.Correspondence.Memory
-		SccProjectUniqueName19 = Silverlight\u00204\\Reversi\\Reversi.Model\\Reversi.Model.csproj
+		SccProjectName18 = WP7/UpdateControls.Correspondence.POXClient\u0020(WP7)
+		SccLocalPath18 = WP7\\UpdateControls.Correspondence.POXClient\u0020(WP7)
+		SccProjectUniqueName19 = Desktop\\UpdateControls.Correspondence\\UpdateControls.Correspondence.csproj
 		SccProjectTopLevelParentUniqueName19 = Correspondence.sln
-		SccProjectName19 = Silverlight\u00204/Reversi/Reversi.Model
-		SccLocalPath19 = Silverlight\u00204\\Reversi\\Reversi.Model
-		SccProjectUniqueName20 = WP7\\UpdateControls.Correspondence\u0020(WP7)\\UpdateControls.Correspondence\u0020(WP7).csproj
+		SccProjectName19 = Desktop/UpdateControls.Correspondence
+		SccLocalPath19 = Desktop\\UpdateControls.Correspondence
+		SccProjectUniqueName20 = Desktop\\UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
 		SccProjectTopLevelParentUniqueName20 = Correspondence.sln
-		SccProjectName20 = WP7/UpdateControls.Correspondence\u0020(WP7)
-		SccLocalPath20 = WP7\\UpdateControls.Correspondence\u0020(WP7)
-		SccProjectUniqueName21 = WP7\\UpdateControls.Correspondence.Memory\u0020(WP7)\\UpdateControls.Correspondence.Memory\u0020(WP7).csproj
+		SccProjectName20 = Desktop/UpdateControls.Correspondence.Memory
+		SccLocalPath20 = Desktop\\UpdateControls.Correspondence.Memory
+		SccProjectUniqueName21 = Desktop\\UpdateControls.Correspondence.WebServiceClient\\UpdateControls.Correspondence.WebServiceClient.csproj
 		SccProjectTopLevelParentUniqueName21 = Correspondence.sln
-		SccProjectName21 = WP7/UpdateControls.Correspondence.Memory\u0020(WP7)
-		SccLocalPath21 = WP7\\UpdateControls.Correspondence.Memory\u0020(WP7)
-		SccProjectUniqueName22 = WP7\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7)\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7).csproj
+		SccProjectName21 = Desktop/UpdateControls.Correspondence.WebServiceClient
+		SccLocalPath21 = Desktop\\UpdateControls.Correspondence.WebServiceClient
+		SccProjectUniqueName22 = Desktop\\UpdateControls.Correspondence.Rebuild\\UpdateControls.Correspondence.Rebuild.csproj
 		SccProjectTopLevelParentUniqueName22 = Correspondence.sln
-		SccProjectName22 = WP7/UpdateControls.Correspondence.WebServiceClient\u0020(WP7)
-		SccLocalPath22 = WP7\\UpdateControls.Correspondence.WebServiceClient\u0020(WP7)
-		SccProjectUniqueName23 = WP7\\UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)\\UpdateControls.Correspondence.IsolatedStorage\u0020(WP7).csproj
+		SccProjectName22 = Desktop/UpdateControls.Correspondence.Rebuild
+		SccLocalPath22 = Desktop\\UpdateControls.Correspondence.Rebuild
+		SccProjectUniqueName23 = Desktop\\UpdateControls.Correspondence.SSCE\\UpdateControls.Correspondence.SSCE.csproj
 		SccProjectTopLevelParentUniqueName23 = Correspondence.sln
-		SccProjectName23 = WP7/UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)
-		SccLocalPath23 = WP7\\UpdateControls.Correspondence.IsolatedStorage\u0020(WP7)
-		SccProjectUniqueName24 = Desktop\\UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data.csproj
+		SccProjectName23 = Desktop/UpdateControls.Correspondence.SSCE
+		SccLocalPath23 = Desktop\\UpdateControls.Correspondence.SSCE
+		SccProjectUniqueName24 = Desktop\\UpdateControls.Correspondence.UnitTest\\UpdateControls.Correspondence.UnitTest.csproj
 		SccProjectTopLevelParentUniqueName24 = Correspondence.sln
-		SccProjectName24 = Desktop/UpdateControls.Correspondence.Data
-		SccLocalPath24 = Desktop\\UpdateControls.Correspondence.Data
-		SccProjectUniqueName25 = Desktop\\UpdateControls.Correspondence.Data.UnitTest\\UpdateControls.Correspondence.Data.UnitTest.csproj
+		SccProjectName24 = Desktop/UpdateControls.Correspondence.UnitTest
+		SccLocalPath24 = Desktop\\UpdateControls.Correspondence.UnitTest
+		SccProjectUniqueName25 = Desktop\\UpdateControls.Correspondence.WebService.Contract\\UpdateControls.Correspondence.WebService.Contract.csproj
 		SccProjectTopLevelParentUniqueName25 = Correspondence.sln
-		SccProjectName25 = Desktop/UpdateControls.Correspondence.Data.UnitTest
-		SccLocalPath25 = Desktop\\UpdateControls.Correspondence.Data.UnitTest
-		SccProjectUniqueName26 = WP7\\UpdateControls.Correspondence.IsolatedStorage.UnitTest\\UpdateControls.Correspondence.IsolatedStorage.UnitTest\u0020(WP7).csproj
-		SccProjectTopLevelParentUniqueName26 = Correspondence.sln
-		SccProjectName26 = WP7/UpdateControls.Correspondence.IsolatedStorage.UnitTest
-		SccLocalPath26 = WP7\\UpdateControls.Correspondence.IsolatedStorage.UnitTest
-		SccProjectUniqueName27 = wp7\\UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data\u0020(WP7).csproj
-		SccProjectTopLevelParentUniqueName27 = Correspondence.sln
-		SccProjectName27 = wp7/UpdateControls.Correspondence.Data
-		SccLocalPath27 = wp7\\UpdateControls.Correspondence.Data
-		SccProjectUniqueName28 = Desktop\\UpdateControls.Correspondence.POXClient\\UpdateControls.Correspondence.POXClient.csproj
-		SccProjectTopLevelParentUniqueName28 = Correspondence.sln
-		SccProjectName28 = Desktop/UpdateControls.Correspondence.POXClient
-		SccLocalPath28 = Desktop\\UpdateControls.Correspondence.POXClient
-		SccProjectUniqueName29 = Desktop\\UpdateControls.Correspondence.POXClient.UnitTest\\UpdateControls.Correspondence.POXClient.UnitTest.csproj
-		SccProjectTopLevelParentUniqueName29 = Correspondence.sln
-		SccProjectName29 = Desktop/UpdateControls.Correspondence.POXClient.UnitTest
-		SccLocalPath29 = Desktop\\UpdateControls.Correspondence.POXClient.UnitTest
-		SccProjectUniqueName30 = WP7\\UpdateControls.Correspondence.POXClient\u0020(WP7)\\UpdateControls.Correspondence.POXClient\u0020(WP7).csproj
-		SccProjectTopLevelParentUniqueName30 = Correspondence.sln
-		SccProjectName30 = WP7/UpdateControls.Correspondence.POXClient\u0020(WP7)
-		SccLocalPath30 = WP7\\UpdateControls.Correspondence.POXClient\u0020(WP7)
+		SccProjectName25 = Desktop/UpdateControls.Correspondence.WebService.Contract
+		SccLocalPath25 = Desktop\\UpdateControls.Correspondence.WebService.Contract
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -252,18 +231,6 @@ Global
 		{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F476A28A-9EC0-44FC-B67C-D532B6FD8CAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15C2C87D-3996-480B-8576-1E04C20B1D09}.Release|Any CPU.Build.0 = Release|Any CPU
-		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{975FCB20-5E93-42E0-AE11-F8EFDBBD5F89}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DE5E950-C19C-4588-80EC-5C60A50D352C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -279,10 +246,6 @@ Global
 		{51624E7F-2AAB-40F9-9979-23695F20A7CC}.Debug|Any CPU.ActiveCfg = Debug
 		{51624E7F-2AAB-40F9-9979-23695F20A7CC}.Release|Any CPU.ActiveCfg = Release
 		{51624E7F-2AAB-40F9-9979-23695F20A7CC}.Release|Any CPU.Build.0 = Release
-		{B6D2F677-390D-4D0E-8905-A840804FDFB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6D2F677-390D-4D0E-8905-A840804FDFB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6D2F677-390D-4D0E-8905-A840804FDFB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6D2F677-390D-4D0E-8905-A840804FDFB5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -291,10 +254,6 @@ Global
 		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90511DF3-3151-447E-9C2E-1B3E11CD788C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -352,8 +311,6 @@ Global
 		{434A2555-8566-495D-BCFA-4AD0E5E42C37} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646} = {B08999A9-59D8-4790-A084-515E40DDF472}
-		{9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4} = {B08999A9-59D8-4790-A084-515E40DDF472}
-		{90511DF3-3151-447E-9C2E-1B3E11CD788C} = {9ECDD7B1-F5CE-4DDA-A183-12EC6B0FD2A4}
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{D489015D-1272-4B18-BC26-645C720169F9} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{285D68FA-6CA3-4757-B330-DE4EDC5B0849} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
@@ -365,5 +322,12 @@ Global
 		{510D6813-AE9B-4F28-9B77-390F36DF958A} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{3F7356A7-C107-4497-A89E-3E1C21A23718} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{04178710-8BE6-416F-9D41-909258CDE242} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{6B3FD9E5-3D50-4DD8-9656-F9B9F1EB138D} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{E318C58A-0EB8-4FFB-9547-DD5F73760989} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{4D0E4C15-A2AD-456D-BCF3-496EBB20E76B} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{A418955B-D3B5-4F05-A1A2-7864E92B6C4F} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{8A2EE5D2-BFAB-4DA6-9F1B-AD5645329313} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{FA94B34D-4D02-41B8-811F-2DC47CE5CFE8} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 	EndGlobalSection
 EndGlobal

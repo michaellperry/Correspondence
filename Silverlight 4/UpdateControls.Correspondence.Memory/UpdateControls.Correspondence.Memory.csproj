@@ -62,25 +62,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\Duration.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Duration.cs">
       <Link>Duration.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\FactRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\FactRecord.cs">
       <Link>FactRecord.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
       <Link>MemoryStorageStrategy.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
       <Link>PeerIdentifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
       <Link>PeerPivotIdentifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerRecord.cs">
       <Link>PeerRecord.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
       <Link>QueryExecutor.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

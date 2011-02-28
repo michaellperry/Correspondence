@@ -59,9 +59,9 @@
     <Compile Include="Translate.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
+    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>
-      <Name>UpdateControls.Correspondence</Name>
+      <Name>UpdateControls.Correspondence %28Desktop\UpdateControls.Correspondence%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
