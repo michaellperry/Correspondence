@@ -22,7 +22,7 @@ namespace UpdateControls.Correspondence.UnitTest
             MemoryCommunicationStrategy sharedCommunication = new MemoryCommunicationStrategy();
             _communityAlan = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
-                .RegisterAssembly(typeof(Machine))
+                .Register<Model.CorrespondenceModule>()
                 .Subscribe(() => _userAlan)
                 .Subscribe(() => _userAlan.ActivePlayers.Select(player => player.Game));
             _communityFlynn = new Community(new MemoryStorageStrategy())

@@ -252,6 +252,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ICorrespondenceFactFactory.cs">
       <Link>Strategy\ICorrespondenceFactFactory.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ICorrespondenceModule.cs">
+      <Link>Strategy\ICorrespondenceModule.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\IFieldSerializer.cs">
       <Link>Strategy\IFieldSerializer.cs</Link>
     </Compile>

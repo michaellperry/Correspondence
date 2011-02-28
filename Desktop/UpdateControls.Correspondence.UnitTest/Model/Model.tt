@@ -42,7 +42,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
+using UpdateControls.Correspondence.Strategy;
 using System;
+using System.IO;
 
 /**
 / For use with http://graphviz.org/
@@ -73,6 +75,49 @@ namespace <#=targetNamespace.Name#>
     [CorrespondenceType]
     public partial class <#=c.Name#> : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				<#=c.Name#> newFact = new <#=c.Name#>(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+<# if (c.Unique) { #>
+						newFact._unique = (Guid)_fieldSerializerByType[typeof(Guid)].ReadData(output);
+<# } #>
+<# foreach (Field field in c.Fields) {#>
+						newFact._<#=field.Name#> = (<#=FieldType(field)#>)_fieldSerializerByType[typeof(<#=FieldType(field)#>)].ReadData(output);
+<#}#>
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				<#=c.Name#> fact = (<#=c.Name#>)obj;
+<# if (c.Unique) { #>
+				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
+<# } #>
+<# foreach (Field field in c.Fields) {#>
+				_fieldSerializerByType[typeof(<#=FieldType(field)#>)].WriteData(output, fact._<#=field.Name#>);
+<#}#>
+			}
+		}
+
         // Roles
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
         public static <#=RoleClass(predecessor)#> <#=RoleName(predecessor.Name)#> = new <#=RoleClass(predecessor)#>("<#=predecessor.Name#>"<#=predecessor.IsPivot ? ", RoleRelationship.Pivot" : ""#>);
@@ -109,13 +154,13 @@ namespace <#=targetNamespace.Name#>
 <# if (c.Unique) { #>
         // Unique
         [CorrespondenceField]
-        private Guid _unique;
+        internal Guid _unique;
 
 <# } #>
         // Fields
 <# foreach (Field field in c.Fields) {#>
         [CorrespondenceField]
-        private <#=FieldType(field)#> _<#=field.Name#>;
+        internal <#=FieldType(field)#> _<#=field.Name#>;
 <#}#>
 
         // Results
@@ -194,6 +239,19 @@ namespace <#=targetNamespace.Name#>
     }
     
 <#}#>
+
+	public class CorrespondenceModule : ICorrespondenceModule
+	{
+		public void RegisterAllFactTypes(Community community, IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+		{
+<# foreach (Class c in targetNamespace.Classes) { #>
+			community.AddType(
+				new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1),
+				new <#=c.Name#>.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1) }));
+<#}#>
+		}
+	}
 }
 <#}}#>
 <#+

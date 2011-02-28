@@ -76,6 +76,14 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
+		public Community Register<T>()
+			where T : ICorrespondenceModule, new()
+		{
+			ICorrespondenceModule module = new T();
+			module.RegisterAllFactTypes(this, _fieldSerializerByType);
+			return this;
+		}
+
         public IDisposable BeginDuration()
         {
             return _model.BeginDuration();

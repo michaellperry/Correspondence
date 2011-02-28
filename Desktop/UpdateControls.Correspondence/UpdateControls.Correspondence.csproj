@@ -109,6 +109,7 @@
     <Compile Include="Networking\PushSubscriptionProxy.cs" />
     <Compile Include="Networking\ISubscriptionProvider.cs" />
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICorrespondenceModule.cs" />
     <Compile Include="Strategy\IPushSubscription.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="IQueryResult.cs" />

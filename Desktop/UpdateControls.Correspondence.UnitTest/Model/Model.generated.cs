@@ -2,7 +2,9 @@
 using System.Linq;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
+using UpdateControls.Correspondence.Strategy;
 using System;
+using System.IO;
 
 /**
 / For use with http://graphviz.org/
@@ -27,6 +29,39 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class Machine : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Machine newFact = new Machine(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._unique = (Guid)_fieldSerializerByType[typeof(Guid)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Machine fact = (Machine)obj;
+				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
+			}
+		}
+
         // Roles
 
         // Queries
@@ -41,7 +76,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Unique
         [CorrespondenceField]
-        private Guid _unique;
+        internal Guid _unique;
 
         // Fields
 
@@ -82,6 +117,39 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class User : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				User newFact = new User(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._userName = (string)_fieldSerializerByType[typeof(string)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				User fact = (User)obj;
+				_fieldSerializerByType[typeof(string)].WriteData(output, fact._userName);
+			}
+		}
+
         // Roles
 
         // Queries
@@ -100,7 +168,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Fields
         [CorrespondenceField]
-        private string _userName;
+        internal string _userName;
 
         // Results
         private Result<Player> _activePlayers;
@@ -150,6 +218,39 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class LogOn : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				LogOn newFact = new LogOn(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._unique = (Guid)_fieldSerializerByType[typeof(Guid)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				LogOn fact = (LogOn)obj;
+				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
+			}
+		}
+
         // Roles
         public static Role<User> RoleUser = new Role<User>("user");
         public static Role<Machine> RoleMachine = new Role<Machine>("machine");
@@ -168,7 +269,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Unique
         [CorrespondenceField]
-        private Guid _unique;
+        internal Guid _unique;
 
         // Fields
 
@@ -217,6 +318,37 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class LogOff : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				LogOff newFact = new LogOff(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				LogOff fact = (LogOff)obj;
+			}
+		}
+
         // Roles
         public static Role<LogOn> RoleLogOn = new Role<LogOn>("logOn");
 
@@ -266,6 +398,39 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class Game : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Game newFact = new Game(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._unique = (Guid)_fieldSerializerByType[typeof(Guid)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Game fact = (Game)obj;
+				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
+			}
+		}
+
         // Roles
 
         // Queries
@@ -286,7 +451,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Unique
         [CorrespondenceField]
-        private Guid _unique;
+        internal Guid _unique;
 
         // Fields
 
@@ -339,6 +504,39 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class GameName : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				GameName newFact = new GameName(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._name = (string)_fieldSerializerByType[typeof(string)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				GameName fact = (GameName)obj;
+				_fieldSerializerByType[typeof(string)].WriteData(output, fact._name);
+			}
+		}
+
         // Roles
         public static Role<Game> RoleGame = new Role<Game>("game");
         public static Role<GameName> RolePrior = new Role<GameName>("prior");
@@ -353,7 +551,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Fields
         [CorrespondenceField]
-        private string _name;
+        internal string _name;
 
         // Results
 
@@ -405,6 +603,39 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class Player : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Player newFact = new Player(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._index = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Player fact = (Player)obj;
+				_fieldSerializerByType[typeof(int)].WriteData(output, fact._index);
+			}
+		}
+
         // Roles
         public static Role<User> RoleUser = new Role<User>("user", RoleRelationship.Pivot);
         public static Role<Game> RoleGame = new Role<Game>("game", RoleRelationship.Pivot);
@@ -432,7 +663,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Fields
         [CorrespondenceField]
-        private int _index;
+        internal int _index;
 
         // Results
         private Result<Move> _moves;
@@ -490,6 +721,41 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class Move : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Move newFact = new Move(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._index = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
+						newFact._square = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Move fact = (Move)obj;
+				_fieldSerializerByType[typeof(int)].WriteData(output, fact._index);
+				_fieldSerializerByType[typeof(int)].WriteData(output, fact._square);
+			}
+		}
+
         // Roles
         public static Role<Player> RolePlayer = new Role<Player>("player");
 
@@ -502,9 +768,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Fields
         [CorrespondenceField]
-        private int _index;
+        internal int _index;
         [CorrespondenceField]
-        private int _square;
+        internal int _square;
 
         // Results
 
@@ -555,6 +821,37 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     [CorrespondenceType]
     public partial class Outcome : CorrespondenceFact
     {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Outcome newFact = new Outcome(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Outcome fact = (Outcome)obj;
+			}
+		}
+
         // Roles
         public static Role<Game> RoleGame = new Role<Game>("game");
         public static Role<Player> RoleWinner = new Role<Player>("winner");
@@ -610,4 +907,47 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Query result access
     }
     
+
+	public class CorrespondenceModule : ICorrespondenceModule
+	{
+		public void RegisterAllFactTypes(Community community, IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+		{
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1),
+				new Machine.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+				new User.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
+				new LogOn.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOff", 1),
+				new LogOff.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOff", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+				new Game.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
+				new GameName.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+				new Player.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Move", 1),
+				new Move.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Move", 1) }));
+			community.AddType(
+				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1),
+				new Outcome.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1) }));
+		}
+	}
 }
