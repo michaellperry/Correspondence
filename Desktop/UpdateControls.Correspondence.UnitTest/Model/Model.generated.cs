@@ -62,7 +62,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.Machine", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -157,7 +157,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.User", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -265,7 +265,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.LogOn", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -275,12 +275,12 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Roles
         public static Role RoleUser = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
+			_correspondenceFactType,
 			"user",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
 			false));
         public static Role RoleMachine = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
+			_correspondenceFactType,
 			"machine",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1),
 			false));
@@ -378,7 +378,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.LogOff", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -388,7 +388,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Roles
         public static Role RoleLogOn = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOff", 1),
+			_correspondenceFactType,
 			"logOn",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
 			false));
@@ -472,7 +472,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.Game", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -585,7 +585,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.GameName", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -595,12 +595,12 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Roles
         public static Role RoleGame = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
+			_correspondenceFactType,
 			"game",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
 			false));
         public static Role RolePrior = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
+			_correspondenceFactType,
 			"prior",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
 			false));
@@ -699,7 +699,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.Player", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -709,12 +709,12 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Roles
         public static Role RoleUser = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+			_correspondenceFactType,
 			"user",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
 			true));
         public static Role RoleGame = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+			_correspondenceFactType,
 			"game",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
 			true));
@@ -834,7 +834,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.Move", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -844,7 +844,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Roles
         public static Role RolePlayer = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Move", 1),
+			_correspondenceFactType,
 			"player",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
 			false));
@@ -940,7 +940,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"UpdateControls.Correspondence.UnitTest.Model.Outcome", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -950,12 +950,12 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Roles
         public static Role RoleGame = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1),
+			_correspondenceFactType,
 			"game",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
 			false));
         public static Role RoleWinner = new Role(new RoleMemento(
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1),
+			_correspondenceFactType,
 			"winner",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
 			false));
@@ -1017,71 +1017,71 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		public void RegisterAllFactTypes(Community community, IDictionary<Type, IFieldSerializer> fieldSerializerByType)
 		{
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1),
+				Machine._correspondenceFactType,
 				new Machine.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { Machine._correspondenceFactType }));
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1),
+				Machine._correspondenceFactType,
 				Machine.QueryActiveLogOns.QueryDefinition);
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+				User._correspondenceFactType,
 				new User.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { User._correspondenceFactType }));
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+				User._correspondenceFactType,
 				User.QueryActivePlayers.QueryDefinition);
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+				User._correspondenceFactType,
 				User.QueryFinishedPlayers.QueryDefinition);
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
+				LogOn._correspondenceFactType,
 				new LogOn.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { LogOn._correspondenceFactType }));
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
+				LogOn._correspondenceFactType,
 				LogOn.QueryIsActive.QueryDefinition);
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOff", 1),
+				LogOff._correspondenceFactType,
 				new LogOff.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOff", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { LogOff._correspondenceFactType }));
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+				Game._correspondenceFactType,
 				new Game.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { Game._correspondenceFactType }));
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+				Game._correspondenceFactType,
 				Game.QueryPlayers.QueryDefinition);
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+				Game._correspondenceFactType,
 				Game.QueryMoves.QueryDefinition);
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+				Game._correspondenceFactType,
 				Game.QueryOutcomes.QueryDefinition);
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
+				GameName._correspondenceFactType,
 				new GameName.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { GameName._correspondenceFactType }));
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+				Player._correspondenceFactType,
 				new Player.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { Player._correspondenceFactType }));
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+				Player._correspondenceFactType,
 				Player.QueryMoves.QueryDefinition);
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+				Player._correspondenceFactType,
 				Player.QueryIsActive.QueryDefinition);
 			community.AddQuery(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+				Player._correspondenceFactType,
 				Player.QueryIsNotActive.QueryDefinition);
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Move", 1),
+				Move._correspondenceFactType,
 				new Move.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Move", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { Move._correspondenceFactType }));
 			community.AddType(
-				new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1),
+				Outcome._correspondenceFactType,
 				new Outcome.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { Outcome._correspondenceFactType }));
 		}
 	}
 }

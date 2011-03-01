@@ -118,7 +118,7 @@ namespace <#=targetNamespace.Name#>
 		}
 
 		// Type
-		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
 			"<#=targetNamespace.Name#>.<#=c.Name#>", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
@@ -129,7 +129,7 @@ namespace <#=targetNamespace.Name#>
         // Roles
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
         public static Role <#=RoleName(predecessor.Name)#> = new Role(new RoleMemento(
-			new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1),
+			_correspondenceFactType,
 			"<#=predecessor.Name#>",
 			new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=predecessor.FactType#>", 1),
 			<#=predecessor.IsPivot ? "true" : "false"#>));
@@ -256,12 +256,12 @@ namespace <#=targetNamespace.Name#>
 		{
 <# foreach (Class c in targetNamespace.Classes) { #>
 			community.AddType(
-				new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1),
+				<#=c.Name#>._correspondenceFactType,
 				new <#=c.Name#>.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1) }));
+				new FactMetadata(new List<CorrespondenceFactType> { <#=c.Name#>._correspondenceFactType }));
 <# foreach (Query query in c.Queries) { #>
 			community.AddQuery(
-				new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1),
+				<#=c.Name#>._correspondenceFactType,
 				<#=c.Name#>.<#=QueryName(query.Name)#>.QueryDefinition);
 <#}}#>
 		}
