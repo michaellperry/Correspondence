@@ -84,7 +84,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\UpdateControls.Correspondence.Memory\Mallardsoft.snk">
+    <None Include="..\..\Desktop\UpdateControls.Correspondence\Mallardsoft.snk">
       <Link>Mallardsoft.snk</Link>
     </None>
   </ItemGroup>

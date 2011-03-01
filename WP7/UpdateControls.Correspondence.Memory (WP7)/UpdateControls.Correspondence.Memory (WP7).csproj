@@ -58,42 +58,42 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\Duration.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Duration.cs">
       <Link>Duration.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\FactRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\FactRecord.cs">
       <Link>FactRecord.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\MemoryCommunicationStrategy.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryCommunicationStrategy.cs">
       <Link>MemoryCommunicationStrategy.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
       <Link>MemoryStorageStrategy.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
       <Link>PeerIdentifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
       <Link>PeerPivotIdentifier.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\PeerRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerRecord.cs">
       <Link>PeerRecord.cs</Link>
     </Compile>
-    <Compile Include="..\..\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
       <Link>QueryExecutor.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\UpdateControls.Correspondence.Memory\Mallardsoft.snk">
-      <Link>Mallardsoft.snk</Link>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence %28WP7%29\UpdateControls.Correspondence %28WP7%29.csproj">
       <Project>{DE3FFB60-CADE-4679-A53E-0541F707EA95}</Project>
       <Name>UpdateControls.Correspondence %28WP7%29</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Mallardsoft.snk">
+      <Link>Mallardsoft.snk</Link>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
