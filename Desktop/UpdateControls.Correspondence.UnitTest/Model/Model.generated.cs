@@ -83,7 +83,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessors
 
         // Unique
-        internal Guid _unique;
+        private Guid _unique;
 
         // Fields
 
@@ -182,7 +182,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessors
 
         // Fields
-        internal string _userName;
+        private string _userName;
 
         // Results
         private Result<Player> _activePlayers;
@@ -298,7 +298,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private PredecessorObj<Machine> _machine;
 
         // Unique
-        internal Guid _unique;
+        private Guid _unique;
 
         // Fields
 
@@ -499,7 +499,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessors
 
         // Unique
-        internal Guid _unique;
+        private Guid _unique;
 
         // Fields
 
@@ -614,7 +614,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private PredecessorList<GameName> _prior;
 
         // Fields
-        internal string _name;
+        private string _name;
 
         // Results
 
@@ -741,7 +741,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private PredecessorObj<Game> _game;
 
         // Fields
-        internal int _index;
+        private int _index;
 
         // Results
         private Result<Move> _moves;
@@ -857,8 +857,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private PredecessorObj<Player> _player;
 
         // Fields
-        internal int _index;
-        internal int _square;
+        private int _index;
+        private int _square;
 
         // Results
 

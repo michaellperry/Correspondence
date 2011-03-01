@@ -165,12 +165,12 @@ namespace <#=targetNamespace.Name#>
 
 <# if (c.Unique) { #>
         // Unique
-        internal Guid _unique;
+        private Guid _unique;
 
 <# } #>
         // Fields
 <# foreach (Field field in c.Fields) {#>
-        internal <#=FieldType(field)#> _<#=field.Name#>;
+        private <#=FieldType(field)#> _<#=field.Name#>;
 <#}#>
 
         // Results
