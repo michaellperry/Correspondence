@@ -72,7 +72,6 @@ digraph "<#=targetNamespace.Name#>"
 namespace <#=targetNamespace.Name#>
 {
 <# foreach (Class c in targetNamespace.Classes) { #>
-    [CorrespondenceType]
     public partial class <#=c.Name#> : CorrespondenceFact
     {
 		// Factory
@@ -118,9 +117,22 @@ namespace <#=targetNamespace.Name#>
 			}
 		}
 
+		// Type
+		private static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"<#=targetNamespace.Name#>.<#=c.Name#>", 1);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
         // Roles
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
-        public static <#=RoleClass(predecessor)#> <#=RoleName(predecessor.Name)#> = new <#=RoleClass(predecessor)#>("<#=predecessor.Name#>"<#=predecessor.IsPivot ? ", RoleRelationship.Pivot" : ""#>);
+        public static Role <#=RoleName(predecessor.Name)#> = new Role(new RoleMemento(
+			new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1),
+			"<#=predecessor.Name#>",
+			new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=predecessor.FactType#>", 1),
+			<#=predecessor.IsPivot ? "true" : "false"#>));
 <#}#>
 
         // Queries
@@ -153,13 +165,11 @@ namespace <#=targetNamespace.Name#>
 
 <# if (c.Unique) { #>
         // Unique
-        [CorrespondenceField]
         internal Guid _unique;
 
 <# } #>
         // Fields
 <# foreach (Field field in c.Fields) {#>
-        [CorrespondenceField]
         internal <#=FieldType(field)#> _<#=field.Name#>;
 <#}#>
 
@@ -249,7 +259,11 @@ namespace <#=targetNamespace.Name#>
 				new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1),
 				new <#=c.Name#>.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1) }));
-<#}#>
+<# foreach (Query query in c.Queries) { #>
+			community.AddQuery(
+				new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=c.Name#>", 1),
+				<#=c.Name#>.<#=QueryName(query.Name)#>.QueryDefinition);
+<#}}#>
 		}
 	}
 }
@@ -258,11 +272,6 @@ namespace <#=targetNamespace.Name#>
 private static string Capitalize(string str)
 {
     return str.Substring(0, 1).ToUpper() + str.Substring(1);
-}
-
-private static string RoleClass(Predecessor predecessor)
-{
-    return "Role<" + predecessor.FactType + ">";
 }
 
 private static string RoleName(string predecessorName)

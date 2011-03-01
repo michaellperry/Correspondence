@@ -20,10 +20,10 @@ namespace UpdateControls.Correspondence.UnitTest
 		        MemoryStorageStrategy sharedStorage = new MemoryStorageStrategy();
 		        _playerOneCommuniy = new Community(sharedStorage)
                     .AddCommunicationStrategy(new MemoryCommunicationStrategy())
-                    .RegisterAssembly(typeof(Machine));
+                    .Register<Model.CorrespondenceModule>();
 		        _playerTwoCommuniy = new Community(sharedStorage)
                     .AddCommunicationStrategy(new MemoryCommunicationStrategy())
-                    .RegisterAssembly(typeof(Machine));
+                    .Register<Model.CorrespondenceModule>();
         }
 
         [TestMethod]

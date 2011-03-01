@@ -15,7 +15,7 @@ namespace UpdateControls.Correspondence
 
 		public PredecessorOpt(
 			CorrespondenceFact subject,
-			Role<TFact> role,
+			Role role,
 			TFact obj ) :
             base(subject, true)
 		{
@@ -33,7 +33,7 @@ namespace UpdateControls.Correspondence
 
         public PredecessorOpt(
             CorrespondenceFact subject,
-            Role<TFact> role,
+            Role role,
             FactMemento memento) :
             base(subject, false)
         {

@@ -16,7 +16,7 @@ namespace UpdateControls.Correspondence
 
 		public PredecessorList(
 			CorrespondenceFact subject,
-			Role<TFact> role,
+			Role role,
 			IEnumerable<TFact> facts ) :
             base(subject, true)
 		{
@@ -40,7 +40,7 @@ namespace UpdateControls.Correspondence
 
 		public PredecessorList(
 			CorrespondenceFact subject,
-			Role<TFact> role,
+			Role role,
 			FactMemento memento ) :
             base(subject, false)
 		{

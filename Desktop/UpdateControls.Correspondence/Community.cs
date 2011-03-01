@@ -16,9 +16,9 @@ namespace UpdateControls.Correspondence
         private Network _network;
         private IDictionary<Type, IFieldSerializer> _fieldSerializerByType = new Dictionary<Type, IFieldSerializer>();
 
-		public Community(IStorageStrategy storageStrategy, ITypeStrategy typeStrategy)
+		public Community(IStorageStrategy storageStrategy)
         {
-            _model = new Model(this, storageStrategy, typeStrategy);
+            _model = new Model(this, storageStrategy);
             _network = new Network(_model, storageStrategy);
 
             // Register the default types.
@@ -26,11 +26,6 @@ namespace UpdateControls.Correspondence
 		}
 
 		partial void RegisterDefaultTypes();
-
-        public Community(IStorageStrategy storageStrategy)
-            : this(storageStrategy, new AttributeTypeStrategy())
-        {
-        }
 
         public Community AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
         {

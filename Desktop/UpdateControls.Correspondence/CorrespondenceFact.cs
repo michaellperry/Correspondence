@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence
 {
 	/// <summary>
 	/// </summary>
-	public class CorrespondenceFact
+	public abstract class CorrespondenceFact
 	{
         private FactID _id;
         private IDictionary<RoleMemento, PredecessorBase> _predecessor = new Dictionary<RoleMemento, PredecessorBase>();
@@ -15,7 +15,9 @@ namespace UpdateControls.Correspondence
 
 		private Community _community;
 
-		internal FactID ID
+        protected internal abstract CorrespondenceFactType GetCorrespondenceFactType();
+
+        internal FactID ID
 		{
 			get { return _id; }
 			set { _id = value; }

@@ -6,31 +6,31 @@ namespace UpdateControls.Correspondence
     {
         private QueryDefinition _queryDefinition = new QueryDefinition();
 
-        public Query JoinSuccessors(RoleBase role)
+        public Query JoinSuccessors(Role role)
         {
             _queryDefinition.AddJoin(true, role.RoleMemento, null);
             return this;
         }
 
-		public Query JoinSuccessors(RoleBase role, Condition condition)
+		public Query JoinSuccessors(Role role, Condition condition)
 		{
 			_queryDefinition.AddJoin(true, role.RoleMemento, condition);
 			return this;
 		}
 
-        public Query JoinPredecessors(RoleBase role)
+        public Query JoinPredecessors(Role role)
         {
             _queryDefinition.AddJoin(false, role.RoleMemento, null);
             return this;
         }
 
-        public Query JoinPredecessors(RoleBase role, Condition condition)
+        public Query JoinPredecessors(Role role, Condition condition)
         {
             _queryDefinition.AddJoin(false, role.RoleMemento, condition);
             return this;
         }
 
-        internal QueryDefinition QueryDefinition
+        public QueryDefinition QueryDefinition
         {
             get { return _queryDefinition; }
         }

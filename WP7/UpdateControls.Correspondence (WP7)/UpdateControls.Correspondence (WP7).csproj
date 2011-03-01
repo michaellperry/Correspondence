@@ -61,15 +61,6 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\AttributeFactFactory.cs">
-      <Link>AttributeFactFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\AttributeObjectFactoryExtensions.cs">
-      <Link>AttributeObjectFactoryExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\AttributeTypeStrategy.cs">
-      <Link>AttributeTypeStrategy.cs</Link>
-    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Community.cs">
       <Link>Community.cs</Link>
     </Compile>
@@ -93,12 +84,6 @@
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\CorrespondenceFact.cs">
       <Link>CorrespondenceFact.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\CorrespondenceFieldAttribute.cs">
-      <Link>CorrespondenceFieldAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\CorrespondenceTypeAttribute.cs">
-      <Link>CorrespondenceTypeAttribute.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\FactMetadata.cs">
       <Link>FactMetadata.cs</Link>
@@ -229,9 +214,6 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Result.cs">
       <Link>Result.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Role.cs">
-      <Link>Role.cs</Link>
-    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\RoleBase.cs">
       <Link>RoleBase.cs</Link>
     </Compile>
@@ -258,9 +240,6 @@
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\IStorageStrategy.cs">
       <Link>Strategy\IStorageStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ITypeStrategy.cs">
-      <Link>Strategy\ITypeStrategy.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\QueryOptions.cs">
       <Link>Strategy\QueryOptions.cs</Link>

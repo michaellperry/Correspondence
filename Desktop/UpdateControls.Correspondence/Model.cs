@@ -16,7 +16,6 @@ namespace UpdateControls.Correspondence
 
 		private Community _community;
 		private IStorageStrategy _storageStrategy;
-        private ITypeStrategy _typeStrategy;
         private IDictionary<CorrespondenceFactType, ICorrespondenceFactFactory> _factoryByType =
             new Dictionary<CorrespondenceFactType, ICorrespondenceFactFactory>();
         private IDictionary<CorrespondenceFactType, List<QueryInvalidator>> _queryInvalidatorsByType =
@@ -28,11 +27,10 @@ namespace UpdateControls.Correspondence
 
         public event Action FactAdded;
 
-        public Model(Community community, IStorageStrategy storageStrategy, ITypeStrategy typeStrategy)
+        public Model(Community community, IStorageStrategy storageStrategy)
 		{
             _community = community;
 			_storageStrategy = storageStrategy;
-            _typeStrategy = typeStrategy;
 		}
 
         public void AddType(CorrespondenceFactType type, ICorrespondenceFactFactory factory, FactMetadata factMetadata)
@@ -342,7 +340,7 @@ namespace UpdateControls.Correspondence
         private FactMemento CreateMementoFromFact(CorrespondenceFact prototype)
         {
             // Get the type of the object.
-            CorrespondenceFactType type = _typeStrategy.GetTypeOfFact(prototype);
+            CorrespondenceFactType type = prototype.GetCorrespondenceFactType();
 
             // Find the factory for that type.
             ICorrespondenceFactFactory factory;

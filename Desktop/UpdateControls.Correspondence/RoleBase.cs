@@ -2,11 +2,11 @@ using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence
 {
-    public abstract class RoleBase
+    public class Role
     {
         private RoleMemento _roleMemento;
 
-        protected RoleBase(RoleMemento roleMemento)
+        public Role(RoleMemento roleMemento)
         {
             _roleMemento = roleMemento;
         }

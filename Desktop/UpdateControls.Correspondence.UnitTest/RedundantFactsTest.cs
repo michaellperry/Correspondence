@@ -33,7 +33,7 @@ namespace UpdateControls.Correspondence.UnitTest
 			_recorder = new RecordingCommunicationStrategy(_memoryCommunicationStrategy);
 			_community = new Community(new MemoryStorageStrategy())
 				.AddCommunicationStrategy(_recorder)
-				.RegisterAssembly(typeof(Game))
+                .Register<Model.CorrespondenceModule>()
 				.Subscribe(() => _michael);
 			_michael = CreateUser("michael");
 		}
