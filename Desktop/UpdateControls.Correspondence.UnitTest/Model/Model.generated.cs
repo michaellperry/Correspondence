@@ -113,6 +113,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
 
         // Field access
+		public Guid Unique { get { return _unique; } }
+
 
         // Query result access
         public IEnumerable<LogOn> ActiveLogOns
@@ -340,6 +342,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Field access
+		public Guid Unique { get { return _unique; } }
+
 
         // Query result access
     }
@@ -533,6 +537,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
 
         // Field access
+		public Guid Unique { get { return _unique; } }
+
 
         // Query result access
         public IEnumerable<Player> Players

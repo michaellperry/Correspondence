@@ -232,6 +232,10 @@ namespace <#=targetNamespace.Name#>
 <#}}#>
 
         // Field access
+<# if (c.Unique) { #>
+		public Guid Unique { get { return _unique; } }
+
+<#}#>
 <# foreach (Field field in c.Fields) {#>
         public <#=PropertyType(field)#> <#=Capitalize(field.Name)#>
         {
