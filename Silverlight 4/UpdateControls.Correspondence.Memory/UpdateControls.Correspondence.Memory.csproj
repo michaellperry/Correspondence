@@ -57,8 +57,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="UpdateControls.Light, Version=2.1.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>C:\Projects\correspondence\Correspondence\SolutionItems\Silverlight\UpdateControls.Light.dll</HintPath>
+    <Reference Include="UpdateControls.Light, Version=2.1.1.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SolutionItems\Silverlight4\UpdateControls.Light.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
