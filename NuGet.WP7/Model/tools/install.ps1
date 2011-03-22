@@ -1,5 +1,6 @@
 param($installPath, $toolsPath, $package, $project)
 
+# http://weblogs.asp.net/adweigert/archive/2008/10/31/powershell-install-gac-gacutil-for-powershell.aspx
 function Install-Gac {
     BEGIN {
         $ErrorActionPreference = "Stop"
