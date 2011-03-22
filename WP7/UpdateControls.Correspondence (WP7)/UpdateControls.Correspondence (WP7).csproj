@@ -50,8 +50,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
-    <Reference Include="UpdateControls, Version=2.1.1.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls, Version=2.1.2.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\updatecontrols.wp7.2.1.2.1\lib\Silverlight 3.0\UpdateControls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -256,10 +257,14 @@
     <None Include="..\..\Desktop\UpdateControls.Correspondence\Mallardsoft.snk">
       <Link>Mallardsoft.snk</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet.WP7\Core\lib\Silverlight 3.0\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
