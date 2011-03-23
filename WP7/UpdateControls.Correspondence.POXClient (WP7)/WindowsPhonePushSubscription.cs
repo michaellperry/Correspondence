@@ -45,7 +45,7 @@ namespace UpdateControls.Correspondence.POXClient
                             DeviceUri = deviceUri
                         };
                         POXHttpRequest.Begin<UnsubscribeRequest, UnsubscribeResponse>(
-                            _configuration.Endpoint,
+                            _configuration,
                             request,
                             response => UnsubscribeSuccess(),
                             ex => UnsubscribeError(ex));
@@ -62,7 +62,7 @@ namespace UpdateControls.Correspondence.POXClient
                             ClientGuid = _clientGuid.ToString()
                         };
                         POXHttpRequest.Begin<SubscribeRequest, SubscribeResponse>(
-                            _configuration.Endpoint,
+                            _configuration,
                             request,
                             response => SubscribeSuccess(deviceUri),
                             ex => SubscribeError(ex));

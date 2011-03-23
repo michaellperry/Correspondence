@@ -73,12 +73,14 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.POXClient\POXConfiguration.cs">
       <Link>POXConfiguration.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.POXClient\POXHttpRequest.cs">
+      <Link>POXHttpRequest.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.POXClient\Translate.cs">
       <Link>Translate.cs</Link>
     </Compile>
     <Compile Include="Contract\Contract.cs" />
     <Compile Include="POXAsynchronousCommunicationStrategy.PushNotification.cs" />
-    <Compile Include="POXHttpRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToastNotificationObserver.cs" />
     <Compile Include="WindowsPhonePushSubscription.cs" />

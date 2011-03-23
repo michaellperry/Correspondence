@@ -43,7 +43,7 @@ namespace UpdateControls.Correspondence.POXClient
                 ClientGuid = clientGuid.ToString()
             };
             POXHttpRequest.Begin<GetRequest, GetResponse>(
-                _configuration.Endpoint,
+                _configuration,
                 request,
                 response => callback(
                     Translate.FactTreeToMemento(response.FactTree),
@@ -61,7 +61,7 @@ namespace UpdateControls.Correspondence.POXClient
                 ClientGuid = clientGuid.ToString()
             };
             POXHttpRequest.Begin<PostRequest, PostResponse>(
-                _configuration.Endpoint,
+                _configuration,
                 request,
                 response => callback(true),
                 ex => callback(false));
