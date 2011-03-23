@@ -20,7 +20,7 @@ namespace UpdateControls.Correspondence.UnitTest
         public void Initialize()
         {
             _community = new Community(new MemoryStorageStrategy())
-                .Register<Model.CorrespondenceModule>();
+                .Register<Model.CorrespondenceModel>();
 
             _alan = _community.AddFact(new User("alan1"));
             _flynn = _community.AddFact(new User("flynn1"));

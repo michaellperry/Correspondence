@@ -72,9 +72,9 @@ namespace UpdateControls.Correspondence
         }
 
 		public Community Register<T>()
-			where T : ICorrespondenceModule, new()
+			where T : ICorrespondenceModel, new()
 		{
-			ICorrespondenceModule module = new T();
+			ICorrespondenceModel module = new T();
 			module.RegisterAllFactTypes(this, _fieldSerializerByType);
 			return this;
 		}

@@ -1,7 +1,7 @@
 ﻿<#@ template language="C#" hostspecific="True" debug="True" #>
 <#@ assembly name="System.Core"#>
-<#@ assembly name="UpdateControls.Correspondence.Factual"#>
-<#@ assembly name="QEDCode.LLOne"#>
+<#@ assembly name="$(SolutionDir)UpdateControls.Correspondence.Factual\bin\Release\UpdateControls.Correspondence.Factual.dll"#>
+<#@ assembly name="$(SolutionDir)UpdateControls.Correspondence.Factual\bin\Release\QEDCode.LLOne.dll"#>
 <#@ import namespace="System.IO"#>
 <#@ import namespace="System.Collections.Generic"#>
 <#@ import namespace="System.Linq"#>
@@ -254,7 +254,7 @@ namespace <#=targetNamespace.Name#>
     
 <#}#>
 
-	public class CorrespondenceModule : ICorrespondenceModule
+	public class CorrespondenceModel : ICorrespondenceModel
 	{
 		public void RegisterAllFactTypes(Community community, IDictionary<Type, IFieldSerializer> fieldSerializerByType)
 		{

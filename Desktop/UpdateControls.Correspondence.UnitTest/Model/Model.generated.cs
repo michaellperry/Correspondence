@@ -1018,7 +1018,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
     }
     
 
-	public class CorrespondenceModule : ICorrespondenceModule
+	public class CorrespondenceModel : ICorrespondenceModel
 	{
 		public void RegisterAllFactTypes(Community community, IDictionary<Type, IFieldSerializer> fieldSerializerByType)
 		{
