@@ -94,7 +94,6 @@
     <Compile Include="AST\ConditionModifier.cs" />
     <Compile Include="AST\Property.cs" />
     <Compile Include="AST\Query.cs" />
-    <Compile Include="AST\QueryTail.cs" />
     <Compile Include="AST\Set.cs" />
     <Compile Include="Compiler\Analyzer.cs" />
     <Compile Include="AST\Namespace.cs" />

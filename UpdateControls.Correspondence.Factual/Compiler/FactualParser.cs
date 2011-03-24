@@ -149,7 +149,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (and, clause) => clause),
                 (condition, clause) => condition.AddClause(clause));
 
-            // query_tail -> "{" set* "}"
             // set -> identifier identifier ":" path "=" path condition?
             var setRule = Sequence(
                 Terminal(Symbol.Identifier),
@@ -160,13 +159,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 pathRule, "Declare a relative path or \"this\".",
                 Optional(conditionRule, new Condition()), "Defect.",
                 (factNameToken, setNameToken, colonToken, leftPath, equalToken, rightPath, condition) => new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, condition, factNameToken.LineNumber));
-            var queryTailRule = Sequence(
-                Many(
-                    Reduce(Terminal(Symbol.OpenBracket), t => new QueryTail()),
-                    setRule,
-                    (queryTail, set) => queryTail.AddSet(set)),
-                Terminal(Symbol.CloseBracket), "A query must contain sets.",
-                (queryTail, closeBracket) => QueryGenerator(queryTail));
 
             // predicate -> "bool" identifier "{" "not"? "exists" set* "}"
             var predicateRule = Sequence(
@@ -183,14 +175,24 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
                 (predicate, closeBracket) => (FactMember)predicate);
 
-            // field_tail -> ";"
-            // field_or_query -> type identifier (field_tail | query_tail)
-            var fieldTailRule = Reduce(Terminal(Symbol.Semicolon), t => FieldGenerator());
-            var fieldOrQueryRule = Sequence(
+            // field -> type identifier ";"
+            var fieldRule = Sequence(
                 typeRule,
-                Terminal(Symbol.Identifier), "Provide a name for the field or query.",
-                fieldTailRule | queryTailRule, "Declare a field or a query.",
-                (type, nameToken, generator) => generator(type, nameToken));
+                Terminal(Symbol.Identifier), "Provide a name for the field.",
+                Terminal(Symbol.Semicolon), "Missing semicolon after field.",
+                (type, nameToken, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type));
+
+            // query -> type identifier "{" set* "}"
+            var queryRule = Sequence(
+                Many(
+                    Sequence(
+                        typeRule,
+                        Terminal(Symbol.Identifier), "Provide a name for the query.",
+                        Terminal(Symbol.OpenBracket), "Provide query sets in brackets.",
+                        (type, name, openBracket) => CreateQuery(type, name)),
+                    setRule, (query, set) => query.AddSet(set)),
+                Terminal(Symbol.CloseBracket), "A query must contain sets.",
+                (query, closeBracket) => (FactMember)query);
 
             // secure_field -> ("from" | "to") type identifier ";"
             var secureFieldRule = Sequence(
@@ -203,7 +205,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             // key_member -> field | secure_field
             // key_section -> "key" ":" key_member*
-            var keyMemberRule = fieldOrQueryRule | secureFieldRule;
+            var keyMemberRule = fieldRule | secureFieldRule;
             var keySectionRule = Many(
                 Sequence(
                     Terminal(Symbol.Key),
@@ -213,7 +215,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             // query_member -> query | predicate
             // query_section -> "query" ":" query_member*
-            var queryMemberRule = fieldOrQueryRule | predicateRule;
+            var queryMemberRule = queryRule | predicateRule;
             var querySectionRule = Many(
                 Sequence(
                     Terminal(Symbol.Query),
@@ -255,23 +257,15 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return rule;
         }
 
-        private static Func<DataType, Token<Symbol>, FactMember> QueryGenerator(QueryTail queryTail)
+        private static Query CreateQuery(DataType type, Token<Symbol> nameToken)
         {
-            return (type, nameToken) =>
-            {
-                DataTypeFact factType = type as DataTypeFact;
-                if (factType == null)
-                    throw new ParserException("A query must return a fact type, not a native type.", type.LineNumber);
-                if (factType.Cardinality != Cardinality.Many)
-                    throw new ParserException("A query must return multiple results.", factType.LineNumber);
+            DataTypeFact factType = type as DataTypeFact;
+            if (factType == null)
+                throw new ParserException("A query must return a fact type, not a native type.", type.LineNumber);
+            if (factType.Cardinality != Cardinality.Many)
+                throw new ParserException("A query must return multiple results.", factType.LineNumber);
 
-                return new Query(nameToken.Value, factType.FactName, queryTail, factType.LineNumber);
-            };
-        }
-
-        private static Func<DataType, Token<Symbol>, FactMember> FieldGenerator()
-        {
-            return (type, nameToken) => new Field(type.LineNumber, nameToken.Value, type);
+            return new Query(nameToken.Value, factType.FactName, factType.LineNumber);
         }
 
         private static Fact ModifyFact(Fact fact, Symbol modifier)

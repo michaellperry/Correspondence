@@ -6,13 +6,12 @@ namespace UpdateControls.Correspondence.Factual.AST
     public class Query : FactMember
     {
         private string _factName;
-        private QueryTail _tail;
+        private List<Set> _sets = new List<Set>();
 
-        public Query(string name, string factName, QueryTail tail, int lineNumber)
+        public Query(string name, string factName, int lineNumber)
             : base(name, lineNumber)
         {
             _factName = factName;
-            _tail = tail;
         }
 
         public string FactName
@@ -22,7 +21,13 @@ namespace UpdateControls.Correspondence.Factual.AST
 
         public IEnumerable<Set> Sets
         {
-            get { return _tail.Sets; }
+            get { return _sets; }
+        }
+
+        public Query AddSet(Set set)
+        {
+            _sets.Add(set);
+            return this;
         }
     }
 }
