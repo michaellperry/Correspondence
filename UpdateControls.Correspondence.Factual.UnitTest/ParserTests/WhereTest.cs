@@ -14,6 +14,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;                  " +
                 "                                              " +
                 "fact Frame {                                  " +
+                "query:                                        " +
                 "	Request* outstandingRequests {             " +
                 "		Request request : request.frame = this " +
                 "			where not request.isAccepted       " +
@@ -34,6 +35,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;                                       " +
                 "                                                                   " +
                 "fact Frame {                                                       " +
+                "query:                                                             " +
                 "	Request* outstandingRequests {                                  " +
                 "		Request request : request.frame = this                      " +
                 "			where not request.isAccepted and not request.isCanceled " +
