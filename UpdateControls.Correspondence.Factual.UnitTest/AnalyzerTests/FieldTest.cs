@@ -16,6 +16,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "  string identifier;\r\n" +
                 "}"
             );
@@ -36,10 +37,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "  string identifier;\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
+                "key:\r\n" +
                 "  GameQueue gameQueue;\r\n" +
                 "}"
             );
@@ -61,10 +64,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "  string identifier;\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
+                "key:\r\n" +
                 "  publish GameQueue gameQueue;\r\n" +
                 "}"
             );
@@ -88,6 +93,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "fact Id { }\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "  string identifier;\r\n" +
                 "  Id identifier;\r\n" +
                 "}"
@@ -95,11 +101,11 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(e => e.Message, Is.EqualTo("The member \"GameQueue.identifier\" is defined more than once.")) &
-                Has<Error>.Property(e => e.LineNumber, Is.EqualTo(6))
+                Has<Error>.Property(e => e.LineNumber, Is.EqualTo(7))
             ));
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(e => e.Message, Is.EqualTo("The member \"GameQueue.identifier\" is defined more than once.")) &
-                Has<Error>.Property(e => e.LineNumber, Is.EqualTo(7))
+                Has<Error>.Property(e => e.LineNumber, Is.EqualTo(8))
             ));
         }
 
@@ -110,18 +116,20 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "query:\r\n" +
                 "  GameRequest *gameRequests {\r\n" +
                 "    GameRequest r : r.identifier = this\r\n" +
                 "  }\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
+                "key:\r\n" +
                 "  string identifier;\r\n" +
                 "}"
             );
 
             Pred.Assert(errors, Contains<Error>.That(
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(5)) &
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(6)) &
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The member \"GameRequest.identifier\" is not a fact."))
             ));
         }

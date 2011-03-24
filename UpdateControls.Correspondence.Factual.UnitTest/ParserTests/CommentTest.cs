@@ -18,6 +18,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "}                                           \r\n" +
                 "*/                                          \r\n" +
                 "fact Person {                               \r\n" +
+                "query:                                      \r\n" +
                 "  Address* addresses {                      \r\n" +
                 "    Address address : address.person = this \r\n" +
                 "  }                                         \r\n" +
@@ -33,6 +34,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace ContactList;                      \r\n" +
                 "                                            \r\n" +
                 "fact Person {                               \r\n" +
+                "query:                                      \r\n" +
                 "  Address* addresses {                      \r\n" +
                 "    Address address : address.person = this \r\n" +
                 "  }                                         \r\n" +

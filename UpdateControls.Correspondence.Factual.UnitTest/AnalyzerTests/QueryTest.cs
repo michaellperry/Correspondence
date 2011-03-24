@@ -17,12 +17,14 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "query:\r\n" +
                 "  GameRequest *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
                 "  }\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
+                "key:\r\n" +
                 "  GameQueue gameQueue;\r\n" +
                 "}"
             );
@@ -47,12 +49,14 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "query:\r\n" +
                 "  GameRequest *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
                 "  }\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
+                "key:\r\n" +
                 "  GameQueue gameQueue;\r\n" +
                 "}"
             );
@@ -75,19 +79,21 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "query:\r\n" +
                 "  TypeNotFound *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
                 "  }\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
+                "key:\r\n" +
                 "  GameQueue gameQueue;\r\n" +
                 "}"
             );
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The fact type \"TypeNotFound\" is not defined.")) &
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(4))
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(5))
             ));
         }
 
@@ -98,12 +104,14 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "query:\r\n" +
                 "  TypeFoundButWrong *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
                 "  }\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact GameRequest {\r\n" +
+                "key:\r\n" +
                 "  GameQueue gameQueue;\r\n" +
                 "}\r\n" +
                 "\r\n" +
@@ -113,7 +121,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The query results in \"GameRequest\", not \"TypeFoundButWrong\".")) &
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(4))
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(5))
             ));
         }
 
@@ -124,6 +132,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace MagazineSubscriptions;\r\n" +
                 "\r\n" +
                 "fact Subscriber {\r\n" +
+                "query:\r\n" +
                 "  Article* articles {\r\n" +
                 "    Subscription subscription : subscription.subscriber = this\r\n" +
                 "    Article article : article.magazine = subscription.magazine\r\n" +
@@ -134,11 +143,13 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "}\r\n" +
                 "\r\n" +
                 "fact Subscription {\r\n" +
+                "key:\r\n" +
                 "  Subscriber subscriber;\r\n" +
                 "  Magazine magazine;\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact Article {\r\n" +
+                "key:\r\n" +
                 "  Magazine magazine;\r\n" +
                 "}"
             );

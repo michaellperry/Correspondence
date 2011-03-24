@@ -212,6 +212,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 keyMemberRule, (keySection, keyMember) => keySection.AddMember(keyMember));
 
             // query_member -> query | predicate
+            // query_section -> "query" ":" query_member*
             var queryMemberRule = fieldOrQueryRule | predicateRule;
             var querySectionRule = Many(
                 Sequence(
@@ -222,7 +223,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             // fact -> "fact" identifier "{" key_section? query_section? modifier* member* "}"
             // member -> field_or_query | secure_feld | property | predicate
-            var factMemberRule = propertyRule | queryMemberRule;
+            var factMemberRule = propertyRule;
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
