@@ -39,6 +39,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         From,
         To,
         Strength,
-        Key
+        Key,
+        Query
     }
 }

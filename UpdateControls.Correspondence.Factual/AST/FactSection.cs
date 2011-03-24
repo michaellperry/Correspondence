@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace UpdateControls.Correspondence.Factual.AST
 {
-    public class KeySection
+    public class FactSection
     {
         private List<FactMember> _members = new List<FactMember>();
 
-        public KeySection AddMember(FactMember keyMember)
+        public FactSection AddMember(FactMember keyMember)
         {
             _members.Add(keyMember);
             return this;

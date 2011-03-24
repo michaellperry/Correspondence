@@ -8,6 +8,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 {
     public class FactualParser : Parser<Symbol, Namespace>
     {
+        private static readonly FactSection EmptySection = new FactSection();
+
         public FactualParser(System.IO.TextReader input)
             : base(
                 Lexer(input),
@@ -47,6 +49,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("from", Symbol.From)
                 .AddSymbol("to", Symbol.To)
                 .AddSymbol("key", Symbol.Key)
+                .AddSymbol("query", Symbol.Query)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -205,13 +208,21 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Sequence(
                     Terminal(Symbol.Key),
                     Terminal(Symbol.Colon), "Missing \":\" after \"key\".",
-                    (key, colon) => new KeySection()),
+                    (key, colon) => new FactSection()),
                 keyMemberRule, (keySection, keyMember) => keySection.AddMember(keyMember));
 
-            // fact -> "fact" identifier "{" key_section? modifier* member* "}"
+            // query_member -> query | predicate
+            var queryMemberRule = fieldOrQueryRule | predicateRule;
+            var querySectionRule = Many(
+                Sequence(
+                    Terminal(Symbol.Query),
+                    Terminal(Symbol.Colon), "Missing \":\" after \"query\".",
+                    (key, colon) => new FactSection()),
+                queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
+
+            // fact -> "fact" identifier "{" key_section? query_section? modifier* member* "}"
             // member -> field_or_query | secure_feld | property | predicate
-            var queryMemberRule = propertyRule | predicateRule;
-            var factMemberRule = keyMemberRule | queryMemberRule;
+            var factMemberRule = propertyRule | queryMemberRule;
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
@@ -228,8 +239,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             var modifierRule = uniqueModifierRule | principalModifierRule;
             var sectionedFactHeader = Sequence(
                 factHeader,
-                Optional(keySectionRule, null), "Defect.",
-                (fact, section) => section == null ? fact : section.AddTo(fact));
+                Optional(keySectionRule, EmptySection), "Defect.",
+                Optional(querySectionRule, EmptySection), "Defect.",
+                (fact, keySection, querySection) => querySection.AddTo(keySection.AddTo(fact)));
             var modifiedFactHeader = Many(
                 sectionedFactHeader, modifierRule, (fact, modifier) => ModifyFact(fact, modifier.Symbol));
             var factRule = Sequence(
