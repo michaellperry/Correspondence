@@ -203,15 +203,24 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 (modifierToken, typeToken, nameToken, semicolon) => CreateSecureField(modifierToken, typeToken, nameToken.Value)
             );
 
-            // key_member -> field | secure_field
+            // key_member -> modifier | field | secure_field
             // key_section -> "key" ":" key_member*
-            var keyMemberRule = fieldRule | secureFieldRule;
+            var principalModifierRule = Sequence(
+                Terminal(Symbol.Principal),
+                Terminal(Symbol.Semicolon), "The principal modifier is followed by a semicolon.",
+                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetPrincipal()));
+            var uniqueModifierRule = Sequence(
+                Terminal(Symbol.Unique),
+                Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
+                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetUnique()));
+            var modifierRule = uniqueModifierRule | principalModifierRule;
+            var keyMemberRule = Reduce(fieldRule | secureFieldRule, keyMember => (Func<FactSection, FactSection>)(keySection => keySection.AddMember(keyMember)));
             var keySectionRule = Many(
                 Sequence(
                     Terminal(Symbol.Key),
                     Terminal(Symbol.Colon), "Missing \":\" after \"key\".",
                     (key, colon) => new FactSection()),
-                keyMemberRule, (keySection, keyMember) => keySection.AddMember(keyMember));
+                keyMemberRule | modifierRule, (keySection, keyMember) => keyMember(keySection));
 
             // query_member -> query | predicate
             // query_section -> "query" ":" query_member*
@@ -223,7 +232,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
 
-            // fact -> "fact" identifier "{" key_section? query_section? modifier* member* "}"
+            // fact -> "fact" identifier "{" key_section? query_section? member* "}"
             // member -> field_or_query | secure_feld | property | predicate
             var factMemberRule = propertyRule;
             var factHeader = Sequence(
@@ -231,24 +240,13 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
                 Terminal(Symbol.OpenBracket), "Declare members of a fact within brackets.",
                 (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
-            var principalModifierRule = Sequence(
-                Terminal(Symbol.Principal),
-                Terminal(Symbol.Semicolon), "The principal modifier is followed by a semicolon.",
-                (modifier, semicolon) => modifier);
-            var uniqueModifierRule = Sequence(
-                Terminal(Symbol.Unique),
-                Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
-                (modifier, semicolon) => modifier);
-            var modifierRule = uniqueModifierRule | principalModifierRule;
             var sectionedFactHeader = Sequence(
                 factHeader,
                 Optional(keySectionRule, EmptySection), "Defect.",
                 Optional(querySectionRule, EmptySection), "Defect.",
                 (fact, keySection, querySection) => querySection.AddTo(keySection.AddTo(fact)));
-            var modifiedFactHeader = Many(
-                sectionedFactHeader, modifierRule, (fact, modifier) => ModifyFact(fact, modifier.Symbol));
             var factRule = Sequence(
-                Many(modifiedFactHeader, factMemberRule, (fact, member) => fact.AddMember(member)),
+                Many(sectionedFactHeader, factMemberRule, (fact, member) => fact.AddMember(member)),
                 Terminal(Symbol.CloseBracket), "A member must be a field, property, query, or predicate.",
                 (fact, closeBracket) => fact);
 
@@ -266,15 +264,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 throw new ParserException("A query must return multiple results.", factType.LineNumber);
 
             return new Query(nameToken.Value, factType.FactName, factType.LineNumber);
-        }
-
-        private static Fact ModifyFact(Fact fact, Symbol modifier)
-        {
-            if (modifier == Symbol.Unique)
-                fact.Unique = true;
-            else if (modifier == Symbol.Principal)
-                fact.Principal = true;
-            return fact;
         }
 
         private static FactMember CreateSecureField(Token<Symbol> modifierToken, DataType dataType, string name)
