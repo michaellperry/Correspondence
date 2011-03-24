@@ -38,6 +38,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Principal,
         From,
         To,
-        Strength
+        Strength,
+        Key
     }
 }

@@ -25,11 +25,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;\r\n" +
                 "                            \r\n" +
                 "fact GameQueue {            \r\n" +
+                "key:                        \r\n" +
                 "  string identifier;        \r\n" +
                 "}                           \r\n";
             Namespace result = ParseToNamespace(code);
             Field identifier = result.WithFactNamed("GameQueue").WithFieldNamed("identifier");
-            Assert.AreEqual(4, identifier.LineNumber);
+            Assert.AreEqual(5, identifier.LineNumber);
             DataTypeNative type = identifier.Type.ThatIsDataTypeNative();
             Assert.AreEqual(Cardinality.One, type.Cardinality);
             Assert.AreEqual(NativeType.String, type.NativeType);

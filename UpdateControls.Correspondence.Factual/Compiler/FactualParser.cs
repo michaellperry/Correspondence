@@ -46,6 +46,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("principal", Symbol.Principal)
                 .AddSymbol("from", Symbol.From)
                 .AddSymbol("to", Symbol.To)
+                .AddSymbol("key", Symbol.Key)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -197,9 +198,20 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 (modifierToken, typeToken, nameToken, semicolon) => CreateSecureField(modifierToken, typeToken, nameToken.Value)
             );
 
-            // fact -> "fact" identifier "{" modifier* member* "}"
+            // key_member -> field | secure_field
+            // key_section -> "key" ":" key_member*
+            var keyMemberRule = fieldOrQueryRule | secureFieldRule;
+            var keySectionRule = Many(
+                Sequence(
+                    Terminal(Symbol.Key),
+                    Terminal(Symbol.Colon), "Missing \":\" after \"key\".",
+                    (key, colon) => new KeySection()),
+                keyMemberRule, (keySection, keyMember) => keySection.AddMember(keyMember));
+
+            // fact -> "fact" identifier "{" key_section? modifier* member* "}"
             // member -> field_or_query | secure_feld | property | predicate
-            var factMemberRule = fieldOrQueryRule | secureFieldRule | propertyRule | predicateRule;
+            var queryMemberRule = propertyRule | predicateRule;
+            var factMemberRule = keyMemberRule | queryMemberRule;
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
@@ -214,8 +226,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
                 (modifier, semicolon) => modifier);
             var modifierRule = uniqueModifierRule | principalModifierRule;
+            var sectionedFactHeader = Sequence(
+                factHeader,
+                Optional(keySectionRule, null), "Defect.",
+                (fact, section) => section == null ? fact : section.AddTo(fact));
             var modifiedFactHeader = Many(
-                factHeader, modifierRule, (fact, modifier) => ModifyFact(fact, modifier.Symbol));
+                sectionedFactHeader, modifierRule, (fact, modifier) => ModifyFact(fact, modifier.Symbol));
             var factRule = Sequence(
                 Many(modifiedFactHeader, factMemberRule, (fact, member) => fact.AddMember(member)),
                 Terminal(Symbol.CloseBracket), "A member must be a field, property, query, or predicate.",
