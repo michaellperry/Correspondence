@@ -31,7 +31,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             Namespace result = ParseToNamespace(
                 "namespace IM.Model;" +
                 "fact User {        " +
-                "    principal;      " +
+                "key:               " +
+                "    principal;     " +
                 "}                  ");
             Fact user = result.WithFactNamed("User");
             Assert.IsTrue(user.Principal);
@@ -43,6 +44,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             string source =
                 "namespace IM.Model; " +
                 "fact Message {      " +
+                "key:               " +
                 "    Tag tag;        " +
                 "}                   ";
             Namespace result = ParseToNamespace(source);
@@ -56,6 +58,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             string code =
                 "namespace IM.Model;    " +
                 "fact Message {         " +
+                "key:               " +
                 "    to User recipient; " +
                 "}                      ";
             Namespace result = ParseToNamespace(code);
@@ -69,6 +72,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             string code =
                 "namespace IM.Model;   " +
                 "fact Message {        " +
+                "key:               " +
                 "    from User sender; " +
                 "}                     ";
             Namespace result = ParseToNamespace(code);

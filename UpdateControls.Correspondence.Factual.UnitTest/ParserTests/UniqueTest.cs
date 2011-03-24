@@ -13,6 +13,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel; " +
                 "                             " +
                 "fact Person {                " +
+                "key:                         " +
                 "    unique;                  " +
                 "}                            ";
             Namespace result = ParseToNamespace(code);

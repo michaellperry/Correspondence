@@ -13,6 +13,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel; " +
                 "                             " +
                 "fact GameRequest {           " +
+                "key:                         " +
                 "  GameQueue gameQueue;       " +
                 "}                            ";
             Namespace result = ParseToNamespace(code);
@@ -31,6 +32,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;   " +
                 "                               " +
                 "fact GameRequest {             " +
+                "key:                         " +
                 "  publish GameQueue gameQueue; " +
                 "}                              ";
             Namespace result = ParseToNamespace(code);
@@ -47,6 +49,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel; " +
                 "                             " +
                 "fact Game {                  " +
+                "key:                         " +
                 "  publish User *players;     " +
                 "}                            ";
             Namespace result = ParseToNamespace(code);
@@ -63,6 +66,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel; " +
                 "                             " +
                 "fact GameQueue {             " +
+                "key:                         " +
                 "  string? identifier;        " +
                 "}                            ";
             Namespace result = ParseToNamespace(code);
