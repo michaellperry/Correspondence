@@ -20,7 +20,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Char,
         Date,
         Time,
-        Property,
         Colon,
         This,
         Equal,
@@ -40,6 +39,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         To,
         Strength,
         Key,
-        Query
+        Query,
+        Mutable
     }
 }

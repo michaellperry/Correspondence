@@ -26,7 +26,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("namespace", Symbol.Namespace)
                 .AddSymbol("strength", Symbol.Strength)
                 .AddSymbol("fact", Symbol.Fact)
-                .AddSymbol("property", Symbol.Property)
                 .AddSymbol("this", Symbol.This)
 				.AddSymbol("string", Symbol.String)
                 .AddSymbol("byte", Symbol.Byte)
@@ -50,6 +49,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("to", Symbol.To)
                 .AddSymbol("key", Symbol.Key)
                 .AddSymbol("query", Symbol.Query)
+                .AddSymbol("mutable", Symbol.Mutable)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -121,14 +121,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             var typeRule =
                 Reduce(nativeTypeRule, t => (DataType)t) |
                 Reduce(factTypeRule, t => (DataType)t);
-
-            // property -> "property" type identifier ";"
-            var propertyRule = Sequence(
-                Terminal(Symbol.Property),
-                typeRule, "Declare a type for the property.",
-                Terminal(Symbol.Identifier), "Provide a name for the property.",
-                Terminal(Symbol.Semicolon), "Terminate a property with a semicolon.",
-                (propertyToken, dataType, propertyNameToken, semicolonToken) => (FactMember)new Property(propertyToken.LineNumber, propertyNameToken.Value, dataType));
 
             // clause -> "not"? identifier "." identifier
             // condition -> "where" clause ("and" clause)*
@@ -222,6 +214,20 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 keyMemberRule | modifierRule, (keySection, keyMember) => keyMember(keySection));
 
+            // mutable_member -> type identifier ";"
+            // mutable_section -> "mutable" ":" mutable_member*
+            var mutableMemberRule = Sequence(
+                typeRule,
+                Terminal(Symbol.Identifier), "Provide a name for the field.",
+                Terminal(Symbol.Semicolon), "Terminate a field with a semicolon.",
+                (dataType, propertyNameToken, semicolonToken) => (FactMember)new Property(dataType.LineNumber, propertyNameToken.Value, dataType));
+            var mutableSectionRule = Many(
+                Sequence(
+                    Terminal(Symbol.Mutable),
+                    Terminal(Symbol.Colon), "Missing \":\" after \"mutable\".",
+                    (key, colon) => new FactSection()),
+                mutableMemberRule, (mutableSection, mutableMember) => mutableSection.AddMember(mutableMember));
+
             // query_member -> query | predicate
             // query_section -> "query" ":" query_member*
             var queryMemberRule = queryRule | predicateRule;
@@ -232,23 +238,19 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
 
-            // fact -> "fact" identifier "{" key_section? query_section? member* "}"
-            // member -> field_or_query | secure_feld | property | predicate
-            var factMemberRule = propertyRule;
+            // fact -> "fact" identifier "{" key_section? mutable_section? query_section? "}"
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
                 Terminal(Symbol.OpenBracket), "Declare members of a fact within brackets.",
                 (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
-            var sectionedFactHeader = Sequence(
+            var factRule = Sequence(
                 factHeader,
                 Optional(keySectionRule, EmptySection), "Defect.",
+                Optional(mutableSectionRule, EmptySection), "Defect.",
                 Optional(querySectionRule, EmptySection), "Defect.",
-                (fact, keySection, querySection) => querySection.AddTo(keySection.AddTo(fact)));
-            var factRule = Sequence(
-                Many(sectionedFactHeader, factMemberRule, (fact, member) => fact.AddMember(member)),
-                Terminal(Symbol.CloseBracket), "A member must be a field, property, query, or predicate.",
-                (fact, closeBracket) => fact);
+                Terminal(Symbol.CloseBracket), "Specify a \"key\", \"mutable\", or \"query\" section.",
+                (fact, keySection, mutableSection, querySection, closeBracket) => querySection.AddTo(mutableSection.AddTo(keySection.AddTo(fact))));
 
             // factual_file -> namespace_declaration fact*
             var rule = Many(namespaceRule, factRule, (namespaceRoot, fact) => namespaceRoot.AddFact(fact));
