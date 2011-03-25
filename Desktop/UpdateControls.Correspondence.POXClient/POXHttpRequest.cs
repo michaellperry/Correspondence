@@ -25,6 +25,7 @@ namespace UpdateControls.Correspondence.POXClient
                 Action<TResponse> success,
                 Action<Exception> failure)
             {
+                string endpoint = configuration.Endpoint;
                 _request = request;
                 _success = success;
                 _failure = failure;
@@ -32,9 +33,11 @@ namespace UpdateControls.Correspondence.POXClient
                 _webRequest = WebRequest.Create(new Uri(configuration.Endpoint, UriKind.Absolute));
                 _webRequest.Method = "POST";
                 _webRequest.ContentType = "text/xml";
+                HttpWebRequest httpWebRequest = (HttpWebRequest)_webRequest;
+                httpWebRequest.Credentials = new NetworkCredential(configuration.Username, configuration.Password);
             }
 
-            private void Begin()
+            public void Begin()
             {
                 _webRequest.BeginGetRequestStream(GetRequestStream, null);
             }
@@ -80,7 +83,7 @@ namespace UpdateControls.Correspondence.POXClient
             Action<TResponse> success,
             Action<Exception> failure)
         {
-            var handler = new POXHttpRequestHandler<TRequest, TResponse>(configuration, request, success, failure);
+            new POXHttpRequestHandler<TRequest, TResponse>(configuration, request, success, failure).Begin();
         }
 
         private static XmlSerializerNamespaces DefineNamespaces()
