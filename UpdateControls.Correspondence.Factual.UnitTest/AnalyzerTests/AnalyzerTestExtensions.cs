@@ -29,12 +29,32 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 
         public static Target.Predecessor HasPredecessorNamed(this Class c, string name)
         {
-            IEnumerable<Target.Predecessor> predecessors = c.Predecessors.Where(field => field.Name == name);
+            IEnumerable<Target.Predecessor> predecessors = c.Predecessors.Where(predecessor => predecessor.Name == name);
             if (!predecessors.Any())
                 Assert.Fail(String.Format("No predecessor named {0} was found.", name));
             if (predecessors.Count() > 1)
                 Assert.Fail(String.Format("More than one predecessor named {0} was found.", name));
             return predecessors.Single();
+        }
+
+        public static Target.Field HasFieldNamed(this Class c, string name)
+        {
+            IEnumerable<Target.Field> fields = c.Fields.Where(field => field.Name == name);
+            if (!fields.Any())
+                Assert.Fail(String.Format("No field named {0} was found.", name));
+            if (fields.Count() > 1)
+                Assert.Fail(String.Format("More than one field named {0} was found.", name));
+            return fields.Single();
+        }
+
+        public static Target.Predicate HasPredicateNamed(this Target.Class c, string name)
+        {
+            IEnumerable<Target.Predicate> predicates = c.Predicates.Where(predicate => predicate.Query.Name == name);
+            if (!predicates.Any())
+                Assert.Fail(String.Format("No predicate named {0} was found.", name));
+            if (predicates.Count() > 1)
+                Assert.Fail(String.Format("More than one predicate named {0} was found.", name));
+            return predicates.Single();
         }
     }
 }

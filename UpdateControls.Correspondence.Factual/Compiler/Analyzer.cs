@@ -186,6 +186,31 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Target.Cardinality.Many,
                 childClass.Name,
                 false));
+            Source.DataTypeNative dataTypeNative = property.Type as Source.DataTypeNative;
+            if (dataTypeNative != null)
+            {
+                childClass.AddField(new Target.Field(
+                    "value",
+                    _cardinalityMap[dataTypeNative.Cardinality],
+                    _nativeTypeMap[dataTypeNative.NativeType]));
+            }
+            else
+            {
+                Source.DataTypeFact dataTypeFact = property.Type as Source.DataTypeFact;
+                if (dataTypeFact != null)
+                {
+                    childClass.AddPredecessor(new Target.Predecessor(
+                        "value",
+                        _cardinalityMap[dataTypeFact.Cardinality],
+                        dataTypeFact.FactName,
+                        false));
+                }
+            }
+
+            Target.Query query = new Target.Query("isCurrent")
+                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, "prior"));
+            childClass.AddQuery(query);
+            childClass.AddPredicate(new Target.Predicate(Target.ConditionModifier.Negative, query));
         }
 
         private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, out Source.Fact resultType)

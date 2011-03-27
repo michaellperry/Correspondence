@@ -11,6 +11,10 @@ using System.IO;
 digraph "UpdateControls.Correspondence.UnitTest.Model"
 {
     rankdir=BT
+    UserFavoriteColor -> User
+    UserFavoriteColor -> UserFavoriteColor [label="  *"]
+    UserFavoriteColor2 -> User
+    UserFavoriteColor2 -> UserFavoriteColor2 [label="  *"]
     LogOn -> User
     LogOn -> Machine
     LogOff -> LogOn
@@ -178,6 +182,10 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             .JoinSuccessors(Player.RoleUser, Condition.WhereIsNotEmpty(Player.QueryIsNotActive)
             )
             ;
+        public static Query QueryFavoriteColor2 = new Query()
+            .JoinSuccessors(UserFavoriteColor2.RoleUser, Condition.WhereIsEmpty(UserFavoriteColor2.QueryIsCurrent)
+            )
+            ;
 
         // Predicates
 
@@ -189,6 +197,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Results
         private Result<Player> _activePlayers;
         private Result<Player> _finishedPlayers;
+        private Result<UserFavoriteColor2> _favoriteColor2;
 
         // Business constructor
         public User(
@@ -210,6 +219,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             _activePlayers = new Result<Player>(this, QueryActivePlayers);
             _finishedPlayers = new Result<Player>(this, QueryFinishedPlayers);
+            _favoriteColor2 = new Result<UserFavoriteColor2>(this, QueryFavoriteColor2);
         }
 
         // Predecessor access
@@ -229,6 +239,246 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _finishedPlayers; }
         }
+        public IEnumerable<UserFavoriteColor2> FavoriteColor2
+        {
+            get { return _favoriteColor2; }
+        }
+    }
+    
+    public partial class UserFavoriteColor : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				UserFavoriteColor newFact = new UserFavoriteColor(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._value = (string)_fieldSerializerByType[typeof(string)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				UserFavoriteColor fact = (UserFavoriteColor)obj;
+				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
+			}
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"UpdateControls.Correspondence.UnitTest.Model.UserFavoriteColor", 1);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Roles
+        public static Role RoleUser = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"user",
+			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			false));
+        public static Role RolePrior = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"prior",
+			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.UserFavoriteColor", 1),
+			false));
+
+        // Queries
+        public static Query QueryIsCurrent = new Query()
+            .JoinSuccessors(UserFavoriteColor.RolePrior)
+            ;
+
+        // Predicates
+        public static Condition IsCurrent = Condition.WhereIsEmpty(QueryIsCurrent);
+
+        // Predecessors
+        private PredecessorObj<User> _user;
+        private PredecessorList<UserFavoriteColor> _prior;
+
+        // Fields
+        private string _value;
+
+        // Results
+
+        // Business constructor
+        public UserFavoriteColor(
+            User user
+            ,IEnumerable<UserFavoriteColor> prior
+            ,string value
+            )
+        {
+            InitializeResults();
+            _user = new PredecessorObj<User>(this, RoleUser, user);
+            _prior = new PredecessorList<UserFavoriteColor>(this, RolePrior, prior);
+            _value = value;
+        }
+
+        // Hydration constructor
+        private UserFavoriteColor(FactMemento memento)
+        {
+            InitializeResults();
+            _user = new PredecessorObj<User>(this, RoleUser, memento);
+            _prior = new PredecessorList<UserFavoriteColor>(this, RolePrior, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+        public User User
+        {
+            get { return _user.Fact; }
+        }
+        public IEnumerable<UserFavoriteColor> Prior
+        {
+            get { return _prior; }
+        }
+     
+        // Field access
+        public string Value
+        {
+            get { return _value; }
+        }
+
+        // Query result access
+    }
+    
+    public partial class UserFavoriteColor2 : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				UserFavoriteColor2 newFact = new UserFavoriteColor2(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._value = (string)_fieldSerializerByType[typeof(string)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				UserFavoriteColor2 fact = (UserFavoriteColor2)obj;
+				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
+			}
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"UpdateControls.Correspondence.UnitTest.Model.UserFavoriteColor2", 1);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Roles
+        public static Role RoleUser = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"user",
+			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			false));
+        public static Role RolePrior = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"prior",
+			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.UserFavoriteColor2", 1),
+			false));
+
+        // Queries
+        public static Query QueryIsCurrent = new Query()
+            .JoinSuccessors(UserFavoriteColor2.RolePrior)
+            ;
+
+        // Predicates
+        public static Condition IsCurrent = Condition.WhereIsEmpty(QueryIsCurrent);
+
+        // Predecessors
+        private PredecessorObj<User> _user;
+        private PredecessorList<UserFavoriteColor2> _prior;
+
+        // Fields
+        private string _value;
+
+        // Results
+
+        // Business constructor
+        public UserFavoriteColor2(
+            User user
+            ,IEnumerable<UserFavoriteColor2> prior
+            ,string value
+            )
+        {
+            InitializeResults();
+            _user = new PredecessorObj<User>(this, RoleUser, user);
+            _prior = new PredecessorList<UserFavoriteColor2>(this, RolePrior, prior);
+            _value = value;
+        }
+
+        // Hydration constructor
+        private UserFavoriteColor2(FactMemento memento)
+        {
+            InitializeResults();
+            _user = new PredecessorObj<User>(this, RoleUser, memento);
+            _prior = new PredecessorList<UserFavoriteColor2>(this, RolePrior, memento);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+        public User User
+        {
+            get { return _user.Fact; }
+        }
+        public IEnumerable<UserFavoriteColor2> Prior
+        {
+            get { return _prior; }
+        }
+     
+        // Field access
+        public string Value
+        {
+            get { return _value; }
+        }
+
+        // Query result access
     }
     
     public partial class LogOn : CorrespondenceFact
@@ -1039,6 +1289,23 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			community.AddQuery(
 				User._correspondenceFactType,
 				User.QueryFinishedPlayers.QueryDefinition);
+			community.AddQuery(
+				User._correspondenceFactType,
+				User.QueryFavoriteColor2.QueryDefinition);
+			community.AddType(
+				UserFavoriteColor._correspondenceFactType,
+				new UserFavoriteColor.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { UserFavoriteColor._correspondenceFactType }));
+			community.AddQuery(
+				UserFavoriteColor._correspondenceFactType,
+				UserFavoriteColor.QueryIsCurrent.QueryDefinition);
+			community.AddType(
+				UserFavoriteColor2._correspondenceFactType,
+				new UserFavoriteColor2.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { UserFavoriteColor2._correspondenceFactType }));
+			community.AddQuery(
+				UserFavoriteColor2._correspondenceFactType,
+				UserFavoriteColor2.QueryIsCurrent.QueryDefinition);
 			community.AddType(
 				LogOn._correspondenceFactType,
 				new LogOn.CorrespondenceFactFactory(fieldSerializerByType),
