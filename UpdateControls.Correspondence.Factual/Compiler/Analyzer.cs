@@ -72,13 +72,13 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             foreach (Source.FactMember member in fact.Members)
             {
-                AnalyzeMember(fact, factClass, member);
+                AnalyzeMember(result, fact, factClass, member);
             }
 
             factClass.HasPublicKey = fact.Principal;
         }
 
-        private void AnalyzeMember(Source.Fact fact, Target.Class factClass, Source.FactMember member)
+        private void AnalyzeMember(Target.Analyzed result, Source.Fact fact, Target.Class factClass, Source.FactMember member)
         {
             try
             {
@@ -97,6 +97,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         var predicate = member as Source.Predicate;
                         if (predicate != null)
                             AnalyzePredicate(factClass, fact, predicate);
+                        else
+                        {
+                            var property = member as Source.Property;
+                            if (property != null)
+                                AnalyzeProperty(result, factClass, fact, property);
+                        }
                     }
                 }
             }
@@ -163,6 +169,23 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     Target.ConditionModifier.Negative :
                     Target.ConditionModifier.Positive,
                 targetQuery));
+        }
+
+        private void AnalyzeProperty(Target.Analyzed result, Target.Class factClass, Source.Fact fact, Source.Property property)
+        {
+            Target.Class childClass = new Target.Class(fact.Name + property.Name.PascalCase());
+            result.AddClass(childClass);
+
+            childClass.AddPredecessor(new Target.Predecessor(
+                fact.Name.CamelCase(),
+                Target.Cardinality.One,
+                fact.Name,
+                false));
+            childClass.AddPredecessor(new Target.Predecessor(
+                "prior",
+                Target.Cardinality.Many,
+                childClass.Name,
+                false));
         }
 
         private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, out Source.Fact resultType)
@@ -317,5 +340,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", factName), lineNumber);
             return fact;
         }
+
+        
     }
 }

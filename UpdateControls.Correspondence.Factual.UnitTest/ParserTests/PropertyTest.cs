@@ -14,7 +14,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "                             " +
                 "fact Person {                " +
                 "mutable:                     " +
-                "  string firstName; " +
+                "  string firstName;          " +
                 "}                            ";
             Namespace result = ParseToNamespace(code);
             DataTypeNative dataTypeNative = result.WithFactNamed("Person").WithPropertyNamed("firstName")

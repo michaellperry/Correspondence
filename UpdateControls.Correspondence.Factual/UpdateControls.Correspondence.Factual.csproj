@@ -102,6 +102,7 @@
     <Compile Include="Compiler\FactualParser.cs" />
     <Compile Include="AST\NativeTypeAtLine.cs" />
     <Compile Include="Compiler\PredecessorInfo.cs" />
+    <Compile Include="Compiler\StringExtensions.cs" />
     <Compile Include="FactualException.cs" />
     <Compile Include="Metadata\Cardinality.cs" />
     <Compile Include="Metadata\Class.cs" />
