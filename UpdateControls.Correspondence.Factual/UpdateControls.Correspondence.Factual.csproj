@@ -107,6 +107,10 @@
     <Compile Include="Metadata\Cardinality.cs" />
     <Compile Include="Metadata\Class.cs" />
     <Compile Include="Metadata\Condition.cs" />
+    <Compile Include="Metadata\ResultDirect.cs" />
+    <Compile Include="Metadata\ResultValue.cs" />
+    <Compile Include="Metadata\ResultValueFact.cs" />
+    <Compile Include="Metadata\ResultValueNative.cs" />
     <Compile Include="Metadata\Predicate.cs" />
     <Compile Include="Metadata\ConditionModifier.cs" />
     <Compile Include="Metadata\Direction.cs" />

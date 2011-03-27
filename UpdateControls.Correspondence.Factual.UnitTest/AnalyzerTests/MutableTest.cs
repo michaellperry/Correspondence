@@ -71,6 +71,33 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "CustomerName",
                 _analyzed.HasClassNamed("CustomerName").HasPredicateNamed("isCurrent").Query.Joins.Single().Type);
         }
-        
+
+        [TestMethod]
+        public void ParentClassHasQuery()
+        {
+            Target.Join join = _analyzed.HasClassNamed("Customer").HasQueryNamed("name").Joins.Single();
+            Assert.AreEqual("CustomerName", join.Type);
+            Assert.AreEqual("isCurrent", join.Conditions.Single().Name);
+        }
+
+        [TestMethod]
+        public void ParentClassHasDisputableResultNative()
+        {
+            Target.Result result = _analyzed.HasClassNamed("Customer").HasResultNamed("name");
+            Assert.AreEqual("CustomerName", result.Type);
+            Target.ResultValueNative nativeDisputableResult = result as Target.ResultValueNative;
+            Assert.IsNotNull(nativeDisputableResult);
+            Assert.AreEqual(Target.NativeType.String, nativeDisputableResult.NativeType);
+        }
+
+        [TestMethod]
+        public void ParentClassHasDisputableResultFact()
+        {
+            Target.Result result = _analyzed.HasClassNamed("Customer").HasResultNamed("employer");
+            Assert.AreEqual("CustomerEmployer", result.Type);
+            Target.ResultValueFact nativeDisputableResult = result as Target.ResultValueFact;
+            Assert.IsNotNull(nativeDisputableResult);
+            Assert.AreEqual("Company", nativeDisputableResult.FactType);
+        }
     }
 }

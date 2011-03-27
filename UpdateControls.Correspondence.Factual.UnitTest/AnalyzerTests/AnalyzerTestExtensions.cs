@@ -56,5 +56,25 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 Assert.Fail(String.Format("More than one predicate named {0} was found.", name));
             return predicates.Single();
         }
+
+        public static Target.Query HasQueryNamed(this Target.Class c, string name)
+        {
+            IEnumerable<Target.Query> queries = c.Queries.Where(query => query.Name == name);
+            if (!queries.Any())
+                Assert.Fail(String.Format("No query named {0} was found.", name));
+            if (queries.Count() > 1)
+                Assert.Fail(String.Format("More than one query named {0} was found.", name));
+            return queries.Single();
+        }
+
+        public static Target.Result HasResultNamed(this Target.Class c, string name)
+        {
+            IEnumerable<Target.Result> results = c.Results.Where(result => result.Query.Name == name);
+            if (!results.Any())
+                Assert.Fail(String.Format("No results named {0} was found.", name));
+            if (results.Count() > 1)
+                Assert.Fail(String.Format("More than one result named {0} was found.", name));
+            return results.Single();
+        }
     }
 }

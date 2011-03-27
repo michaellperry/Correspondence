@@ -157,7 +157,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         resultType.Name,
                         sourceQuery.FactName),
                     sourceQuery.LineNumber);
-            factClass.AddResult(new Target.Result(sourceQuery.FactName, targetQuery));
+            factClass.AddResult(new Target.ResultDirect(sourceQuery.FactName, targetQuery));
         }
 
         private void AnalyzePredicate(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
@@ -173,11 +173,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private void AnalyzeProperty(Target.Analyzed result, Target.Class factClass, Source.Fact fact, Source.Property property)
         {
-            Target.Class childClass = new Target.Class(fact.Name + property.Name.PascalCase());
+            Target.Class childClass = new Target.Class(fact.Name + property.Name.ToPascalCase());
             result.AddClass(childClass);
 
             childClass.AddPredecessor(new Target.Predecessor(
-                fact.Name.CamelCase(),
+                fact.Name.ToCamelCase(),
                 Target.Cardinality.One,
                 fact.Name,
                 false));
@@ -186,31 +186,50 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Target.Cardinality.Many,
                 childClass.Name,
                 false));
+
+            Target.Query query = new Target.Query("isCurrent")
+                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, "prior"));
+            childClass.AddQuery(query);
+            childClass.AddPredicate(new Target.Predicate(Target.ConditionModifier.Negative, query));
+
+            Target.Query valueQuery = new Target.Query(property.Name)
+                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, fact.Name.ToCamelCase())
+                    .AddCondition(new Target.Condition(Target.ConditionModifier.Negative, "isCurrent")));
+            factClass.AddQuery(valueQuery);
+
             Source.DataTypeNative dataTypeNative = property.Type as Source.DataTypeNative;
             if (dataTypeNative != null)
             {
+                Target.Cardinality cardinality = _cardinalityMap[dataTypeNative.Cardinality];
+                Target.NativeType nativeType = _nativeTypeMap[dataTypeNative.NativeType];
                 childClass.AddField(new Target.Field(
                     "value",
-                    _cardinalityMap[dataTypeNative.Cardinality],
-                    _nativeTypeMap[dataTypeNative.NativeType]));
+                    cardinality,
+                    nativeType));
+                factClass.AddResult(new Target.ResultValueNative(
+                    childClass.Name,
+                    valueQuery,
+                    cardinality,
+                    nativeType));
             }
             else
             {
                 Source.DataTypeFact dataTypeFact = property.Type as Source.DataTypeFact;
                 if (dataTypeFact != null)
                 {
+                    Target.Cardinality cardinality = _cardinalityMap[dataTypeFact.Cardinality];
                     childClass.AddPredecessor(new Target.Predecessor(
                         "value",
-                        _cardinalityMap[dataTypeFact.Cardinality],
+                        cardinality,
                         dataTypeFact.FactName,
                         false));
+                    factClass.AddResult(new Target.ResultValueFact(
+                        childClass.Name,
+                        valueQuery,
+                        cardinality,
+                        dataTypeFact.FactName));
                 }
             }
-
-            Target.Query query = new Target.Query("isCurrent")
-                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, "prior"));
-            childClass.AddQuery(query);
-            childClass.AddPredicate(new Target.Predicate(Target.ConditionModifier.Negative, query));
         }
 
         private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, out Source.Fact resultType)

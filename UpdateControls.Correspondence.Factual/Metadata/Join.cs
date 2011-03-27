@@ -37,9 +37,10 @@ namespace UpdateControls.Correspondence.Factual.Metadata
             get { return _conditions; }
         }
 
-        public void AddCondition(Condition condition)
+        public Join AddCondition(Condition condition)
         {
             _conditions.Add(condition);
+            return this;
         }
     }
 }

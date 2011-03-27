@@ -2,7 +2,7 @@ using System;
 
 namespace UpdateControls.Correspondence.Factual.Metadata
 {
-    public class Result
+    public abstract class Result
     {
         private string _type;
         private Query _query;

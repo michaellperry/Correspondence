@@ -174,6 +174,10 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Roles
 
         // Queries
+        public static Query QueryFavoriteColor = new Query()
+            .JoinSuccessors(UserFavoriteColor.RoleUser, Condition.WhereIsEmpty(UserFavoriteColor.QueryIsCurrent)
+            )
+            ;
         public static Query QueryActivePlayers = new Query()
             .JoinSuccessors(Player.RoleUser, Condition.WhereIsEmpty(Player.QueryIsActive)
             )
@@ -195,6 +199,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private string _userName;
 
         // Results
+        private Result<UserFavoriteColor> _favoriteColor;
         private Result<Player> _activePlayers;
         private Result<Player> _finishedPlayers;
         private Result<UserFavoriteColor2> _favoriteColor2;
@@ -217,6 +222,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
+            _favoriteColor = new Result<UserFavoriteColor>(this, QueryFavoriteColor);
             _activePlayers = new Result<Player>(this, QueryActivePlayers);
             _finishedPlayers = new Result<Player>(this, QueryFinishedPlayers);
             _favoriteColor2 = new Result<UserFavoriteColor2>(this, QueryFavoriteColor2);
@@ -231,6 +237,10 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
+        public IEnumerable<UserFavoriteColor> FavoriteColor
+        {
+            get { return _favoriteColor; }
+        }
         public IEnumerable<Player> ActivePlayers
         {
             get { return _activePlayers; }
@@ -1283,6 +1293,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				User._correspondenceFactType,
 				new User.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { User._correspondenceFactType }));
+			community.AddQuery(
+				User._correspondenceFactType,
+				User.QueryFavoriteColor.QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
 				User.QueryActivePlayers.QueryDefinition);
