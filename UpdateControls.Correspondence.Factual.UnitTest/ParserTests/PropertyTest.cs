@@ -21,5 +21,21 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 .Type.ThatIsDataTypeNative();
             Assert.AreEqual(NativeType.String, dataTypeNative.NativeType);
         }
+
+        [TestMethod]
+        public void CanPublishAProperty()
+        {
+            string code =
+                "namespace ContactList;       " +
+                "                             " +
+                "fact Person {                " +
+                "mutable:                     " +
+                "  publish string firstName;  " +
+                "}                            ";
+            Namespace result = ParseToNamespace(code);
+            Property property = result.WithFactNamed("Person").WithPropertyNamed("firstName");
+
+            Assert.IsTrue(property.Publish);
+        }
     }
 }

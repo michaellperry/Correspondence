@@ -78,6 +78,7 @@
     <Compile Include="MultiCommunityTest.cs" />
     <Compile Include="OutcomeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyTest.cs" />
     <Compile Include="RecordingCommunicationStrategy.cs" />
     <Compile Include="RedundantFactsTest.cs" />
     <Compile Include="TwoPlayerGameTest.cs" />

@@ -11,5 +11,10 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         {
             _cardinality = cardinality;
         }
+
+        public Cardinality Cardinality
+        {
+            get { return _cardinality; }
+        }
     }
 }

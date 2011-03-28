@@ -22,7 +22,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             DataTypeFact type = gameQueue.Type.ThatIsDataTypeFact();
             Assert.IsInstanceOfType(gameQueue.Type, typeof(DataTypeFact));
             Assert.AreEqual("GameQueue", type.FactName);
-            Assert.IsFalse(type.IsPivot, "The gameQueue field is a pivot.");
+            Assert.IsFalse(gameQueue.Publish, "The gameQueue field is a pivot.");
         }
 
         [TestMethod]
@@ -36,10 +36,10 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "  publish GameQueue gameQueue; " +
                 "}                              ";
             Namespace result = ParseToNamespace(code);
-            DataTypeFact type = result.WithFactNamed("GameRequest").WithFieldNamed("gameQueue")
-                .Type.ThatIsDataTypeFact();
+            Field field = result.WithFactNamed("GameRequest").WithFieldNamed("gameQueue");
+            DataTypeFact type = field.Type.ThatIsDataTypeFact();
             Assert.AreEqual(Cardinality.One, type.Cardinality);
-            Assert.IsTrue(type.IsPivot, "The gameQueue field is not a pivot.");
+            Assert.IsTrue(field.Publish, "The gameQueue field is not a pivot.");
         }
 
         [TestMethod]
@@ -53,10 +53,10 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "  publish User *players;     " +
                 "}                            ";
             Namespace result = ParseToNamespace(code);
-            DataTypeFact type = result.WithFactNamed("Game").WithFieldNamed("players")
-                .Type.ThatIsDataTypeFact();
+            Field field = result.WithFactNamed("Game").WithFieldNamed("players");
+            DataTypeFact type = field.Type.ThatIsDataTypeFact();
             Assert.AreEqual(Cardinality.Many, type.Cardinality);
-            Assert.IsTrue(type.IsPivot, "The players field is not a pivot.");
+            Assert.IsTrue(field.Publish, "The players field is not a pivot.");
         }
 
         [TestMethod]

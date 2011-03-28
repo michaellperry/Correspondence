@@ -19,8 +19,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         {
             Source.Namespace root = new Source.Namespace("CRM.Model", 1, string.Empty)
                 .AddFact(new Source.Fact("Customer", 3)
-                    .AddMember(new Source.Property(5, "name", new Source.DataTypeNative(Source.NativeType.String, Source.Cardinality.One, 5)))
-                    .AddMember(new Source.Property(6, "employer", new Source.DataTypeFact("Company", Source.Cardinality.One, false, 6)))
+                    .AddMember(new Source.Property(5, "name", new Source.DataTypeNative(Source.NativeType.String, Source.Cardinality.One, 5), true))
+                    .AddMember(new Source.Property(6, "employer", new Source.DataTypeFact("Company", Source.Cardinality.One, 6), false))
                 );
 
             _analyzed = new Analyzer(root).Analyze();
@@ -38,6 +38,20 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Assert.AreEqual(
                 "Customer",
                 _analyzed.HasClassNamed("CustomerName").HasPredecessorNamed("customer").FactType);
+        }
+
+        [TestMethod]
+        public void ChildClassIsPublished()
+        {
+            Assert.IsTrue(
+                _analyzed.HasClassNamed("CustomerName").HasPredecessorNamed("customer").IsPivot);
+        }
+
+        [TestMethod]
+        public void OtherChildClassIsNotPublished()
+        {
+            Assert.IsFalse(
+                _analyzed.HasClassNamed("CustomerEmployer").HasPredecessorNamed("customer").IsPivot);
         }
 
         [TestMethod]

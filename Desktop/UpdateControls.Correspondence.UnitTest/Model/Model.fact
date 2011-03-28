@@ -16,7 +16,7 @@ key:
 	string userName;
 
 mutable:
-	string favoriteColor;
+	publish string favoriteColor;
 
 query:
 	Player* activePlayers {

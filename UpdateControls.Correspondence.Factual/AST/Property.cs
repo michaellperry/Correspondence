@@ -4,9 +4,17 @@ namespace UpdateControls.Correspondence.Factual.AST
 {
     public class Property : DataMember
     {
-        public Property(int lineNumber, string name, DataType type)
+        private bool _publish;
+
+        public Property(int lineNumber, string name, DataType type, bool publish)
             : base(lineNumber, name, type)
         {
+            _publish = publish;
+        }
+
+        public bool Publish
+        {
+            get { return _publish; }
         }
     }
 }

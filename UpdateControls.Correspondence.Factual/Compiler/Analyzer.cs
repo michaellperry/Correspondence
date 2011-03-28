@@ -142,7 +142,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 				field.Name, 
 				_cardinalityMap[dataTypeFact.Cardinality], 
 				dataTypeFact.FactName, 
-				dataTypeFact.IsPivot));
+				field.Publish));
         }
 
         private void AnalyzeQuery(Target.Class factClass, Source.Fact fact, Source.Query sourceQuery)
@@ -180,7 +180,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 fact.Name.ToCamelCase(),
                 Target.Cardinality.One,
                 fact.Name,
-                false));
+                property.Publish));
             childClass.AddPredecessor(new Target.Predecessor(
                 "prior",
                 Target.Cardinality.Many,

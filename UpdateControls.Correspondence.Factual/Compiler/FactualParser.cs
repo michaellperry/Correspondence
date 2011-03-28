@@ -113,11 +113,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 nativeTypeNameRule,
                 cardinalityRule, "Defect.",
                 (nativeType, cardinality) => new DataTypeNative(nativeType.NativeType, cardinality, nativeType.LineNumber));
+            var publishOptRule = Optional(Reduce(Terminal(Symbol.Publish), t => true), false);
             var factTypeRule = Sequence(
-                Optional(Reduce(Terminal(Symbol.Publish), t => true), false),
-                Terminal(Symbol.Identifier), "Defect.",
+                Terminal(Symbol.Identifier),
                 cardinalityRule, "Defect.",
-                (isPivot, identifier, cardinality) => new DataTypeFact(identifier.Value, cardinality, isPivot, identifier.LineNumber));
+                (identifier, cardinality) => new DataTypeFact(identifier.Value, cardinality, identifier.LineNumber));
             var typeRule =
                 Reduce(nativeTypeRule, t => (DataType)t) |
                 Reduce(factTypeRule, t => (DataType)t);
@@ -169,10 +169,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             // field -> type identifier ";"
             var fieldRule = Sequence(
-                typeRule,
+                publishOptRule,
+                typeRule, "Provide a field type.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Terminal(Symbol.Semicolon), "Missing semicolon after field.",
-                (type, nameToken, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type));
+                (publish, type, nameToken, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type, publish));
 
             // query -> type identifier "{" set* "}"
             var queryRule = Sequence(
@@ -189,10 +190,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             // secure_field -> ("from" | "to") type identifier ";"
             var secureFieldRule = Sequence(
                 (Terminal(Symbol.From) | Terminal(Symbol.To)),
+                publishOptRule, "Defect.",
                 typeRule, "Declare a field after \"from\" or \"to\".",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Terminal(Symbol.Semicolon), "A field is followed by a semicolon.",
-                (modifierToken, typeToken, nameToken, semicolon) => CreateSecureField(modifierToken, typeToken, nameToken.Value)
+                (modifierToken, publish, typeToken, nameToken, semicolon) => CreateSecureField(modifierToken, typeToken, nameToken.Value, publish)
             );
 
             // key_member -> modifier | field | secure_field
@@ -217,10 +219,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             // mutable_member -> type identifier ";"
             // mutable_section -> "mutable" ":" mutable_member*
             var mutableMemberRule = Sequence(
-                typeRule,
+                publishOptRule,
+                typeRule, "Provide a field type.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Terminal(Symbol.Semicolon), "Terminate a field with a semicolon.",
-                (dataType, propertyNameToken, semicolonToken) => (FactMember)new Property(dataType.LineNumber, propertyNameToken.Value, dataType));
+                (publish, dataType, propertyNameToken, semicolonToken) => (FactMember)new Property(dataType.LineNumber, propertyNameToken.Value, dataType, publish));
             var mutableSectionRule = Many(
                 Sequence(
                     Terminal(Symbol.Mutable),
@@ -268,9 +271,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new Query(nameToken.Value, factType.FactName, factType.LineNumber);
         }
 
-        private static FactMember CreateSecureField(Token<Symbol> modifierToken, DataType dataType, string name)
+        private static FactMember CreateSecureField(Token<Symbol> modifierToken, DataType dataType, string name, bool publish)
         {
-            Field field = new Field(modifierToken.LineNumber, name, dataType);
+            Field field = new Field(modifierToken.LineNumber, name, dataType, publish);
             if (modifierToken.Symbol == Symbol.From)
                 field.SecurityModifier = FieldSecurityModifier.From;
             else if (modifierToken.Symbol == Symbol.To)

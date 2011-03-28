@@ -74,6 +74,7 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Disputable.cs" />
     <Compile Include="FieldSerializer\BinaryHelper.cs" />
     <Compile Include="Mementos\GetResultMemento.cs" />
     <Compile Include="Networking\AsynchronousNetwork.cs" />

@@ -11,7 +11,7 @@ using System.IO;
 digraph "UpdateControls.Correspondence.UnitTest.Model"
 {
     rankdir=BT
-    UserFavoriteColor -> User
+    UserFavoriteColor -> User [color="red"]
     UserFavoriteColor -> UserFavoriteColor [label="  *"]
     UserFavoriteColor2 -> User
     UserFavoriteColor2 -> UserFavoriteColor2 [label="  *"]
@@ -125,6 +125,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _activeLogOns; }
         }
+
+        // Mutable property access
     }
     
     public partial class User : CorrespondenceFact
@@ -237,10 +239,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
-        public IEnumerable<UserFavoriteColor> FavoriteColor
-        {
-            get { return _favoriteColor; }
-        }
         public IEnumerable<Player> ActivePlayers
         {
             get { return _activePlayers; }
@@ -252,6 +250,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         public IEnumerable<UserFavoriteColor2> FavoriteColor2
         {
             get { return _favoriteColor2; }
+        }
+
+        // Mutable property access
+        public Disputable<string> FavoriteColor
+        {
+            get { return _favoriteColor.Select(fact => fact.Value).AsDisputable(); }
+			set
+			{
+				Community.AddFact(new UserFavoriteColor(this, _favoriteColor, value.Value));
+			}
         }
     }
     
@@ -304,7 +312,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			_correspondenceFactType,
 			"user",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			false));
+			true));
         public static Role RolePrior = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"prior",
@@ -371,6 +379,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
+
+        // Mutable property access
     }
     
     public partial class UserFavoriteColor2 : CorrespondenceFact
@@ -489,6 +499,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
+
+        // Mutable property access
     }
     
     public partial class LogOn : CorrespondenceFact
@@ -606,6 +618,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 
         // Query result access
+
+        // Mutable property access
     }
     
     public partial class LogOff : CorrespondenceFact
@@ -698,6 +712,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Field access
 
         // Query result access
+
+        // Mutable property access
     }
     
     public partial class Game : CorrespondenceFact
@@ -813,6 +829,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _outcomes; }
         }
+
+        // Mutable property access
     }
     
     public partial class GameName : CorrespondenceFact
@@ -927,6 +945,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
+
+        // Mutable property access
     }
     
     public partial class Player : CorrespondenceFact
@@ -1060,6 +1080,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _moves; }
         }
+
+        // Mutable property access
     }
     
     public partial class Move : CorrespondenceFact
@@ -1170,6 +1192,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
+
+        // Mutable property access
     }
     
     public partial class Outcome : CorrespondenceFact
@@ -1275,6 +1299,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Field access
 
         // Query result access
+
+        // Mutable property access
     }
     
 
