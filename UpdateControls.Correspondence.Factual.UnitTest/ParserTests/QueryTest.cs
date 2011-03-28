@@ -14,6 +14,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace ContactList;                      " +
                 "                                            " +
                 "fact Person {                               " +
+                "key:                                        " +
                 "query:                                      " +
                 "  Address* addresses {                      " +
                 "    Address address : address.person = this " +

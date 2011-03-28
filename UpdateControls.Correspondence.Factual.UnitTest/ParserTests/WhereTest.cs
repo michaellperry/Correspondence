@@ -14,6 +14,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;                  " +
                 "                                              " +
                 "fact Frame {                                  " +
+                "key:                                          " +
                 "query:                                        " +
                 "	Request* outstandingRequests {             " +
                 "		Request request : request.frame = this " +
@@ -35,6 +36,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;                                       " +
                 "                                                                   " +
                 "fact Frame {                                                       " +
+                "key:                                                               " +
                 "query:                                                             " +
                 "	Request* outstandingRequests {                                  " +
                 "		Request request : request.frame = this                      " +

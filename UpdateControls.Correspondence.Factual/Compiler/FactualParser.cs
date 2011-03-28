@@ -167,7 +167,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
                 (predicate, closeBracket) => (FactMember)predicate);
 
-            // field -> type identifier ";"
+            // field -> "publish"? type identifier ";"
             var fieldRule = Sequence(
                 publishOptRule,
                 typeRule, "Provide a field type.",
@@ -187,7 +187,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A query must contain sets.",
                 (query, closeBracket) => (FactMember)query);
 
-            // secure_field -> ("from" | "to") type identifier ";"
+            // secure_field -> ("from" | "to") "publish"? type identifier ";"
             var secureFieldRule = Sequence(
                 (Terminal(Symbol.From) | Terminal(Symbol.To)),
                 publishOptRule, "Defect.",
@@ -216,7 +216,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 keyMemberRule | modifierRule, (keySection, keyMember) => keyMember(keySection));
 
-            // mutable_member -> type identifier ";"
+            // mutable_member -> "publish"? type identifier ";"
             // mutable_section -> "mutable" ":" mutable_member*
             var mutableMemberRule = Sequence(
                 publishOptRule,
@@ -241,7 +241,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
 
-            // fact -> "fact" identifier "{" key_section? mutable_section? query_section? "}"
+            // fact -> "fact" identifier "{" key_section mutable_section? query_section? "}"
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
@@ -249,7 +249,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
             var factRule = Sequence(
                 factHeader,
-                Optional(keySectionRule, EmptySection), "Defect.",
+                keySectionRule, "Key section is required.",
                 Optional(mutableSectionRule, EmptySection), "Defect.",
                 Optional(querySectionRule, EmptySection), "Defect.",
                 Terminal(Symbol.CloseBracket), "Specify a \"key\", \"mutable\", or \"query\" section.",

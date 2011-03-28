@@ -17,6 +17,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Person {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "	bool isPlaying {\r\n" +
                 "		exists Game game : game.player.person = this\r\n" +
@@ -26,7 +27,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The fact type \"Game\" is not defined.")) &
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(6))
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(7))
             ));
         }
 
@@ -37,9 +38,11 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Game {\r\n" +
+                "key:\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact Person {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "	bool isPlaying {\r\n" +
                 "		exists Game game : game.player.person = this\r\n" +
@@ -49,7 +52,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The member \"Game.player\" is not defined.")) &
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(9))
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(11))
             ));
         }
 
@@ -60,6 +63,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "	Request* outstandingRequests {\r\n" +
                 "		Request request : request.frame = this\r\n" +
@@ -75,7 +79,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The member \"Request.isAccepted\" is not defined.")) &
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(7))
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(8))
             ));
         }
 
@@ -86,6 +90,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "	Request* outstandingRequests {\r\n" +
                 "		Request request : request.frame = this\r\n" +
@@ -129,6 +134,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "	Request* outstandingRequests {\r\n" +
                 "		Request request : request.frame = this\r\n" +
@@ -183,6 +189,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact Frame {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "	Request* outstandingRequests {\r\n" +
                 "		Request request : request.frame = this\r\n" +

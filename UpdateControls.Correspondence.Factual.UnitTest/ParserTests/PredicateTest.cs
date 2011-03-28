@@ -14,6 +14,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;                            " +
                 "                                                        " +
                 "fact Request {                                          " +
+                "key:                                                    " +
                 "query:                                                  " +
                 "	bool isOutstanding {                                 " +
                 "		not exists Accept accept : accept.request = this " +
@@ -34,7 +35,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace Reversi.GameModel;                        " +
                 "                                                    " +
                 "fact Person {                                       " +
-                "query:                                                  " +
+                "key:                                                " +
+                "query:                                              " +
                 "	bool isPlaying {                                 " +
                 "		exists Game game : game.player.person = this " +
                 "	}                                                " +

@@ -13,6 +13,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace ContactList;       " +
                 "                             " +
                 "fact Person {                " +
+                "key:                         " +
                 "mutable:                     " +
                 "  string firstName;          " +
                 "}                            ";
@@ -29,6 +30,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace ContactList;       " +
                 "                             " +
                 "fact Person {                " +
+                "key:                         " +
                 "mutable:                     " +
                 "  publish string firstName;  " +
                 "}                            ";

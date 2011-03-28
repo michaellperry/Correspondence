@@ -26,7 +26,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Analyzed result = AssertNoError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
-                "fact GameQueue { }"
+                "fact GameQueue { key: }"
             );
 
             Pred.Assert(result.Name, Is.EqualTo("Reversi.GameModel"));
@@ -39,8 +39,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             IEnumerable<Error> errors = AssertError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
-                "fact GameQueue { }\r\n" +
-                "fact GameQueue { }"
+                "fact GameQueue { key: }\r\n" +
+                "fact GameQueue { key: }"
             );
 
             Pred.Assert(errors, Contains<Error>.That(

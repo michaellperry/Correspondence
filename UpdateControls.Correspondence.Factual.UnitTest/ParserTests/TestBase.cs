@@ -33,7 +33,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         {
             FactualParser parser = new FactualParser(new StringReader(code));
             Namespace result = parser.Parse();
-            Assert.IsNull(result);
+            Assert.IsNull(result, "The parser should have raised an error.");
             return parser.Errors.Single();
         }
     }

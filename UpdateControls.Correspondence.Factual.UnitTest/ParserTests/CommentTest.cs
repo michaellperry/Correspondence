@@ -15,9 +15,11 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "                                            \r\n" +
                 "/*fact Ignored                              \r\n" +
                 "{                                           \r\n" +
+                "key:                                        \r\n" +
                 "}                                           \r\n" +
                 "*/                                          \r\n" +
                 "fact Person {                               \r\n" +
+                "key:                                        \r\n" +
                 "query:                                      \r\n" +
                 "  Address* addresses {                      \r\n" +
                 "    Address address : address.person = this \r\n" +
@@ -34,11 +36,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "namespace ContactList;                      \r\n" +
                 "                                            \r\n" +
                 "fact Person {                               \r\n" +
+                "key:                                        \r\n" +
+                "  //string ignored;                         \r\n" +
                 "query:                                      \r\n" +
                 "  Address* addresses {                      \r\n" +
                 "    Address address : address.person = this \r\n" +
                 "  }                                         \r\n" +
-                "  //string ignored;                         \r\n" +
                 "}";
             Namespace result = ParseToNamespace(code);
             var person = result.WithFactNamed("Person");

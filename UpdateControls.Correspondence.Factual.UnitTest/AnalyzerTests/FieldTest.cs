@@ -90,7 +90,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             IEnumerable<Error> errors = AssertError(
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
-                "fact Id { }\r\n" +
+                "fact Id { key: }\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
                 "key:\r\n" +
@@ -116,6 +116,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "  GameRequest *gameRequests {\r\n" +
                 "    GameRequest r : r.identifier = this\r\n" +
@@ -129,7 +130,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             );
 
             Pred.Assert(errors, Contains<Error>.That(
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(6)) &
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(7)) &
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The member \"GameRequest.identifier\" is not a fact."))
             ));
         }

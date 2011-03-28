@@ -17,6 +17,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "  GameRequest *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
@@ -49,6 +50,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "  GameRequest *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
@@ -79,6 +81,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "  TypeNotFound *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
@@ -93,7 +96,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The fact type \"TypeNotFound\" is not defined.")) &
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(5))
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(6))
             ));
         }
 
@@ -104,6 +107,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace Reversi.GameModel;\r\n" +
                 "\r\n" +
                 "fact GameQueue {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "  TypeFoundButWrong *gameRequests {\r\n" +
                 "    GameRequest r : r.gameQueue = this\r\n" +
@@ -116,12 +120,13 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "}\r\n" +
                 "\r\n" +
                 "fact TypeFoundButWrong {\r\n" +
+                "key:\r\n" +
                 "}"
             );
 
             Pred.Assert(errors, Contains<Error>.That(
                 Has<Error>.Property(error => error.Message, Is.EqualTo("The query results in \"GameRequest\", not \"TypeFoundButWrong\".")) &
-                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(5))
+                Has<Error>.Property(error => error.LineNumber, Is.EqualTo(6))
             ));
         }
 
@@ -132,6 +137,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "namespace MagazineSubscriptions;\r\n" +
                 "\r\n" +
                 "fact Subscriber {\r\n" +
+                "key:\r\n" +
                 "query:\r\n" +
                 "  Article* articles {\r\n" +
                 "    Subscription subscription : subscription.subscriber = this\r\n" +
@@ -140,6 +146,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 "}\r\n" +
                 "\r\n" +
                 "fact Magazine {\r\n" +
+                "key:\r\n" +
                 "}\r\n" +
                 "\r\n" +
                 "fact Subscription {\r\n" +

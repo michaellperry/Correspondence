@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Factual.AST;
+using QEDCode.LLOne;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
 {
@@ -12,10 +13,21 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             string code =
                 "namespace Reversi.GameModel;\r\n" +
                 "                            \r\n" +
-                "fact GameQueue {}           \r\n";
+                "fact GameQueue {key:}       \r\n";
             Namespace result = ParseToNamespace(code);
             Fact gameQueue = result.WithFactNamed("GameQueue");
             Assert.AreEqual(3, gameQueue.LineNumber);
+        }
+
+        [TestMethod]
+        public void KeySectionIsRequired()
+        {
+            string code =
+                "namespace Reversi.GameModel;\r\n" +
+                "                            \r\n" +
+                "fact GameQueue {}           \r\n";
+            ParserError result = ParseToError(code);
+            Assert.AreEqual("Key section is required.", result.Message);
         }
 
         [TestMethod]
