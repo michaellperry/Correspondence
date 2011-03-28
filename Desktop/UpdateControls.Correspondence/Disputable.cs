@@ -26,6 +26,16 @@ namespace UpdateControls.Correspondence
             get { return _candidates.FirstOrDefault(); }
         }
 
+        public bool InConflict
+        {
+            get { return _candidates.Count > 1; }
+        }
+
+        public IEnumerable<T> Candidates
+        {
+            get { return _candidates; }
+        }
+
         public static implicit operator T(Disputable<T> disputable)
         {
             return disputable.Value;
@@ -34,11 +44,6 @@ namespace UpdateControls.Correspondence
         public static implicit operator Disputable<T>(T value)
         {
             return Enumerable.Repeat(value, 1).AsDisputable();
-        }
-
-        public bool InConflict
-        {
-            get { return _candidates.Count > 1; }
         }
     }
 }

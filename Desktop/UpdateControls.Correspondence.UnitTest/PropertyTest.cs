@@ -80,6 +80,18 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
+        public void CanSeeCandidatesOfConflict()
+        {
+            _alan.FavoriteColor = "Blue";
+            _otherAlan.FavoriteColor = "Red";
+            Synchronize();
+
+            IEnumerable<string> candidates = _alan.FavoriteColor.Candidates;
+            Assert.IsTrue(candidates.Contains("Blue"));
+            Assert.IsTrue(candidates.Contains("Red"));
+        }
+
+        [TestMethod]
         public void CanGetDefaultMutableFactProperty()
         {
             Color color = _alan.BetterFavoriteColor;
@@ -123,6 +135,18 @@ namespace UpdateControls.Correspondence.UnitTest
             Synchronize();
 
             Assert.IsTrue(_alan.BetterFavoriteColor.InConflict);
+        }
+
+        [TestMethod]
+        public void CanSeeCandidatesOfFactConflict()
+        {
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            _otherAlan.BetterFavoriteColor = _otherCommunity.AddFact(new Color("Red"));
+            Synchronize();
+
+            IEnumerable<Color> candidates = _alan.BetterFavoriteColor.Candidates;
+            Assert.IsTrue(candidates.Any(color => color.Name == "Blue"));
+            Assert.IsTrue(candidates.Any(color => color.Name == "Red"));
         }
 
         private void Synchronize()
