@@ -262,6 +262,17 @@ namespace <#=targetNamespace.Name#>
 			}
         }
 <#}#>
+
+<# foreach (ResultValueFact result in c.Results.OfType<ResultValueFact>()) { #>
+        public Disputable<<#=ResultTypeFact(result)#>> <#=Capitalize(result.Query.Name)#>
+        {
+            get { return _<#=result.Query.Name#>.Select(fact => fact.Value).AsDisputable(); }
+			set
+			{
+				Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+			}
+        }
+<#}#>
     }
     
 <#}#>
@@ -365,6 +376,14 @@ private static string ResultTypeNative(ResultValueNative result)
         else
             return string.Format("{0}?", NativeTypeName(result.NativeType));
     }
+}
+
+private static string ResultTypeFact(ResultValueFact result)
+{
+    if (result.Cardinality == Cardinality.Many)
+        return string.Format("List<{0}>", result.FactType);
+    else
+        return result.FactType;
 }
 
 private static string NativeTypeName(NativeType nativeType)

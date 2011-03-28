@@ -17,6 +17,7 @@ key:
 
 mutable:
 	publish string favoriteColor;
+	publish Color betterFavoriteColor;
 
 query:
 	Player* activePlayers {
@@ -28,23 +29,11 @@ query:
 		Player p : p.user = this
 			where p.isNotActive
 	}
-
-	UserFavoriteColor2* favoriteColor2 {
-		UserFavoriteColor2 c : c.user = this
-			where c.isCurrent
-	}
 }
 
-fact UserFavoriteColor2 {
+fact Color {
 key:
-	User user;
-	string value;
-	UserFavoriteColor2* prior;
-
-query:
-	bool isCurrent {
-		not exists UserFavoriteColor2 next : next.prior = this
-	}
+	string name;
 }
 
 fact LogOn {

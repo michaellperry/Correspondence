@@ -13,8 +13,9 @@ digraph "UpdateControls.Correspondence.UnitTest.Model"
     rankdir=BT
     UserFavoriteColor -> User [color="red"]
     UserFavoriteColor -> UserFavoriteColor [label="  *"]
-    UserFavoriteColor2 -> User
-    UserFavoriteColor2 -> UserFavoriteColor2 [label="  *"]
+    UserBetterFavoriteColor -> User [color="red"]
+    UserBetterFavoriteColor -> UserBetterFavoriteColor [label="  *"]
+    UserBetterFavoriteColor -> Color
     LogOn -> User
     LogOn -> Machine
     LogOff -> LogOn
@@ -127,6 +128,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Mutable property access
+
     }
     
     public partial class User : CorrespondenceFact
@@ -180,16 +182,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             .JoinSuccessors(UserFavoriteColor.RoleUser, Condition.WhereIsEmpty(UserFavoriteColor.QueryIsCurrent)
             )
             ;
+        public static Query QueryBetterFavoriteColor = new Query()
+            .JoinSuccessors(UserBetterFavoriteColor.RoleUser, Condition.WhereIsEmpty(UserBetterFavoriteColor.QueryIsCurrent)
+            )
+            ;
         public static Query QueryActivePlayers = new Query()
             .JoinSuccessors(Player.RoleUser, Condition.WhereIsEmpty(Player.QueryIsActive)
             )
             ;
         public static Query QueryFinishedPlayers = new Query()
             .JoinSuccessors(Player.RoleUser, Condition.WhereIsNotEmpty(Player.QueryIsNotActive)
-            )
-            ;
-        public static Query QueryFavoriteColor2 = new Query()
-            .JoinSuccessors(UserFavoriteColor2.RoleUser, Condition.WhereIsEmpty(UserFavoriteColor2.QueryIsCurrent)
             )
             ;
 
@@ -202,9 +204,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Results
         private Result<UserFavoriteColor> _favoriteColor;
+        private Result<UserBetterFavoriteColor> _betterFavoriteColor;
         private Result<Player> _activePlayers;
         private Result<Player> _finishedPlayers;
-        private Result<UserFavoriteColor2> _favoriteColor2;
 
         // Business constructor
         public User(
@@ -225,9 +227,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private void InitializeResults()
         {
             _favoriteColor = new Result<UserFavoriteColor>(this, QueryFavoriteColor);
+            _betterFavoriteColor = new Result<UserBetterFavoriteColor>(this, QueryBetterFavoriteColor);
             _activePlayers = new Result<Player>(this, QueryActivePlayers);
             _finishedPlayers = new Result<Player>(this, QueryFinishedPlayers);
-            _favoriteColor2 = new Result<UserFavoriteColor2>(this, QueryFavoriteColor2);
         }
 
         // Predecessor access
@@ -247,10 +249,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _finishedPlayers; }
         }
-        public IEnumerable<UserFavoriteColor2> FavoriteColor2
-        {
-            get { return _favoriteColor2; }
-        }
 
         // Mutable property access
         public Disputable<string> FavoriteColor
@@ -259,6 +257,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			set
 			{
 				Community.AddFact(new UserFavoriteColor(this, _favoriteColor, value.Value));
+			}
+        }
+
+        public Disputable<Color> BetterFavoriteColor
+        {
+            get { return _betterFavoriteColor.Select(fact => fact.Value).AsDisputable(); }
+			set
+			{
+				Community.AddFact(new UserBetterFavoriteColor(this, _betterFavoriteColor, value.Value));
 			}
         }
     }
@@ -381,9 +388,10 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Query result access
 
         // Mutable property access
+
     }
     
-    public partial class UserFavoriteColor2 : CorrespondenceFact
+    public partial class UserBetterFavoriteColor : CorrespondenceFact
     {
 		// Factory
 		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
@@ -397,14 +405,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 			public CorrespondenceFact CreateFact(FactMemento memento)
 			{
-				UserFavoriteColor2 newFact = new UserFavoriteColor2(memento);
+				UserBetterFavoriteColor newFact = new UserBetterFavoriteColor(memento);
 
 				// Create a memory stream from the memento data.
 				using (MemoryStream data = new MemoryStream(memento.Data))
 				{
 					using (BinaryReader output = new BinaryReader(data))
 					{
-						newFact._value = (string)_fieldSerializerByType[typeof(string)].ReadData(output);
 					}
 				}
 
@@ -413,14 +420,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
-				UserFavoriteColor2 fact = (UserFavoriteColor2)obj;
-				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
+				UserBetterFavoriteColor fact = (UserBetterFavoriteColor)obj;
 			}
 		}
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.UserFavoriteColor2", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.UserBetterFavoriteColor", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -432,16 +438,21 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			_correspondenceFactType,
 			"user",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			false));
+			true));
         public static Role RolePrior = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"prior",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.UserFavoriteColor2", 1),
+			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.UserBetterFavoriteColor", 1),
+			false));
+        public static Role RoleValue = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"value",
+			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Color", 1),
 			false));
 
         // Queries
         public static Query QueryIsCurrent = new Query()
-            .JoinSuccessors(UserFavoriteColor2.RolePrior)
+            .JoinSuccessors(UserBetterFavoriteColor.RolePrior)
             ;
 
         // Predicates
@@ -449,32 +460,33 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Predecessors
         private PredecessorObj<User> _user;
-        private PredecessorList<UserFavoriteColor2> _prior;
+        private PredecessorList<UserBetterFavoriteColor> _prior;
+        private PredecessorObj<Color> _value;
 
         // Fields
-        private string _value;
 
         // Results
 
         // Business constructor
-        public UserFavoriteColor2(
+        public UserBetterFavoriteColor(
             User user
-            ,IEnumerable<UserFavoriteColor2> prior
-            ,string value
+            ,IEnumerable<UserBetterFavoriteColor> prior
+            ,Color value
             )
         {
             InitializeResults();
             _user = new PredecessorObj<User>(this, RoleUser, user);
-            _prior = new PredecessorList<UserFavoriteColor2>(this, RolePrior, prior);
-            _value = value;
+            _prior = new PredecessorList<UserBetterFavoriteColor>(this, RolePrior, prior);
+            _value = new PredecessorObj<Color>(this, RoleValue, value);
         }
 
         // Hydration constructor
-        private UserFavoriteColor2(FactMemento memento)
+        private UserBetterFavoriteColor(FactMemento memento)
         {
             InitializeResults();
             _user = new PredecessorObj<User>(this, RoleUser, memento);
-            _prior = new PredecessorList<UserFavoriteColor2>(this, RolePrior, memento);
+            _prior = new PredecessorList<UserBetterFavoriteColor>(this, RolePrior, memento);
+            _value = new PredecessorObj<Color>(this, RoleValue, memento);
         }
 
         // Result initializer
@@ -487,20 +499,112 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _user.Fact; }
         }
-        public IEnumerable<UserFavoriteColor2> Prior
+        public IEnumerable<UserBetterFavoriteColor> Prior
         {
             get { return _prior; }
         }
-     
-        // Field access
-        public string Value
+             public Color Value
         {
-            get { return _value; }
+            get { return _value.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+
+        // Mutable property access
+
+    }
+    
+    public partial class Color : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Color newFact = new Color(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._name = (string)_fieldSerializerByType[typeof(string)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Color fact = (Color)obj;
+				_fieldSerializerByType[typeof(string)].WriteData(output, fact._name);
+			}
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"UpdateControls.Correspondence.UnitTest.Model.Color", 1);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Roles
+
+        // Queries
+
+        // Predicates
+
+        // Predecessors
+
+        // Fields
+        private string _name;
+
+        // Results
+
+        // Business constructor
+        public Color(
+            string name
+            )
+        {
+            InitializeResults();
+            _name = name;
+        }
+
+        // Hydration constructor
+        private Color(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+
+        // Field access
+        public string Name
+        {
+            get { return _name; }
         }
 
         // Query result access
 
         // Mutable property access
+
     }
     
     public partial class LogOn : CorrespondenceFact
@@ -620,6 +724,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Query result access
 
         // Mutable property access
+
     }
     
     public partial class LogOff : CorrespondenceFact
@@ -714,6 +819,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Query result access
 
         // Mutable property access
+
     }
     
     public partial class Game : CorrespondenceFact
@@ -831,6 +937,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Mutable property access
+
     }
     
     public partial class GameName : CorrespondenceFact
@@ -947,6 +1054,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Query result access
 
         // Mutable property access
+
     }
     
     public partial class Player : CorrespondenceFact
@@ -1082,6 +1190,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Mutable property access
+
     }
     
     public partial class Move : CorrespondenceFact
@@ -1194,6 +1303,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Query result access
 
         // Mutable property access
+
     }
     
     public partial class Outcome : CorrespondenceFact
@@ -1301,6 +1411,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Query result access
 
         // Mutable property access
+
     }
     
 
@@ -1324,13 +1435,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				User.QueryFavoriteColor.QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
+				User.QueryBetterFavoriteColor.QueryDefinition);
+			community.AddQuery(
+				User._correspondenceFactType,
 				User.QueryActivePlayers.QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
 				User.QueryFinishedPlayers.QueryDefinition);
-			community.AddQuery(
-				User._correspondenceFactType,
-				User.QueryFavoriteColor2.QueryDefinition);
 			community.AddType(
 				UserFavoriteColor._correspondenceFactType,
 				new UserFavoriteColor.CorrespondenceFactFactory(fieldSerializerByType),
@@ -1339,12 +1450,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				UserFavoriteColor._correspondenceFactType,
 				UserFavoriteColor.QueryIsCurrent.QueryDefinition);
 			community.AddType(
-				UserFavoriteColor2._correspondenceFactType,
-				new UserFavoriteColor2.CorrespondenceFactFactory(fieldSerializerByType),
-				new FactMetadata(new List<CorrespondenceFactType> { UserFavoriteColor2._correspondenceFactType }));
+				UserBetterFavoriteColor._correspondenceFactType,
+				new UserBetterFavoriteColor.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { UserBetterFavoriteColor._correspondenceFactType }));
 			community.AddQuery(
-				UserFavoriteColor2._correspondenceFactType,
-				UserFavoriteColor2.QueryIsCurrent.QueryDefinition);
+				UserBetterFavoriteColor._correspondenceFactType,
+				UserBetterFavoriteColor.QueryIsCurrent.QueryDefinition);
+			community.AddType(
+				Color._correspondenceFactType,
+				new Color.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { Color._correspondenceFactType }));
 			community.AddType(
 				LogOn._correspondenceFactType,
 				new LogOn.CorrespondenceFactFactory(fieldSerializerByType),

@@ -79,6 +79,52 @@ namespace UpdateControls.Correspondence.UnitTest
             Assert.IsTrue(_alan.FavoriteColor.InConflict);
         }
 
+        [TestMethod]
+        public void CanGetDefaultMutableFactProperty()
+        {
+            Color color = _alan.BetterFavoriteColor;
+
+            Assert.IsNull(color);
+        }
+
+        [TestMethod]
+        public void CanSetMutableFactProperty()
+        {
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            Color color = _alan.BetterFavoriteColor;
+
+            Assert.AreEqual("Blue", color.Name);
+        }
+
+        [TestMethod]
+        public void CanChangeMutableFactProperty()
+        {
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Red"));
+            Color color = _alan.BetterFavoriteColor;
+
+            Assert.AreEqual("Red", color.Name);
+        }
+
+        [TestMethod]
+        public void FactPropertySetFromOneCommunityHasNoConflict()
+        {
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Red"));
+
+            Assert.IsFalse(_alan.BetterFavoriteColor.InConflict);
+        }
+
+        [TestMethod]
+        public void FactPropertySetFromTwoCommunitiesHasConflict()
+        {
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            _otherAlan.BetterFavoriteColor = _otherCommunity.AddFact(new Color("Red"));
+            Synchronize();
+
+            Assert.IsTrue(_alan.BetterFavoriteColor.InConflict);
+        }
+
         private void Synchronize()
         {
             while (_community.Synchronize() || _otherCommunity.Synchronize()) ;
