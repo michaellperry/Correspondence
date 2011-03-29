@@ -91,12 +91,30 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{849EB099-EC1C-497A-8F77-849A0A8FB3AF}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.WP7\App\correspondence.app.wp7.nuspec = NuGet.WP7\App\correspondence.app.wp7.nuspec
-		NuGet.WP7\Core\correspondence.core.wp7.nuspec = NuGet.WP7\Core\correspondence.core.wp7.nuspec
+		NuGet.WP7\PackAll.bat = NuGet.WP7\PackAll.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A-656F-46C5-AC58-EC984A4DDB42}"
+	ProjectSection(SolutionItems) = preProject
 		NuGet.WP7\Model\correspondence.model.wp7.nuspec = NuGet.WP7\Model\correspondence.model.wp7.nuspec
-		NuGet.WP7\UnitTest\correspondence.unittest.wp7.nuspec = NuGet.WP7\UnitTest\correspondence.unittest.wp7.nuspec
 		NuGet.WP7\Model\content\Model.fact.pp = NuGet.WP7\Model\content\Model.fact.pp
 		NuGet.WP7\Model\content\Model.tt = NuGet.WP7\Model\content\Model.tt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CB489F9B-C65C-4443-B7F8-DA30818C1BAF}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.WP7\Core\correspondence.wp7.nuspec = NuGet.WP7\Core\correspondence.wp7.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.WP7\UnitTest\correspondence.unittest.wp7.nuspec = NuGet.WP7\UnitTest\correspondence.unittest.wp7.nuspec
+		NuGet.WP7\UnitTest\content\ModelTest.cs.pp = NuGet.WP7\UnitTest\content\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.WP7\App\correspondence.app.wp7.nuspec = NuGet.WP7\App\correspondence.app.wp7.nuspec
 	EndProjectSection
 EndProject
 Global
@@ -339,5 +357,9 @@ Global
 		{B4245EFD-8EEE-4D38-AA3A-F5D51516037C} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{426A7DF6-3C39-4125-9AD3-31D93208B269} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{896FC2DB-34B3-4F20-812E-15AE88D7398C} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
+		{4F26812A-656F-46C5-AC58-EC984A4DDB42} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{CB489F9B-C65C-4443-B7F8-DA30818C1BAF} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 	EndGlobalSection
 EndGlobal

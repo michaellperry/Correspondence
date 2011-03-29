@@ -56,6 +56,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Disputable.cs">
+      <Link>Disputable.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ICorrespondenceModel.cs">
       <Link>Strategy\ICorrespondenceModel.cs</Link>
     </Compile>

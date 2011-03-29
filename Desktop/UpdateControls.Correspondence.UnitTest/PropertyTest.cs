@@ -1,10 +1,8 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UpdateControls.Correspondence.UnitTest.Model;
 using UpdateControls.Correspondence.Memory;
+using UpdateControls.Correspondence.UnitTest.Model;
 
 namespace UpdateControls.Correspondence.UnitTest
 {

@@ -5,14 +5,15 @@
     <version>1.1.0.0</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
-    <description>Persistence and synchronization for occasionally connected Windows Phone 7 applications.</description>
+    <description>Add to a Windows Phone 7 application. Turns it into a multiple-client test suite.</description>
     <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>
     <projectUrl>http://correspondence.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language>en-US</language>
     <tags>nosql database wp7 synchronize</tags>
     <dependencies>
-      <dependency id="correspondence.core.wp7" version="1.1.0.0"/>
+      <dependency id="correspondence.wp7" version="1.1.0.0"/>
+      <dependency id="silverlight.unittest.wp7" version="3.0.31115.2022"/>
     </dependencies>
   </metadata>
 </package>

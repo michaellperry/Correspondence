@@ -244,10 +244,33 @@ namespace <#=targetNamespace.Name#>
 <#}#>
 
         // Query result access
-<# foreach (Result result in c.Results) { #>
+<# foreach (Result result in c.Results.OfType<ResultDirect>()) { #>
         public IEnumerable<<#=result.Type#>> <#=Capitalize(result.Query.Name)#>
         {
             get { return _<#=result.Query.Name#>; }
+        }
+<#}#>
+
+        // Mutable property access
+<# foreach (ResultValueNative result in c.Results.OfType<ResultValueNative>()) { #>
+        public Disputable<<#=ResultTypeNative(result)#>> <#=Capitalize(result.Query.Name)#>
+        {
+            get { return _<#=result.Query.Name#>.Select(fact => fact.Value).AsDisputable(); }
+			set
+			{
+				Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+			}
+        }
+<#}#>
+
+<# foreach (ResultValueFact result in c.Results.OfType<ResultValueFact>()) { #>
+        public Disputable<<#=ResultTypeFact(result)#>> <#=Capitalize(result.Query.Name)#>
+        {
+            get { return _<#=result.Query.Name#>.Select(fact => fact.Value).AsDisputable(); }
+			set
+			{
+				Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+			}
         }
 <#}#>
     }
@@ -338,6 +361,29 @@ private static string PropertyType(Field field)
         else
             return string.Format("{0}?", NativeTypeName(field.NativeType));
     }
+}
+
+private static string ResultTypeNative(ResultValueNative result)
+{
+    if (result.Cardinality == Cardinality.One)
+        return NativeTypeName(result.NativeType);
+    else if (result.Cardinality == Cardinality.Many)
+        return string.Format("List<{0}>", NativeTypeName(result.NativeType));
+    else
+    {
+        if (IsReferenceType(result.NativeType))
+            return NativeTypeName(result.NativeType);
+        else
+            return string.Format("{0}?", NativeTypeName(result.NativeType));
+    }
+}
+
+private static string ResultTypeFact(ResultValueFact result)
+{
+    if (result.Cardinality == Cardinality.Many)
+        return string.Format("List<{0}>", result.FactType);
+    else
+        return result.FactType;
 }
 
 private static string NativeTypeName(NativeType nativeType)
