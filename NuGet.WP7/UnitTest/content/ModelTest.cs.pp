@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Memory;
 
 namespace $rootnamespace$

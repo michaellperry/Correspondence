@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>correspondence.allinone.wp7</id>
+    <version>1.1.0.0</version>
+    <authors>Michael L Perry</authors>
+    <owners>Michael L Perry</owners>
+    <description>Add to a Windows Phone 7 application project. Puts everything in one project. Not good for unit testing.</description>
+    <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>
+    <projectUrl>http://correspondence.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <language>en-US</language>
+    <tags>nosql database wp7 synchronize</tags>
+    <dependencies>
+      <dependency id="correspondence.app.wp7" version="1.1.0.0"/>
+      <dependency id="correspondence.model.wp7" version="1.1.0.0"/>
+    </dependencies>
+  </metadata>
+</package>
