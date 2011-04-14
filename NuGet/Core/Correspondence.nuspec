@@ -1,18 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>correspondence.app.wp7</id>
-    <version>1.1.0.0</version>
+    <id>Correspondence</id>
+    <version>1.1.0.1</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
-    <description>Add to a Windows Phone 7 application project. Sets up isolated storage and POX synchronization.</description>
+    <description>Persistence and synchronization for occasionally connected Windows Phone 7 applications.</description>
     <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>
     <projectUrl>http://correspondence.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language>en-US</language>
     <tags>nosql database wp7 synchronize</tags>
     <dependencies>
-      <dependency id="correspondence.wp7" version="1.1.0.0"/>
+      <dependency id="UpdateControls" version="2.1.2.2"/>
     </dependencies>
   </metadata>
 </package>

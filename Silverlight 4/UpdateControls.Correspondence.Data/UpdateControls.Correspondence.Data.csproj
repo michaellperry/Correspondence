@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B80E6DB6-E68C-4D4A-89AB-EE44FB452646}</ProjectGuid>
+    <ProjectGuid>{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UpdateControls.Correspondence.Memory</RootNamespace>
-    <AssemblyName>UpdateControls.Correspondence.Memory</AssemblyName>
+    <RootNamespace>UpdateControls.Correspondence.Data</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence.Data</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -57,45 +57,30 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="UpdateControls">
-      <HintPath>..\..\packages\UpdateControls.2.1.2.2\lib\sl4\UpdateControls.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Duration.cs">
-      <Link>Duration.cs</Link>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Data\HistoricalTree.cs">
+      <Link>HistoricalTree.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\FactRecord.cs">
-      <Link>FactRecord.cs</Link>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Data\HistoricalTreeFact.cs">
+      <Link>HistoricalTreeFact.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
-      <Link>MemoryStorageStrategy.cs</Link>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Data\HistoricalTreePredecessor.cs">
+      <Link>HistoricalTreePredecessor.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
-      <Link>PeerIdentifier.cs</Link>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Data\InvariantException.cs">
+      <Link>InvariantException.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
-      <Link>PeerPivotIdentifier.cs</Link>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Data\RedBlackTree.cs">
+      <Link>RedBlackTree.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerRecord.cs">
-      <Link>PeerRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
-      <Link>QueryExecutor.cs</Link>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Data\StreamBasedDataStructure.cs">
+      <Link>StreamBasedDataStructure.cs</Link>
     </Compile>
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
-      <Project>{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD}</Project>
-      <Name>UpdateControls.Correspondence %28Silverlight 4\UpdateControls.Correspondence%29</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
@@ -106,7 +91,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\UnitTest\lib\SL4\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App\lib\SL4\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

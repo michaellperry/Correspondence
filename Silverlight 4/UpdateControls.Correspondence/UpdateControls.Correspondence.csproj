@@ -57,9 +57,8 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="UpdateControls.Light, Version=2.1.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\SolutionItems\Silverlight4\UpdateControls.Light.dll</HintPath>
+    <Reference Include="UpdateControls">
+      <HintPath>..\..\packages\UpdateControls.2.1.2.2\lib\sl4\UpdateControls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -252,11 +251,16 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Subscription.cs">
       <Link>Subscription.cs</Link>
     </Compile>
+    <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Community.Platform.cs" />
     <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
@@ -265,6 +269,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\SL4\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

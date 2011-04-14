@@ -90,48 +90,51 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient (WP7)", "WP7\UpdateControls.Correspondence.POXClient (WP7)\UpdateControls.Correspondence.POXClient (WP7).csproj", "{896FC2DB-34B3-4F20-812E-15AE88D7398C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{849EB099-EC1C-497A-8F77-849A0A8FB3AF}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet.WP7\PackAll.bat = NuGet.WP7\PackAll.bat
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A-656F-46C5-AC58-EC984A4DDB42}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.WP7\Model\correspondence.model.wp7.nuspec = NuGet.WP7\Model\correspondence.model.wp7.nuspec
-		NuGet.WP7\Model\content\Models\Identity.cs.pp = NuGet.WP7\Model\content\Models\Identity.cs.pp
-		NuGet.WP7\Model\content\Models\Model.fact.pp = NuGet.WP7\Model\content\Models\Model.fact.pp
-		NuGet.WP7\Model\content\Models\Model.tt = NuGet.WP7\Model\content\Models\Model.tt
+		NuGet\Model\Correspondence.Model.nuspec = NuGet\Model\Correspondence.Model.nuspec
+		NuGet\Model\content\Models\Identity.cs.pp = NuGet\Model\content\Models\Identity.cs.pp
+		NuGet\Model\content\Models\Model.fact.pp = NuGet\Model\content\Models\Model.fact.pp
+		NuGet\Model\content\Models\Model.tt = NuGet\Model\content\Models\Model.tt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CB489F9B-C65C-4443-B7F8-DA30818C1BAF}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.WP7\Core\correspondence.wp7.nuspec = NuGet.WP7\Core\correspondence.wp7.nuspec
+		NuGet\Core\Correspondence.nuspec = NuGet\Core\Correspondence.nuspec
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.WP7\UnitTest\correspondence.unittest.wp7.nuspec = NuGet.WP7\UnitTest\correspondence.unittest.wp7.nuspec
-		NuGet.WP7\UnitTest\content\ModelTest.cs.pp = NuGet.WP7\UnitTest\content\ModelTest.cs.pp
+		NuGet\UnitTest\Correspondence.UnitTest.nuspec = NuGet\UnitTest\Correspondence.UnitTest.nuspec
+		NuGet\UnitTest\content\ModelTest.cs.pp = NuGet\UnitTest\content\ModelTest.cs.pp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.WP7\App\correspondence.app.wp7.nuspec = NuGet.WP7\App\correspondence.app.wp7.nuspec
-		NuGet.WP7\App\content\ViewModels\MainViewModel.cs.pp = NuGet.WP7\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet.WP7\App\content\POXConfigurationProvider.cs.pp = NuGet.WP7\App\content\POXConfigurationProvider.cs.pp
-		NuGet.WP7\App\content\Readme.txt.pp = NuGet.WP7\App\content\Readme.txt.pp
-		NuGet.WP7\App\content\ViewModels\SettingsViewModel.cs.pp = NuGet.WP7\App\content\ViewModels\SettingsViewModel.cs.pp
-		NuGet.WP7\App\content\SynchronizationService.cs.pp = NuGet.WP7\App\content\SynchronizationService.cs.pp
-		NuGet.WP7\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet.WP7\App\content\ViewModels\ViewModelLocator.cs.pp
+		NuGet\App\Correspondence.App.nuspec = NuGet\App\Correspondence.App.nuspec
+		NuGet\App\content\ViewModels\MainViewModel.cs.pp = NuGet\App\content\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\POXConfigurationProvider.cs.pp = NuGet\App\content\POXConfigurationProvider.cs.pp
+		NuGet\App\content\Readme.txt.pp = NuGet\App\content\Readme.txt.pp
+		NuGet\App\content\ViewModels\SettingsViewModel.cs.pp = NuGet\App\content\ViewModels\SettingsViewModel.cs.pp
+		NuGet\App\content\SynchronizationService.cs.pp = NuGet\App\content\SynchronizationService.cs.pp
+		NuGet\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{182C379A-33E6-43DC-BF14-249146C73CDF}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet.WP7\AllInOne\correspondence.allinone.wp7.nuspec = NuGet.WP7\AllInOne\correspondence.allinone.wp7.nuspec
+		NuGet\AllInOne\Correspondence.AllInOne.nuspec = NuGet\AllInOne\Correspondence.AllInOne.nuspec
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage", "Silverlight 4\UpdateControls.Correspondence.IsolatedStorage\UpdateControls.Correspondence.IsolatedStorage.csproj", "{7CE0E52C-7D5E-44A6-9CAF-30097CC30248}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "Silverlight 4\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient", "Silverlight 4\UpdateControls.Correspondence.POXClient\UpdateControls.Correspondence.POXClient.csproj", "{20A2A6EB-9030-4D34-BD91-0829D7180DCA}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 26
+		SccNumberOfProjects = 29
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -230,6 +233,18 @@ Global
 		SccProjectTopLevelParentUniqueName25 = Correspondence.sln
 		SccProjectName25 = Desktop/UpdateControls.Correspondence.WebService.Contract
 		SccLocalPath25 = Desktop\\UpdateControls.Correspondence.WebService.Contract
+		SccProjectUniqueName26 = Silverlight\u00204\\UpdateControls.Correspondence.IsolatedStorage\\UpdateControls.Correspondence.IsolatedStorage.csproj
+		SccProjectTopLevelParentUniqueName26 = Correspondence.sln
+		SccProjectName26 = Silverlight\u00204/UpdateControls.Correspondence.IsolatedStorage
+		SccLocalPath26 = Silverlight\u00204\\UpdateControls.Correspondence.IsolatedStorage
+		SccProjectUniqueName27 = Silverlight\u00204\\UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data.csproj
+		SccProjectTopLevelParentUniqueName27 = Correspondence.sln
+		SccProjectName27 = Silverlight\u00204/UpdateControls.Correspondence.Data
+		SccLocalPath27 = Silverlight\u00204\\UpdateControls.Correspondence.Data
+		SccProjectUniqueName28 = Silverlight\u00204\\UpdateControls.Correspondence.POXClient\\UpdateControls.Correspondence.POXClient.csproj
+		SccProjectTopLevelParentUniqueName28 = Correspondence.sln
+		SccProjectName28 = Silverlight\u00204/UpdateControls.Correspondence.POXClient
+		SccLocalPath28 = Silverlight\u00204\\UpdateControls.Correspondence.POXClient
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -340,6 +355,18 @@ Global
 		{896FC2DB-34B3-4F20-812E-15AE88D7398C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{896FC2DB-34B3-4F20-812E-15AE88D7398C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{896FC2DB-34B3-4F20-812E-15AE88D7398C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CE0E52C-7D5E-44A6-9CAF-30097CC30248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE0E52C-7D5E-44A6-9CAF-30097CC30248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE0E52C-7D5E-44A6-9CAF-30097CC30248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE0E52C-7D5E-44A6-9CAF-30097CC30248}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A2A6EB-9030-4D34-BD91-0829D7180DCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A2A6EB-9030-4D34-BD91-0829D7180DCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A2A6EB-9030-4D34-BD91-0829D7180DCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A2A6EB-9030-4D34-BD91-0829D7180DCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -362,6 +389,9 @@ Global
 		{3F7356A7-C107-4497-A89E-3E1C21A23718} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646} = {B08999A9-59D8-4790-A084-515E40DDF472}
+		{7CE0E52C-7D5E-44A6-9CAF-30097CC30248} = {B08999A9-59D8-4790-A084-515E40DDF472}
+		{9E39AC23-7979-4B94-8D1E-A6938B2FED7A} = {B08999A9-59D8-4790-A084-515E40DDF472}
+		{20A2A6EB-9030-4D34-BD91-0829D7180DCA} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{D489015D-1272-4B18-BC26-645C720169F9} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{285D68FA-6CA3-4757-B330-DE4EDC5B0849} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}

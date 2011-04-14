@@ -2,6 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("UpdateControls.Correspondence")]
+[assembly: AssemblyTitle("UpdateControls.Correspondence.POXClient")]
 [assembly: AssemblyDescription("")]
-[assembly: Guid("d4d933aa-53f7-4126-a14a-f4e5c350e968")]
+[assembly: Guid("b5aaabe2-2425-4960-a259-171d5bebf229")]
