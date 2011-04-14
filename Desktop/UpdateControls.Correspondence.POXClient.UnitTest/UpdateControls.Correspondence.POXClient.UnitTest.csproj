@@ -65,7 +65,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence.POXClient\UpdateControls.Correspondence.POXClient.csproj">
       <Project>{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}</Project>
-      <Name>UpdateControls.Correspondence.POXClient</Name>
+      <Name>UpdateControls.Correspondence.POXClient %28Desktop\UpdateControls.Correspondence.POXClient%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

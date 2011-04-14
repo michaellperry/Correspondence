@@ -56,7 +56,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj">
       <Project>{9638F018-26C5-4E6B-B355-F8E37F86D1C0}</Project>
-      <Name>UpdateControls.Correspondence.Data</Name>
+      <Name>UpdateControls.Correspondence.Data %28Desktop\UpdateControls.Correspondence.Data%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

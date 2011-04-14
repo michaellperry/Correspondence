@@ -90,6 +90,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient (WP7)", "WP7\UpdateControls.Correspondence.POXClient (WP7)\UpdateControls.Correspondence.POXClient (WP7).csproj", "{896FC2DB-34B3-4F20-812E-15AE88D7398C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{849EB099-EC1C-497A-8F77-849A0A8FB3AF}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\PackAll.bat = NuGet\PackAll.bat
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A-656F-46C5-AC58-EC984A4DDB42}"
 	ProjectSection(SolutionItems) = preProject
@@ -106,24 +109,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CB489F9B-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\UnitTest\Correspondence.UnitTest.nuspec = NuGet\UnitTest\Correspondence.UnitTest.nuspec
-		NuGet\UnitTest\content\ModelTest.cs.pp = NuGet\UnitTest\content\ModelTest.cs.pp
+		NuGet\WindowsPhone\UnitTest\Correspondence.WindowsPhone.UnitTest.nuspec = NuGet\WindowsPhone\UnitTest\Correspondence.WindowsPhone.UnitTest.nuspec
+		NuGet\WindowsPhone\UnitTest\content\ModelTest.cs.pp = NuGet\WindowsPhone\UnitTest\content\ModelTest.cs.pp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\App\Correspondence.App.nuspec = NuGet\App\Correspondence.App.nuspec
-		NuGet\App\content\ViewModels\MainViewModel.cs.pp = NuGet\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\App\content\POXConfigurationProvider.cs.pp = NuGet\App\content\POXConfigurationProvider.cs.pp
-		NuGet\App\content\Readme.txt.pp = NuGet\App\content\Readme.txt.pp
-		NuGet\App\content\ViewModels\SettingsViewModel.cs.pp = NuGet\App\content\ViewModels\SettingsViewModel.cs.pp
-		NuGet\App\content\SynchronizationService.cs.pp = NuGet\App\content\SynchronizationService.cs.pp
-		NuGet\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\ViewModels\ViewModelLocator.cs.pp
+		NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec = NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec
+		NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp
+		NuGet\WindowsPhone\App\content\POXConfigurationProvider.cs.pp = NuGet\WindowsPhone\App\content\POXConfigurationProvider.cs.pp
+		NuGet\WindowsPhone\App\content\Readme.txt.pp = NuGet\WindowsPhone\App\content\Readme.txt.pp
+		NuGet\WindowsPhone\App\content\ViewModels\SettingsViewModel.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\SettingsViewModel.cs.pp
+		NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp = NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp
+		NuGet\WindowsPhone\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{182C379A-33E6-43DC-BF14-249146C73CDF}"
 	ProjectSection(SolutionItems) = preProject
-		NuGet\AllInOne\Correspondence.AllInOne.nuspec = NuGet\AllInOne\Correspondence.AllInOne.nuspec
+		NuGet\WindowsPhone\AllInOne\Correspondence.WindowsPhone.AllInOne.nuspec = NuGet\WindowsPhone\AllInOne\Correspondence.WindowsPhone.AllInOne.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage", "Silverlight 4\UpdateControls.Correspondence.IsolatedStorage\UpdateControls.Correspondence.IsolatedStorage.csproj", "{7CE0E52C-7D5E-44A6-9CAF-30097CC30248}"
@@ -131,6 +134,32 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "Silverlight 4\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient", "Silverlight 4\UpdateControls.Correspondence.POXClient\UpdateControls.Correspondence.POXClient.csproj", "{20A2A6EB-9030-4D34-BD91-0829D7180DCA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{96475E40-26FC-4419-AD3E-2289D4013AD4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Phone", "Windows Phone", "{80C00D5E-131E-4742-B1A4-4F361C1F5B33}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{5E544625-E5E4-4C47-A2DD-8A6E42C074A8}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Silverlight\AllInOne\Correspondence.Silverlight.AllInOne.nuspec = NuGet\Silverlight\AllInOne\Correspondence.Silverlight.AllInOne.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1F9D8122-A895-4BB2-968B-AE50B06367CC}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec = NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec
+		NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp
+		NuGet\Silverlight\App\content\POXConfigurationProvider.cs.pp = NuGet\Silverlight\App\content\POXConfigurationProvider.cs.pp
+		NuGet\Silverlight\App\content\Readme.txt.pp = NuGet\Silverlight\App\content\Readme.txt.pp
+		NuGet\Silverlight\App\content\ViewModels\SettingsViewModel.cs.pp = NuGet\Silverlight\App\content\ViewModels\SettingsViewModel.cs.pp
+		NuGet\Silverlight\App\content\SynchronizationService.cs.pp = NuGet\Silverlight\App\content\SynchronizationService.cs.pp
+		NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{A1C3E34F-E21D-4CF1-95C9-23A098354BE1}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Silverlight\UnitTest\Correspondence.Silverlight.UnitTest.nuspec = NuGet\Silverlight\UnitTest\Correspondence.Silverlight.UnitTest.nuspec
+		NuGet\Silverlight\UnitTest\content\ModelTest.cs.pp = NuGet\Silverlight\UnitTest\content\ModelTest.cs.pp
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -401,8 +430,13 @@ Global
 		{896FC2DB-34B3-4F20-812E-15AE88D7398C} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{4F26812A-656F-46C5-AC58-EC984A4DDB42} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{CB489F9B-C65C-4443-B7F8-DA30818C1BAF} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
-		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
-		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
-		{182C379A-33E6-43DC-BF14-249146C73CDF} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{96475E40-26FC-4419-AD3E-2289D4013AD4} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{80C00D5E-131E-4742-B1A4-4F361C1F5B33} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{5E544625-E5E4-4C47-A2DD-8A6E42C074A8} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
+		{1F9D8122-A895-4BB2-968B-AE50B06367CC} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
+		{A1C3E34F-E21D-4CF1-95C9-23A098354BE1} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
+		{182C379A-33E6-43DC-BF14-249146C73CDF} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
+		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
+		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 	EndGlobalSection
 EndGlobal
