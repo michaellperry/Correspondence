@@ -11,7 +11,6 @@ namespace $rootnamespace$.ViewModels
         private readonly SynchronizationService _synchronizationService;
 
         private readonly MainViewModel _main;
-        private readonly SettingsViewModel _settings;
 
         public ViewModelLocator()
         {
@@ -19,17 +18,11 @@ namespace $rootnamespace$.ViewModels
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
             _main = new MainViewModel(_synchronizationService.Identity);
-            _settings = new SettingsViewModel(_synchronizationService.Identity);
         }
 
         public object Main
         {
             get { return ForView.Wrap(_main); }
-        }
-
-        public object Settings
-        {
-            get { return ForView.Wrap(_settings); }
         }
     }
 }

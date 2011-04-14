@@ -11,6 +11,6 @@ Create a ViewModelLocator in App.xaml:
 
 Reverence it in MainPage.xaml:
 
-<phone:PhoneApplicationPage 
+<UserControl 
     ...
     DataContext="{Binding Main, Source={StaticResource Locator}}">

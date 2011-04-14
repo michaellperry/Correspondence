@@ -25,10 +25,5 @@ namespace $rootnamespace$
                 return new POXConfiguration(address, "$rootnamespace$", userName, password);
             }
         }
-
-        public bool IsToastEnabled
-        {
-            get { return Identity == null ? false : !Identity.IsToastNotificationDisabled.Any(); }
-        }
     }
 }
