@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BED3008-81C4-44AE-841E-C971D41D72B3}"
 	ProjectSection(SolutionItems) = preProject
+		SolutionItems\CommonAssemblyInfo.cs = SolutionItems\CommonAssemblyInfo.cs
 		Correspondence.vsmdi = Correspondence.vsmdi
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		SolutionItems\Mallardsoft.snk = SolutionItems\Mallardsoft.snk
@@ -58,30 +59,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage.UnitTest (WP7)", "WP7\UpdateControls.Correspondence.IsolatedStorage.UnitTest\UpdateControls.Correspondence.IsolatedStorage.UnitTest (WP7).csproj", "{B4245EFD-8EEE-4D38-AA3A-F5D51516037C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data (WP7)", "wp7\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data (WP7).csproj", "{426A7DF6-3C39-4125-9AD3-31D93208B269}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{CC15F72D-91A4-43A7-8009-F66A60B2CDD9}"
-	ProjectSection(SolutionItems) = preProject
-		SolutionItems\Desktop\UpdateControls.dll = SolutionItems\Desktop\UpdateControls.dll
-		SolutionItems\Desktop\UpdateControls.XAML.dll = SolutionItems\Desktop\UpdateControls.XAML.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{1AE51ED6-CA71-4944-933C-C14E36B88C6F}"
-	ProjectSection(SolutionItems) = preProject
-		SolutionItems\Silverlight\System.ComponentModel.DataAnnotations.dll = SolutionItems\Silverlight\System.ComponentModel.DataAnnotations.dll
-		SolutionItems\Silverlight\UpdateControls.Light.dll = SolutionItems\Silverlight\UpdateControls.Light.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight4", "Silverlight4", "{49134CA0-E167-44FF-BC27-BFCE0696922B}"
-	ProjectSection(SolutionItems) = preProject
-		SolutionItems\Silverlight4\UpdateControls.Light.dll = SolutionItems\Silverlight4\UpdateControls.Light.dll
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP7", "WP7", "{434A2555-8566-495D-BCFA-4AD0E5E42C37}"
-	ProjectSection(SolutionItems) = preProject
-		SolutionItems\WP7\Microsoft.Silverlight.Testing.dll = SolutionItems\WP7\Microsoft.Silverlight.Testing.dll
-		SolutionItems\WP7\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll = SolutionItems\WP7\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll
-		SolutionItems\WP7\UpdateControls.dll = SolutionItems\WP7\UpdateControls.dll
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient", "Desktop\UpdateControls.Correspondence.POXClient\UpdateControls.Correspondence.POXClient.csproj", "{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}"
 EndProject
@@ -400,10 +377,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{CC15F72D-91A4-43A7-8009-F66A60B2CDD9} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
-		{1AE51ED6-CA71-4944-933C-C14E36B88C6F} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
-		{49134CA0-E167-44FF-BC27-BFCE0696922B} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
-		{434A2555-8566-495D-BCFA-4AD0E5E42C37} = {4BED3008-81C4-44AE-841E-C971D41D72B3}
 		{04178710-8BE6-416F-9D41-909258CDE242} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{A418955B-D3B5-4F05-A1A2-7864E92B6C4F} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{E318C58A-0EB8-4FFB-9547-DD5F73760989} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
