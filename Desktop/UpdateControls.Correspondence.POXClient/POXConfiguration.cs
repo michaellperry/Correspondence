@@ -6,15 +6,13 @@ namespace UpdateControls.Correspondence.POXClient
 	{
         private readonly string _endpoint;
         private readonly string _channelName;
-        private readonly string _username;
-        private readonly string _password;
+        private readonly string _akiKey;
         
-        public POXConfiguration(string endpoint, string channelName, string username, string password)
+        public POXConfiguration(string endpoint, string channelName, string apiKey)
         {
             _endpoint = endpoint;
             _channelName = channelName;
-            _username = username;
-            _password = password;
+            _akiKey = apiKey;
         }
 
 		public string Endpoint
@@ -29,12 +27,7 @@ namespace UpdateControls.Correspondence.POXClient
 
         public string Username
         {
-            get { return _username; }
-        }
-
-        public string Password
-        {
-            get { return _password; }
+            get { return _akiKey; }
         }
     }
 }

@@ -14,10 +14,11 @@ namespace $rootnamespace$.ViewModels
 
         public ViewModelLocator()
         {
-            _synchronizationService = new SynchronizationService();
+            NavigationModel navigationModel = new NavigationModel();
+            _synchronizationService = new SynchronizationService(navigationModel);
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
-            _main = new MainViewModel(_synchronizationService.Identity);
+            _main = new MainViewModel(_synchronizationService.Community, navigationModel);
         }
 
         public object Main

@@ -86,6 +86,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\CorrespondenceFact.cs">
       <Link>CorrespondenceFact.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Disputable.cs">
+      <Link>Disputable.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\FactMetadata.cs">
       <Link>FactMetadata.cs</Link>
     </Compile>

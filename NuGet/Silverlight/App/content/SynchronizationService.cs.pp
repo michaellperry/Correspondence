@@ -10,8 +10,13 @@ namespace $rootnamespace$
 {
     public class SynchronizationService
     {
+        private NavigationModel _navigationModel;
         private Community _community;
-        private Identity _identity;
+
+        public SynchronizationService(NavigationModel navigationModel)
+        {
+            _navigationModel = navigationModel;
+        }
 
         public void Initialize()
         {
@@ -19,11 +24,8 @@ namespace $rootnamespace$
             _community = new Community(IsolatedStorageStorageStrategy.Load())
                 .AddAsynchronousCommunicationStrategy(new POXAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _identity)
+                .Subscribe(() => _navigationModel.CurrentUser)
                 ;
-
-            _identity = _community.AddFact(new Identity("Example"));
-            configurationProvider.Identity = _identity;
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -38,11 +40,6 @@ namespace $rootnamespace$
         public Community Community
         {
             get { return _community; }
-        }
-
-        public Identity Identity
-        {
-            get { return _identity; }
         }
 
         public void Synchronize()

@@ -125,6 +125,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1F9D8122-A89
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec = NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec
 		NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp
+		NuGet\Silverlight\App\content\Models\NavigationModel.cs.pp = NuGet\Silverlight\App\content\Models\NavigationModel.cs.pp
 		NuGet\Silverlight\App\content\POXConfigurationProvider.cs.pp = NuGet\Silverlight\App\content\POXConfigurationProvider.cs.pp
 		NuGet\Silverlight\App\content\Readme.txt.pp = NuGet\Silverlight\App\content\Readme.txt.pp
 		NuGet\Silverlight\App\content\SynchronizationService.cs.pp = NuGet\Silverlight\App\content\SynchronizationService.cs.pp

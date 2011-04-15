@@ -1,16 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using $rootnamespace$.Models;
+using UpdateControls.Correspondence;
+using UpdateControls.XAML;
 
 namespace $rootnamespace$.ViewModels
 {
     public class MainViewModel
     {
-        private Identity _identity;
+        private Community _community;
+        private NavigationModel _navigationModel;
 
-        public MainViewModel(Identity identity)
+        public MainViewModel(Community community, NavigationModel navigationModel)
         {
-            _identity = identity;
+            _community = community;
+            _navigationModel = navigationModel;
         }
     }
 }
