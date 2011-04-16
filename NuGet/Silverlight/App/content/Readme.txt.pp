@@ -1,10 +1,9 @@
 Create a ViewModelLocator in App.xaml:
 
-<Application
-    ...
-    xmlns:vm="clr-namespace:$rootnamespace$.ViewModels">
+<Application ...
+             xmlns:vm="clr-namespace:$rootnamespace$.ViewModels"
+             >
 
-    <!--Application Resources-->
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator"/>
     </Application.Resources>
