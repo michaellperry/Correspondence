@@ -75,18 +75,21 @@ namespace UpdateControls.Correspondence.Networking
 
 		private void ServeNextSynchronize(IAsyncResult expected)
 		{
-			lock (this)
+            SynchronizeResult result = null;
+            lock (this)
 			{
 				SynchronizeResult actual = _synchronizeQueue.Dequeue();
 				if (actual != expected)
 					throw new CorrespondenceException("The synchronization queue is corrupt.");
 				if (_synchronizeQueue.Any())
 				{
-					SynchronizeResult result = _synchronizeQueue.Peek();
-                    BeginSynchronize(result);
+                    result = _synchronizeQueue.Peek();
                 }
 			}
-		}
+
+            if (result != null)
+                BeginSynchronize(result);
+        }
 
         private void BeginSynchronize(SynchronizeResult result)
         {
