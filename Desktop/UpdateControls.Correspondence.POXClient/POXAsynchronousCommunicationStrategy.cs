@@ -37,6 +37,7 @@ namespace UpdateControls.Correspondence.POXClient
 		{
             GetRequest request = new GetRequest
             {
+                Domain = _configuration.APIKey,
                 PivotTree = Translate.MementoToFactTree(pivotTree),
                 PivotId = pivotId.key,
                 Timestamp = timestamp.Key,
@@ -57,6 +58,7 @@ namespace UpdateControls.Correspondence.POXClient
         {
             PostRequest request = new PostRequest
             {
+                Domain = _configuration.APIKey,
                 MessageBody = Translate.MementoToFactTree(messageBody),
                 ClientGuid = clientGuid.ToString()
             };

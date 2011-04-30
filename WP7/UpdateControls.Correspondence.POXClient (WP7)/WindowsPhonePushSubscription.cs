@@ -40,6 +40,7 @@ namespace UpdateControls.Correspondence.POXClient
                         _callPending = true;
                         UnsubscribeRequest request = new UnsubscribeRequest
                         {
+                            Domain = _configuration.APIKey,
                             PivotTree = _pivot,
                             PivotId = _pivotId,
                             DeviceUri = deviceUri
@@ -56,6 +57,7 @@ namespace UpdateControls.Correspondence.POXClient
                         _callPending = true;
                         SubscribeRequest request = new SubscribeRequest
                         {
+                            Domain = _configuration.APIKey,
                             PivotTree = _pivot,
                             PivotId = _pivotId,
                             DeviceUri = deviceUri,

@@ -25,7 +25,7 @@ namespace UpdateControls.Correspondence.POXClient
             get { return _channelName; }
         }
 
-        public string Username
+        public string APIKey
         {
             get { return _akiKey; }
         }

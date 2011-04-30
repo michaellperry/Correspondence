@@ -14,6 +14,7 @@ namespace UpdateControls.Correspondence.POXClient.UnitTest
         {
             GetRequest getRequest = new GetRequest
             {
+                Domain = "LnldvHcytc2Jhv",
                 ClientGuid = "25a0ff9b-478c-4bf7-8ce5-0e87832f0ff5",
                 PivotTree = new FactTree
                 {

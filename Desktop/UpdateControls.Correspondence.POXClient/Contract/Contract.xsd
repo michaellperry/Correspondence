@@ -69,6 +69,7 @@
   <xs:element name="GetRequest">
     <xs:complexType>
       <xs:sequence>
+        <xs:element name="Domain" type="xs:string"/>
         <xs:element name="PivotTree" nillable="true" type="tns:FactTree"/>
         <xs:element name="PivotId" type="xs:long"/>
         <xs:element name="Timestamp" type="xs:long"/>
@@ -87,7 +88,8 @@
 	<xs:element name="PostRequest">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="MessageBody" nillable="true" type="tns:FactTree"/>
+        <xs:element name="Domain" type="xs:string"/>
+        <xs:element name="MessageBody" nillable="true" type="tns:FactTree"/>
 				<xs:element name="ClientGuid" type="xs:string"/>
 			</xs:sequence>
 		</xs:complexType>
@@ -100,6 +102,7 @@
   <xs:element name="SubscribeRequest">
     <xs:complexType>
       <xs:sequence>
+        <xs:element name="Domain" type="xs:string"/>
         <xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
         <xs:element name="PivotId" type="xs:long" />
         <xs:element name="DeviceUri" nillable="true" type="xs:string" />
@@ -110,6 +113,7 @@
   <xs:element name="UnsubscribeRequest">
     <xs:complexType>
       <xs:sequence>
+        <xs:element name="Domain" type="xs:string"/>
         <xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
         <xs:element name="PivotId" type="xs:long" />
         <xs:element name="DeviceUri" nillable="true" type="xs:string" />
