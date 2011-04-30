@@ -49,7 +49,8 @@ namespace UpdateControls.Correspondence.POXClient
                 _httpChannel = HttpNotificationChannel.Find(_configuration.ChannelName);
                 if (_httpChannel != null)
                 {
-                    _receivedChannelUri = true;
+                    _receivedChannelUri = _httpChannel.ChannelUri != null;
+                    _openPending = !_receivedChannelUri;
                     SubscribeToChannelEvents();
                     _toastNotificationObserver.HttpChannel = _httpChannel;
                 }
