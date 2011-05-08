@@ -25,8 +25,6 @@ namespace UpdateControls.Correspondence
             _query = query;
             _options = options;
 
-            _indResults.GainDependent += new Action(GainDependent);
-
             startingPoint.AddQueryResult(query.QueryDefinition, this);
         }
 
@@ -35,6 +33,7 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 _indResults.OnGet();
+                LoadResults();
                 List<TResultType> results = new List<TResultType>(_results);
                 return results.GetEnumerator();
             }
@@ -45,12 +44,13 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 _indResults.OnGet();
+                LoadResults();
                 List<TResultType> results = new List<TResultType>(_results);
                 return results.GetEnumerator();
             }
         }
 
-        private void GainDependent()
+        private void LoadResults()
         {
             // If the results are not cached, load them.
             if (_results == null)
