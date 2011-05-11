@@ -56,5 +56,10 @@ namespace UpdateControls.Correspondence.Networking
         {
 			return _synchronousNetwork.Synchronize();
 		}
+
+        public bool Synchronizing
+        {
+            get { return _asynchronousNetwork.Synchronizing || _synchronousNetwork.Synchronizing; }
+        }
 	}
 }

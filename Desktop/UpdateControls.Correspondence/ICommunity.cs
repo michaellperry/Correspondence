@@ -11,5 +11,8 @@ namespace UpdateControls.Correspondence
             where T : CorrespondenceFact;
         event Action FactAdded;
         bool Synchronize();
+        void BeginSynchronize(AsyncCallback callback, object state);
+        bool EndSynchronize(IAsyncResult asyncResult);
+        bool Synchronizing { get; }
     }
 }

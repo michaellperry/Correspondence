@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using System;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -19,6 +21,8 @@ namespace UpdateControls.Correspondence.Networking
 		private IStorageStrategy _storageStrategy;
 
 		private List<ServerProxy> _serverProxies = new List<ServerProxy>();
+
+        private Independent<bool> _synchronizing = new Independent<bool>();
 
 		public SynchronousNetwork(ISubscriptionProvider subscriptionProvider, Model model, IStorageStrategy storageStrategy)
 		{
@@ -38,15 +42,41 @@ namespace UpdateControls.Correspondence.Networking
 
 		public bool Synchronize()
 		{
-			bool any = false;
-			if (SynchronizeOutgoing())
-				any = true;
-			if (SynchronizeIncoming())
-				any = true;
-			return any;
+            Synchronizing = true;
+            try
+            {
+                bool any = false;
+                if (SynchronizeOutgoing())
+                    any = true;
+                if (SynchronizeIncoming())
+                    any = true;
+                return any;
+            }
+            finally
+            {
+                Synchronizing = false;
+            }
 		}
 
-		private bool SynchronizeOutgoing()
+        public bool Synchronizing
+        {
+            get
+            {
+                lock (this)
+                {
+                    return _synchronizing;
+                }
+            }
+            private set
+            {
+                lock (this)
+                {
+                    _synchronizing.Value = value;
+                }
+            }
+        }
+
+        private bool SynchronizeOutgoing()
 		{
 			bool any = false;
 			foreach (ServerProxy serverProxy in _serverProxies)

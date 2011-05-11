@@ -125,10 +125,15 @@ namespace UpdateControls.Correspondence
             _network.BeginSynchronize(callback, state);
         }
 
-		public bool EndSynchronize(IAsyncResult asyncResult)
-		{
-			return _network.EndSynchronize(asyncResult);
-		}
+        public bool EndSynchronize(IAsyncResult asyncResult)
+        {
+            return _network.EndSynchronize(asyncResult);
+        }
+
+        public bool Synchronizing
+        {
+            get { return _network.Synchronizing; }
+        }
 
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
         {

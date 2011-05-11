@@ -16,6 +16,7 @@ namespace UpdateControls.Correspondence.Networking
 
         private List<AsynchronousServerProxy> _serverProxies = new List<AsynchronousServerProxy>();
 		private Queue<SynchronizeResult> _synchronizeQueue = new Queue<SynchronizeResult>();
+        private Independent _indSynchronizeQueue = new Independent();
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
 		private Dependent _depPushSubscriptions;
@@ -59,6 +60,7 @@ namespace UpdateControls.Correspondence.Networking
 			lock (this)
 			{
 				firstInLine = !_synchronizeQueue.Any();
+                _indSynchronizeQueue.OnSet();
 				_synchronizeQueue.Enqueue(result);
 			}
 			if (firstInLine)
@@ -73,11 +75,24 @@ namespace UpdateControls.Correspondence.Networking
 			return (r.IncomingResult ?? false) || (r.OutgoingResult ?? false);
 		}
 
-		private void ServeNextSynchronize(IAsyncResult expected)
+        public bool Synchronizing
+        {
+            get
+            {
+                lock (this)
+                {
+                    _indSynchronizeQueue.OnGet();
+                    return _synchronizeQueue.Any();
+                }
+            }
+        }
+
+        private void ServeNextSynchronize(IAsyncResult expected)
 		{
             SynchronizeResult result = null;
             lock (this)
 			{
+                _indSynchronizeQueue.OnSet();
 				SynchronizeResult actual = _synchronizeQueue.Dequeue();
 				if (actual != expected)
 					throw new CorrespondenceException("The synchronization queue is corrupt.");
