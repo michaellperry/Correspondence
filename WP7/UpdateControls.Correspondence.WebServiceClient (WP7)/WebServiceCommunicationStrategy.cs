@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
             get { return new SynchronizationServiceClient().Endpoint.Address.ToString(); }
         }
 
-        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback)
+        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback, Action<Exception> error)
         {
             FactTree pivot = Translate.MementoToFactTree(pivotTree);
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
@@ -48,7 +48,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
                 }
                 catch (Exception ex)
                 {
-                    HandleException(ex);
+                    error(ex);
                     factTreeMemento = new FactTreeMemento(pivotTree.DatabaseId);
                     newTimestamp = timestamp;
                 }
@@ -62,7 +62,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
         }
 
-        public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback)
+        public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback, Action<Exception> error)
         {
             ISynchronizationService synchronizationService = new SynchronizationServiceClient();
             synchronizationService.BeginPost(Translate.MementoToFactTree(messageBody), clientGuid, delegate(IAsyncResult result)
@@ -74,7 +74,7 @@ namespace UpdateControls.Correspondence.WebServiceClient
 				}
                 catch (Exception ex)
                 {
-                    HandleException(ex);
+                    error(ex);
 					callback(false);
 				}
             }, null);
@@ -227,11 +227,6 @@ namespace UpdateControls.Correspondence.WebServiceClient
             }
 
             return new IdentifiedFactMemento(new FactID { key = factId }, factMemento);
-        }
-
-        private void HandleException(Exception ex)
-        {
-            // TODO: Notify the application about exceptions.
         }
     }
 }

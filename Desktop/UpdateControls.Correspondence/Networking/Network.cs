@@ -61,5 +61,10 @@ namespace UpdateControls.Correspondence.Networking
         {
             get { return _asynchronousNetwork.Synchronizing || _synchronousNetwork.Synchronizing; }
         }
+
+        public Exception LastException
+        {
+            get { return _asynchronousNetwork.LastException; }
+        }
 	}
 }

@@ -135,6 +135,11 @@ namespace UpdateControls.Correspondence
             get { return _network.Synchronizing; }
         }
 
+        public Exception LastException
+        {
+            get { return _network.LastException; }
+        }
+
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
         {
             get { return _fieldSerializerByType; }

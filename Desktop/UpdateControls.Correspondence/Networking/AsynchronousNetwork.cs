@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -17,6 +18,7 @@ namespace UpdateControls.Correspondence.Networking
         private List<AsynchronousServerProxy> _serverProxies = new List<AsynchronousServerProxy>();
 		private Queue<SynchronizeResult> _synchronizeQueue = new Queue<SynchronizeResult>();
         private Independent _indSynchronizeQueue = new Independent();
+        private Independent<Exception> _lastException = new Independent<Exception>();
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
 		private Dependent _depPushSubscriptions;
@@ -65,6 +67,10 @@ namespace UpdateControls.Correspondence.Networking
 			}
 			if (firstInLine)
 			{
+                lock (this)
+                {
+                    _lastException.Value = null;
+                }
 				BeginSynchronize(result);
 			}
 		}
@@ -83,6 +89,17 @@ namespace UpdateControls.Correspondence.Networking
                 {
                     _indSynchronizeQueue.OnGet();
                     return _synchronizeQueue.Any();
+                }
+            }
+        }
+
+        public Exception LastException
+        {
+            get
+            {
+                lock (this)
+                {
+                    return _lastException;
                 }
             }
         }
@@ -130,10 +147,10 @@ namespace UpdateControls.Correspondence.Networking
 					communicationStrategyAggregate.Begin();
                     serverProxy.CommunicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, delegate(bool succeeded)
                     {
-						if (succeeded)
-	                        _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
+                        if (succeeded)
+                            _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
                         communicationStrategyAggregate.End();
-                    });
+                    }, OnError);
 				}
 			}
 
@@ -173,7 +190,7 @@ namespace UpdateControls.Correspondence.Networking
 								}
 							}
 							communicationStragetyAggregate.End();
-						});
+                        }, OnError);
 					}
 				}
 			}
@@ -212,6 +229,14 @@ namespace UpdateControls.Correspondence.Networking
                         TriggerAsync();
                 }, null);
             }));
+        }
+
+        private void OnError(Exception exception)
+        {
+            lock (this)
+            {
+                _lastException.Value = exception;
+            }
         }
     }
 }

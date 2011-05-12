@@ -33,7 +33,7 @@ namespace UpdateControls.Correspondence.POXClient
 			get { return _configuration.Endpoint; }
 		}
 
-		public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback)
+        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback, Action<Exception> error)
 		{
             GetRequest request = new GetRequest
             {
@@ -54,7 +54,7 @@ namespace UpdateControls.Correspondence.POXClient
                     new TimestampID(pivotTree.DatabaseId, timestamp.Key)));
         }
 
-        public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback)
+        public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback, Action<Exception> error)
         {
             PostRequest request = new PostRequest
             {
