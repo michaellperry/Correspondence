@@ -12,11 +12,18 @@ namespace $rootnamespace$.ViewModels
     {
         private Community _community;
         private NavigationModel _navigationModel;
+        private SynchronizationService _synhronizationService;
 
-        public MainViewModel(Community community, NavigationModel navigationModel)
+        public MainViewModel(Community community, NavigationModel navigationModel, SynchronizationService synhronizationService)
         {
             _community = community;
             _navigationModel = navigationModel;
+            _synhronizationService = synhronizationService;
+        }
+
+        public bool Synchronizing
+        {
+            get { return _synhronizationService.Synchronizing; }
         }
     }
 }

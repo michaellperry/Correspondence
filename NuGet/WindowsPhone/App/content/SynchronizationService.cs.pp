@@ -63,6 +63,11 @@ namespace $rootnamespace$
             }, null);
         }
 
+        public bool Synchronizing
+        {
+            get { return _community.Synchronizing; }
+        }
+
         private static string GetAnonymousUserId()
         {
             string anid = UserExtendedProperties.GetValue("ANID") as string;

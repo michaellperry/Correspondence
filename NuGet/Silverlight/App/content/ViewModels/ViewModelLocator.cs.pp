@@ -18,7 +18,7 @@ namespace $rootnamespace$.ViewModels
             _synchronizationService = new SynchronizationService(navigationModel);
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
-            _main = new MainViewModel(_synchronizationService.Community, navigationModel);
+            _main = new MainViewModel(_synchronizationService.Community, navigationModel, _synchronizationService);
         }
 
         public object Main

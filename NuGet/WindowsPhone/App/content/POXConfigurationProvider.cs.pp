@@ -20,9 +20,8 @@ namespace $rootnamespace$
             get
             {
                 string address = "https://api.facetedworlds.com:9443/correspondence_server_web/pox";
-                string userName = "<<Your username>>";
-                string password = "<<Your password>>";
-                return new POXConfiguration(address, "$rootnamespace$", userName, password);
+                string apiKey = "<<Your API key>>";
+                return new POXConfiguration(address, "$rootnamespace$", apiKey);
             }
         }
 

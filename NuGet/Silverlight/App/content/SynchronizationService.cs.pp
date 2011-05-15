@@ -50,5 +50,10 @@ namespace $rootnamespace$
                     Synchronize();
             }, null);
         }
+
+        public bool Synchronizing
+        {
+            get { return _community.Synchronizing; }
+        }
     }
 }

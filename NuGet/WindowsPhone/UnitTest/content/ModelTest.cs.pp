@@ -13,8 +13,8 @@ namespace $rootnamespace$
     {
         private Community _community;
         private Community _otherCommunity;
-		//private MyFact _fact;
-		//private MyFact _otherFact;
+        //private Identity _identity;
+        //private Identity _otherIdentity;
 
         [TestInitialize]
         public void Initialize()
@@ -23,16 +23,37 @@ namespace $rootnamespace$
             _community = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 //.Register<Model.CorrespondenceModel>()
-                //.Subscribe(() => _fact)
+                //.Subscribe(() => _identity)
 				;
             _otherCommunity = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 //.Register<Model.CorrespondenceModel>()
-                //.Subscribe(() => _otherFact)
+                //.Subscribe(() => _otherIdentity)
 				;
 
-			//_fact = _community.AddFact(new MyFact());
-			//_otherFact = _otherCommunity.AddFact(new MyFact());
+            //_identity = _community.AddFact(new Identity("mike"));
+            //_otherIdentity = _otherCommunity.AddFact(new Identity("mike"));
 		}
+
+        //[TestMethod]
+        //public void ThroughtIsInitiallyNull()
+        //{
+        //    Assert.IsNull(_otherIdentity.Me.Value);
+        //}
+
+        //[TestMethod]
+        //public void OtherDeviceReceivesThougths()
+        //{
+        //    _identity.Me = _community.AddFact(new Thought());
+        //
+        //    Synchronize();
+        //
+        //    Assert.IsNotNull(_otherIdentity.Me.Value);
+        //}
+
+        private void Synchronize()
+        {
+            while (_community.Synchronize() || _otherCommunity.Synchronize()) ;
+        }
 	}
 }
