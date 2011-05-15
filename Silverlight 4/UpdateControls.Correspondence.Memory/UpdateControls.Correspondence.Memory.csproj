@@ -69,6 +69,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\FactRecord.cs">
       <Link>FactRecord.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryCommunicationStrategy.cs">
+      <Link>MemoryCommunicationStrategy.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
       <Link>MemoryStorageStrategy.cs</Link>
     </Compile>
