@@ -56,9 +56,13 @@ namespace UpdateControls.Correspondence.POXClient
                         .Select(pivot => new PivotMemento(
                             new FactID { key = pivot.FactId ?? 0L },
                             new TimestampID(0L, pivot.Timestamp)))),
-                ex => callback(
-                    new FactTreeMemento(pivotTree.DatabaseId),
-                    Enumerable.Empty<PivotMemento>()));
+                ex =>
+                {
+                    error(ex);
+                    callback(
+                        new FactTreeMemento(pivotTree.DatabaseId),
+                        Enumerable.Empty<PivotMemento>());
+                });
         }
 
         public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback, Action<Exception> error)
@@ -73,7 +77,11 @@ namespace UpdateControls.Correspondence.POXClient
                 _configuration,
                 request,
                 response => callback(true),
-                ex => callback(false));
+                ex =>
+                {
+                    callback(false);
+                    error(ex);
+                });
         }
 
 		public event Action<FactTreeMemento> MessageReceived;

@@ -14,5 +14,6 @@ namespace UpdateControls.Correspondence
         void BeginSynchronize(AsyncCallback callback, object state);
         bool EndSynchronize(IAsyncResult asyncResult);
         bool Synchronizing { get; }
+        Exception LastException { get; }
     }
 }
