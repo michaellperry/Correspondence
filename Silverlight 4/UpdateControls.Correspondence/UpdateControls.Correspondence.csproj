@@ -153,6 +153,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\NamedFactMemento.cs">
       <Link>Mementos\NamedFactMemento.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\PivotMemento.cs">
+      <Link>Mementos\PivotMemento.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\PredecessorMemento.cs">
       <Link>Mementos\PredecessorMemento.cs</Link>
     </Compile>

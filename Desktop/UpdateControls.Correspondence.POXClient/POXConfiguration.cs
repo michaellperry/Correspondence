@@ -6,13 +6,20 @@ namespace UpdateControls.Correspondence.POXClient
 	{
         private readonly string _endpoint;
         private readonly string _channelName;
-        private readonly string _akiKey;
+        private readonly string _apiKey;
+        private readonly int _timeoutSeconds;
         
-        public POXConfiguration(string endpoint, string channelName, string apiKey)
+        public POXConfiguration(string endpoint, string channelName, string apiKey) :
+            this(endpoint, channelName, apiKey, 0)
+        {
+        }
+
+        public POXConfiguration(string endpoint, string channelName, string apiKey, int timeoutSeconds)
         {
             _endpoint = endpoint;
             _channelName = channelName;
-            _akiKey = apiKey;
+            _apiKey = apiKey;
+            _timeoutSeconds = timeoutSeconds;
         }
 
 		public string Endpoint
@@ -27,7 +34,12 @@ namespace UpdateControls.Correspondence.POXClient
 
         public string APIKey
         {
-            get { return _akiKey; }
+            get { return _apiKey; }
+        }
+
+        public int TimeoutSeconds
+        {
+            get { return _timeoutSeconds; }
         }
     }
 }

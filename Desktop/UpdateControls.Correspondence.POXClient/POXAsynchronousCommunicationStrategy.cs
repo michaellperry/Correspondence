@@ -5,6 +5,8 @@ using System.Xml.Serialization;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.POXClient.Contract;
 using UpdateControls.Correspondence.Strategy;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UpdateControls.Correspondence.POXClient
 {
@@ -33,25 +35,30 @@ namespace UpdateControls.Correspondence.POXClient
 			get { return _configuration.Endpoint; }
 		}
 
-        public void BeginGet(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp, Guid clientGuid, Action<FactTreeMemento, TimestampID> callback, Action<Exception> error)
-		{
-            GetRequest request = new GetRequest
+        public void BeginGetMany(FactTreeMemento pivotTree, List<PivotMemento> pivots, Guid clientGuid, Action<FactTreeMemento, IEnumerable<PivotMemento>> callback, Action<Exception> error)
+        {
+            GetManyRequest request = new GetManyRequest
             {
                 Domain = _configuration.APIKey,
                 PivotTree = Translate.MementoToFactTree(pivotTree),
-                PivotId = pivotId.key,
-                Timestamp = timestamp.Key,
-                ClientGuid = clientGuid.ToString()
+                PivotIds = pivots
+                    .Select(pivot => new ArrayOfPivotIdPivotId { FactId = pivot.PivotId.key, Timestamp = pivot.Timestamp.Key })
+                    .ToArray(),
+                ClientGuid = clientGuid.ToString(),
+                TimeoutSeconds = _configuration.TimeoutSeconds
             };
-            POXHttpRequest.Begin<GetRequest, GetResponse>(
+            POXHttpRequest.Begin<GetManyRequest, GetManyResponse>(
                 _configuration,
                 request,
                 response => callback(
                     Translate.FactTreeToMemento(response.FactTree),
-                    new TimestampID(response.FactTree.DatabaseId, response.Timestamp)),
+                    response.PivotIds
+                        .Select(pivot => new PivotMemento(
+                            new FactID { key = pivot.FactId ?? 0L },
+                            new TimestampID(0L, pivot.Timestamp)))),
                 ex => callback(
                     new FactTreeMemento(pivotTree.DatabaseId),
-                    new TimestampID(pivotTree.DatabaseId, timestamp.Key)));
+                    Enumerable.Empty<PivotMemento>()));
         }
 
         public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback, Action<Exception> error)

@@ -164,36 +164,48 @@ namespace UpdateControls.Correspondence.Networking
 			{
 				result.IncomingFinished(any);
 			});
-			foreach (AsynchronousServerProxy serverProxy in _serverProxies)
-			{
-				foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
-				{
-					foreach (CorrespondenceFact pivot in subscription.Pivots)
-					{
-						if (pivot == null)
-							continue;
 
-						FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-						FactID pivotId = pivot.ID;
-						_model.AddToFactTree(pivotTree, pivotId);
-						TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
-						communicationStragetyAggregate.Begin();
-						serverProxy.CommunicationStrategy.BeginGet(pivotTree, pivotId, timestamp, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, TimestampID newTimestamp)
-						{
-							if (messageBody.Facts.Any())
-							{
-								any = true;
-                                _model.ReceiveMessage(messageBody, serverProxy.PeerId);
-								lock (this)
-								{
-								    _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, newTimestamp);
-								}
-							}
-							communicationStragetyAggregate.End();
-                        }, OnError);
-					}
-				}
-			}
+            FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+            List<FactID> pivotIds = new List<FactID>();
+            foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
+            {
+                foreach (CorrespondenceFact pivot in subscription.Pivots)
+                {
+                    if (pivot == null)
+                        continue;
+
+                    FactID pivotId = pivot.ID;
+                    _model.AddToFactTree(pivotTree, pivotId);
+                    pivotIds.Add(pivotId);
+                }
+            }
+
+            foreach (AsynchronousServerProxy serverProxy in _serverProxies)
+            {
+                List<PivotMemento> pivots = new List<PivotMemento>();
+                foreach (FactID pivotId in pivotIds)
+                {
+                    TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
+                    pivots.Add(new PivotMemento(pivotId, timestamp));
+                }
+                communicationStragetyAggregate.Begin();
+                serverProxy.CommunicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
+                {
+                    if (messageBody.Facts.Any())
+                    {
+                        any = true;
+                        _model.ReceiveMessage(messageBody, serverProxy.PeerId);
+                        lock (this)
+                        {
+                            foreach (PivotMemento pivot in newTimestamps)
+                            {
+                                _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivot.PivotId, pivot.Timestamp);
+                            }
+                        }
+                    }
+                    communicationStragetyAggregate.End();
+                }, OnError);
+            }
 
 			communicationStragetyAggregate.Close();
 		}
