@@ -49,9 +49,6 @@ namespace UpdateControls.Correspondence.Networking
 
 		public void BeginSynchronize(AsyncCallback callback, object state)
 		{
-			if (!_serverProxies.Any())
-				throw new CorrespondenceException("Register at least one asynchronous communication strategy before calling BeginSynchronize.");
-
 			SynchronizeResult result = new SynchronizeResult(
 				delegate(IAsyncResult r)
 				{
