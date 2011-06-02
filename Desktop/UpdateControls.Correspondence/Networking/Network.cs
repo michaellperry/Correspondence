@@ -42,15 +42,15 @@ namespace UpdateControls.Correspondence.Networking
 			_asynchronousNetwork.AddAsynchronousCommunicationStrategy(asynchronousCommunicationStrategy);
 		}
 
-		public void BeginSynchronize(AsyncCallback callback, object state)
+		public void BeginReceiving()
 		{
-			_asynchronousNetwork.BeginSynchronize(callback, state);
+			_asynchronousNetwork.BeginReceiving();
 		}
 
-		public bool EndSynchronize(IAsyncResult asyncResult)
-		{
-			return _asynchronousNetwork.EndSynchronize(asyncResult);
-		}
+        public void BeginSending()
+        {
+            _asynchronousNetwork.BeginSending();
+        }
 
         public bool Synchronize()
         {

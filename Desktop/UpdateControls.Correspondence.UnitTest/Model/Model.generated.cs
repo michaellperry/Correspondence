@@ -11,9 +11,9 @@ using System.IO;
 digraph "UpdateControls.Correspondence.UnitTest.Model"
 {
     rankdir=BT
-    UserFavoriteColor -> User
+    UserFavoriteColor -> User [color="red"]
     UserFavoriteColor -> UserFavoriteColor [label="  *"]
-    UserBetterFavoriteColor -> User
+    UserBetterFavoriteColor -> User [color="red"]
     UserBetterFavoriteColor -> UserBetterFavoriteColor [label="  *"]
     UserBetterFavoriteColor -> Color
     LogOn -> User
@@ -319,7 +319,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			_correspondenceFactType,
 			"user",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			false));
+			true));
         public static Role RolePrior = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"prior",
@@ -438,7 +438,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			_correspondenceFactType,
 			"user",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			false));
+			true));
         public static Role RolePrior = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"prior",

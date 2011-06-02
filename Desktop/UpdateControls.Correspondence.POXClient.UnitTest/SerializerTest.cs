@@ -58,6 +58,7 @@ namespace UpdateControls.Correspondence.POXClient.UnitTest
             ShouldEqual(
                 "<?xml version=\"1.0\"?>\r\n" +
                 "<c:GetRequest xmlns:c=\"http://correspondence.updatecontrols.com/pox/1.0\">\r\n" +
+                "  <Domain>LnldvHcytc2Jhv</Domain>\r\n" +
                 "  <PivotTree>\r\n" +
                 "    <DatabaseId>1</DatabaseId>\r\n" +
                 "    <Facts>\r\n" +

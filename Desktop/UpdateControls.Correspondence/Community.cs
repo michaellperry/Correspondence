@@ -120,14 +120,14 @@ namespace UpdateControls.Correspondence
             return _network.Synchronize();
         }
 
-        public void BeginSynchronize(AsyncCallback callback, object state)
+        public void BeginSynchronizeIncoming()
         {
-            _network.BeginSynchronize(callback, state);
+            _network.BeginReceiving();
         }
 
-        public bool EndSynchronize(IAsyncResult asyncResult)
+        public void BeginSynchronizeOutgoing()
         {
-            return _network.EndSynchronize(asyncResult);
+            _network.BeginSending();
         }
 
         public bool Synchronizing

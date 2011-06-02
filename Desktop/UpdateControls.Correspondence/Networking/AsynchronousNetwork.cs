@@ -16,8 +16,8 @@ namespace UpdateControls.Correspondence.Networking
 		private IStorageStrategy _storageStrategy;
 
         private List<AsynchronousServerProxy> _serverProxies = new List<AsynchronousServerProxy>();
-		private Queue<SynchronizeResult> _synchronizeQueue = new Queue<SynchronizeResult>();
-        private Independent _indSynchronizeQueue = new Independent();
+        private Independent<bool> _sending = new Independent<bool>();
+        private Independent<bool> _receiving = new Independent<bool>();
         private Independent<Exception> _lastException = new Independent<Exception>();
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
@@ -30,7 +30,7 @@ namespace UpdateControls.Correspondence.Networking
 			_storageStrategy = storageStrategy;
 
 			_depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
-			_depPushSubscriptions.Invalidated += TriggerAsync;
+			_depPushSubscriptions.Invalidated += TriggerSubscriptionUpdate;
 		}
 
 		public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
@@ -47,45 +47,13 @@ namespace UpdateControls.Correspondence.Networking
             });
 		}
 
-		public void BeginSynchronize(AsyncCallback callback, object state)
-		{
-			SynchronizeResult result = new SynchronizeResult(
-				delegate(IAsyncResult r)
-				{
-					ServeNextSynchronize(r);
-					callback(r);
-				}, state);
-			bool firstInLine = false;
-			lock (this)
-			{
-				firstInLine = !_synchronizeQueue.Any();
-                _indSynchronizeQueue.OnSet();
-				_synchronizeQueue.Enqueue(result);
-			}
-			if (firstInLine)
-			{
-                lock (this)
-                {
-                    _lastException.Value = null;
-                }
-				BeginSynchronize(result);
-			}
-		}
-
-		public bool EndSynchronize(IAsyncResult result)
-		{
-			SynchronizeResult r = (SynchronizeResult)result;
-			return (r.IncomingResult ?? false) || (r.OutgoingResult ?? false);
-		}
-
         public bool Synchronizing
         {
             get
             {
                 lock (this)
                 {
-                    _indSynchronizeQueue.OnGet();
-                    return _synchronizeQueue.Any();
+                    return _receiving || _sending;
                 }
             }
         }
@@ -101,111 +69,108 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        private void ServeNextSynchronize(IAsyncResult expected)
-		{
-            SynchronizeResult result = null;
-            lock (this)
-			{
-                _indSynchronizeQueue.OnSet();
-				SynchronizeResult actual = _synchronizeQueue.Dequeue();
-				if (actual != expected)
-					throw new CorrespondenceException("The synchronization queue is corrupt.");
-				if (_synchronizeQueue.Any())
-				{
-                    result = _synchronizeQueue.Peek();
-                }
-			}
-
-            if (result != null)
-                BeginSynchronize(result);
-        }
-
-        private void BeginSynchronize(SynchronizeResult result)
+        public void BeginSending()
         {
-            _depPushSubscriptions.OnGet();
-            BeginSynchronizeOutgoing(result);
-            BeginSynchronizeIncoming(result);
+            lock (this)
+            {
+                if (_sending)
+                    return;
+            }
+            Send();
         }
 
-        private void BeginSynchronizeOutgoing(SynchronizeResult result)
+        private void Send()
 		{
-			bool any = false;
-			ResultAggregate communicationStrategyAggregate = new ResultAggregate(delegate()
-			{
-				result.OutgoingFinished(any);
-			});
+            bool sending = false;
 			foreach (AsynchronousServerProxy serverProxy in _serverProxies)
 			{
 				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
 				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId);
-				if (messageBodies != null && messageBodies.Facts.Any())
-				{
-					any = true;
-					communicationStrategyAggregate.Begin();
+                if (messageBodies != null && messageBodies.Facts.Any())
+                {
+                    sending = true;
                     serverProxy.CommunicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, delegate(bool succeeded)
                     {
                         if (succeeded)
+                        {
                             _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
-                        communicationStrategyAggregate.End();
-                    }, OnError);
-				}
+                            Send();
+                        }
+                        else
+                        {
+                            OnSendError(null);
+                        }
+                    }, OnSendError);
+                }
 			}
 
-			communicationStrategyAggregate.Close();
+            lock (this)
+            {
+                _sending.Value = sending;
+            }
 		}
 
-		private void BeginSynchronizeIncoming(SynchronizeResult result)
-		{
-			bool any = false;
-			ResultAggregate communicationStragetyAggregate = new ResultAggregate(delegate()
-			{
-				result.IncomingFinished(any);
-			});
-
-            FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-            List<FactID> pivotIds = new List<FactID>();
-            foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
+        public void BeginReceiving()
+        {
+            lock (this)
             {
-                foreach (CorrespondenceFact pivot in subscription.Pivots)
-                {
-                    if (pivot == null)
-                        continue;
-
-                    FactID pivotId = pivot.ID;
-                    _model.AddToFactTree(pivotTree, pivotId);
-                    pivotIds.Add(pivotId);
-                }
+                if (_receiving)
+                    return;
             }
 
-            foreach (AsynchronousServerProxy serverProxy in _serverProxies)
+            Receive();
+        }
+
+        public void Receive()
+        {
+            FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+            List<FactID> pivotIds = new List<FactID>();
+            lock (this)
             {
-                List<PivotMemento> pivots = new List<PivotMemento>();
-                foreach (FactID pivotId in pivotIds)
+                _depPushSubscriptions.OnGet();
+                GetPivots(pivotTree, pivotIds);
+            }
+
+            bool anyPivots = pivotIds.Any();
+            if (anyPivots)
+            {
+                foreach (AsynchronousServerProxy serverProxy in _serverProxies)
                 {
-                    TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
-                    pivots.Add(new PivotMemento(pivotId, timestamp));
-                }
-                communicationStragetyAggregate.Begin();
-                serverProxy.CommunicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
-                {
-                    if (messageBody.Facts.Any())
+                    List<PivotMemento> pivots = new List<PivotMemento>();
+                    foreach (FactID pivotId in pivotIds)
                     {
-                        any = true;
-                        _model.ReceiveMessage(messageBody, serverProxy.PeerId);
-                        lock (this)
+                        TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
+                        pivots.Add(new PivotMemento(pivotId, timestamp));
+                    }
+                    serverProxy.CommunicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
+                    {
+                        bool receivedFacts = messageBody.Facts.Any();
+                        if (receivedFacts)
                         {
+                            _model.ReceiveMessage(messageBody, serverProxy.PeerId);
                             foreach (PivotMemento pivot in newTimestamps)
                             {
                                 _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivot.PivotId, pivot.Timestamp);
                             }
                         }
-                    }
-                    communicationStragetyAggregate.End();
-                }, OnError);
+                        if (receivedFacts || serverProxy.CommunicationStrategy.IsLongPolling)
+                            Receive();
+                        else
+                        {
+                            lock (this)
+                            {
+                                _receiving.Value = false;
+                            }
+                        }
+                    }, OnReceiveError);
+                }
             }
 
-			communicationStragetyAggregate.Close();
-		}
+            lock (this)
+            {
+                _receiving.Value = anyPivots;
+            }
+        }
 
 		private void UpdatePushSubscriptions()
 		{
@@ -223,29 +188,54 @@ namespace UpdateControls.Correspondence.Networking
 
 				foreach (PushSubscriptionProxy pushSubscription in _pushSubscriptions)
 				{
-					pushSubscription.Subscribe();
+                    pushSubscription.Subscribe();
 				}
 			}
 		}
 
-        private void TriggerAsync()
+        private void GetPivots(FactTreeMemento pivotTree, List<FactID> pivotIds)
         {
-            GetDispatcher().BeginInvoke(new Action(delegate
+            foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
             {
-                BeginSynchronize(a =>
+                foreach (CorrespondenceFact pivot in subscription.Pivots)
                 {
-                    if (EndSynchronize(a))
-                        TriggerAsync();
-                }, null);
-            }));
+                    if (pivot == null)
+                        continue;
+
+                    FactID pivotId = pivot.ID;
+                    _model.AddToFactTree(pivotTree, pivotId);
+                    pivotIds.Add(pivotId);
+                }
+            }
         }
 
-        private void OnError(Exception exception)
+        private void OnSendError(Exception exception)
         {
             lock (this)
             {
+                _sending.Value = false;
                 _lastException.Value = exception;
             }
+        }
+
+        private void OnReceiveError(Exception exception)
+        {
+            lock (this)
+            {
+                _receiving.Value = false;
+                _lastException.Value = exception;
+            }
+        }
+
+        private void TriggerSubscriptionUpdate()
+        {
+            GetDispatcher().BeginInvoke(new Action(() =>
+            {
+                lock (this)
+                {
+                    _depPushSubscriptions.OnGet();
+                }
+            }));
         }
     }
 }

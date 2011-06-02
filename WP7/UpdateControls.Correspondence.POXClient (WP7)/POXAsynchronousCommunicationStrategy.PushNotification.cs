@@ -24,6 +24,11 @@ namespace UpdateControls.Correspondence.POXClient
             _toastNotificationObserver = new ToastNotificationObserver(_configurationProvider);
         }
 
+        public bool IsLongPolling
+        {
+            get { return false; }
+        }
+
         public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
         {
             lock (_monitor)

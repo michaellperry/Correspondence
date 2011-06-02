@@ -18,5 +18,10 @@ namespace UpdateControls.Correspondence.POXClient
             // Push notification is not supported in the desktop version.
             return new NoOpPushSubscription();
         }
+
+        public bool IsLongPolling
+        {
+            get { return _configuration.TimeoutSeconds > 0; }
+        }
     }
 }
