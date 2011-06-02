@@ -11,8 +11,8 @@ namespace UpdateControls.Correspondence
             where T : CorrespondenceFact;
         event Action FactAdded;
         bool Synchronize();
-        void BeginSynchronizeIncoming();
-        void BeginSynchronizeOutgoing();
+        void BeginSending();
+        void BeginReceiving();
         bool Synchronizing { get; }
         Exception LastException { get; }
     }

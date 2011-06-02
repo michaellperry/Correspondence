@@ -120,12 +120,12 @@ namespace UpdateControls.Correspondence
             return _network.Synchronize();
         }
 
-        public void BeginSynchronizeIncoming()
+        public void BeginReceiving()
         {
             _network.BeginReceiving();
         }
 
-        public void BeginSynchronizeOutgoing()
+        public void BeginSending()
         {
             _network.BeginSending();
         }

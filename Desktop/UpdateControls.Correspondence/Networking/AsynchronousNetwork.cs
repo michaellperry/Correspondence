@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Threading;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Fields;
@@ -18,7 +19,9 @@ namespace UpdateControls.Correspondence.Networking
         private List<AsynchronousServerProxy> _serverProxies = new List<AsynchronousServerProxy>();
         private Independent<bool> _sending = new Independent<bool>();
         private Independent<bool> _receiving = new Independent<bool>();
+        private Independent<bool> _receiveWaiting = new Independent<bool>();
         private Independent<Exception> _lastException = new Independent<Exception>();
+        private DispatcherTimer _receiveWaitingTimer = new DispatcherTimer();
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
 		private Dependent _depPushSubscriptions;
@@ -31,6 +34,14 @@ namespace UpdateControls.Correspondence.Networking
 
 			_depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
 			_depPushSubscriptions.Invalidated += TriggerSubscriptionUpdate;
+
+            _receiveWaitingTimer = new DispatcherTimer();
+            _receiveWaitingTimer.Tick += delegate
+            {
+                _receiveWaiting.Value = true;
+                _receiveWaitingTimer.Stop();
+            };
+            _receiveWaitingTimer.Interval = TimeSpan.FromSeconds(1.0);
 		}
 
 		public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
@@ -53,7 +64,7 @@ namespace UpdateControls.Correspondence.Networking
             {
                 lock (this)
                 {
-                    return _receiving || _sending;
+                    return (_receiving && !_receiveWaiting) || _sending;
                 }
             }
         }
@@ -160,6 +171,7 @@ namespace UpdateControls.Correspondence.Networking
                             lock (this)
                             {
                                 _receiving.Value = false;
+                                _receiveWaiting.Value = false;
                             }
                         }
                     }, OnReceiveError);
@@ -169,6 +181,14 @@ namespace UpdateControls.Correspondence.Networking
             lock (this)
             {
                 _receiving.Value = anyPivots;
+                _receiveWaiting.Value = false;
+            }
+            if (anyPivots)
+            {
+                GetDispatcher().BeginInvoke(new Action(delegate
+                {
+                    _receiveWaitingTimer.Start();
+                }));
             }
         }
 
@@ -223,6 +243,7 @@ namespace UpdateControls.Correspondence.Networking
             lock (this)
             {
                 _receiving.Value = false;
+                _receiveWaiting.Value = false;
                 _lastException.Value = exception;
             }
         }
