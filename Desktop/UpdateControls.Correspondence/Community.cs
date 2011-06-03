@@ -109,7 +109,7 @@ namespace UpdateControls.Correspondence
             _model.SetFact(objectName, fact);
 		}
 
-        public event Action FactAdded
+        public event Action<CorrespondenceFact> FactAdded
         {
             add { _model.FactAdded += value; }
             remove { _model.FactAdded -= value; }

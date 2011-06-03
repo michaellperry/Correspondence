@@ -25,7 +25,7 @@ namespace UpdateControls.Correspondence
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
 		private IDictionary<FactMemento, CorrespondenceFact> _factByMemento = new Dictionary<FactMemento, CorrespondenceFact>();
 
-        public event Action FactAdded;
+        public event Action<CorrespondenceFact> FactAdded;
 
         public Model(Community community, IStorageStrategy storageStrategy)
 		{
@@ -134,7 +134,7 @@ namespace UpdateControls.Correspondence
                 invalidateAction();
 
             if (FactAdded != null)
-                FactAdded();
+                FactAdded(prototype);
 
             return prototype;
         }
