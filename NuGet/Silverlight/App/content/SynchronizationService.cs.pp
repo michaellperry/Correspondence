@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
 using UpdateControls.Correspondence.POXClient;
