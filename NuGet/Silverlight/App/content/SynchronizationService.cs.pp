@@ -30,11 +30,22 @@ namespace $rootnamespace$
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
             {
-                Synchronize();
+                _community.BeginSending();
             };
 
+            // Periodically resume if there is an error.
+            DispatcherTimer synchronizeTimer = new DispatcherTimer();
+            synchronizeTimer.Tick += delegate
+            {
+                _community.BeginSending();
+                _community.BeginReceiving();
+            };
+            synchronizeTimer.Interval = TimeSpan.FromSeconds(60.0);
+            synchronizeTimer.Start();
+
             // And synchronize on startup.
-            Synchronize();
+            _community.BeginSending();
+            _community.BeginReceiving();
         }
 
         public Community Community
@@ -42,18 +53,14 @@ namespace $rootnamespace$
             get { return _community; }
         }
 
-        public void Synchronize()
-        {
-            _community.BeginSynchronize(delegate(IAsyncResult result)
-            {
-                if (_community.EndSynchronize(result))
-                    Synchronize();
-            }, null);
-        }
-
         public bool Synchronizing
         {
             get { return _community.Synchronizing; }
+        }
+
+        public Exception LastException
+        {
+            get { return _community.LastException; }
         }
     }
 }
