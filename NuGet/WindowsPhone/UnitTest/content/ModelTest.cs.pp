@@ -22,12 +22,12 @@ namespace $rootnamespace$
             var sharedCommunication = new MemoryCommunicationStrategy();
             _community = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
-                //.Register<Model.CorrespondenceModel>()
+                //.Register<CorrespondenceModel>()
                 //.Subscribe(() => _identity)
 				;
             _otherCommunity = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
-                //.Register<Model.CorrespondenceModel>()
+                //.Register<CorrespondenceModel>()
                 //.Subscribe(() => _otherIdentity)
 				;
 
