@@ -63,6 +63,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{849EB099-EC1C-497A-8F77-849A0A8FB3AF}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\PackAll.bat = NuGet\PackAll.bat
+		NuGet\PushAll.bat = NuGet\PushAll.bat
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A-656F-46C5-AC58-EC984A4DDB42}"
