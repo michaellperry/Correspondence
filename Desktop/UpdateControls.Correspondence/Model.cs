@@ -91,37 +91,7 @@ namespace UpdateControls.Correspondence
                 if (_factByMemento.TryGetValue(memento, out fact))
                     return (T)fact;
 
-                // Set the ID and add the object to the community.
-                FactID id;
-                if (_storageStrategy.Save(memento, peerId, out id))
-                {
-                    // Invalidate all of the queries affected by the new object.
-                    List<QueryInvalidator> invalidators;
-                    foreach (CorrespondenceFactType factType in _metadataByFactType[memento.FactType].ConvertableTypes)
-                        if (_queryInvalidatorsByType.TryGetValue(factType, out invalidators))
-                        {
-                            foreach (QueryInvalidator invalidator in invalidators)
-                            {
-                                List<FactID> targetFactIds;
-                                if (invalidator.TargetFacts.CanExecuteFromMemento)
-                                    // If the inverse query is simple, the results are already in the memento.
-                                    targetFactIds = invalidator.TargetFacts.ExecuteFromMemento(memento);
-                                else
-                                    // The query is more complex, so go to the storage strategy.
-                                    targetFactIds = _storageStrategy.QueryForIds(invalidator.TargetFacts, id).ToList();
-
-                                foreach (FactID targetObjectId in targetFactIds)
-                                {
-                                    CorrespondenceFact targetObject;
-                                    if (_factByID.TryGetValue(targetObjectId, out targetObject))
-                                    {
-                                        QueryDefinition invalidQuery = invalidator.InvalidQuery;
-                                        invalidateActions.Add(() => targetObject.InvalidateQuery(invalidQuery));
-                                    }
-                                }
-                            }
-                        }
-                }
+                FactID id = AddFactMemento(peerId, invalidateActions, memento);
 
                 // Turn the prototype into the real fact.
                 prototype.ID = id;
@@ -232,18 +202,14 @@ namespace UpdateControls.Correspondence
                     })
                     .Where(pred => pred != null));
 
-                try
-                {
-                    CorrespondenceFact fact = HydrateFact(translatedMemento);
-                    fact = AddFact(fact, peerId);
-                    FactID localId = fact.ID;
-                    FactID remoteId = identifiedFact.Id;
-                    localIdByRemoteId.Add(remoteId, localId);
-                }
-                catch (Exception ex)
-                {
-                    HandleException(ex);
-                }
+                List<Action> invalidateActions = new List<Action>();
+                FactID localId = AddFactMemento(peerId, invalidateActions, translatedMemento);
+
+                foreach (Action invalidateAction in invalidateActions)
+                    invalidateAction();
+
+                FactID remoteId = identifiedFact.Id;
+                localIdByRemoteId.Add(remoteId, localId);
             }
         }
 
@@ -367,6 +333,46 @@ namespace UpdateControls.Correspondence
             }
 
             return memento;
+        }
+
+        private FactID AddFactMemento(int peerId, List<Action> invalidateActions, FactMemento memento)
+        {
+            // Set the ID and add the object to the community.
+            FactID id;
+            if (_storageStrategy.Save(memento, peerId, out id))
+            {
+                // Invalidate all of the queries affected by the new object.
+                List<QueryInvalidator> invalidators;
+                FactMetadata metadata;
+                if (_metadataByFactType.TryGetValue(memento.FactType, out metadata))
+                {
+                    foreach (CorrespondenceFactType factType in metadata.ConvertableTypes)
+                        if (_queryInvalidatorsByType.TryGetValue(factType, out invalidators))
+                        {
+                            foreach (QueryInvalidator invalidator in invalidators)
+                            {
+                                List<FactID> targetFactIds;
+                                if (invalidator.TargetFacts.CanExecuteFromMemento)
+                                    // If the inverse query is simple, the results are already in the memento.
+                                    targetFactIds = invalidator.TargetFacts.ExecuteFromMemento(memento);
+                                else
+                                    // The query is more complex, so go to the storage strategy.
+                                    targetFactIds = _storageStrategy.QueryForIds(invalidator.TargetFacts, id).ToList();
+
+                                foreach (FactID targetObjectId in targetFactIds)
+                                {
+                                    CorrespondenceFact targetObject;
+                                    if (_factByID.TryGetValue(targetObjectId, out targetObject))
+                                    {
+                                        QueryDefinition invalidQuery = invalidator.InvalidQuery;
+                                        invalidateActions.Add(() => targetObject.InvalidateQuery(invalidQuery));
+                                    }
+                                }
+                            }
+                        }
+                }
+            }
+            return id;
         }
 
         private void HandleException(Exception exception)

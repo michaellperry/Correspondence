@@ -184,7 +184,7 @@ namespace UpdateControls.Correspondence.Memory
 
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
         {
-            throw new NotImplementedException();
+            return _factTable.Select(record => record.IdentifiedFactMemento);
         }
 
         public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
