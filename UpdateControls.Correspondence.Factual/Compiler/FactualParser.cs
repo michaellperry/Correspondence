@@ -167,13 +167,38 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
                 (predicate, closeBracket) => (FactMember)predicate);
 
-            // field -> "publish"? type identifier ";"
-            var fieldRule = Sequence(
-                publishOptRule,
-                typeRule, "Provide a field type.",
+            // field -> "publish"? type identifier publish_condition? ";"
+            // publish_clause -> "not"? "this" "." identifier
+            // publish_condition -> "where" clause ("and" clause)*
+            var publishClauseRule = Sequence(
+                Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive),
+                Terminal(Symbol.This), "Publish conditions must be based on this.",
+                Terminal(Symbol.Dot), "Use a dot to reference a predicate.",
+                Terminal(Symbol.Identifier), "Provide the name of a predicate.",
+                (not, set, dot, predicate) => new Clause(set.LineNumber, not, set.Value, predicate.Value));
+            var publishConditionRule = Many(
+                Sequence(
+                    Terminal(Symbol.Where),
+                    publishClauseRule, "Give a predicate to use as a condition.",
+                    (whereToken, clause) => new Condition().AddClause(clause)),
+                Sequence(
+                    Terminal(Symbol.And),
+                    publishClauseRule, "Provide another clause.",
+                    (and, clause) => clause),
+                (condition, clause) => condition.AddClause(clause));
+            var simpleFieldRule = Sequence(
+                typeRule,
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Terminal(Symbol.Semicolon), "Missing semicolon after field.",
-                (publish, type, nameToken, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type, publish));
+                (type, nameToken, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type, false, null));
+            var publishFieldRule = Sequence(
+                Terminal(Symbol.Publish),
+                typeRule, "Provide a field type.",
+                Terminal(Symbol.Identifier), "Provide a name for the field.",
+                Optional(publishConditionRule, new Condition()), "Defect.",
+                Terminal(Symbol.Semicolon), "Missing semicolon after field.",
+                (publish, type, nameToken, condition, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type, true, condition));
+            var fieldRule = simpleFieldRule | publishFieldRule;
 
             // query -> type identifier "{" set* "}"
             var queryRule = Sequence(
@@ -194,7 +219,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 typeRule, "Declare a field after \"from\" or \"to\".",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Terminal(Symbol.Semicolon), "A field is followed by a semicolon.",
-                (modifierToken, publish, typeToken, nameToken, semicolon) => CreateSecureField(modifierToken, typeToken, nameToken.Value, publish)
+                (modifierToken, publish, typeToken, nameToken, semicolon) => CreateSecureField(modifierToken, typeToken, nameToken.Value, publish, null)
             );
 
             // key_member -> modifier | field | secure_field
@@ -271,9 +296,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new Query(nameToken.Value, factType.FactName, factType.LineNumber);
         }
 
-        private static FactMember CreateSecureField(Token<Symbol> modifierToken, DataType dataType, string name, bool publish)
+        private static FactMember CreateSecureField(Token<Symbol> modifierToken, DataType dataType, string name, bool publish, Condition publishCondition)
         {
-            Field field = new Field(modifierToken.LineNumber, name, dataType, publish);
+            Field field = new Field(modifierToken.LineNumber, name, dataType, publish, publishCondition);
             if (modifierToken.Symbol == Symbol.From)
                 field.SecurityModifier = FieldSecurityModifier.From;
             else if (modifierToken.Symbol == Symbol.To)
