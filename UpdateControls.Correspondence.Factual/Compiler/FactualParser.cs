@@ -167,7 +167,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
                 (predicate, closeBracket) => (FactMember)predicate);
 
-            // field -> "publish"? type identifier publish_condition? ";"
+            // field -> "publish"? ("from" | "to")? type identifier publish_condition? ";"
             // publish_clause -> "not"? "this" "." identifier
             // publish_condition -> "where" clause ("and" clause)*
             var publishClauseRule = Sequence(
@@ -187,17 +187,19 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (and, clause) => clause),
                 (condition, clause) => condition.AddClause(clause));
             var simpleFieldRule = Sequence(
-                typeRule,
+                Optional(Terminal(Symbol.To) | Terminal(Symbol.From), null),
+                typeRule, "Defect.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Terminal(Symbol.Semicolon), "Missing semicolon after field.",
-                (type, nameToken, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type, false, null));
+                (modifierToken, type, nameToken, semicolon) => CreateField(modifierToken, type, nameToken.Value, false, null));
             var publishFieldRule = Sequence(
                 Terminal(Symbol.Publish),
+                Optional(Terminal(Symbol.To) |  Terminal(Symbol.From), null), "Defect.",
                 typeRule, "Provide a field type.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Optional(publishConditionRule, new Condition()), "Defect.",
                 Terminal(Symbol.Semicolon), "Missing semicolon after field.",
-                (publish, type, nameToken, condition, semicolon) => (FactMember)new Field(type.LineNumber, nameToken.Value, type, true, condition));
+                (publish, modifierToken, type, nameToken, condition, semicolon) => CreateField(modifierToken, type, nameToken.Value, true, condition));
             var fieldRule = simpleFieldRule | publishFieldRule;
 
             // query -> type identifier "{" set* "}"
@@ -212,17 +214,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A query must contain sets.",
                 (query, closeBracket) => (FactMember)query);
 
-            // secure_field -> ("from" | "to") "publish"? type identifier ";"
-            var secureFieldRule = Sequence(
-                (Terminal(Symbol.From) | Terminal(Symbol.To)),
-                publishOptRule, "Defect.",
-                typeRule, "Declare a field after \"from\" or \"to\".",
-                Terminal(Symbol.Identifier), "Provide a name for the field.",
-                Terminal(Symbol.Semicolon), "A field is followed by a semicolon.",
-                (modifierToken, publish, typeToken, nameToken, semicolon) => CreateSecureField(modifierToken, typeToken, nameToken.Value, publish, null)
-            );
-
-            // key_member -> modifier | field | secure_field
+            // key_member -> modifier | field
             // key_section -> "key" ":" key_member*
             var principalModifierRule = Sequence(
                 Terminal(Symbol.Principal),
@@ -233,7 +225,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
                 (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetUnique()));
             var modifierRule = uniqueModifierRule | principalModifierRule;
-            var keyMemberRule = Reduce(fieldRule | secureFieldRule, keyMember => (Func<FactSection, FactSection>)(keySection => keySection.AddMember(keyMember)));
+            var keyMemberRule = Reduce(fieldRule, keyMember => (Func<FactSection, FactSection>)(keySection => keySection.AddMember(keyMember)));
             var keySectionRule = Many(
                 Sequence(
                     Terminal(Symbol.Key),
@@ -297,13 +289,16 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new Query(nameToken.Value, factType.FactName, factType.LineNumber);
         }
 
-        private static FactMember CreateSecureField(Token<Symbol> modifierToken, DataType dataType, string name, bool publish, Condition publishCondition)
+        private static FactMember CreateField(Token<Symbol> modifierToken, DataType dataType, string name, bool publish, Condition publishCondition)
         {
-            Field field = new Field(modifierToken.LineNumber, name, dataType, publish, publishCondition);
-            if (modifierToken.Symbol == Symbol.From)
-                field.SecurityModifier = FieldSecurityModifier.From;
-            else if (modifierToken.Symbol == Symbol.To)
-                field.SecurityModifier = FieldSecurityModifier.To;
+            Field field = new Field(dataType.LineNumber, name, dataType, publish, publishCondition);
+            if (modifierToken != null)
+            {
+                if (modifierToken.Symbol == Symbol.From)
+                    field.SecurityModifier = FieldSecurityModifier.From;
+                else if (modifierToken.Symbol == Symbol.To)
+                    field.SecurityModifier = FieldSecurityModifier.To;
+            }
             return field;
         }
     }
