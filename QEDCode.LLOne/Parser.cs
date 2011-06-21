@@ -28,6 +28,11 @@ namespace QEDCode.LLOne
             return new RuleTerminal<TSymbol>(expectedSymbol);
         }
 
+        protected static Rule<TSymbol, bool> Error(TSymbol triggerSymbol, string errorMessage)
+        {
+            return new RuleError<TSymbol>(triggerSymbol, errorMessage);
+        }
+
         protected static Rule<TSymbol, TResult> Reduce<TFrom, TResult>(Rule<TSymbol, TFrom> ruleFrom, Func<TFrom, TResult> reduce)
         {
             return new RuleReduce<TSymbol, TFrom, TResult>(ruleFrom, reduce);

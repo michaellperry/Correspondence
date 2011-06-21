@@ -247,8 +247,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 publishOptRule,
                 typeRule, "Provide a field type.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
+                Error(Symbol.Where, "A mutable field may not have a publish condition."), "Defect.",
                 Terminal(Symbol.Semicolon), "Terminate a field with a semicolon.",
-                (publish, dataType, propertyNameToken, semicolonToken) => (FactMember)new Property(dataType.LineNumber, propertyNameToken.Value, dataType, publish));
+                (publish, dataType, propertyNameToken, error, semicolonToken) => (FactMember)new Property(dataType.LineNumber, propertyNameToken.Value, dataType, publish));
             var mutableSectionRule = Many(
                 Sequence(
                     Terminal(Symbol.Mutable),
