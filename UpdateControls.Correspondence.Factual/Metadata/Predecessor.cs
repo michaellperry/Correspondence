@@ -11,14 +11,15 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         private Cardinality _cardinality;
         private string _factType;
 		private bool _isPivot;
+        private List<Condition> _publishConditions = new List<Condition>();
 
-		public Predecessor(string name, Cardinality cardinality, string factType, bool isPivot)
-		{
-			_name = name;
-			_cardinality = cardinality;
-			_factType = factType;
-			_isPivot = isPivot;
-		}
+        public Predecessor(string name, Cardinality cardinality, string factType, bool isPivot)
+        {
+            _name = name;
+            _cardinality = cardinality;
+            _factType = factType;
+            _isPivot = isPivot;
+        }
 
         public string Name
         {
@@ -39,5 +40,15 @@ namespace UpdateControls.Correspondence.Factual.Metadata
 		{
 			get { return _isPivot; }
 		}
+
+        public IEnumerable<Condition> PublishConditions
+        {
+            get { return _publishConditions; }
+        }
+
+        public void AddPublishCondition(Condition publishCondition)
+        {
+            _publishConditions.Add(publishCondition);
+        }
 	}
 }

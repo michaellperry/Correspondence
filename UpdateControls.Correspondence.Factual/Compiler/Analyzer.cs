@@ -86,7 +86,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     throw new CompilerException(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Name, member.Name), member.LineNumber);
                 var field = member as Source.Field;
                 if (field != null)
-                    AnalyzeField(factClass, field);
+                    AnalyzeField(factClass, fact, field);
                 else
                 {
                     var query = member as Source.Query;
@@ -112,7 +112,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
         }
 
-        private void AnalyzeField(Target.Class factClass, Source.Field field)
+        private void AnalyzeField(Target.Class factClass, Source.Fact fact, Source.Field field)
         {
             Source.DataTypeNative dataTypeNative = field.Type as Source.DataTypeNative;
             if (dataTypeNative != null)
@@ -121,7 +121,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             {
                 Source.DataTypeFact dataTypeFact = field.Type as Source.DataTypeFact;
                 if (dataTypeFact != null)
-                    AnalyzeFieldFact(field, dataTypeFact, factClass);
+                    AnalyzeFieldFact(field, fact, dataTypeFact, factClass);
             }
         }
 
@@ -133,16 +133,41 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 _nativeTypeMap[dataTypeNative.NativeType]));
         }
 
-        private void AnalyzeFieldFact(Source.Field field, Source.DataTypeFact dataTypeFact, Target.Class factClass)
+        private void AnalyzeFieldFact(Source.Field field, Source.Fact fact, Source.DataTypeFact dataTypeFact, Target.Class factClass)
         {
             if (!_root.Facts.Any(f => f.Name == dataTypeFact.FactName))
                 throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", dataTypeFact.FactName), field.LineNumber);
 
-            factClass.AddPredecessor(new Target.Predecessor(
-				field.Name, 
-				_cardinalityMap[dataTypeFact.Cardinality], 
-				dataTypeFact.FactName, 
-				field.Publish));
+            Target.Predecessor predecessor = new Target.Predecessor(field.Name, _cardinalityMap[dataTypeFact.Cardinality], dataTypeFact.FactName, field.Publish);
+            factClass.AddPredecessor(predecessor);
+
+            if (field.Publish && field.PublishCondition != null && field.PublishCondition.Clauses.Any())
+            {
+                foreach (Source.Clause clause in field.PublishCondition.Clauses)
+                {
+                    Source.FactMember member = fact.GetMemberByName(clause.PredicateName);
+                    if (member == null)
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", fact.Name, clause.PredicateName), clause.LineNumber);
+                    Source.Predicate predicate = member as Source.Predicate;
+                    if (predicate == null)
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", fact.Name, clause.PredicateName), clause.LineNumber);
+
+                    Source.ConditionModifier modifier = clause.Existence;
+                    if (predicate.Existence == Source.ConditionModifier.Negative)
+                    {
+                        // Invert the modifier if the predicate itself is negative.
+                        modifier = modifier == Source.ConditionModifier.Positive ?
+                            Source.ConditionModifier.Negative :
+                            Source.ConditionModifier.Positive;
+                    }
+
+                    predecessor.AddPublishCondition(new Target.Condition(
+                        modifier == Source.ConditionModifier.Positive ?
+                            Target.ConditionModifier.Positive :
+                            Target.ConditionModifier.Negative,
+                        clause.PredicateName));
+                }
+            }
         }
 
         private void AnalyzeQuery(Target.Class factClass, Source.Fact fact, Source.Query sourceQuery)
@@ -176,16 +201,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             Target.Class childClass = new Target.Class(fact.Name + property.Name.ToPascalCase());
             result.AddClass(childClass);
 
-            childClass.AddPredecessor(new Target.Predecessor(
-                fact.Name.ToCamelCase(),
-                Target.Cardinality.One,
-                fact.Name,
-                property.Publish));
-            childClass.AddPredecessor(new Target.Predecessor(
-                "prior",
-                Target.Cardinality.Many,
-                childClass.Name,
-                false));
+            childClass.AddPredecessor(new Target.Predecessor(fact.Name.ToCamelCase(), Target.Cardinality.One, fact.Name, property.Publish));
+            childClass.AddPredecessor(new Target.Predecessor("prior", Target.Cardinality.Many, childClass.Name, false));
 
             Target.Query query = new Target.Query("isCurrent")
                 .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, "prior"));
@@ -218,11 +235,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 if (dataTypeFact != null)
                 {
                     Target.Cardinality cardinality = _cardinalityMap[dataTypeFact.Cardinality];
-                    childClass.AddPredecessor(new Target.Predecessor(
-                        "value",
-                        cardinality,
-                        dataTypeFact.FactName,
-                        false));
+                    childClass.AddPredecessor(new Target.Predecessor("value", cardinality, dataTypeFact.FactName, false));
                     factClass.AddResult(new Target.ResultValueFact(
                         childClass.Name,
                         valueQuery,
