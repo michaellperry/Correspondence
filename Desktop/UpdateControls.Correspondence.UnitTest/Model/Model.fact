@@ -80,7 +80,8 @@ key:
 
 fact Player {
 key:
-	publish User user;
+	publish User user
+        where this.isActive;
 	publish Game game;
 	int index;
 

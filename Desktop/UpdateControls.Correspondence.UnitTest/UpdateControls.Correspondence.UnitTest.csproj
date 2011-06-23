@@ -83,6 +83,7 @@
     <Compile Include="RecordingCommunicationStrategy.cs" />
     <Compile Include="RedundantFactsTest.cs" />
     <Compile Include="TwoPlayerGameTest.cs" />
+    <Compile Include="UnpublishTest.cs" />
     <Compile Include="VersionTest.cs" />
   </ItemGroup>
   <ItemGroup>
