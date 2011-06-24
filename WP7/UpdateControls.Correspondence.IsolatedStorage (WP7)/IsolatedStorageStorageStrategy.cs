@@ -242,6 +242,11 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             return _messageStore.LoadRecentMessagesForClient(pivotId, timestamp);
         }
 
+        public void Unpublish(FactID pivotId, FactID factId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
         {
             throw new NotImplementedException();

@@ -85,7 +85,7 @@ namespace UpdateControls.Correspondence.Networking
 				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId);
                 if (messageBodies != null && messageBodies.Facts.Any())
 				{
-                    serverProxy.CommunicationStrategy.Post(messageBodies);
+                    serverProxy.CommunicationStrategy.Post(messageBodies, new List<MessageMemento>());
 					_storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
 					any = true;
 				}

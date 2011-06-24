@@ -35,7 +35,7 @@ namespace UpdateControls.Correspondence.Memory
             return new GetResultMemento(messageBody, new TimestampID(_databaseId, nextTimestamp));
         }
 
-        public void Post(FactTreeMemento messageBody)
+        public void Post(FactTreeMemento messageBody, List<MessageMemento> unpublishedMessages)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
             foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
@@ -48,6 +48,15 @@ namespace UpdateControls.Correspondence.Memory
                 _repository.Save(translatedMemento, 0, out localId);
                 FactID remoteId = identifiedFact.Id;
                 localIdByRemoteId.Add(remoteId, localId);
+            }
+
+            foreach (MessageMemento unpublishedMessage in unpublishedMessages)
+            {
+                FactID localPivotId;
+                FactID localFactId;
+                if (localIdByRemoteId.TryGetValue(unpublishedMessage.PivotId, out localPivotId) &&
+                    localIdByRemoteId.TryGetValue(unpublishedMessage.FactId, out localFactId))
+                    _repository.Unpublish(localPivotId, localFactId);
             }
         }
 

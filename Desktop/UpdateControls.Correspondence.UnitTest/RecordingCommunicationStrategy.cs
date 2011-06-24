@@ -35,10 +35,10 @@ namespace UpdateControls.Correspondence.UnitTest
             return _innerCommunicationStrategy.Get(pivotTree, pivotId, timestamp);
         }
 
-        public void Post(FactTreeMemento messageBody)
+        public void Post(FactTreeMemento messageBody, List<MessageMemento> unpublishedMessages)
         {
             _posted.Add(messageBody);
-            _innerCommunicationStrategy.Post(messageBody);
+            _innerCommunicationStrategy.Post(messageBody, unpublishedMessages);
         }
 
         public IEnumerable<FactTreeMemento> Posted

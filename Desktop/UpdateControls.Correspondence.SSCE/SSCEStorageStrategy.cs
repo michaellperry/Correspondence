@@ -424,6 +424,11 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
+        public void Unpublish(FactID pivotId, FactID messageId)
+        {
+            throw new NotImplementedException();
+        }
+
         public int SavePeer(string protocolName, string peerName)
         {
             using (var session = new Session(_connectionString))

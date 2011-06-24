@@ -29,6 +29,7 @@ namespace UpdateControls.Correspondence.Strategy
         void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp);
         IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp);
         IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp);
+        void Unpublish(FactID pivotId, FactID factId);
 
         // Networking.
         int SavePeer(string protocolName, string peerName);

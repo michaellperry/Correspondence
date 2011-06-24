@@ -60,7 +60,7 @@ namespace UpdateControls.Correspondence.UnitTest
 			gameTreeMemento.Add(gameMemento);
 			gameTreeMemento.Add(userMemento);
 			gameTreeMemento.Add(playerMemento);
-			_memoryCommunicationStrategy.Post(gameTreeMemento);
+			_memoryCommunicationStrategy.Post(gameTreeMemento, new List<MessageMemento>());
 
 			Assert.AreEqual(0, _michael.ActivePlayers.Count());
 			while (_community.Synchronize());

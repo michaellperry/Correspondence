@@ -182,6 +182,11 @@ namespace UpdateControls.Correspondence.Memory
                 .Select(message => message.FactId);
         }
 
+        public void Unpublish(FactID pivotId, FactID factId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
         {
             return _factTable.Select(record => record.IdentifiedFactMemento);
@@ -201,5 +206,5 @@ namespace UpdateControls.Correspondence.Memory
         {
             throw new NotImplementedException();
         }
-	}
+    }
 }
