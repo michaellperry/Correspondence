@@ -35,7 +35,7 @@ namespace UpdateControls.Correspondence.UnitTest
             return _innerCommunicationStrategy.Get(pivotTree, pivotId, timestamp);
         }
 
-        public void Post(FactTreeMemento messageBody, List<MessageMemento> unpublishedMessages)
+        public void Post(FactTreeMemento messageBody, List<UnpublishMemento> unpublishedMessages)
         {
             _posted.Add(messageBody);
             _innerCommunicationStrategy.Post(messageBody, unpublishedMessages);

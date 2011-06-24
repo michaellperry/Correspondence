@@ -5,6 +5,7 @@ using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Conditions;
 
 namespace UpdateControls.Correspondence
 {
@@ -20,6 +21,8 @@ namespace UpdateControls.Correspondence
             new Dictionary<CorrespondenceFactType, ICorrespondenceFactFactory>();
         private IDictionary<CorrespondenceFactType, List<QueryInvalidator>> _queryInvalidatorsByType =
             new Dictionary<CorrespondenceFactType, List<QueryInvalidator>>();
+        private IDictionary<CorrespondenceFactType, List<Unpublisher>> _unpublishersByType =
+            new Dictionary<CorrespondenceFactType, List<Unpublisher>>();
         private IDictionary<CorrespondenceFactType, FactMetadata> _metadataByFactType = new Dictionary<CorrespondenceFactType, FactMetadata>();
 
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
@@ -156,7 +159,7 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SetID(factName, obj.ID);
         }
 
-        public FactTreeMemento GetMessageBodies(ref TimestampID timestamp, int peerId)
+        public FactTreeMemento GetMessageBodies(ref TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
 		{
 			FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
             IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessagesForServer(peerId, timestamp);
@@ -164,13 +167,39 @@ namespace UpdateControls.Correspondence
 			{
 				if (message.FactId.key > timestamp.Key)
 					timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
-				AddToFactTree(result, message.FactId);
+                FactMemento newFact = AddToFactTree(result, message.FactId);
+
+                FactMetadata factMetadata;
+                if (_metadataByFactType.TryGetValue(newFact.FactType, out factMetadata))
+                {
+                    IEnumerable<CorrespondenceFactType> convertableTypes = factMetadata.ConvertableTypes;
+                    foreach (CorrespondenceFactType convertableType in convertableTypes)
+                    {
+                        List<Unpublisher> unpublishers;
+                        if (_unpublishersByType.TryGetValue(convertableType, out unpublishers))
+                        {
+                            foreach (Unpublisher unpublisher in unpublishers)
+                            {
+                                IEnumerable<FactID> messageIds = _storageStrategy.QueryForIds(unpublisher.MessageFacts, message.FactId);
+                                foreach (FactID messageId in messageIds)
+                                {
+                                    ConditionEvaluator conditionEvaluator = new ConditionEvaluator(_storageStrategy);
+                                    bool published = conditionEvaluator.Evaluate(messageId, unpublisher.PublishCondition);
+                                    if (!published)
+                                    {
+                                        unpublishedMessages.Add(new UnpublishMemento(messageId, unpublisher.Role));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 			}
 			return result;
 		}
 
 
-        public void AddToFactTree(FactTreeMemento messageBody, FactID factId)
+        public FactMemento AddToFactTree(FactTreeMemento messageBody, FactID factId)
         {
             if (!messageBody.Contains(factId))
             {
@@ -181,7 +210,14 @@ namespace UpdateControls.Correspondence
                     foreach (PredecessorMemento predecessor in factMemento.Predecessors)
                         AddToFactTree(messageBody, predecessor.ID);
                     messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
+
+                    return factMemento;
                 }
+                return null;
+            }
+            else
+            {
+                return messageBody.Get(factId).Memento;
             }
         }
 

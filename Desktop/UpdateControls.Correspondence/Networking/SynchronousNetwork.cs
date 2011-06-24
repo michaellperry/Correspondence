@@ -77,22 +77,23 @@ namespace UpdateControls.Correspondence.Networking
         }
 
         private bool SynchronizeOutgoing()
-		{
-			bool any = false;
-			foreach (ServerProxy serverProxy in _serverProxies)
-			{
-				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
-				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId);
+        {
+            bool any = false;
+            foreach (ServerProxy serverProxy in _serverProxies)
+            {
+                List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
+                TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
+                FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId, unpublishedMessages);
                 if (messageBodies != null && messageBodies.Facts.Any())
-				{
-                    serverProxy.CommunicationStrategy.Post(messageBodies, new List<MessageMemento>());
-					_storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
-					any = true;
-				}
-			}
+                {
+                    serverProxy.CommunicationStrategy.Post(messageBodies, unpublishedMessages);
+                    _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
+                    any = true;
+                }
+            }
 
-			return any;
-		}
+            return any;
+        }
 
         private bool SynchronizeIncoming()
         {

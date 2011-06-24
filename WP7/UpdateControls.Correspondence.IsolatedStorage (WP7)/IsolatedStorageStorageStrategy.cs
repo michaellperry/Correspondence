@@ -242,7 +242,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             return _messageStore.LoadRecentMessagesForClient(pivotId, timestamp);
         }
 
-        public void Unpublish(FactID pivotId, FactID factId)
+        public void Unpublish(FactID factId, RoleMemento role)
         {
             throw new NotImplementedException();
         }

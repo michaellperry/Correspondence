@@ -424,7 +424,7 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
-        public void Unpublish(FactID pivotId, FactID messageId)
+        public void Unpublish(FactID factId, RoleMemento role)
         {
             throw new NotImplementedException();
         }

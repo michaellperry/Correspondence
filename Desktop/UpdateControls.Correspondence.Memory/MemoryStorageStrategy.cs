@@ -182,7 +182,7 @@ namespace UpdateControls.Correspondence.Memory
                 .Select(message => message.FactId);
         }
 
-        public void Unpublish(FactID pivotId, FactID factId)
+        public void Unpublish(FactID factId, RoleMemento role)
         {
             throw new NotImplementedException();
         }

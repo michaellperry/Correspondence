@@ -74,10 +74,12 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Conditions\ConditionEvaluator.cs" />
     <Compile Include="Disputable.cs" />
     <Compile Include="FieldSerializer\BinaryHelper.cs" />
     <Compile Include="Mementos\GetResultMemento.cs" />
     <Compile Include="Mementos\PivotMemento.cs" />
+    <Compile Include="Mementos\UnpublishMemento.cs" />
     <Compile Include="Networking\AsynchronousNetwork.cs" />
     <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
     <Compile Include="Networking\AsynchronousServerProxy.cs" />
@@ -105,6 +107,7 @@
     <Compile Include="ICommunity.cs" />
     <Compile Include="Networking\PushSubscriptionProxy.cs" />
     <Compile Include="Networking\ISubscriptionProvider.cs" />
+    <Compile Include="Queries\Unpublisher.cs" />
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
     <Compile Include="Strategy\ICorrespondenceModel.cs" />
     <Compile Include="Strategy\IPushSubscription.cs" />

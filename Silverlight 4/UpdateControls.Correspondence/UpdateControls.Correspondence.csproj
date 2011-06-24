@@ -75,6 +75,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Conditions\AndConditionBuilder.cs">
       <Link>Conditions\AndConditionBuilder.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Conditions\ConditionEvaluator.cs">
+      <Link>Conditions\ConditionEvaluator.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Conditions\IConditionVisitor.cs">
       <Link>Conditions\IConditionVisitor.cs</Link>
     </Compile>
@@ -165,6 +168,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\TimestampID.cs">
       <Link>Mementos\TimestampID.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\UnpublishMemento.cs">
+      <Link>Mementos\UnpublishMemento.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Model.cs">
       <Link>Model.cs</Link>
     </Compile>
@@ -212,6 +218,9 @@
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\QueryInvalidator.cs">
       <Link>Queries\QueryInvalidator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\Unpublisher.cs">
+      <Link>Queries\Unpublisher.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Query.cs">
       <Link>Query.cs</Link>

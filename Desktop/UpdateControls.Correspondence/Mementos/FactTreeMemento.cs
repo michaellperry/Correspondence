@@ -29,6 +29,11 @@ namespace UpdateControls.Correspondence.Mementos
             return _facts.Any(f => f.Id.Equals(factId));
         }
 
+        public IdentifiedFactMemento Get(FactID factId)
+        {
+            return _facts.FirstOrDefault(f => f.Id.Equals(factId));
+        }
+
         public void Add(IdentifiedFactMemento identifiedFact)
         {
             _facts.Add(identifiedFact);

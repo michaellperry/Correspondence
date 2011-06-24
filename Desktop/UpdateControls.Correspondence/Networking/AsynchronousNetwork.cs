@@ -96,7 +96,7 @@ namespace UpdateControls.Correspondence.Networking
 			foreach (AsynchronousServerProxy serverProxy in _serverProxies)
 			{
 				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
-				FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId);
+                FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId, new List<UnpublishMemento>());
                 if (messageBodies != null && messageBodies.Facts.Any())
                 {
                     sending = true;
