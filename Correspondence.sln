@@ -133,9 +133,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{A1
 		NuGet\Silverlight\UnitTest\content\ModelTest.cs.pp = NuGet\Silverlight\UnitTest\content\ModelTest.cs.pp
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "Desktop\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{B81104D2-6388-404A-87B9-16C5FC167431}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 26
+		SccNumberOfProjects = 27
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -234,6 +236,10 @@ Global
 		SccProjectTopLevelParentUniqueName25 = Correspondence.sln
 		SccProjectName25 = Silverlight\u00204/UpdateControls.Correspondence.POXClient
 		SccLocalPath25 = Silverlight\u00204\\UpdateControls.Correspondence.POXClient
+		SccProjectUniqueName26 = Desktop\\UpdateControls.Correspondence.FileStream\\UpdateControls.Correspondence.FileStream.csproj
+		SccProjectTopLevelParentUniqueName26 = Correspondence.sln
+		SccProjectName26 = Desktop/UpdateControls.Correspondence.FileStream
+		SccLocalPath26 = Desktop\\UpdateControls.Correspondence.FileStream
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -343,6 +349,10 @@ Global
 		{20A2A6EB-9030-4D34-BD91-0829D7180DCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20A2A6EB-9030-4D34-BD91-0829D7180DCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20A2A6EB-9030-4D34-BD91-0829D7180DCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B81104D2-6388-404A-87B9-16C5FC167431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B81104D2-6388-404A-87B9-16C5FC167431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B81104D2-6388-404A-87B9-16C5FC167431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B81104D2-6388-404A-87B9-16C5FC167431}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -357,6 +367,7 @@ Global
 		{510D6813-AE9B-4F28-9B77-390F36DF958A} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{3F7356A7-C107-4497-A89E-3E1C21A23718} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
+		{B81104D2-6388-404A-87B9-16C5FC167431} = {689AA250-D66C-4C63-AD1F-D76050BA5D82}
 		{5BAD4A23-8523-40C5-ACA5-D4004DCA02BD} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{B80E6DB6-E68C-4D4A-89AB-EE44FB452646} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{7CE0E52C-7D5E-44A6-9CAF-30097CC30248} = {B08999A9-59D8-4790-A084-515E40DDF472}
