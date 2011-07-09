@@ -55,7 +55,7 @@ namespace UpdateControls.Correspondence.FileStream
             if (File.Exists(fileName))
             {
                 using (BinaryReader factTypeReader = new BinaryReader(File.Open(
-                    FactTypeTableFileName,
+                    fileName,
                     FileMode.Open,
                     FileAccess.Read)))
                 {

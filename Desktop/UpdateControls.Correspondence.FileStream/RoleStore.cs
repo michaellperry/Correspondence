@@ -42,8 +42,8 @@ namespace UpdateControls.Correspondence.FileStream
                     writer.Write(role.DeclaringType.TypeName);
                     writer.Write(role.DeclaringType.Version);
                     writer.Write(role.RoleName);
-                    writer.Write(role.TargetType.TypeName);
-                    writer.Write(role.TargetType.Version);
+                    writer.Write(role.TargetType == null ? string.Empty : role.TargetType.TypeName);
+                    writer.Write(role.TargetType == null ? 0 : role.TargetType.Version);
                     writer.Write(role.IsPivot ? (byte)1 : (byte)0);
                 }
             }
@@ -91,7 +91,9 @@ namespace UpdateControls.Correspondence.FileStream
                 new RoleMemento(
                     new CorrespondenceFactType(declaringTypeName, declaringTypeVersion),
                     roleName,
-                    new CorrespondenceFactType(targetTypeName, targetTypeVersion),
+                    String.IsNullOrEmpty(targetTypeName)
+                        ? null
+                        : new CorrespondenceFactType(targetTypeName, targetTypeVersion),
                     isPivot));
         }
 
