@@ -36,7 +36,7 @@ namespace UpdateControls.Correspondence.Mementos
 
         public override int GetHashCode()
         {
-            return _role.GetHashCode() * 37 + _id.GetHashCode();
+            return _role.GetHashCode() ^ _id.GetHashCode();
         }
 
         public override string ToString()

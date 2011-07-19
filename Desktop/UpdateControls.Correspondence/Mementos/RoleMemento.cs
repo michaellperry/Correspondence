@@ -51,7 +51,7 @@ namespace UpdateControls.Correspondence.Mementos
         public override int GetHashCode()
         {
             int hash = _declaringType.GetHashCode();
-            hash = hash * 37 + _roleName.GetHashCode();
+            hash ^= Crc32.GetHashOfString(_roleName);
             return hash;
         }
 

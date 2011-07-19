@@ -24,7 +24,7 @@ namespace UpdateControls.Correspondence.Mementos
 
         public override int GetHashCode()
         {
-            return _typeName.GetHashCode() * 37 + _version;
+            return Crc32.GetHashOfString(_typeName) + _version;
         }
 
         public override bool Equals(object obj)

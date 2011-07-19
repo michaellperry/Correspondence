@@ -4,15 +4,21 @@
 using System;
 using System.Security.Cryptography;
 using UpdateControls.Correspondence.Mementos;
+using System.Text;
 
 public class Crc32 : HashAlgorithm
 {
     public static Crc32 Default = new Crc32();
 
+    public static int GetHashOfString(string str)
+    {
+        return GetHashOfBytes(Encoding.UTF8.GetBytes(str));
+    }
+
     public static int GetHashOfBytes(byte[] data)
     {
         byte[] hashBytes = Default.ComputeHash(data);
-        int hashCode = hashBytes[0] << 24 + hashBytes[1] << 16 + hashBytes[2] << 8 + hashBytes[3];
+        int hashCode = hashBytes[0] << 24 | hashBytes[1] << 16 | hashBytes[2] << 8 | hashBytes[3];
         return hashCode;
     }
 

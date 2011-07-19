@@ -20,7 +20,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 memento.Data[i + 2] = bytes[i];
 
             int hashCode = memento.GetHashCode();
-            Assert.AreEqual(0x4be7ff23, hashCode);
+            Assert.AreEqual(0x03f5afb5, hashCode);
         }
     }
 }
