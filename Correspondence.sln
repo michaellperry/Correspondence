@@ -135,9 +135,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{A1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "Desktop\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{B81104D2-6388-404A-87B9-16C5FC167431}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "Silverlight 4\UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{CCA59C2E-9A36-42BB-AFDD-A5B764060496}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 27
+		SccNumberOfProjects = 28
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -240,6 +242,10 @@ Global
 		SccProjectTopLevelParentUniqueName26 = Correspondence.sln
 		SccProjectName26 = Desktop/UpdateControls.Correspondence.FileStream
 		SccLocalPath26 = Desktop\\UpdateControls.Correspondence.FileStream
+		SccProjectUniqueName27 = Silverlight\u00204\\UpdateControls.Correspondence.UnitTest\\UpdateControls.Correspondence.UnitTest.csproj
+		SccProjectTopLevelParentUniqueName27 = Correspondence.sln
+		SccProjectName27 = Silverlight\u00204/UpdateControls.Correspondence.UnitTest
+		SccLocalPath27 = Silverlight\u00204\\UpdateControls.Correspondence.UnitTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -353,6 +359,10 @@ Global
 		{B81104D2-6388-404A-87B9-16C5FC167431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B81104D2-6388-404A-87B9-16C5FC167431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B81104D2-6388-404A-87B9-16C5FC167431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCA59C2E-9A36-42BB-AFDD-A5B764060496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCA59C2E-9A36-42BB-AFDD-A5B764060496}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCA59C2E-9A36-42BB-AFDD-A5B764060496}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCA59C2E-9A36-42BB-AFDD-A5B764060496}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -373,6 +383,7 @@ Global
 		{7CE0E52C-7D5E-44A6-9CAF-30097CC30248} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{9E39AC23-7979-4B94-8D1E-A6938B2FED7A} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{20A2A6EB-9030-4D34-BD91-0829D7180DCA} = {B08999A9-59D8-4790-A084-515E40DDF472}
+		{CCA59C2E-9A36-42BB-AFDD-A5B764060496} = {B08999A9-59D8-4790-A084-515E40DDF472}
 		{DE3FFB60-CADE-4679-A53E-0541F707EA95} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{D489015D-1272-4B18-BC26-645C720169F9} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{80F0BD6B-2746-41B0-9CC0-ED8CDF1DA35B} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}

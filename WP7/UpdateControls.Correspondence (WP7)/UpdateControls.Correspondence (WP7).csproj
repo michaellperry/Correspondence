@@ -56,11 +56,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Conditions\ConditionEvaluator.cs">
+      <Link>Conditions\ConditionEvaluator.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Disputable.cs">
       <Link>Disputable.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\PivotMemento.cs">
       <Link>Mementos\PivotMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\UnpublishMemento.cs">
+      <Link>Mementos\UnpublishMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\Unpublisher.cs">
+      <Link>Queries\Unpublisher.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ICorrespondenceModel.cs">
       <Link>Strategy\ICorrespondenceModel.cs</Link>

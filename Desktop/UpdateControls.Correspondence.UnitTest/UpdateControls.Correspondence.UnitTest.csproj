@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaptureTest.cs" />
     <Compile Include="ChallengeTest.cs" />
     <Compile Include="FieldSerializerTest.cs" />
     <Compile Include="Model\Game.cs" />
