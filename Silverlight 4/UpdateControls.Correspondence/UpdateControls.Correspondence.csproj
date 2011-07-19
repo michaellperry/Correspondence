@@ -135,6 +135,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\CorrespondenceFactType.cs">
       <Link>Mementos\CorrespondenceFactType.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\Crc32.cs">
+      <Link>Mementos\Crc32.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\FactID.cs">
       <Link>Mementos\FactID.cs</Link>
     </Compile>

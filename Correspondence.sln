@@ -137,9 +137,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "Silverlight 4\UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{CCA59C2E-9A36-42BB-AFDD-A5B764060496}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "WP7\UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{709E459D-990D-4A1C-A2F6-D76B76315B01}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 28
+		SccNumberOfProjects = 29
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -246,6 +248,10 @@ Global
 		SccProjectTopLevelParentUniqueName27 = Correspondence.sln
 		SccProjectName27 = Silverlight\u00204/UpdateControls.Correspondence.UnitTest
 		SccLocalPath27 = Silverlight\u00204\\UpdateControls.Correspondence.UnitTest
+		SccProjectUniqueName28 = WP7\\UpdateControls.Correspondence.UnitTest\\UpdateControls.Correspondence.UnitTest.csproj
+		SccProjectTopLevelParentUniqueName28 = Correspondence.sln
+		SccProjectName28 = WP7/UpdateControls.Correspondence.UnitTest
+		SccLocalPath28 = WP7\\UpdateControls.Correspondence.UnitTest
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -363,6 +369,12 @@ Global
 		{CCA59C2E-9A36-42BB-AFDD-A5B764060496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCA59C2E-9A36-42BB-AFDD-A5B764060496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCA59C2E-9A36-42BB-AFDD-A5B764060496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{709E459D-990D-4A1C-A2F6-D76B76315B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{709E459D-990D-4A1C-A2F6-D76B76315B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{709E459D-990D-4A1C-A2F6-D76B76315B01}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{709E459D-990D-4A1C-A2F6-D76B76315B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{709E459D-990D-4A1C-A2F6-D76B76315B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{709E459D-990D-4A1C-A2F6-D76B76315B01}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -390,6 +402,7 @@ Global
 		{B4245EFD-8EEE-4D38-AA3A-F5D51516037C} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{426A7DF6-3C39-4125-9AD3-31D93208B269} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{896FC2DB-34B3-4F20-812E-15AE88D7398C} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
+		{709E459D-990D-4A1C-A2F6-D76B76315B01} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{4F26812A-656F-46C5-AC58-EC984A4DDB42} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{CB489F9B-C65C-4443-B7F8-DA30818C1BAF} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{80C00D5E-131E-4742-B1A4-4F361C1F5B33} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}

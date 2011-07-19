@@ -14,8 +14,8 @@ namespace UpdateControls.Correspondence.UnitTest
             UTF8Encoding encoding = new UTF8Encoding();
             byte[] bytes = encoding.GetBytes("B1E0F2BB4CF24C2492B872112042797E");
             memento.Data = new byte[bytes.Length + 2];
-            memento.Data[0] = (byte)bytes.Length;
-            memento.Data[1] = 0;
+            memento.Data[0] = 0;
+            memento.Data[1] = (byte)bytes.Length;
             for (int i = 0; i < bytes.Length; i++)
                 memento.Data[i + 2] = bytes[i];
 

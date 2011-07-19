@@ -62,6 +62,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Disputable.cs">
       <Link>Disputable.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\Crc32.cs">
+      <Link>Mementos\Crc32.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\PivotMemento.cs">
       <Link>Mementos\PivotMemento.cs</Link>
     </Compile>

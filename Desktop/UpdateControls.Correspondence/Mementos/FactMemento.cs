@@ -49,16 +49,15 @@ namespace UpdateControls.Correspondence.Mementos
 			set { _data = value; }
 		}
 
-		public override int GetHashCode()
-		{
-			int hash = _factType.GetHashCode();
-			foreach ( PredecessorMemento entry in _predecessors )
-				hash = hash * 37 + entry.GetHashCode();
-			foreach ( byte b in _data )
-				hash = hash * 37 + b;
+        public override int GetHashCode()
+        {
+            int hash = _factType.GetHashCode();
+            foreach (PredecessorMemento entry in _predecessors)
+                hash ^= entry.GetHashCode();
+            hash ^= Crc32.GetHashOfBytes(_data);
 
-			return hash;
-		}
+            return hash;
+        }
 
 		public override bool Equals(object obj)
 		{
