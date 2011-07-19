@@ -22,5 +22,29 @@ namespace UpdateControls.Correspondence.UnitTest
             int hashCode = memento.GetHashCode();
             Assert.AreEqual(0x03f5afb5, hashCode);
         }
+
+        [TestMethod]
+        public void PredecessorHashCodeIsConsistentToo()
+        {
+            FactMemento memento = new FactMemento(new CorrespondenceFactType("FacetedWorlds.MyCon.Model.Attendee", 1));
+            memento.Data = new byte[0];
+            memento.AddPredecessor(new RoleMemento(new CorrespondenceFactType("FacetedWorlds.MyCon.Model.Identity", 1), "identity", null, false), new FactID { key = 1 });
+            memento.AddPredecessor(new RoleMemento(new CorrespondenceFactType("FacetedWorlds.MyCon.Model.Conference", 1), "conference", null, false), new FactID { key = 2 });
+
+            int hashCode = memento.GetHashCode();
+            Assert.AreEqual(-1244599490, hashCode);
+        }
+
+        [TestMethod]
+        public void SmallChangeInRoleNameCausesBigChangeInHash()
+        {
+            FactMemento memento = new FactMemento(new CorrespondenceFactType("FacetedWorlds.MyCon.Model.Attendee", 1));
+            memento.Data = new byte[0];
+            memento.AddPredecessor(new RoleMemento(new CorrespondenceFactType("FacetedWorlds.MyCon.Model.Identity", 1), "identitz", null, false), new FactID { key = 1 });
+            memento.AddPredecessor(new RoleMemento(new CorrespondenceFactType("FacetedWorlds.MyCon.Model.Conference", 1), "conference", null, false), new FactID { key = 2 });
+
+            int hashCode = memento.GetHashCode();
+            Assert.AreEqual(752466564, hashCode);
+        }
     }
 }
