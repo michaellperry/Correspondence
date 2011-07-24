@@ -82,67 +82,73 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public FactMemento Load(FactID id)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                using (HistoricalTree factTree = OpenFactTree(store))
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    return LoadFactFromTree(factTree, id.key);
+                    using (HistoricalTree factTree = OpenFactTree(store))
+                    {
+                        return LoadFactFromTree(factTree, id.key);
+                    }
                 }
             }
         }
 
         public bool Save(FactMemento memento, int peerId, out FactID id)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                using (RedBlackTree index = OpenIndex(store))
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    // See if the fact already exists.
-                    foreach (long candidate in index.FindFacts(memento.GetHashCode()))
+                    using (RedBlackTree index = OpenIndex(store))
                     {
-                        FactID candidateId = new FactID() { key = candidate };
-                        if (Load(candidateId).Equals(memento))
+                        // See if the fact already exists.
+                        foreach (long candidate in index.FindFacts(memento.GetHashCode()))
                         {
-                            id = candidateId;
-                            return false;
+                            FactID candidateId = new FactID() { key = candidate };
+                            if (Load(candidateId).Equals(memento))
+                            {
+                                id = candidateId;
+                                return false;
+                            }
                         }
-                    }
 
-                    // It doesn't, so create it.
-                    using (HistoricalTree factTree = OpenFactTree(store))
-                    {
-                        int factTypeId = _factTypeStore.GetFactTypeId(memento.FactType, store);
-                        HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
-                        foreach (PredecessorMemento predecessor in memento.Predecessors)
+                        // It doesn't, so create it.
+                        using (HistoricalTree factTree = OpenFactTree(store))
                         {
-                            RoleMemento role = predecessor.Role;
-                            int roleId = _roleStore.GetRoleId(role, store);
-                            historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
+                            int factTypeId = _factTypeStore.GetFactTypeId(memento.FactType, store);
+                            HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
+                            foreach (PredecessorMemento predecessor in memento.Predecessors)
+                            {
+                                RoleMemento role = predecessor.Role;
+                                int roleId = _roleStore.GetRoleId(role, store);
+                                historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
+                            }
+                            long newFactIDKey = factTree.Save(historicalTreeFact);
+                            index.AddFact(memento.GetHashCode(), newFactIDKey);
+                            FactID newFactID = new FactID() { key = newFactIDKey };
+                            id = newFactID;
+
+                            // Store a message for each pivot.
+                            IEnumerable<MessageMemento> directMessages = memento.Predecessors
+                                .Where(predecessor => predecessor.Role.IsPivot)
+                                .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
+
+                            // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
+                            List<FactID> nonPivots = memento.Predecessors
+                                .Where(predecessor => !predecessor.Role.IsPivot)
+                                .Select(predecessor => predecessor.ID)
+                                .ToList();
+                            List<FactID> predecessorsPivots = _messageStore.GetPivotsOfFacts(nonPivots);
+                            IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
+                                .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
+
+                            List<MessageMemento> allMessages = directMessages
+                                .Union(indirectMessages)
+                                .ToList();
+                            _messageStore.AddMessages(store, allMessages, peerId);
+                            return true;
                         }
-                        long newFactIDKey = factTree.Save(historicalTreeFact);
-                        index.AddFact(memento.GetHashCode(), newFactIDKey);
-                        FactID newFactID = new FactID() { key = newFactIDKey };
-                        id = newFactID;
-
-                        // Store a message for each pivot.
-                        IEnumerable<MessageMemento> directMessages = memento.Predecessors
-                            .Where(predecessor => predecessor.Role.IsPivot)
-                            .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
-
-                        // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
-                        List<FactID> nonPivots = memento.Predecessors
-                            .Where(predecessor => !predecessor.Role.IsPivot)
-                            .Select(predecessor => predecessor.ID)
-                            .ToList();
-                        List<FactID> predecessorsPivots = _messageStore.GetPivotsOfFacts(nonPivots);
-                        IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
-                            .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
-
-                        List<MessageMemento> allMessages = directMessages
-                            .Union(indirectMessages)
-                            .ToList();
-                        _messageStore.AddMessages(store, allMessages, peerId);
-                        return true;
                     }
                 }
             }
@@ -150,96 +156,126 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public bool FindExistingFact(FactMemento memento, out FactID id)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                using (RedBlackTree index = OpenIndex(store))
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    // See if the fact already exists.
-                    foreach (long candidate in index.FindFacts(memento.GetHashCode()))
+                    using (RedBlackTree index = OpenIndex(store))
                     {
-                        FactID candidateId = new FactID() { key = candidate };
-                        if (Load(candidateId).Equals(memento))
+                        // See if the fact already exists.
+                        foreach (long candidate in index.FindFacts(memento.GetHashCode()))
                         {
-                            id = candidateId;
-                            return false;
+                            FactID candidateId = new FactID() { key = candidate };
+                            if (Load(candidateId).Equals(memento))
+                            {
+                                id = candidateId;
+                                return false;
+                            }
                         }
+                        id = new FactID();
+                        return false;
                     }
-                    id = new FactID();
-                    return false;
                 }
             }
         }
 
         public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                using (HistoricalTree factTree = OpenFactTree(store))
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
-                        .ExecuteQuery(queryDefinition, startingId.key, options)
-                        .Select(key => new IdentifiedFactMemento(new FactID { key = key }, LoadFactFromTree(factTree, key)))
-                        .ToList();
+                    using (HistoricalTree factTree = OpenFactTree(store))
+                    {
+                        return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
+                            .ExecuteQuery(queryDefinition, startingId.key, options)
+                            .Select(key => new IdentifiedFactMemento(new FactID { key = key }, LoadFactFromTree(factTree, key)))
+                            .ToList();
+                    }
                 }
             }
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                using (HistoricalTree factTree = OpenFactTree(store))
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
-                        .ExecuteQuery(queryDefinition, startingId.key, null)
-                        .Select(key => new FactID { key = key })
-                        .ToList();
+                    using (HistoricalTree factTree = OpenFactTree(store))
+                    {
+                        return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
+                            .ExecuteQuery(queryDefinition, startingId.key, null)
+                            .Select(key => new FactID { key = key })
+                            .ToList();
+                    }
                 }
             }
         }
 
         public int SavePeer(string protocolName, string peerName)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                return _peerStore.SavePeer(protocolName, peerName, store);
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    return _peerStore.SavePeer(protocolName, peerName, store);
+                }
             }
         }
 
         public TimestampID LoadOutgoingTimestamp(int peerId)
         {
-            return _outgoingTimestampStore.LoadOutgoingTimestamp(peerId);
+            lock (this)
+            {
+                return _outgoingTimestampStore.LoadOutgoingTimestamp(peerId);
+            }
         }
 
         public void SaveOutgoingTimestamp(int peerId, TimestampID timestamp)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                _outgoingTimestampStore.SaveOutgoingTimestamp(peerId, timestamp, store);
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    _outgoingTimestampStore.SaveOutgoingTimestamp(peerId, timestamp, store);
+                }
             }
         }
 
         public TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId)
         {
-            return _incomingTimestampStore.LoadIncomingTimestamp(peerId, pivotId);
+            lock (this)
+            {
+                return _incomingTimestampStore.LoadIncomingTimestamp(peerId, pivotId);
+            }
         }
 
         public void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp)
         {
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            lock (this)
             {
-                _incomingTimestampStore.SaveIncomingTimestamp(peerId, pivotId, timestamp, store);
+                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    _incomingTimestampStore.SaveIncomingTimestamp(peerId, pivotId, timestamp, store);
+                }
             }
         }
 
         public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
         {
-            return _messageStore.LoadRecentMessagesForServer(peerId, timestamp);
+            lock (this)
+            {
+                return _messageStore.LoadRecentMessagesForServer(peerId, timestamp);
+            }
         }
 
         public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
         {
-            return _messageStore.LoadRecentMessagesForClient(pivotId, timestamp);
+            lock (this)
+            {
+                return _messageStore.LoadRecentMessagesForClient(pivotId, timestamp);
+            }
         }
 
         public void Unpublish(FactID factId, RoleMemento role)
