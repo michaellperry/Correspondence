@@ -62,6 +62,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{849EB099-EC1C-497A-8F77-849A0A8FB3AF}"
 	ProjectSection(SolutionItems) = preProject
+		NuGet\DeleteAll.bat = NuGet\DeleteAll.bat
 		NuGet\PackAll.bat = NuGet\PackAll.bat
 		NuGet\PushAll.bat = NuGet\PushAll.bat
 	EndProjectSection

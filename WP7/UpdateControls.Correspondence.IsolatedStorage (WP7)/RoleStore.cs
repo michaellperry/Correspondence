@@ -41,8 +41,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                     writer.Write(role.DeclaringType.TypeName);
                     writer.Write(role.DeclaringType.Version);
                     writer.Write(role.RoleName);
-                    writer.Write(role.TargetType.TypeName);
-                    writer.Write(role.TargetType.Version);
+                    writer.Write(role.TargetType == null ? string.Empty : role.TargetType.TypeName);
+                    writer.Write(role.TargetType == null ? 0 : role.TargetType.Version);
                     writer.Write(role.IsPivot ? (byte)1 : (byte)0);
                 }
             }
