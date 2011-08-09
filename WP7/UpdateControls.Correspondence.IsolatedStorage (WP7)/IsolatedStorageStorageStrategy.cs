@@ -16,6 +16,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         private const string FactTreeFileName = "FactTree.bin";
         private const string IndexFileName = "Index.bin";
 
+        private IsolatedStorageFile _store;
+
         private Guid _clientGuid;
         private MessageStore _messageStore;
         private FactTypeStore _factTypeStore;
@@ -24,36 +26,35 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         private OutgoingTimestampStore _outgoingTimestampStore;
         private IncomingTimestampStore _incomingTimestampStore;
 
-        private IsolatedStorageStorageStrategy()
+        private IsolatedStorageStorageStrategy(IsolatedStorageFile store)
         {
+            _store = store;
         }
 
         public static IsolatedStorageStorageStrategy Load()
         {
-            var result = new IsolatedStorageStorageStrategy();
+            IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication();
+            var result = new IsolatedStorageStorageStrategy(store);
 
-            using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+            result._messageStore = MessageStore.Load(store);
+            result._factTypeStore = FactTypeStore.Load(store);
+            result._roleStore = RoleStore.Load(store);
+            result._peerStore = PeerStore.Load(store);
+            result._incomingTimestampStore = IncomingTimestampStore.Load(store);
+            result._outgoingTimestampStore = OutgoingTimestampStore.Load(store);
+            if (store.FileExists(ClientGuidFileName))
             {
-                result._messageStore = MessageStore.Load(store);
-                result._factTypeStore = FactTypeStore.Load(store);
-                result._roleStore = RoleStore.Load(store);
-                result._peerStore = PeerStore.Load(store);
-                result._incomingTimestampStore = IncomingTimestampStore.Load(store);
-                result._outgoingTimestampStore = OutgoingTimestampStore.Load(store);
-                if (store.FileExists(ClientGuidFileName))
+                using (BinaryReader input = new BinaryReader(store.OpenFile(ClientGuidFileName, FileMode.Open)))
                 {
-                    using (BinaryReader input = new BinaryReader(store.OpenFile(ClientGuidFileName, FileMode.Open)))
-                    {
-                        result._clientGuid = new Guid(input.ReadBytes(16));
-                    }
+                    result._clientGuid = new Guid(input.ReadBytes(16));
                 }
-                else
+            }
+            else
+            {
+                result._clientGuid = Guid.NewGuid();
+                using (BinaryWriter output = new BinaryWriter(store.OpenFile(ClientGuidFileName, FileMode.Create)))
                 {
-                    result._clientGuid = Guid.NewGuid();
-                    using (BinaryWriter output = new BinaryWriter(store.OpenFile(ClientGuidFileName, FileMode.Create)))
-                    {
-                        output.Write(result._clientGuid.ToByteArray());
-                    }
+                    output.Write(result._clientGuid.ToByteArray());
                 }
             }
 
@@ -84,12 +85,9 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                using (HistoricalTree factTree = OpenFactTree(_store))
                 {
-                    using (HistoricalTree factTree = OpenFactTree(store))
-                    {
-                        return LoadFactFromTree(factTree, id.key);
-                    }
+                    return LoadFactFromTree(factTree, id.key);
                 }
             }
         }
@@ -98,57 +96,54 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                using (RedBlackTree index = OpenIndex(_store))
                 {
-                    using (RedBlackTree index = OpenIndex(store))
+                    // See if the fact already exists.
+                    foreach (long candidate in index.FindFacts(memento.GetHashCode()))
                     {
-                        // See if the fact already exists.
-                        foreach (long candidate in index.FindFacts(memento.GetHashCode()))
+                        FactID candidateId = new FactID() { key = candidate };
+                        if (Load(candidateId).Equals(memento))
                         {
-                            FactID candidateId = new FactID() { key = candidate };
-                            if (Load(candidateId).Equals(memento))
-                            {
-                                id = candidateId;
-                                return false;
-                            }
+                            id = candidateId;
+                            return false;
                         }
+                    }
 
-                        // It doesn't, so create it.
-                        using (HistoricalTree factTree = OpenFactTree(store))
+                    // It doesn't, so create it.
+                    using (HistoricalTree factTree = OpenFactTree(_store))
+                    {
+                        int factTypeId = _factTypeStore.GetFactTypeId(memento.FactType, _store);
+                        HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
+                        foreach (PredecessorMemento predecessor in memento.Predecessors)
                         {
-                            int factTypeId = _factTypeStore.GetFactTypeId(memento.FactType, store);
-                            HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
-                            foreach (PredecessorMemento predecessor in memento.Predecessors)
-                            {
-                                RoleMemento role = predecessor.Role;
-                                int roleId = _roleStore.GetRoleId(role, store);
-                                historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
-                            }
-                            long newFactIDKey = factTree.Save(historicalTreeFact);
-                            index.AddFact(memento.GetHashCode(), newFactIDKey);
-                            FactID newFactID = new FactID() { key = newFactIDKey };
-                            id = newFactID;
-
-                            // Store a message for each pivot.
-                            IEnumerable<MessageMemento> directMessages = memento.Predecessors
-                                .Where(predecessor => predecessor.Role.IsPivot)
-                                .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
-
-                            // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
-                            List<FactID> nonPivots = memento.Predecessors
-                                .Where(predecessor => !predecessor.Role.IsPivot)
-                                .Select(predecessor => predecessor.ID)
-                                .ToList();
-                            List<FactID> predecessorsPivots = _messageStore.GetPivotsOfFacts(nonPivots);
-                            IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
-                                .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
-
-                            List<MessageMemento> allMessages = directMessages
-                                .Union(indirectMessages)
-                                .ToList();
-                            _messageStore.AddMessages(store, allMessages, peerId);
-                            return true;
+                            RoleMemento role = predecessor.Role;
+                            int roleId = _roleStore.GetRoleId(role, _store);
+                            historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
                         }
+                        long newFactIDKey = factTree.Save(historicalTreeFact);
+                        index.AddFact(memento.GetHashCode(), newFactIDKey);
+                        FactID newFactID = new FactID() { key = newFactIDKey };
+                        id = newFactID;
+
+                        // Store a message for each pivot.
+                        IEnumerable<MessageMemento> directMessages = memento.Predecessors
+                            .Where(predecessor => predecessor.Role.IsPivot)
+                            .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
+
+                        // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
+                        List<FactID> nonPivots = memento.Predecessors
+                            .Where(predecessor => !predecessor.Role.IsPivot)
+                            .Select(predecessor => predecessor.ID)
+                            .ToList();
+                        List<FactID> predecessorsPivots = _messageStore.GetPivotsOfFacts(nonPivots);
+                        IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
+                            .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
+
+                        List<MessageMemento> allMessages = directMessages
+                            .Union(indirectMessages)
+                            .ToList();
+                        _messageStore.AddMessages(_store, allMessages, peerId);
+                        return true;
                     }
                 }
             }
@@ -158,23 +153,20 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                using (RedBlackTree index = OpenIndex(_store))
                 {
-                    using (RedBlackTree index = OpenIndex(store))
+                    // See if the fact already exists.
+                    foreach (long candidate in index.FindFacts(memento.GetHashCode()))
                     {
-                        // See if the fact already exists.
-                        foreach (long candidate in index.FindFacts(memento.GetHashCode()))
+                        FactID candidateId = new FactID() { key = candidate };
+                        if (Load(candidateId).Equals(memento))
                         {
-                            FactID candidateId = new FactID() { key = candidate };
-                            if (Load(candidateId).Equals(memento))
-                            {
-                                id = candidateId;
-                                return false;
-                            }
+                            id = candidateId;
+                            return false;
                         }
-                        id = new FactID();
-                        return false;
                     }
+                    id = new FactID();
+                    return false;
                 }
             }
         }
@@ -183,15 +175,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                using (HistoricalTree factTree = OpenFactTree(_store))
                 {
-                    using (HistoricalTree factTree = OpenFactTree(store))
-                    {
-                        return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
-                            .ExecuteQuery(queryDefinition, startingId.key, options)
-                            .Select(key => new IdentifiedFactMemento(new FactID { key = key }, LoadFactFromTree(factTree, key)))
-                            .ToList();
-                    }
+                    return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, _store))
+                        .ExecuteQuery(queryDefinition, startingId.key, options)
+                        .Select(key => new IdentifiedFactMemento(new FactID { key = key }, LoadFactFromTree(factTree, key)))
+                        .ToList();
                 }
             }
         }
@@ -200,15 +189,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
+                using (HistoricalTree factTree = OpenFactTree(_store))
                 {
-                    using (HistoricalTree factTree = OpenFactTree(store))
-                    {
-                        return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, store))
-                            .ExecuteQuery(queryDefinition, startingId.key, null)
-                            .Select(key => new FactID { key = key })
-                            .ToList();
-                    }
+                    return new QueryExecutor(factTree, role => _roleStore.GetRoleId(role, _store))
+                        .ExecuteQuery(queryDefinition, startingId.key, null)
+                        .Select(key => new FactID { key = key })
+                        .ToList();
                 }
             }
         }
@@ -217,10 +203,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                    return _peerStore.SavePeer(protocolName, peerName, store);
-                }
+                return _peerStore.SavePeer(protocolName, peerName, _store);
             }
         }
 
@@ -236,10 +219,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                    _outgoingTimestampStore.SaveOutgoingTimestamp(peerId, timestamp, store);
-                }
+                _outgoingTimestampStore.SaveOutgoingTimestamp(peerId, timestamp, _store);
             }
         }
 
@@ -255,10 +235,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         {
             lock (this)
             {
-                using (IsolatedStorageFile store = IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                    _incomingTimestampStore.SaveIncomingTimestamp(peerId, pivotId, timestamp, store);
-                }
+                _incomingTimestampStore.SaveIncomingTimestamp(peerId, pivotId, timestamp, _store);
             }
         }
 

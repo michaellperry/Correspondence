@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.WindowsPhone.App</id>
-    <version>1.2.0.2</version>
+    <version>1.2.0.3</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a Windows Phone 7 application project. Sets up isolated storage and POX synchronization.</description>
