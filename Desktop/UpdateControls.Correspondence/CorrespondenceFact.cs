@@ -45,8 +45,8 @@ namespace UpdateControls.Correspondence
 
         internal PredecessorBase GetPredecessor(RoleMemento role)
 		{
-            PredecessorBase predecessor = _predecessor[role];
-			if ( predecessor == null )
+            PredecessorBase predecessor;
+            if (!_predecessor.TryGetValue(role, out predecessor))
 				throw new CorrespondenceException( string.Format( "Role not recognized: {0}", role ) );
 			return predecessor;
 		}
