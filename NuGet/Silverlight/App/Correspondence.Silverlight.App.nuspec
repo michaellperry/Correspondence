@@ -2,17 +2,18 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.Silverlight.App</id>
-    <version>1.2.0.3</version>
+    <version>1.2.0.4</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a Silverlight application project. Sets up isolated storage and POX synchronization.</description>
     <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>
     <projectUrl>http://correspondence.codeplex.com/</projectUrl>
+    <iconUrl>http://qedcode.com/images/logo32.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language>en-US</language>
     <tags>nosql database silverlight synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.1.2.0"/>
+      <dependency id="Correspondence" version="1.2.0.4"/>
     </dependencies>
   </metadata>
 </package>
