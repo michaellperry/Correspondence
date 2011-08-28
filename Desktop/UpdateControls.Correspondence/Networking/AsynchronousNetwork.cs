@@ -50,7 +50,13 @@ namespace UpdateControls.Correspondence.Networking
                 asynchronousCommunicationStrategy.ProtocolName,
                 asynchronousCommunicationStrategy.PeerName);
             asynchronousCommunicationStrategy.MessageReceived += messageBody =>
+            {
                 _model.ReceiveMessage(messageBody, peerId);
+                // Trigger a receive on normal channels. This updates the
+                // timestamp and pulls down any messages that were too long
+                // for the push buffer.
+                BeginReceiving();
+            };
             _serverProxies.Add(new AsynchronousServerProxy
             {
                 CommunicationStrategy = asynchronousCommunicationStrategy,
