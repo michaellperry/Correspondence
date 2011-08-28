@@ -5,11 +5,13 @@ namespace UpdateControls.Correspondence.Mementos
     {
         private RoleMemento _role;
         private FactID _id;
+        private bool _isPivot;
 
-        public PredecessorMemento(RoleMemento role, FactID id)
+        public PredecessorMemento(RoleMemento role, FactID id, bool isPivot)
         {
             _role = role;
             _id = id;
+            _isPivot = isPivot;
         }
 
         public RoleMemento Role
@@ -20,6 +22,11 @@ namespace UpdateControls.Correspondence.Mementos
         public FactID ID
         {
             get { return _id; }
+        }
+
+        public bool IsPivot
+        {
+            get { return _isPivot; }
         }
 
         public override bool Equals(object obj)

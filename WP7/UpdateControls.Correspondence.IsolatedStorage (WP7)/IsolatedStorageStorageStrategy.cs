@@ -307,7 +307,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             foreach (HistoricalTreePredecessor predecessorNode in factNode.Predecessors)
             {
                 RoleMemento role = _roleStore.GetRole(predecessorNode.RoleId);
-                factMemento.AddPredecessor(role, new FactID { key = predecessorNode.PredecessorFactId });
+                factMemento.AddPredecessor(role, new FactID { key = predecessorNode.PredecessorFactId }, role.IsPivot);
             }
             return factMemento;
         }

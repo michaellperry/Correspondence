@@ -45,7 +45,8 @@ namespace UpdateControls.Correspondence.POXClient
         {
             return new PredecessorMemento(
                 GetRole(predecessor.RoleId),
-                new FactID() { key = predecessor.PredecessorId }
+                new FactID() { key = predecessor.PredecessorId },
+                predecessor.IsPivot ?? false
             );
         }
 

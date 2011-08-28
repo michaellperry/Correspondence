@@ -234,7 +234,7 @@ namespace UpdateControls.Correspondence
                         FactID localFactId;
                         return !localIdByRemoteId.TryGetValue(remote.ID, out localFactId)
                             ? null
-                            : new PredecessorMemento(remote.Role, localFactId);
+                            : new PredecessorMemento(remote.Role, localFactId, remote.IsPivot);
                     })
                     .Where(pred => pred != null));
 
@@ -355,7 +355,7 @@ namespace UpdateControls.Correspondence
             {
                 PredecessorBase predecessor = prototype.GetPredecessor(role);
                 foreach (FactID id in predecessor.InternalFactIds)
-                    memento.AddPredecessor(role, id);
+                    memento.AddPredecessor(role, id, role.IsPivot);
             }
             using (MemoryStream data = new MemoryStream())
             {

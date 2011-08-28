@@ -14,7 +14,7 @@ namespace UpdateControls.Correspondence.SSCE
     public class SSCEStorageStrategy : IStorageStrategy
     {
         private const string PRE_HEAD_SELECT =
-            "SELECT ff.FactID, ff.Data, t.TypeID, t.TypeName, t.Version, r.RoleID, dt.TypeID, dt.TypeName, dt.Version, r.RoleName, p.FKPredecessorFactID " +
+            "SELECT ff.FactID, ff.Data, t.TypeID, t.TypeName, t.Version, r.RoleID, dt.TypeID, dt.TypeName, dt.Version, r.RoleName, p.FKPredecessorFactID, p.IsPivot " +
             "\r\nFROM (SELECT ";
         private const string POST_HEAD_SELECT =
             "f.FactID, f.Data, f.FKTypeID FROM Fact f ";
@@ -189,24 +189,25 @@ namespace UpdateControls.Correspondence.SSCE
 				foreach (PredecessorMemento predecessor in memento.Predecessors)
 				{
 					int roleId = SaveRole(session, predecessor.Role);
-					session.Command.CommandText = "INSERT Predecessor (FKFactID, FKRoleID, FKPredecessorFactID) VALUES (@FactID, @RoleID, @PredecessorFactID)";
+					session.Command.CommandText = "INSERT Predecessor (FKFactID, FKRoleID, FKPredecessorFactID, IsPivot) VALUES (@FactID, @RoleID, @PredecessorFactID, @IsPivot)";
 					AddParameter(session.Command, "@FactID", id.key);
 					AddParameter(session.Command, "@RoleID", roleId);
 					AddParameter(session.Command, "@PredecessorFactID", predecessor.ID.key);
-					session.Command.ExecuteNonQuery();
+                    AddParameter(session.Command, "@IsPivot", predecessor.IsPivot);
+                    session.Command.ExecuteNonQuery();
 					session.Command.Parameters.Clear();
 				}
 
 				// Store a message for each pivot.
 				FactID newFactId = id;
 				List<MessageMemento> pivotMessages = memento.Predecessors
-					.Where(predecessor => predecessor.Role.IsPivot)
+					.Where(predecessor => predecessor.IsPivot)
 					.Select(predecessor => new MessageMemento(predecessor.ID, newFactId))
 					.ToList();
 
 				// Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
 				string[] nonPivots = memento.Predecessors
-					.Where(predecessor => !predecessor.Role.IsPivot)
+					.Where(predecessor => !predecessor.IsPivot)
 					.Select(predecessor => predecessor.ID.key.ToString())
 					.ToArray();
 				List<MessageMemento> nonPivotMessages;
@@ -680,10 +681,12 @@ namespace UpdateControls.Correspondence.SSCE
 					int declaringTypeVersion = factReader.GetInt32(8);
 					string roleName = factReader.GetString(9);
 					long predecessorFactId = factReader.GetInt64(10);
+                    bool isPivot = factReader.GetBoolean(11);
 
 					current.Memento.AddPredecessor(
 						GetRoleMemento(roleId, declaringTypeId, declaringTypeName, declaringTypeVersion, roleName),
-						new FactID() { key = predecessorFactId });
+						new FactID() { key = predecessorFactId },
+                        isPivot);
 				}
 			}
 

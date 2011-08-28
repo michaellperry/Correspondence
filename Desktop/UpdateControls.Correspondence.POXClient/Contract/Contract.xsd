@@ -34,6 +34,7 @@
 		<xs:sequence>
 			<xs:element name="PredecessorId" type="xs:long"/>
 			<xs:element name="RoleId" type="xs:int"/>
+			<xs:element name="IsPivot" nillable="true" type="xs:boolean"/>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:element name="Predecessor" nillable="true" type="tns:Predecessor"/>
@@ -72,51 +73,51 @@
 				<xs:complexType>
 					<xs:sequence>
 						<xs:element name="FactId" nillable="true" type="xs:long"/>
-						<xs:element name="Timestamp" type="xs:long"/>
+        				<xs:element name="Timestamp" type="xs:long"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:element name="GetRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Domain" nillable="true" type="xs:string"/>
-				<xs:element name="PivotTree" nillable="true" type="tns:FactTree"/>
-				<xs:element name="PivotId" type="xs:long"/>
-				<xs:element name="Timestamp" type="xs:long"/>
-				<xs:element name="ClientGuid" type="xs:string"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="GetResponse">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="FactTree" nillable="true" type="tns:FactTree"/>
-				<xs:element name="Timestamp" type="xs:long"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="GetManyRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Domain" nillable="true" type="xs:string"/>
-				<xs:element name="PivotTree" nillable="true" type="tns:FactTree"/>
-				<xs:element name="PivotIds" type="tns:ArrayOfPivotId"/>
-				<xs:element name="ClientGuid" type="xs:string"/>
-				<xs:element name="TimeoutSeconds" type="xs:int"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="GetManyResponse">
+  <xs:element name="GetRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Domain" nillable="true" type="xs:string"/>
+        <xs:element name="PivotTree" nillable="true" type="tns:FactTree"/>
+        <xs:element name="PivotId" type="xs:long"/>
+        <xs:element name="Timestamp" type="xs:long"/>
+        <xs:element name="ClientGuid" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetResponse">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="FactTree" nillable="true" type="tns:FactTree"/>
-				<xs:element name="PivotIds" type="tns:ArrayOfPivotId"/>
-			</xs:sequence>
+        <xs:element name="Timestamp" type="xs:long"/>
+      </xs:sequence>
 		</xs:complexType>
 	</xs:element>
-
+  <xs:element name="GetManyRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Domain" nillable="true" type="xs:string"/>
+        <xs:element name="PivotTree" nillable="true" type="tns:FactTree"/>
+        <xs:element name="PivotIds" type="tns:ArrayOfPivotId"/>
+        <xs:element name="ClientGuid" type="xs:string"/>
+        <xs:element name="TimeoutSeconds" type="xs:int"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetManyResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="FactTree" nillable="true" type="tns:FactTree"/>
+        <xs:element name="PivotIds" type="tns:ArrayOfPivotId"/>
+      </xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
 	<xs:element name="PostRequest">
 		<xs:complexType>
 			<xs:sequence>
@@ -131,35 +132,35 @@
 			<xs:sequence/>
 		</xs:complexType>
 	</xs:element>
-	<xs:element name="SubscribeRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Domain" nillable="true" type="xs:string"/>
-				<xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
-				<xs:element name="PivotId" type="xs:long" />
-				<xs:element name="DeviceUri" nillable="true" type="xs:string" />
-				<xs:element name="ClientGuid" type="xs:string" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="UnsubscribeRequest">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="Domain" nillable="true" type="xs:string"/>
-				<xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
-				<xs:element name="PivotId" type="xs:long" />
-				<xs:element name="DeviceUri" nillable="true" type="xs:string" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="SubscribeResponse">
-		<xs:complexType>
-			<xs:sequence/>
-		</xs:complexType>
-	</xs:element>
-	<xs:element name="UnsubscribeResponse">
-		<xs:complexType>
-			<xs:sequence/>
-		</xs:complexType>
-	</xs:element>
+  <xs:element name="SubscribeRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Domain" nillable="true" type="xs:string"/>
+        <xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
+        <xs:element name="PivotId" type="xs:long" />
+        <xs:element name="DeviceUri" nillable="true" type="xs:string" />
+        <xs:element name="ClientGuid" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UnsubscribeRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Domain" nillable="true" type="xs:string"/>
+        <xs:element name="PivotTree" nillable="true" type="tns:FactTree" />
+        <xs:element name="PivotId" type="xs:long" />
+        <xs:element name="DeviceUri" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SubscribeResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UnsubscribeResponse">
+    <xs:complexType>
+      <xs:sequence/>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

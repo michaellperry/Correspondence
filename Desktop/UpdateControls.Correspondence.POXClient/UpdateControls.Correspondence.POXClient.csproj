@@ -72,6 +72,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Contract\Contract.bat" />
     <None Include="Contract\Contract.xsd">
       <SubType>Designer</SubType>
     </None>

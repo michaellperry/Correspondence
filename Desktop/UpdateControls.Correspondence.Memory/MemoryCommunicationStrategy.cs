@@ -43,7 +43,7 @@ namespace UpdateControls.Correspondence.Memory
                 FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
                 translatedMemento.Data = identifiedFact.Memento.Data;
                 translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
-                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
+                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
                 FactID localId;
                 _repository.Save(translatedMemento, 0, out localId);
                 FactID remoteId = identifiedFact.Id;
@@ -66,7 +66,7 @@ namespace UpdateControls.Correspondence.Memory
                 FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
                 translatedMemento.Data = identifiedFact.Memento.Data;
                 translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
-                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID])));
+                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
                 FactID localId;
                 if (!_repository.FindExistingFact(translatedMemento, out localId))
                     return null;

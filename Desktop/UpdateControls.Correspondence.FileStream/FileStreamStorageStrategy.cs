@@ -124,12 +124,12 @@ namespace UpdateControls.Correspondence.FileStream
 
                     // Store a message for each pivot.
                     IEnumerable<MessageMemento> directMessages = memento.Predecessors
-                        .Where(predecessor => predecessor.Role.IsPivot)
+                        .Where(predecessor => predecessor.IsPivot)
                         .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
 
                     // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
                     List<FactID> nonPivots = memento.Predecessors
-                        .Where(predecessor => !predecessor.Role.IsPivot)
+                        .Where(predecessor => !predecessor.IsPivot)
                         .Select(predecessor => predecessor.ID)
                         .ToList();
                     List<FactID> predecessorsPivots = _messageStore.GetPivotsOfFacts(nonPivots);
@@ -275,7 +275,7 @@ namespace UpdateControls.Correspondence.FileStream
             foreach (HistoricalTreePredecessor predecessorNode in factNode.Predecessors)
             {
                 RoleMemento role = _roleStore.GetRole(predecessorNode.RoleId);
-                factMemento.AddPredecessor(role, new FactID { key = predecessorNode.PredecessorFactId });
+                factMemento.AddPredecessor(role, new FactID { key = predecessorNode.PredecessorFactId }, role.IsPivot);
             }
             return factMemento;
         }

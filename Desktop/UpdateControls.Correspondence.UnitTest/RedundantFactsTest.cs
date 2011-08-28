@@ -110,10 +110,12 @@ namespace UpdateControls.Correspondence.UnitTest
 				});
 			playerMemento.Memento.AddPredecessor(
 				new RoleMemento(PlayerFactType, "game", GameFactType, true),
-				gameFactId);
+				gameFactId,
+                true);
 			playerMemento.Memento.AddPredecessor(
 				new RoleMemento(PlayerFactType, "user", UserFactType, true),
-				userFactId);
+				userFactId,
+                true);
 			return playerMemento;
 		}
 

@@ -91,7 +91,8 @@ namespace UpdateControls.Correspondence.Rebuild
                 destinationFact.AddPredecessors(sourceFact.Memento.Predecessors.Select
                     (p => new PredecessorMemento(
                         p.Role,
-                        destination.GetFactIDFromShare(peerId, p.ID))));
+                        destination.GetFactIDFromShare(peerId, p.ID),
+                        p.IsPivot)));
                 FactID destinationFactId;
                 destination.Save(destinationFact, 0, out destinationFactId);
                 destination.SaveShare(peerId, sourceFact.Id, destinationFactId);

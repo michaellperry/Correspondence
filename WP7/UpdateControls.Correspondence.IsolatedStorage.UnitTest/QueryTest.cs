@@ -170,8 +170,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         {
             FactID messageId;
             FactMemento message = new FactMemento(_messageType) { Data = Encode(body) };
-            message.AddPredecessor(_fromRole, from);
-            message.AddPredecessor(_toRole, to);
+            message.AddPredecessor(_fromRole, from, false);
+            message.AddPredecessor(_toRole, to, false);
             _storage.Save(message, 0, out messageId);
             return messageId;
         }
@@ -180,8 +180,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
         {
             FactID acknowledgeId;
             FactMemento acknowledge = new FactMemento(_acknowledgeType) { Data = new byte[0] };
-            acknowledge.AddPredecessor(_messageRole, message);
-            acknowledge.AddPredecessor(_userRole, user);
+            acknowledge.AddPredecessor(_messageRole, message, false);
+            acknowledge.AddPredecessor(_userRole, user, false);
             _storage.Save(acknowledge, 0, out acknowledgeId);
         }
 
@@ -191,8 +191,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             {
                 Data = new byte[0]
             };
-            conversation.AddPredecessor(_participantRole, userA);
-            conversation.AddPredecessor(_participantRole, userB);
+            conversation.AddPredecessor(_participantRole, userA, false);
+            conversation.AddPredecessor(_participantRole, userB, false);
 
             FactID id;
             _storage.Save(conversation, 0, out id);

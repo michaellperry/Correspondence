@@ -172,7 +172,8 @@ namespace UpdateControls.Correspondence.POXClient
                         roleName,
                         null,
                         isPivot),
-                    new FactID() { key = predecessorFactId }
+                    new FactID() { key = predecessorFactId },
+                    isPivot
                 );
             }
 

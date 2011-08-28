@@ -197,7 +197,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
                     "user",
                     new CorrespondenceFactType(STR_TypeName, 1),
                     true),
-                predecessorId);
+                predecessorId,
+                true);
             return fact;
         }
 
