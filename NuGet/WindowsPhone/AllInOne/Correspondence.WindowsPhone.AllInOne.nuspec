@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.WindowsPhone.AllInOne</id>
-    <version>1.2.0.4</version>
+    <version>1.2.0.5</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a Windows Phone 7 application project. Puts everything in one project. Not good for unit testing.</description>
@@ -13,8 +13,8 @@
     <language>en-US</language>
     <tags>nosql database wp7 synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence.WindowsPhone.App" version="1.2.0.4"/>
-      <dependency id="Correspondence.Model" version="1.2.0.4"/>
+      <dependency id="Correspondence.WindowsPhone.App" version="1.2.0.5"/>
+      <dependency id="Correspondence.Model" version="1.2.0.5"/>
     </dependencies>
   </metadata>
 </package>

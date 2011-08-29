@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.Model</id>
-    <version>1.2.0.4</version>
+    <version>1.2.0.5</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a class library. Creates a model.fact file and a T4 template to compile it.</description>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database wp7 synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.2.0.4"/>
+      <dependency id="Correspondence" version="1.2.0.5"/>
     </dependencies>
   </metadata>
 </package>
