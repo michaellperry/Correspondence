@@ -165,7 +165,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         modifier == Source.ConditionModifier.Positive ?
                             Target.ConditionModifier.Positive :
                             Target.ConditionModifier.Negative,
-                        clause.PredicateName));
+                        clause.PredicateName,
+                        "type"));
                 }
             }
         }
@@ -211,7 +212,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             Target.Query valueQuery = new Target.Query(property.Name)
                 .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, fact.Name.ToCamelCase())
-                    .AddCondition(new Target.Condition(Target.ConditionModifier.Negative, "isCurrent")));
+                    .AddCondition(new Target.Condition(Target.ConditionModifier.Negative, "isCurrent", "type")));
             factClass.AddQuery(valueQuery);
 
             Source.DataTypeNative dataTypeNative = property.Type as Source.DataTypeNative;
@@ -359,7 +360,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         modifier == Source.ConditionModifier.Positive ?
                             Target.ConditionModifier.Positive :
                             Target.ConditionModifier.Negative,
-                        clause.PredicateName));
+                        clause.PredicateName,
+                        sourceSet.FactName));
                 }
             }
 

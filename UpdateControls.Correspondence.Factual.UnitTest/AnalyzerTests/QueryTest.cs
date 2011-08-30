@@ -175,5 +175,78 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Pred.Assert(joins[2].Type, Is.EqualTo("Article"));
             Pred.Assert(joins[2].Name, Is.EqualTo("magazine"));
         }
+
+        private const string ProjectModel =
+            "namespace Project.Model; " +
+            "" +
+            "fact Identity { " +
+            "key: " +
+                "unique; " +
+                "" +
+            "query: " +
+                "ProjectShare* activeProjectShares { " +
+                    "ProjectShare s : s.identity = this " +
+                        "where s.isActive " +
+                "} " +
+                "" +
+                "Project* activeProjects { " +
+                    "ProjectShare s : s.identity = this " +
+                        "where s.isActive " +
+                    "Project p : p = s.project " +
+                        "where not p.isCompleted " +
+                "} " +
+            "} " +
+                "" +
+            "fact ProjectShare { " +
+            "key: " +
+                "unique; " +
+                "Identity identity; " +
+                "Project project; " +
+                "" +
+            "query: " +
+                "bool isActive { " +
+                    "not exists ProjectShareRevoke r : r.projectShare = this " +
+                "} " +
+            "} " +
+                "" +
+            "fact ProjectShareRevoke { " +
+            "key: " +
+                "ProjectShare projectShare; " +
+            "} " +
+                "" +
+            "fact Project { " +
+            "key: " +
+                "unique; " +
+                "" +
+            "query: " +
+                "bool isCompleted { " +
+                    "exists ProjectCompleted pc : pc.project = this " +
+                "} " +
+            "} " +
+            " " +
+            "fact ProjectCompleted { " +
+            "key: " +
+                "Project project; " +
+                "date completionDate; " +
+            "}";
+            
+
+        [TestMethod]
+        public void WhenSuccessorHasCondition_TypeIsSuccessor()
+        {
+            Analyzed result = AssertNoError(ProjectModel);
+
+            Query query = result.HasClassNamed("Identity").HasQueryNamed("activeProjectShares");
+            Assert.AreEqual("ProjectShare", query.Joins.Single().Conditions.Single().Type);
+        }
+
+        [TestMethod]
+        public void WhenPredecessorHasCondition_TypeIsPredecessor()
+        {
+            Analyzed result = AssertNoError(ProjectModel);
+
+            Query query = result.HasClassNamed("Identity").HasQueryNamed("activeProjects");
+            Assert.AreEqual("Project", query.Joins.ElementAt(1).Conditions.Single().Type);
+        }
     }
 }

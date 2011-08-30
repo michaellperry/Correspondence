@@ -6,11 +6,13 @@ namespace UpdateControls.Correspondence.Factual.Metadata
     {
         private ConditionModifier _modifier;
         private string _name;
+        private string _type;
 
-        public Condition(ConditionModifier modifier, string name)
+        public Condition(ConditionModifier modifier, string name, string type)
         {
             _modifier = modifier;
             _name = name;
+            _type = type;
         }
 
         public ConditionModifier Modifier
@@ -21,6 +23,11 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         public string Name
         {
             get { return _name; }
+        }
+
+        public string Type
+        {
+            get { return _type; }
         }
     }
 }
