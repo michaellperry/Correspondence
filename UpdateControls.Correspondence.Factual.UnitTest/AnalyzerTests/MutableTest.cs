@@ -92,6 +92,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Target.Join join = _analyzed.HasClassNamed("Customer").HasQueryNamed("name").Joins.Single();
             Assert.AreEqual("CustomerName", join.Type);
             Assert.AreEqual("isCurrent", join.Conditions.Single().Name);
+            Assert.AreEqual("CustomerName", join.Conditions.Single().Type);
         }
 
         [TestMethod]

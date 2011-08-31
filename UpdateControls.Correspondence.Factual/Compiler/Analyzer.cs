@@ -166,7 +166,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                             Target.ConditionModifier.Positive :
                             Target.ConditionModifier.Negative,
                         clause.PredicateName,
-                        "type"));
+                        fact.Name));
                 }
             }
         }
@@ -212,7 +212,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             Target.Query valueQuery = new Target.Query(property.Name)
                 .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, fact.Name.ToCamelCase())
-                    .AddCondition(new Target.Condition(Target.ConditionModifier.Negative, "isCurrent", "type")));
+                    .AddCondition(new Target.Condition(Target.ConditionModifier.Negative, "isCurrent", childClass.Name)));
             factClass.AddQuery(valueQuery);
 
             Source.DataTypeNative dataTypeNative = property.Type as Source.DataTypeNative;

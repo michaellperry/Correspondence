@@ -41,6 +41,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Assert.IsNotNull(publishCondition);
             Assert.AreEqual("isOngoing", publishCondition.Name);
             Assert.AreEqual(ConditionModifier.Negative, publishCondition.Modifier);
+            Assert.AreEqual("GameRequest", publishCondition.Type);
         }
 
         [TestMethod]
@@ -74,6 +75,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Assert.IsNotNull(publishCondition);
             Assert.AreEqual("isCompleted", publishCondition.Name);
             Assert.AreEqual(ConditionModifier.Negative, publishCondition.Modifier);
+            Assert.AreEqual("GameRequest", publishCondition.Type);
         }
 
         [TestMethod]
@@ -107,6 +109,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Assert.IsNotNull(publishCondition);
             Assert.AreEqual("isCompleted", publishCondition.Name);
             Assert.AreEqual(ConditionModifier.Positive, publishCondition.Modifier);
+            Assert.AreEqual("GameRequest", publishCondition.Type);
         }
 
         [TestMethod]
@@ -140,6 +143,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Assert.IsNotNull(publishCondition);
             Assert.AreEqual("isOngoing", publishCondition.Name);
             Assert.AreEqual(ConditionModifier.Positive, publishCondition.Modifier);
+            Assert.AreEqual("GameRequest", publishCondition.Type);
         }
     }
 }
