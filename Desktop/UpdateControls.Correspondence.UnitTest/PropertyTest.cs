@@ -13,12 +13,14 @@ namespace UpdateControls.Correspondence.UnitTest
         private Community _otherCommunity;
         private User _alan;
         private User _otherAlan;
+        private MemoryStorageStrategy _storageAlan;
 
         [TestInitialize]
         public void Initialize()
         {
             var sharedCommunication = new MemoryCommunicationStrategy();
-            _community = new Community(new MemoryStorageStrategy())
+            _storageAlan = new MemoryStorageStrategy();
+            _community = new Community(_storageAlan)
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _alan);
@@ -90,6 +92,17 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
+        public void RedundantSetOfSimplePropertyDoesNotCreateAFact()
+        {
+            _alan.FavoriteColor = "Blue";
+            int before = _storageAlan.LoadAllFacts().Count();
+            _alan.FavoriteColor = "Blue";
+            int after = _storageAlan.LoadAllFacts().Count();
+
+            Assert.AreEqual(before, after);
+        }
+
+        [TestMethod]
         public void CanGetDefaultMutableFactProperty()
         {
             Color color = _alan.BetterFavoriteColor;
@@ -114,6 +127,17 @@ namespace UpdateControls.Correspondence.UnitTest
             Color color = _alan.BetterFavoriteColor;
 
             Assert.AreEqual("Red", color.Name);
+        }
+
+        [TestMethod]
+        public void RedundantSetOfFactPropertyDoesNotCreateAFact()
+        {
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            int before = _storageAlan.LoadAllFacts().Count();
+            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            int after = _storageAlan.LoadAllFacts().Count();
+
+            Assert.AreEqual(before, after);
         }
 
         [TestMethod]

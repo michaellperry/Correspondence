@@ -29,6 +29,12 @@ query:
 		Player p : p.user = this
 			where p.isNotActive
 	}
+
+	Game* finishedGames {
+		Player p : p.user = this
+		Game g : p.game = g
+			where g.isFinished
+	}
 }
 
 fact Color {
@@ -68,6 +74,10 @@ query:
 
 	Outcome* outcomes {
 		Outcome o : o.game = this
+	}
+
+	bool isFinished {
+		exists Outcome o : o.game = this
 	}
 }
 

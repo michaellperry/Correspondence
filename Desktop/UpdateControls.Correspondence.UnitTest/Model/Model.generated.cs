@@ -194,6 +194,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             .JoinSuccessors(Player.RoleUser, Condition.WhereIsNotEmpty(Player.QueryIsNotActive)
             )
             ;
+        public static Query QueryFinishedGames = new Query()
+            .JoinSuccessors(Player.RoleUser)
+            .JoinPredecessors(Player.RoleGame, Condition.WhereIsNotEmpty(Game.QueryIsFinished)
+            )
+            ;
 
         // Predicates
 
@@ -207,6 +212,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Result<UserBetterFavoriteColor> _betterFavoriteColor;
         private Result<Player> _activePlayers;
         private Result<Player> _finishedPlayers;
+        private Result<Game> _finishedGames;
 
         // Business constructor
         public User(
@@ -230,6 +236,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             _betterFavoriteColor = new Result<UserBetterFavoriteColor>(this, QueryBetterFavoriteColor);
             _activePlayers = new Result<Player>(this, QueryActivePlayers);
             _finishedPlayers = new Result<Player>(this, QueryFinishedPlayers);
+            _finishedGames = new Result<Game>(this, QueryFinishedGames);
         }
 
         // Predecessor access
@@ -249,6 +256,10 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _finishedPlayers; }
         }
+        public IEnumerable<Game> FinishedGames
+        {
+            get { return _finishedGames; }
+        }
 
         // Mutable property access
         public Disputable<string> FavoriteColor
@@ -256,7 +267,10 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _favoriteColor.Select(fact => fact.Value).AsDisputable(); }
 			set
 			{
-				Community.AddFact(new UserFavoriteColor(this, _favoriteColor, value.Value));
+				if (_favoriteColor.Count() != 1 || !object.Equals(_favoriteColor.Single().Value, value.Value))
+				{
+					Community.AddFact(new UserFavoriteColor(this, _favoriteColor, value.Value));
+				}
 			}
         }
 
@@ -265,7 +279,10 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _betterFavoriteColor.Select(fact => fact.Value).AsDisputable(); }
 			set
 			{
-				Community.AddFact(new UserBetterFavoriteColor(this, _betterFavoriteColor, value.Value));
+				if (_betterFavoriteColor.Count() != 1 || !object.Equals(_betterFavoriteColor.Single().Value, value.Value))
+				{
+					Community.AddFact(new UserBetterFavoriteColor(this, _betterFavoriteColor, value.Value));
+				}
 			}
         }
     }
@@ -879,8 +896,12 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         public static Query QueryOutcomes = new Query()
             .JoinSuccessors(Outcome.RoleGame)
             ;
+        public static Query QueryIsFinished = new Query()
+            .JoinSuccessors(Outcome.RoleGame)
+            ;
 
         // Predicates
+        public static Condition IsFinished = Condition.WhereIsNotEmpty(QueryIsFinished);
 
         // Predecessors
 
@@ -1442,6 +1463,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			community.AddQuery(
 				User._correspondenceFactType,
 				User.QueryFinishedPlayers.QueryDefinition);
+			community.AddQuery(
+				User._correspondenceFactType,
+				User.QueryFinishedGames.QueryDefinition);
 			community.AddType(
 				UserFavoriteColor._correspondenceFactType,
 				new UserFavoriteColor.CorrespondenceFactFactory(fieldSerializerByType),
@@ -1484,6 +1508,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			community.AddQuery(
 				Game._correspondenceFactType,
 				Game.QueryOutcomes.QueryDefinition);
+			community.AddQuery(
+				Game._correspondenceFactType,
+				Game.QueryIsFinished.QueryDefinition);
 			community.AddType(
 				GameName._correspondenceFactType,
 				new GameName.CorrespondenceFactFactory(fieldSerializerByType),

@@ -141,9 +141,9 @@ namespace <#=targetNamespace.Name#>
 <# foreach (Join join in query.Joins) { #>
 <#   if (join.Conditions.Any()) { #>
 <#      Condition first = join.Conditions.First(); #>
-            .Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>, Condition.WhereIs<#=first.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=join.Type#>.<#=QueryName(first.Name)#>)
+            .Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>, Condition.WhereIs<#=first.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=first.Type#>.<#=QueryName(first.Name)#>)
 <#        foreach (Condition condition in join.Conditions.Skip(1)) { #>
-                .And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=join.Type#>.<#=QueryName(condition.Name)#>)
+                .And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=condition.Type#>.<#=QueryName(condition.Name)#>)
 <#        } #>
             )
 <#   } else { #>
@@ -258,7 +258,10 @@ namespace <#=targetNamespace.Name#>
             get { return _<#=result.Query.Name#>.Select(fact => fact.Value).AsDisputable(); }
 			set
 			{
-				Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+				if (_<#=result.Query.Name#>.Count() != 1 || !object.Equals(_<#=result.Query.Name#>.Single().Value, value.Value))
+				{
+					Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+				}
 			}
         }
 <#}#>
@@ -269,7 +272,10 @@ namespace <#=targetNamespace.Name#>
             get { return _<#=result.Query.Name#>.Select(fact => fact.Value).AsDisputable(); }
 			set
 			{
-				Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+				if (_<#=result.Query.Name#>.Count() != 1 || !object.Equals(_<#=result.Query.Name#>.Single().Value, value.Value))
+				{
+					Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+				}
 			}
         }
 <#}#>
