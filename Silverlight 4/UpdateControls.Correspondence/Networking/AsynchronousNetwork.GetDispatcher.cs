@@ -1,13 +1,13 @@
-﻿using System.Windows.Threading;
+﻿using System;
 using System.Windows;
 
 namespace UpdateControls.Correspondence.Networking
 {
     partial class AsynchronousNetwork
     {
-        private static Dispatcher GetDispatcher()
+        private static void RunOnUIThread(Action action)
         {
-            return Deployment.Current.Dispatcher;
+            Deployment.Current.Dispatcher.BeginInvoke(action);
         }
     }
 }
