@@ -213,6 +213,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\PredecessorOpt.cs">
       <Link>PredecessorOpt.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\InvalidatedQuery.cs">
+      <Link>Queries\InvalidatedQuery.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\Join.cs">
       <Link>Queries\Join.cs</Link>
     </Compile>

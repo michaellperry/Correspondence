@@ -108,6 +108,7 @@
     <Compile Include="ICommunity.cs" />
     <Compile Include="Networking\PushSubscriptionProxy.cs" />
     <Compile Include="Networking\ISubscriptionProvider.cs" />
+    <Compile Include="Queries\InvalidatedQuery.cs" />
     <Compile Include="Queries\Unpublisher.cs" />
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
     <Compile Include="Strategy\ICorrespondenceModel.cs" />

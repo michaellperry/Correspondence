@@ -71,6 +71,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\UnpublishMemento.cs">
       <Link>Mementos\UnpublishMemento.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\InvalidatedQuery.cs">
+      <Link>Queries\InvalidatedQuery.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\Unpublisher.cs">
       <Link>Queries\Unpublisher.cs</Link>
     </Compile>

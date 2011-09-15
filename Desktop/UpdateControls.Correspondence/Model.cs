@@ -73,7 +73,7 @@ namespace UpdateControls.Correspondence
         {
             // Save invalidate actions until after the lock
             // because they reenter if a fact is removed.
-            List<Action> invalidateActions = new List<Action>();
+            HashSet<InvalidatedQuery> invalidatedQueries = new HashSet<InvalidatedQuery>();
 
             lock (this)
             {
@@ -94,7 +94,7 @@ namespace UpdateControls.Correspondence
                 if (_factByMemento.TryGetValue(memento, out fact))
                     return (T)fact;
 
-                FactID id = AddFactMemento(peerId, invalidateActions, memento);
+                FactID id = AddFactMemento(peerId, memento, invalidatedQueries);
 
                 // Turn the prototype into the real fact.
                 prototype.ID = id;
@@ -103,8 +103,8 @@ namespace UpdateControls.Correspondence
                 _factByMemento.Add(memento, prototype);
             }
 
-            foreach (Action invalidateAction in invalidateActions)
-                invalidateAction();
+            foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries)
+                invalidatedQuery.Invalidate();
 
             if (FactAdded != null)
                 FactAdded(prototype);
@@ -223,30 +223,34 @@ namespace UpdateControls.Correspondence
 
         public void ReceiveMessage(FactTreeMemento messageBody, int peerId)
         {
-            IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-            foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+            HashSet<InvalidatedQuery> invalidatedQueries = new HashSet<InvalidatedQuery>();
+
+            lock (this)
             {
-                FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
-                translatedMemento.Data = identifiedFact.Memento.Data;
-                translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
-                    .Select(remote =>
-                    {
-                        FactID localFactId;
-                        return !localIdByRemoteId.TryGetValue(remote.ID, out localFactId)
-                            ? null
-                            : new PredecessorMemento(remote.Role, localFactId, remote.IsPivot);
-                    })
-                    .Where(pred => pred != null));
+                IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
+                foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+                {
+                    FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
+                    translatedMemento.Data = identifiedFact.Memento.Data;
+                    translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
+                        .Select(remote =>
+                        {
+                            FactID localFactId;
+                            return !localIdByRemoteId.TryGetValue(remote.ID, out localFactId)
+                                ? null
+                                : new PredecessorMemento(remote.Role, localFactId, remote.IsPivot);
+                        })
+                        .Where(pred => pred != null));
 
-                List<Action> invalidateActions = new List<Action>();
-                FactID localId = AddFactMemento(peerId, invalidateActions, translatedMemento);
+                    FactID localId = AddFactMemento(peerId, translatedMemento, invalidatedQueries);
 
-                foreach (Action invalidateAction in invalidateActions)
-                    invalidateAction();
-
-                FactID remoteId = identifiedFact.Id;
-                localIdByRemoteId.Add(remoteId, localId);
+                    FactID remoteId = identifiedFact.Id;
+                    localIdByRemoteId.Add(remoteId, localId);
+                }
             }
+
+            foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries)
+                invalidatedQuery.Invalidate();
         }
 
         public CorrespondenceFact GetFactByID(FactID id)
@@ -371,7 +375,7 @@ namespace UpdateControls.Correspondence
             return memento;
         }
 
-        private FactID AddFactMemento(int peerId, List<Action> invalidateActions, FactMemento memento)
+        private FactID AddFactMemento(int peerId, FactMemento memento, HashSet<InvalidatedQuery> invalidatedQueries)
         {
             // Set the ID and add the object to the community.
             FactID id;
@@ -401,7 +405,7 @@ namespace UpdateControls.Correspondence
                                     if (_factByID.TryGetValue(targetObjectId, out targetObject))
                                     {
                                         QueryDefinition invalidQuery = invalidator.InvalidQuery;
-                                        invalidateActions.Add(() => targetObject.InvalidateQuery(invalidQuery));
+                                        invalidatedQueries.Add(new InvalidatedQuery(targetObject, invalidQuery));
                                     }
                                 }
                             }
