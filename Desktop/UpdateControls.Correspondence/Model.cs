@@ -73,7 +73,7 @@ namespace UpdateControls.Correspondence
         {
             // Save invalidate actions until after the lock
             // because they reenter if a fact is removed.
-            HashSet<InvalidatedQuery> invalidatedQueries = new HashSet<InvalidatedQuery>();
+            Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries = new Dictionary<InvalidatedQuery, InvalidatedQuery>();
 
             lock (this)
             {
@@ -103,7 +103,7 @@ namespace UpdateControls.Correspondence
                 _factByMemento.Add(memento, prototype);
             }
 
-            foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries)
+            foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries.Keys)
                 invalidatedQuery.Invalidate();
 
             if (FactAdded != null)
@@ -223,7 +223,7 @@ namespace UpdateControls.Correspondence
 
         public void ReceiveMessage(FactTreeMemento messageBody, int peerId)
         {
-            HashSet<InvalidatedQuery> invalidatedQueries = new HashSet<InvalidatedQuery>();
+            Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries = new Dictionary<InvalidatedQuery, InvalidatedQuery>();
 
             lock (this)
             {
@@ -249,7 +249,7 @@ namespace UpdateControls.Correspondence
                 }
             }
 
-            foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries)
+            foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries.Keys)
                 invalidatedQuery.Invalidate();
         }
 
@@ -375,7 +375,7 @@ namespace UpdateControls.Correspondence
             return memento;
         }
 
-        private FactID AddFactMemento(int peerId, FactMemento memento, HashSet<InvalidatedQuery> invalidatedQueries)
+        private FactID AddFactMemento(int peerId, FactMemento memento, Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries)
         {
             // Set the ID and add the object to the community.
             FactID id;
@@ -405,7 +405,9 @@ namespace UpdateControls.Correspondence
                                     if (_factByID.TryGetValue(targetObjectId, out targetObject))
                                     {
                                         QueryDefinition invalidQuery = invalidator.InvalidQuery;
-                                        invalidatedQueries.Add(new InvalidatedQuery(targetObject, invalidQuery));
+                                        InvalidatedQuery query = new InvalidatedQuery(targetObject, invalidQuery);
+                                        if (!invalidatedQueries.ContainsKey(query))
+                                            invalidatedQueries.Add(query, query);
                                     }
                                 }
                             }
