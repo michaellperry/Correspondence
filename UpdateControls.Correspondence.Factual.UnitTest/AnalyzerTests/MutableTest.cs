@@ -29,7 +29,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void MutablePropertyCreatesAChildClass()
         {
-            _analyzed.HasClassNamed("CustomerName");
+            _analyzed.HasClassNamed("Customer__name");
         }
 
         [TestMethod]
@@ -37,29 +37,29 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         {
             Assert.AreEqual(
                 "Customer",
-                _analyzed.HasClassNamed("CustomerName").HasPredecessorNamed("customer").FactType);
+                _analyzed.HasClassNamed("Customer__name").HasPredecessorNamed("customer").FactType);
         }
 
         [TestMethod]
         public void ChildClassIsPublished()
         {
             Assert.IsTrue(
-                _analyzed.HasClassNamed("CustomerName").HasPredecessorNamed("customer").IsPivot);
+                _analyzed.HasClassNamed("Customer__name").HasPredecessorNamed("customer").IsPivot);
         }
 
         [TestMethod]
         public void OtherChildClassIsNotPublished()
         {
             Assert.IsFalse(
-                _analyzed.HasClassNamed("CustomerEmployer").HasPredecessorNamed("customer").IsPivot);
+                _analyzed.HasClassNamed("Customer__employer").HasPredecessorNamed("customer").IsPivot);
         }
 
         [TestMethod]
         public void ChildClassHasPriorPredecessor()
         {
             Assert.AreEqual(
-                "CustomerName",
-                _analyzed.HasClassNamed("CustomerName").HasPredecessorNamed("prior").FactType);
+                "Customer__name",
+                _analyzed.HasClassNamed("Customer__name").HasPredecessorNamed("prior").FactType);
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         {
             Assert.AreEqual(
                 Target.NativeType.String,
-                _analyzed.HasClassNamed("CustomerName").HasFieldNamed("value").NativeType);
+                _analyzed.HasClassNamed("Customer__name").HasFieldNamed("value").NativeType);
         }
 
         [TestMethod]
@@ -75,31 +75,31 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         {
             Assert.AreEqual(
                 "Company",
-                _analyzed.HasClassNamed("CustomerEmployer").HasPredecessorNamed("value").FactType);
+                _analyzed.HasClassNamed("Customer__employer").HasPredecessorNamed("value").FactType);
         }
 
         [TestMethod]
         public void ChildClassHasIsCurrentPredicate()
         {
             Assert.AreEqual(
-                "CustomerName",
-                _analyzed.HasClassNamed("CustomerName").HasPredicateNamed("isCurrent").Query.Joins.Single().Type);
+                "Customer__name",
+                _analyzed.HasClassNamed("Customer__name").HasPredicateNamed("isCurrent").Query.Joins.Single().Type);
         }
 
         [TestMethod]
         public void ParentClassHasQuery()
         {
             Target.Join join = _analyzed.HasClassNamed("Customer").HasQueryNamed("name").Joins.Single();
-            Assert.AreEqual("CustomerName", join.Type);
+            Assert.AreEqual("Customer__name", join.Type);
             Assert.AreEqual("isCurrent", join.Conditions.Single().Name);
-            Assert.AreEqual("CustomerName", join.Conditions.Single().Type);
+            Assert.AreEqual("Customer__name", join.Conditions.Single().Type);
         }
 
         [TestMethod]
         public void ParentClassHasDisputableResultNative()
         {
             Target.Result result = _analyzed.HasClassNamed("Customer").HasResultNamed("name");
-            Assert.AreEqual("CustomerName", result.Type);
+            Assert.AreEqual("Customer__name", result.Type);
             Target.ResultValueNative nativeDisputableResult = result as Target.ResultValueNative;
             Assert.IsNotNull(nativeDisputableResult);
             Assert.AreEqual(Target.NativeType.String, nativeDisputableResult.NativeType);
@@ -109,7 +109,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         public void ParentClassHasDisputableResultFact()
         {
             Target.Result result = _analyzed.HasClassNamed("Customer").HasResultNamed("employer");
-            Assert.AreEqual("CustomerEmployer", result.Type);
+            Assert.AreEqual("Customer__employer", result.Type);
             Target.ResultValueFact nativeDisputableResult = result as Target.ResultValueFact;
             Assert.IsNotNull(nativeDisputableResult);
             Assert.AreEqual("Company", nativeDisputableResult.FactType);

@@ -199,7 +199,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private void AnalyzeProperty(Target.Analyzed result, Target.Class factClass, Source.Fact fact, Source.Property property)
         {
-            Target.Class childClass = new Target.Class(fact.Name + property.Name.ToPascalCase());
+            Target.Class childClass = new Target.Class(String.Format("{0}__{1}", fact.Name, property.Name));
             result.AddClass(childClass);
 
             childClass.AddPredecessor(new Target.Predecessor(fact.Name.ToCamelCase(), Target.Cardinality.One, fact.Name, property.Publish));
