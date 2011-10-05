@@ -105,6 +105,9 @@
     <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\RoleStore.cs">
       <Link>RoleStore.cs</Link>
     </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\SavedFactStore.cs">
+      <Link>SavedFactStore.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
