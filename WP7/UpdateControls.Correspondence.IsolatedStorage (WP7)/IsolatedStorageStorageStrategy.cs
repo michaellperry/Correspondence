@@ -25,6 +25,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         private PeerStore _peerStore;
         private OutgoingTimestampStore _outgoingTimestampStore;
         private IncomingTimestampStore _incomingTimestampStore;
+        private SavedFactStore _savedFactStore;
 
         private IsolatedStorageStorageStrategy(IsolatedStorageFile store)
         {
@@ -42,6 +43,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             result._peerStore = PeerStore.Load(store);
             result._incomingTimestampStore = IncomingTimestampStore.Load(store);
             result._outgoingTimestampStore = OutgoingTimestampStore.Load(store);
+            result._savedFactStore = SavedFactStore.Load(store);
             if (store.FileExists(ClientGuidFileName))
             {
                 using (BinaryReader input = new BinaryReader(store.OpenFile(ClientGuidFileName, FileMode.Open)))
@@ -73,12 +75,12 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public bool GetID(string factName, out FactID id)
         {
-            throw new NotImplementedException();
+            return _savedFactStore.GetFactId(factName, out id);
         }
 
         public void SetID(string factName, FactID id)
         {
-            throw new NotImplementedException();
+            _savedFactStore.SaveFactId(factName, id, _store);
         }
 
         public FactMemento Load(FactID id)
