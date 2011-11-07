@@ -25,5 +25,20 @@ namespace UpdateControls.Correspondence.Conditions
         {
             visitor.VisitAnd(_left, _right);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+                return true;
+            AndCondition that = obj as AndCondition;
+            if (that == null)
+                return false;
+            return this._left.Equals(that._left) && this._right.Equals(that._right);
+        }
+
+        public override int GetHashCode()
+        {
+            return _left.GetHashCode() * 37 + _right.GetHashCode();
+        }
     }
 }
