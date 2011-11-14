@@ -38,5 +38,25 @@ namespace UpdateControls.Correspondence.Mementos
         {
             _facts.Add(identifiedFact);
         }
+
+        public override int GetHashCode()
+        {
+            int hashCode = _databaseId.GetHashCode();
+            foreach (var fact in _facts)
+                hashCode += fact.GetHashCode();
+            return hashCode;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+                return true;
+            FactTreeMemento that = obj as FactTreeMemento;
+            if (that == null)
+                return false;
+            return _databaseId == that._databaseId
+                && _facts.Count == that._facts.Count
+                && _facts.All(f => that._facts.Contains(f));
+        }
     }
 }

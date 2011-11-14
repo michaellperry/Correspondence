@@ -36,11 +36,12 @@ namespace UpdateControls.Correspondence.Mementos
 			_predecessors.AddRange(predecessors);
 		}
 
-        public void AddPredecessor(RoleMemento role, FactID id, bool isPivot)
+        public FactMemento AddPredecessor(RoleMemento role, FactID id, bool isPivot)
         {
             PredecessorMemento predecessor = new PredecessorMemento(role, id, isPivot);
             if (!_predecessors.Contains(predecessor))
                 _predecessors.Add(predecessor);
+            return this;
         }
 
 		public byte[] Data

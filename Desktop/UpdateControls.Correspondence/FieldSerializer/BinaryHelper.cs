@@ -61,6 +61,18 @@ namespace UpdateControls.Correspondence.FieldSerializer
             return Encoding.GetChars(data, 0, data.Length)[0];
         }
 
+        public static void WriteBoolean(bool value, BinaryWriter output)
+        {
+            byte data = value ? (byte)1 : (byte)0;
+            output.Write(data);
+        }
+
+        public static bool ReadBoolean(BinaryReader input)
+        {
+            byte data = input.ReadByte();
+            return data != 0;
+        }
+
         public static void WriteShort(short value, BinaryWriter output)
         {
             byte[] data = BitConverter.GetBytes(value);
@@ -101,12 +113,41 @@ namespace UpdateControls.Correspondence.FieldSerializer
             output.Write(data);
         }
 
-        public static object ReadLong(BinaryReader input)
+        public static long ReadLong(BinaryReader input)
         {
             byte[] data = input.ReadBytes(8);
             if (BitConverter.IsLittleEndian)
                 data = ReverseBytes(data);
             return BitConverter.ToInt64(data, 0);
+        }
+
+        public static string ReadString(BinaryReader input)
+        {
+            short length = ReadShort(input);
+            if (length > Model.MaxDataLength)
+                throw new CorrespondenceException(string.Format("String length {0} exceeded the maximum bytes allowable ({1}).", length, Model.MaxDataLength));
+            if (length == 0)
+                return string.Empty;
+
+            byte[] data = input.ReadBytes(length);
+            string value = Encoding.GetString(data, 0, length);
+            return value;
+        }
+
+        public static void WriteString(string value, BinaryWriter output)
+        {
+            string str = (string)value;
+            if (string.IsNullOrEmpty(str))
+                WriteShort(0, output);
+            else
+            {
+                byte[] data = Encoding.GetBytes(str);
+                int length = data.Length;
+                if (length > Model.MaxDataLength)
+                    throw new CorrespondenceException(string.Format("String length {0} exceeded the maximum bytes allowable ({1}).", length, Model.MaxDataLength));
+                WriteShort((short)length, output);
+                output.Write(data);
+            }
         }
 
         public static byte[] ReverseBytes(byte[] inArray)

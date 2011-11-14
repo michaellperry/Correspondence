@@ -22,5 +22,20 @@ namespace UpdateControls.Correspondence.Mementos
         {
             get { return _memento; }
         }
+
+        public override int GetHashCode()
+        {
+            return _id.GetHashCode() * 37 + _memento.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+                return true;
+            IdentifiedFactMemento that = obj as IdentifiedFactMemento;
+            if (that == null)
+                return false;
+            return _id.Equals(that._id) && _memento.Equals(that._memento);
+        }
     }
 }
