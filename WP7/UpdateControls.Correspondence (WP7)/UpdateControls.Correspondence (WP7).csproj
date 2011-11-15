@@ -65,6 +65,12 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\Crc32.cs">
       <Link>Mementos\Crc32.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactBase.cs">
+      <Link>Mementos\IdentifiedFactBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactRemote.cs">
+      <Link>Mementos\IdentifiedFactRemote.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\PivotMemento.cs">
       <Link>Mementos\PivotMemento.cs</Link>
     </Compile>

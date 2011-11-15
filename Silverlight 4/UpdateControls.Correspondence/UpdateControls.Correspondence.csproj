@@ -150,8 +150,14 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\GetResultMemento.cs">
       <Link>Mementos\GetResultMemento.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactBase.cs">
+      <Link>Mementos\IdentifiedFactBase.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactMemento.cs">
       <Link>Mementos\IdentifiedFactMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactRemote.cs">
+      <Link>Mementos\IdentifiedFactRemote.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\MessageMemento.cs">
       <Link>Mementos\MessageMemento.cs</Link>

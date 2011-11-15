@@ -82,8 +82,36 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.UnitTest
 
             Assert.AreEqual(factTree, deserializedFactTree);
             Assert.AreEqual(
-                factTree.Facts.ElementAt(1).Memento.Predecessors.ElementAt(0).IsPivot,
-                deserializedFactTree.Facts.ElementAt(1).Memento.Predecessors.ElementAt(0).IsPivot);
+                ((IdentifiedFactMemento)factTree.Facts.ElementAt(1)).Memento.Predecessors.ElementAt(0).IsPivot,
+                ((IdentifiedFactMemento)deserializedFactTree.Facts.ElementAt(1)).Memento.Predecessors.ElementAt(0).IsPivot);
+        }
+
+        [TestMethod]
+        public void BinarySerializationIsSmall()
+        {
+            FactTreeMemento factTree = new FactTreeMemento(0);
+            factTree.Add(new IdentifiedFactMemento(
+                new FactID { key = 1L },
+                new FactMemento(TYPE_Identity)
+                {
+                    Data = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString())
+                }
+            ));
+            factTree.Add(new IdentifiedFactMemento(
+                new FactID { key = 2L },
+                new FactMemento(TYPE_EnableToastNotification)
+                {
+                    Data = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString())
+                }
+                .AddPredecessor(
+                    new RoleMemento(TYPE_EnableToastNotification, "identity", TYPE_Identity, true),
+                    new FactID { key = 1L },
+                    true
+                )
+            ));
+            byte[] binarySerialized = Serialize(factTree);
+
+            Assert.AreEqual(240, binarySerialized.Length);
         }
 
         private static byte[] Serialize(FactTreeMemento factTree)

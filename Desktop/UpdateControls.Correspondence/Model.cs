@@ -217,7 +217,7 @@ namespace UpdateControls.Correspondence
             }
             else
             {
-                return messageBody.Get(factId).Memento;
+                return ((IdentifiedFactMemento)messageBody.Get(factId)).Memento;
             }
         }
 

@@ -2,20 +2,14 @@
 
 namespace UpdateControls.Correspondence.Mementos
 {
-    public class IdentifiedFactMemento
+    public class IdentifiedFactMemento : IdentifiedFactBase
     {
-        private FactID _id;
-        private FactMemento _memento;
+        private readonly FactMemento _memento;
 
-        public IdentifiedFactMemento(FactID id, FactMemento memento)
+        public IdentifiedFactMemento(FactID id, FactMemento memento) :
+            base(id)
         {
-            _id = id;
             _memento = memento;
-        }
-
-        public FactID Id
-        {
-            get { return _id; }
         }
 
         public FactMemento Memento
@@ -25,7 +19,7 @@ namespace UpdateControls.Correspondence.Mementos
 
         public override int GetHashCode()
         {
-            return _id.GetHashCode() * 37 + _memento.GetHashCode();
+            return Id.GetHashCode() * 37 + _memento.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -35,7 +29,7 @@ namespace UpdateControls.Correspondence.Mementos
             IdentifiedFactMemento that = obj as IdentifiedFactMemento;
             if (that == null)
                 return false;
-            return _id.Equals(that._id) && _memento.Equals(that._memento);
+            return Id.Equals(that.Id) && _memento.Equals(that._memento);
         }
     }
 }

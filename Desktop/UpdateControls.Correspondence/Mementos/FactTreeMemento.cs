@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence.Mementos
     public class FactTreeMemento
     {
         private long _databaseId;
-        private List<IdentifiedFactMemento> _facts = new List<IdentifiedFactMemento>();
+        private List<IdentifiedFactBase> _facts = new List<IdentifiedFactBase>();
 
         public FactTreeMemento(long databaseId)
         {
@@ -19,7 +19,7 @@ namespace UpdateControls.Correspondence.Mementos
             get { return _databaseId; }
         }
 
-        public IEnumerable<IdentifiedFactMemento> Facts
+        public IEnumerable<IdentifiedFactBase> Facts
         {
             get { return _facts; }
         }
@@ -29,12 +29,12 @@ namespace UpdateControls.Correspondence.Mementos
             return _facts.Any(f => f.Id.Equals(factId));
         }
 
-        public IdentifiedFactMemento Get(FactID factId)
+        public IdentifiedFactBase Get(FactID factId)
         {
             return _facts.FirstOrDefault(f => f.Id.Equals(factId));
         }
 
-        public void Add(IdentifiedFactMemento identifiedFact)
+        public void Add(IdentifiedFactBase identifiedFact)
         {
             _facts.Add(identifiedFact);
         }

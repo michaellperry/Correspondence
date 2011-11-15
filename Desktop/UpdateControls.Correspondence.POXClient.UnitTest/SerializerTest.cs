@@ -3,12 +3,18 @@ using System.IO;
 using System.Xml.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.POXClient.Contract;
+using UpdateControls.Correspondence.Mementos;
+using System.Text;
 
 namespace UpdateControls.Correspondence.POXClient.UnitTest
 {
     [TestClass]
     public class SerializerTest
     {
+        private CorrespondenceFactType TYPE_IdentityService = new CorrespondenceFactType("FacetedWorlds.Reversi.Model.IdentityService", 1);
+        private CorrespondenceFactType TYPE_Identity = new CorrespondenceFactType("FacetedWorlds.Reversi.Model.Identity", 1);
+        private CorrespondenceFactType TYPE_EnableToastNotification = new CorrespondenceFactType("FacetedWorlds.Reversi.Model.EnableToastNotification", 1);
+
         [TestMethod]
         public void CanSerializeGetRequest()
         {
@@ -83,6 +89,40 @@ namespace UpdateControls.Correspondence.POXClient.UnitTest
                 "  <ClientGuid>25a0ff9b-478c-4bf7-8ce5-0e87832f0ff5</ClientGuid>\r\n" +
                 "</c:GetRequest>",
                 getRequestXml);
+        }
+
+        [TestMethod]
+        public void XMLSerializationIsBig()
+        {
+            MementoToContractTranslator translator = new MementoToContractTranslator(0);
+            translator.AddFact(new IdentifiedFactMemento(
+                new FactID { key = 1L },
+                new FactMemento(TYPE_Identity)
+                {
+                    Data = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString())
+                }
+            ));
+            translator.AddFact(new IdentifiedFactMemento(
+                new FactID { key = 2L },
+                new FactMemento(TYPE_EnableToastNotification)
+                {
+                    Data = Encoding.UTF8.GetBytes(Guid.NewGuid().ToString())
+                }
+                .AddPredecessor(
+                    new RoleMemento(TYPE_EnableToastNotification, "identity", TYPE_Identity, true),
+                    new FactID { key = 1L },
+                    true
+                )
+            ));
+            XmlSerializerNamespaces namespaces = new XmlSerializerNamespaces();
+            namespaces.Add("c", "http://correspondence.updatecontrols.com/pox/1.0");
+            XmlSerializer getRequestSerializer = new XmlSerializer(typeof(FactTree));
+            MemoryStream outputStream = new MemoryStream();
+            getRequestSerializer.Serialize(outputStream, translator.TargetFactTree, namespaces);
+
+            byte[] xmlSerialized = outputStream.ToArray();
+
+            Assert.AreEqual(391, xmlSerialized.Length);
         }
 
         private void ShouldEqual(string expected, string actual)

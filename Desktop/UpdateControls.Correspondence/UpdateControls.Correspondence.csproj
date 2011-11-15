@@ -78,6 +78,8 @@
     <Compile Include="FieldSerializer\BinaryHelper.cs" />
     <Compile Include="Mementos\Crc32.cs" />
     <Compile Include="Mementos\GetResultMemento.cs" />
+    <Compile Include="Mementos\IdentifiedFactBase.cs" />
+    <Compile Include="Mementos\IdentifiedFactRemote.cs" />
     <Compile Include="Mementos\PivotMemento.cs" />
     <Compile Include="Mementos\UnpublishMemento.cs" />
     <Compile Include="Networking\AsynchronousNetwork.cs" />

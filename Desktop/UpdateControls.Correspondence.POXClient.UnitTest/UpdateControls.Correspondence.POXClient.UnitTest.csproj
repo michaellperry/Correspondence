@@ -63,6 +63,10 @@
       <Project>{52085345-E9DB-4FA2-9FB0-8C1F89F6C7D3}</Project>
       <Name>UpdateControls.Correspondence.POXClient %28Desktop\UpdateControls.Correspondence.POXClient%29</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
+      <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>
+      <Name>UpdateControls.Correspondence %28Desktop\UpdateControls.Correspondence%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -38,15 +38,15 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             short factCount = (short)factTreeMemento.Facts.Count();
             BinaryHelper.WriteShort(factCount, factWriter);
             foreach (var fact in factTreeMemento.Facts)
-                SerializeFact(fact, factWriter);
+                SerializeFact((IdentifiedFactMemento)fact, factWriter);
         }
 
         private void CollectFactTypesAndRoles(FactTreeMemento factTreeMemento)
         {
             foreach (var fact in factTreeMemento.Facts)
             {
-                AddFactType(fact.Memento.FactType);
-                foreach (var predecessor in fact.Memento.Predecessors)
+                AddFactType(((IdentifiedFactMemento)fact).Memento.FactType);
+                foreach (var predecessor in ((IdentifiedFactMemento)fact).Memento.Predecessors)
                 {
                     AddFactType(predecessor.Role.DeclaringType);
                     AddRole(predecessor.Role);
