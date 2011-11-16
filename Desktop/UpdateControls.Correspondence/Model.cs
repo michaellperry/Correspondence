@@ -228,22 +228,9 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-                foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+                foreach (IdentifiedFactBase identifiedFact in messageBody.Facts)
                 {
-                    FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
-                    translatedMemento.Data = identifiedFact.Memento.Data;
-                    translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
-                        .Select(remote =>
-                        {
-                            FactID localFactId;
-                            return !localIdByRemoteId.TryGetValue(remote.ID, out localFactId)
-                                ? null
-                                : new PredecessorMemento(remote.Role, localFactId, remote.IsPivot);
-                        })
-                        .Where(pred => pred != null));
-
-                    FactID localId = AddFactMemento(peerId, translatedMemento, invalidatedQueries);
-
+                    FactID localId = ReceiveFact(identifiedFact, peerId, invalidatedQueries, localIdByRemoteId);
                     FactID remoteId = identifiedFact.Id;
                     localIdByRemoteId.Add(remoteId, localId);
                 }
@@ -251,6 +238,32 @@ namespace UpdateControls.Correspondence
 
             foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries.Keys)
                 invalidatedQuery.Invalidate();
+        }
+
+        private FactID ReceiveFact(IdentifiedFactBase identifiedFact, int peerId, Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries, IDictionary<FactID, FactID> localIdByRemoteId)
+        {
+            if (identifiedFact is IdentifiedFactMemento)
+            {
+                IdentifiedFactMemento identifiedFactMemento = (IdentifiedFactMemento)identifiedFact;
+                FactMemento translatedMemento = new FactMemento(identifiedFactMemento.Memento.FactType);
+                translatedMemento.Data = identifiedFactMemento.Memento.Data;
+                translatedMemento.AddPredecessors(identifiedFactMemento.Memento.Predecessors
+                    .Select(remote =>
+                    {
+                        FactID localFactId;
+                        return !localIdByRemoteId.TryGetValue(remote.ID, out localFactId)
+                            ? null
+                            : new PredecessorMemento(remote.Role, localFactId, remote.IsPivot);
+                    })
+                    .Where(pred => pred != null));
+
+                return AddFactMemento(peerId, translatedMemento, invalidatedQueries);
+            }
+            else
+            {
+                IdentifiedFactRemote identifiedFactRemote = (IdentifiedFactRemote)identifiedFact;
+                return _storageStrategy.GetFactIDFromShare(peerId, identifiedFactRemote.RemoteId);
+            }
         }
 
         public CorrespondenceFact GetFactByID(FactID id)

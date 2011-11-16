@@ -67,6 +67,7 @@
     <Compile Include="CaptureTest.cs" />
     <Compile Include="ChallengeTest.cs" />
     <Compile Include="FieldSerializerTest.cs" />
+    <Compile Include="MockCommunicationStrategy.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\Machine.cs" />
     <Compile Include="Model\Model.generated.cs">
@@ -84,6 +85,7 @@
     <Compile Include="QueryDefinitionTest.cs" />
     <Compile Include="RecordingCommunicationStrategy.cs" />
     <Compile Include="RedundantFactsTest.cs" />
+    <Compile Include="RemoteIdTest.cs" />
     <Compile Include="TwoPlayerGameTest.cs" />
     <Compile Include="UnpublishTest.cs" />
     <Compile Include="VersionTest.cs" />
