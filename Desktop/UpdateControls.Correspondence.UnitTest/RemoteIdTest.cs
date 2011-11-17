@@ -24,11 +24,13 @@ namespace UpdateControls.Correspondence.UnitTest
             ));
 
             Model.Game game = null;
-            Community community = new Community(new MemoryStorageStrategy())
+            MemoryStorageStrategy storage = new MemoryStorageStrategy();
+            Community community = new Community(storage)
                 .AddCommunicationStrategy(new MockCommunicationStrategy(messageBody))
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => game);
             game = community.AddFact(new Model.Game());
+            storage.SaveShare(1, new FactID { key = 42 }, new FactID { key = 1 });
 
             community.Synchronize();
 

@@ -15,6 +15,7 @@ namespace UpdateControls.Correspondence.Memory
         private IDictionary<int, TimestampID> _outgoingTimestampByPeer = new Dictionary<int,TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
         private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
+        private IDictionary<ShareKey, FactID> _shareTable = new Dictionary<ShareKey, FactID>();
 
         private Guid _clientGuid = Guid.NewGuid();
 
@@ -194,12 +195,17 @@ namespace UpdateControls.Correspondence.Memory
 
         public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
         {
-            throw new NotImplementedException();
+            ShareKey key = new ShareKey(peerId, remoteFactId);
+            FactID localId;
+            if (_shareTable.TryGetValue(key, out localId))
+                return localId;
+
+            throw new CorrespondenceException(String.Format("Share not found for peer {0} and remote fact {1}.", peerId, remoteFactId.key));
         }
 
         public void SaveShare(int peerId, FactID remoteFactId, FactID localFactId)
         {
-            throw new NotImplementedException();
+            _shareTable[new ShareKey(peerId, remoteFactId)] = localFactId;
         }
 
         public IEnumerable<NamedFactMemento> LoadAllNamedFacts()
