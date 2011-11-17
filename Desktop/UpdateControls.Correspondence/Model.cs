@@ -167,10 +167,10 @@ namespace UpdateControls.Correspondence
 			{
 				if (message.FactId.key > timestamp.Key)
 					timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
-                FactMemento newFact = AddToFactTree(result, message.FactId);
+                FactMemento newFact = AddToFactTree(result, message.FactId, peerId);
 
                 FactMetadata factMetadata;
-                if (_metadataByFactType.TryGetValue(newFact.FactType, out factMetadata))
+                if (newFact != null && _metadataByFactType.TryGetValue(newFact.FactType, out factMetadata))
                 {
                     IEnumerable<CorrespondenceFactType> convertableTypes = factMetadata.ConvertableTypes;
                     foreach (CorrespondenceFactType convertableType in convertableTypes)
@@ -199,19 +199,27 @@ namespace UpdateControls.Correspondence
 		}
 
 
-        public FactMemento AddToFactTree(FactTreeMemento messageBody, FactID factId)
+        public FactMemento AddToFactTree(FactTreeMemento messageBody, FactID factId, int peerId)
         {
             if (!messageBody.Contains(factId))
             {
                 CorrespondenceFact fact = GetFactByID(factId);
                 if (fact != null)
                 {
-                    FactMemento factMemento = CreateMementoFromFact(fact);
-                    foreach (PredecessorMemento predecessor in factMemento.Predecessors)
-                        AddToFactTree(messageBody, predecessor.ID);
-                    messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
+                    FactID remoteId;
+                    if (_storageStrategy.GetRemoteId(factId, peerId, out remoteId))
+                    {
+                        messageBody.Add(new IdentifiedFactRemote(factId, remoteId));
+                    }
+                    else
+                    {
+                        FactMemento factMemento = CreateMementoFromFact(fact);
+                        foreach (PredecessorMemento predecessor in factMemento.Predecessors)
+                            AddToFactTree(messageBody, predecessor.ID, peerId);
+                        messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
 
-                    return factMemento;
+                        return factMemento;
+                    }
                 }
                 return null;
             }
@@ -257,7 +265,10 @@ namespace UpdateControls.Correspondence
                     })
                     .Where(pred => pred != null));
 
-                return AddFactMemento(peerId, translatedMemento, invalidatedQueries);
+                FactID localId = AddFactMemento(peerId, translatedMemento, invalidatedQueries);
+                _storageStrategy.SaveShare(peerId, identifiedFact.Id, localId);
+
+                return localId;
             }
             else
             {

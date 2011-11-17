@@ -38,14 +38,24 @@ namespace UpdateControls.Correspondence.Memory
         public void Post(FactTreeMemento messageBody, List<UnpublishMemento> unpublishedMessages)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-            foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+            foreach (IdentifiedFactBase identifiedFact in messageBody.Facts)
             {
-                FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
-                translatedMemento.Data = identifiedFact.Memento.Data;
-                translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
-                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
                 FactID localId;
-                _repository.Save(translatedMemento, 0, out localId);
+                if (identifiedFact is IdentifiedFactMemento)
+                {
+                    FactMemento memento = ((IdentifiedFactMemento)identifiedFact).Memento;
+                    FactMemento translatedMemento = new FactMemento(memento.FactType);
+                    translatedMemento.Data = memento.Data;
+                    translatedMemento.AddPredecessors(memento.Predecessors
+                        .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
+                    _repository.Save(translatedMemento, 0, out localId);
+                }
+                else
+                {
+                    // I am remote to the sender, so my local ID is his remote ID.
+                    var identifiedFactRemote = (IdentifiedFactRemote)identifiedFact;
+                    localId = identifiedFactRemote.RemoteId;
+                }
                 FactID remoteId = identifiedFact.Id;
                 localIdByRemoteId.Add(remoteId, localId);
             }
@@ -61,15 +71,25 @@ namespace UpdateControls.Correspondence.Memory
         private FactID? FindExistingFact(FactID remotePivotId, FactTreeMemento messageBody)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
-            foreach (IdentifiedFactMemento identifiedFact in messageBody.Facts)
+            foreach (IdentifiedFactBase identifiedFact in messageBody.Facts)
             {
-                FactMemento translatedMemento = new FactMemento(identifiedFact.Memento.FactType);
-                translatedMemento.Data = identifiedFact.Memento.Data;
-                translatedMemento.AddPredecessors(identifiedFact.Memento.Predecessors
-                    .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
                 FactID localId;
-                if (!_repository.FindExistingFact(translatedMemento, out localId))
-                    return null;
+                if (identifiedFact is IdentifiedFactMemento)
+                {
+                    FactMemento memento = ((IdentifiedFactMemento)identifiedFact).Memento;
+                    FactMemento translatedMemento = new FactMemento(memento.FactType);
+                    translatedMemento.Data = memento.Data;
+                    translatedMemento.AddPredecessors(memento.Predecessors
+                        .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
+                    if (!_repository.FindExistingFact(translatedMemento, out localId))
+                        return null;
+                }
+                else
+                {
+                    // I am remote to the sender, so my local ID is his remote ID.
+                    var identifiedFactRemote = (IdentifiedFactRemote)identifiedFact;
+                    localId = identifiedFactRemote.RemoteId;
+                }
                 FactID remoteId = identifiedFact.Id;
                 localIdByRemoteId.Add(remoteId, localId);
             }

@@ -34,6 +34,7 @@ namespace UpdateControls.Correspondence.Strategy
         // Networking.
         int SavePeer(string protocolName, string peerName);
         FactID GetFactIDFromShare(int peerId, FactID remoteFactId);
+        bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId);
         void SaveShare(int peerId, FactID remoteFactId, FactID localFactId);
         IEnumerable<NamedFactMemento> LoadAllNamedFacts();
     }

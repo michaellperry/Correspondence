@@ -869,5 +869,11 @@ namespace UpdateControls.Correspondence.SSCE
                 session.Command.Parameters.Clear();
             }
         }
+
+
+        public bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

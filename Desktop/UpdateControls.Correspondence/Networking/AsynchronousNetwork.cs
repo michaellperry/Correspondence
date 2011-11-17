@@ -129,19 +129,21 @@ namespace UpdateControls.Correspondence.Networking
 
         public void Receive()
         {
-            FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-            List<FactID> pivotIds = new List<FactID>();
-            lock (this)
+            bool receiving = false;
+            foreach (AsynchronousServerProxy serverProxy in _serverProxies)
             {
-                _depPushSubscriptions.OnGet();
-                GetPivots(pivotTree, pivotIds);
-            }
-
-            bool anyPivots = pivotIds.Any();
-            if (anyPivots)
-            {
-                foreach (AsynchronousServerProxy serverProxy in _serverProxies)
+                FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+                List<FactID> pivotIds = new List<FactID>();
+                lock (this)
                 {
+                    _depPushSubscriptions.OnGet();
+                    GetPivots(pivotTree, pivotIds, serverProxy.PeerId);
+                }
+
+                bool anyPivots = pivotIds.Any();
+                if (anyPivots)
+                {
+                    receiving = true;
                     List<PivotMemento> pivots = new List<PivotMemento>();
                     foreach (FactID pivotId in pivotIds)
                     {
@@ -174,7 +176,7 @@ namespace UpdateControls.Correspondence.Networking
 
             lock (this)
             {
-                _receiving.Value = anyPivots;
+                _receiving.Value = receiving;
             }
         }
 
@@ -188,7 +190,7 @@ namespace UpdateControls.Correspondence.Networking
 				var pushSubscriptions =
 					from serverProxy in _serverProxies
 					from pivot in pivots
-					select bin.Extract(new PushSubscriptionProxy(_model, serverProxy.CommunicationStrategy, pivot));
+					select bin.Extract(new PushSubscriptionProxy(_model, serverProxy, pivot));
 
 				_pushSubscriptions = pushSubscriptions.ToList();
 
@@ -199,7 +201,7 @@ namespace UpdateControls.Correspondence.Networking
 			}
 		}
 
-        private void GetPivots(FactTreeMemento pivotTree, List<FactID> pivotIds)
+        private void GetPivots(FactTreeMemento pivotTree, List<FactID> pivotIds, int peerId)
         {
             foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
             {
@@ -209,7 +211,7 @@ namespace UpdateControls.Correspondence.Networking
                         continue;
 
                     FactID pivotId = pivot.ID;
-                    _model.AddToFactTree(pivotTree, pivotId);
+                    _model.AddToFactTree(pivotTree, pivotId, peerId);
                     pivotIds.Add(pivotId);
                 }
             }

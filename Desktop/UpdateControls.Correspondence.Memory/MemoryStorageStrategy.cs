@@ -12,10 +12,10 @@ namespace UpdateControls.Correspondence.Memory
         private List<FactRecord> _factTable = new List<FactRecord>();
         private List<PeerRecord> _peerTable = new List<PeerRecord>();
         private List<MessageMemento> _messageTable = new List<MessageMemento>();
-        private IDictionary<int, TimestampID> _outgoingTimestampByPeer = new Dictionary<int,TimestampID>();
+        private readonly IDictionary<int, TimestampID> _outgoingTimestampByPeer = new Dictionary<int, TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
+        private List<ShareRecord> _shareTable = new List<ShareRecord>();
         private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
-        private IDictionary<ShareKey, FactID> _shareTable = new Dictionary<ShareKey, FactID>();
 
         private Guid _clientGuid = Guid.NewGuid();
 
@@ -195,17 +195,33 @@ namespace UpdateControls.Correspondence.Memory
 
         public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
         {
-            ShareKey key = new ShareKey(peerId, remoteFactId);
-            FactID localId;
-            if (_shareTable.TryGetValue(key, out localId))
-                return localId;
+            var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.RemoteFactId.Equals(remoteFactId));
+            if (share != null)
+                return share.LocalFactId;
 
             throw new CorrespondenceException(String.Format("Share not found for peer {0} and remote fact {1}.", peerId, remoteFactId.key));
         }
 
+        public bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId)
+        {
+            var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.LocalFactId.Equals(localFactId));
+            if (share != null)
+            {
+                remoteFactId = share.RemoteFactId;
+                return true;
+            }
+            remoteFactId = new FactID();
+            return false;
+        }
+
         public void SaveShare(int peerId, FactID remoteFactId, FactID localFactId)
         {
-            _shareTable[new ShareKey(peerId, remoteFactId)] = localFactId;
+            _shareTable.Add(new ShareRecord
+            {
+                PeerId = peerId,
+                RemoteFactId = remoteFactId,
+                LocalFactId = localFactId
+            });
         }
 
         public IEnumerable<NamedFactMemento> LoadAllNamedFacts()

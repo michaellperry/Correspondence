@@ -109,7 +109,7 @@ namespace UpdateControls.Correspondence.Networking
 
                         FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
                         FactID pivotId = pivot.ID;
-                        _model.AddToFactTree(pivotTree, pivotId);
+                        _model.AddToFactTree(pivotTree, pivotId, serverProxy.PeerId);
                         TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
                         GetResultMemento result = serverProxy.CommunicationStrategy.Get(pivotTree, pivotId, timestamp);
                         if (result.FactTree.Facts.Any())

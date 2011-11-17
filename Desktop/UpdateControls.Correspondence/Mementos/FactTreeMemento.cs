@@ -34,9 +34,10 @@ namespace UpdateControls.Correspondence.Mementos
             return _facts.FirstOrDefault(f => f.Id.Equals(factId));
         }
 
-        public void Add(IdentifiedFactBase identifiedFact)
+        public FactTreeMemento Add(IdentifiedFactBase identifiedFact)
         {
             _facts.Add(identifiedFact);
+            return this;
         }
 
         public override int GetHashCode()

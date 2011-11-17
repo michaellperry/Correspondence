@@ -8,17 +8,17 @@ namespace UpdateControls.Correspondence.Networking
 	{
 		private const long ClientDatabasId = 0;
 
-		private Model _model;
-		private IAsynchronousCommunicationStrategy _strategy;
-		private CorrespondenceFact _pivot;
+		private readonly Model _model;
+        private readonly AsynchronousServerProxy _serverProxy;
+        private readonly CorrespondenceFact _pivot;
 		private IPushSubscription _pushSubscription = null;
-
-		public PushSubscriptionProxy(Model model, IAsynchronousCommunicationStrategy strategy, CorrespondenceFact pivot)
-		{
-			_model = model;
-			_strategy = strategy;
-			_pivot = pivot;
-		}
+  
+        public PushSubscriptionProxy(Model model, AsynchronousServerProxy serverProxy, CorrespondenceFact pivot)
+        {
+            _model = model;
+            _serverProxy = serverProxy;
+            _pivot = pivot;
+        }
 
 		public void Subscribe()
 		{
@@ -26,8 +26,8 @@ namespace UpdateControls.Correspondence.Networking
 			{
 				FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
 				FactID pivotId = _pivot.ID;
-				_model.AddToFactTree(pivotTree, pivotId);
-				_pushSubscription = _strategy.SubscribeForPush(pivotTree, pivotId, _model.ClientDatabaseGuid);
+				_model.AddToFactTree(pivotTree, pivotId, _serverProxy.PeerId);
+				_pushSubscription = _serverProxy.CommunicationStrategy.SubscribeForPush(pivotTree, pivotId, _model.ClientDatabaseGuid);
 			}
 		}
 
@@ -38,12 +38,12 @@ namespace UpdateControls.Correspondence.Networking
 			PushSubscriptionProxy that = obj as PushSubscriptionProxy;
 			if (that == null)
 				return false;
-			return this._strategy == that._strategy && this._pivot == that._pivot;
+			return this._serverProxy == that._serverProxy && this._pivot == that._pivot;
 		}
 
 		public override int GetHashCode()
 		{
-			return _strategy.GetHashCode() * 37 + _pivot.GetHashCode();
+			return _serverProxy.GetHashCode() * 37 + _pivot.GetHashCode();
 		}
 
 		public void Dispose()

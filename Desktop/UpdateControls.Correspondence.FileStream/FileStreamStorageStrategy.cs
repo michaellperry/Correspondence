@@ -299,5 +299,11 @@ namespace UpdateControls.Correspondence.FileStream
             IncomingTimestampStore.DeleteAll(filePath);
             OutgoingTimestampStore.DeleteAll(filePath);
         }
+
+
+        public bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
