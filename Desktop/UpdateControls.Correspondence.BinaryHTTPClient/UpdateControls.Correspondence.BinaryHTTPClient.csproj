@@ -44,7 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryHTTPAsynchronousCommunicationStrategy.cs" />
+    <Compile Include="BinaryRequest.cs" />
+    <Compile Include="BinaryResponse.cs" />
+    <Compile Include="FactTimestamp.cs" />
     <Compile Include="FactTreeSerlializer.cs" />
+    <Compile Include="HTTPConfiguration.cs" />
+    <Compile Include="IHTTPConfigurationProvider.cs" />
+    <Compile Include="BinaryHTTPRequest.cs" />
+    <Compile Include="BinaryHTTPAsynchronousCommunicationStrategy.PushNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

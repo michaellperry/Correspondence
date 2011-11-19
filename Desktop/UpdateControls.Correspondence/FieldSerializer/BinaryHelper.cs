@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Text;
 
 namespace UpdateControls.Correspondence.FieldSerializer
 {
@@ -10,6 +8,16 @@ namespace UpdateControls.Correspondence.FieldSerializer
     {
         // Don't include byte order mark, and throw on invalid encodings.
         public static readonly UTF8Encoding Encoding = new UTF8Encoding(false, true);
+
+        public static void WriteByte(byte value, BinaryWriter output)
+        {
+            output.Write(value);
+        }
+
+        public static byte ReadByte(BinaryReader input)
+        {
+            return input.ReadByte();
+        }
 
         public static void WriteChar(char value, BinaryWriter output)
         {

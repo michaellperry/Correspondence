@@ -9,8 +9,6 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 {
     public class FactTreeSerlializer
     {
-        private const int FACT_TREE_VERSION = 1;
-
         private List<CorrespondenceFactType> _factTypes = new List<CorrespondenceFactType>();
         private List<RoleMemento> _roles = new List<RoleMemento>();
 
@@ -18,7 +16,6 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
         {
             CollectFactTypesAndRoles(factTreeMemento);
 
-            BinaryHelper.WriteInt(FACT_TREE_VERSION, factWriter);
             BinaryHelper.WriteLong(factTreeMemento.DatabaseId, factWriter);
 
             BinaryHelper.WriteShort((short)_factTypes.Count, factWriter);
@@ -38,18 +35,26 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             short factCount = (short)factTreeMemento.Facts.Count();
             BinaryHelper.WriteShort(factCount, factWriter);
             foreach (var fact in factTreeMemento.Facts)
-                SerializeFact((IdentifiedFactMemento)fact, factWriter);
+            {
+                if (fact is IdentifiedFactMemento)
+                    SerializeIdentifiedFactMemento((IdentifiedFactMemento)fact, factWriter);
+                else
+                    SerializeIdentifiedFactRemote((IdentifiedFactRemote)fact, factWriter);
+            }
         }
 
         private void CollectFactTypesAndRoles(FactTreeMemento factTreeMemento)
         {
             foreach (var fact in factTreeMemento.Facts)
             {
-                AddFactType(((IdentifiedFactMemento)fact).Memento.FactType);
-                foreach (var predecessor in ((IdentifiedFactMemento)fact).Memento.Predecessors)
+                if (fact is IdentifiedFactMemento)
                 {
-                    AddFactType(predecessor.Role.DeclaringType);
-                    AddRole(predecessor.Role);
+                    AddFactType(((IdentifiedFactMemento)fact).Memento.FactType);
+                    foreach (var predecessor in ((IdentifiedFactMemento)fact).Memento.Predecessors)
+                    {
+                        AddFactType(predecessor.Role.DeclaringType);
+                        AddRole(predecessor.Role);
+                    }
                 }
             }
         }
@@ -90,9 +95,10 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             return _roles[roleId];
         }
 
-        private void SerializeFact(IdentifiedFactMemento factMemento, BinaryWriter factWriter)
+        private void SerializeIdentifiedFactMemento(IdentifiedFactMemento factMemento, BinaryWriter factWriter)
         {
             BinaryHelper.WriteLong(factMemento.Id.key, factWriter);
+            BinaryHelper.WriteBoolean(true, factWriter);
             BinaryHelper.WriteShort(GetFactTypeId(factMemento.Memento.FactType), factWriter);
             short dataSize = factMemento.Memento.Data == null ? (short)0 : (short)(factMemento.Memento.Data.Length);
             BinaryHelper.WriteShort(dataSize, factWriter);
@@ -109,12 +115,15 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             }
         }
 
+        private void SerializeIdentifiedFactRemote(IdentifiedFactRemote identifiedFactRemote, BinaryWriter factWriter)
+        {
+            BinaryHelper.WriteLong(identifiedFactRemote.Id.key, factWriter);
+            BinaryHelper.WriteBoolean(false, factWriter);
+            BinaryHelper.WriteLong(identifiedFactRemote.RemoteId.key, factWriter);
+        }
+
         public FactTreeMemento DeserializeFactTree(BinaryReader factReader)
         {
-            int factTreeVersion = BinaryHelper.ReadInt(factReader);
-            if (factTreeVersion != FACT_TREE_VERSION)
-                throw new CorrespondenceException(String.Format("This application cannot read a version {0} fact tree.", factTreeVersion));
-
             long databaseId = BinaryHelper.ReadLong(factReader);
             FactTreeMemento factTreeMemento = new FactTreeMemento(databaseId);
 
@@ -142,14 +151,25 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             return factTreeMemento;
         }
 
-        private IdentifiedFactMemento DeserlializeFact(BinaryReader factReader)
+        private IdentifiedFactBase DeserlializeFact(BinaryReader factReader)
         {
             long factId;
+            bool isMemento;
+
+            factId = BinaryHelper.ReadLong(factReader);
+            isMemento = BinaryHelper.ReadBoolean(factReader);
+            if (isMemento)
+                return DeserlializeIdentifiedFactMemento(factReader, factId);
+            else
+                return DeserializeIdentifiedFactRemote(factReader, factId);
+        }
+
+        private IdentifiedFactMemento DeserlializeIdentifiedFactMemento(BinaryReader factReader, long factId)
+        {
             short dataSize;
             byte[] data;
             short predecessorCount;
 
-            factId = BinaryHelper.ReadLong(factReader);
             CorrespondenceFactType factType = GetFactType(BinaryHelper.ReadShort(factReader));
             dataSize = BinaryHelper.ReadShort(factReader);
             data = dataSize > 0 ? factReader.ReadBytes(dataSize) : new byte[0];
@@ -174,6 +194,14 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             }
 
             return new IdentifiedFactMemento(new FactID { key = factId }, factMemento);
+        }
+
+        private IdentifiedFactRemote DeserializeIdentifiedFactRemote(BinaryReader factReader, long factId)
+        {
+            long remoteFactId;
+
+            remoteFactId = BinaryHelper.ReadLong(factReader);
+            return new IdentifiedFactRemote(new FactID { key = factId }, new FactID { key = remoteFactId });
         }
     }
 }

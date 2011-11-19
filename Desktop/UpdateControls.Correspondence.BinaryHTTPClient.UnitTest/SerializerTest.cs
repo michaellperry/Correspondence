@@ -87,6 +87,14 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.UnitTest
         }
 
         [TestMethod]
+        public void CanSerializeARemoteFactId()
+        {
+            FactTreeMemento factTree = new FactTreeMemento(0)
+                .Add(new IdentifiedFactRemote(new FactID { key = 1 }, new FactID { key = 42 }));
+            FactTreeMemento deserializedFactTree = Deserialize(Serialize(factTree));
+        }
+
+        [TestMethod]
         public void BinarySerializationIsSmall()
         {
             FactTreeMemento factTree = new FactTreeMemento(0);
@@ -111,7 +119,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.UnitTest
             ));
             byte[] binarySerialized = Serialize(factTree);
 
-            Assert.AreEqual(240, binarySerialized.Length);
+            Assert.AreEqual(238, binarySerialized.Length);
         }
 
         private static byte[] Serialize(FactTreeMemento factTree)
