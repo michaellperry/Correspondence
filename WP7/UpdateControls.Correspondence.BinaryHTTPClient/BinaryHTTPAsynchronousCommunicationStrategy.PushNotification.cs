@@ -4,6 +4,7 @@ using Microsoft.Phone.Notification;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using System.IO;
+using UpdateControls.Correspondence.FieldSerializer;
 
 namespace UpdateControls.Correspondence.BinaryHTTPClient
 {
@@ -115,67 +116,14 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             {
                 using (BinaryReader factReader = new BinaryReader(e.Notification.Body))
                 {
-                    FactTreeMemento factTreeMemento = ReadFactTreeFromStorage(factReader);
+                    byte version = BinaryHelper.ReadByte(factReader);
+                    if (version != 1)
+                        throw new CorrespondenceException(String.Format("Unknown fact tree version {0}.", version));
+
+                    FactTreeMemento factTreeMemento = new FactTreeSerlializer().DeserializeFactTree(factReader);
                     MessageReceived(factTreeMemento);
                 }
             }
-        }
-
-        private static FactTreeMemento ReadFactTreeFromStorage(BinaryReader factReader)
-        {
-            FactTreeMemento factTreeMemento = new FactTreeMemento(0);
-            int factCount = factReader.ReadInt32();
-            for (int i = 0; i < factCount; i++)
-            {
-                factTreeMemento.Add(ReadFactFromStorage(factReader));
-            }
-            return factTreeMemento;
-        }
-
-        private static IdentifiedFactMemento ReadFactFromStorage(BinaryReader factReader)
-        {
-            long factId;
-            string typeName;
-            int version;
-            short dataSize;
-            byte[] data;
-            short predecessorCount;
-
-            factId = factReader.ReadInt64();
-            typeName = factReader.ReadString();
-            version = factReader.ReadInt32();
-            dataSize = factReader.ReadInt16();
-            data = dataSize > 0 ? factReader.ReadBytes(dataSize) : new byte[0];
-            predecessorCount = factReader.ReadInt16();
-
-            FactMemento factMemento = new FactMemento(new CorrespondenceFactType(typeName, version));
-            factMemento.Data = data;
-            for (short i = 0; i < predecessorCount; i++)
-            {
-                string declaringTypeName;
-                int declaringTypeVersion;
-                string roleName;
-                bool isPivot;
-                long predecessorFactId;
-
-                declaringTypeName = factReader.ReadString();
-                declaringTypeVersion = factReader.ReadInt32();
-                roleName = factReader.ReadString();
-                isPivot = factReader.ReadBoolean();
-                predecessorFactId = factReader.ReadInt64();
-
-                factMemento.AddPredecessor(
-                    new RoleMemento(
-                        new CorrespondenceFactType(declaringTypeName, declaringTypeVersion),
-                        roleName,
-                        null,
-                        isPivot),
-                    new FactID() { key = predecessorFactId },
-                    isPivot
-                );
-            }
-
-            return new IdentifiedFactMemento(new FactID { key = factId }, factMemento);
         }
     }
 }
