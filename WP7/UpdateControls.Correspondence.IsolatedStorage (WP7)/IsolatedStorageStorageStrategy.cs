@@ -274,7 +274,6 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public void SaveShare(int peerId, FactID remoteFactId, FactID localFactId)
         {
-            throw new NotImplementedException();
         }
 
         public IEnumerable<NamedFactMemento> LoadAllNamedFacts()
@@ -338,7 +337,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
 
         public bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId)
         {
-            throw new NotImplementedException();
+            remoteFactId = new FactID();
+            return false;
         }
     }
 }
