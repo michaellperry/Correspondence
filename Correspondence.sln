@@ -145,7 +145,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Desktop\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{ADF2412E-F0E2-48C7-A2F3-DDCE3D2E6943}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Silverlight4\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{E0D29520-BE58-42EF-8FC8-A414273533B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Silverlight 4\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{E0D29520-BE58-42EF-8FC8-A414273533B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "WP7\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{9544480E-B425-459C-9CA7-6F8B57F1A97F}"
 EndProject
@@ -270,10 +270,10 @@ Global
 		SccProjectTopLevelParentUniqueName30 = Correspondence.sln
 		SccProjectName30 = Desktop/UpdateControls.Correspondence.BinaryHTTPClient
 		SccLocalPath30 = Desktop\\UpdateControls.Correspondence.BinaryHTTPClient
-		SccProjectUniqueName31 = Silverlight4\\UpdateControls.Correspondence.BinaryHTTPClient\\UpdateControls.Correspondence.BinaryHTTPClient.csproj
+		SccProjectUniqueName31 = Silverlight\u00204\\UpdateControls.Correspondence.BinaryHTTPClient\\UpdateControls.Correspondence.BinaryHTTPClient.csproj
 		SccProjectTopLevelParentUniqueName31 = Correspondence.sln
-		SccProjectName31 = Silverlight4/UpdateControls.Correspondence.BinaryHTTPClient
-		SccLocalPath31 = Silverlight4\\UpdateControls.Correspondence.BinaryHTTPClient
+		SccProjectName31 = Silverlight\u00204/UpdateControls.Correspondence.BinaryHTTPClient
+		SccLocalPath31 = Silverlight\u00204\\UpdateControls.Correspondence.BinaryHTTPClient
 		SccProjectUniqueName32 = WP7\\UpdateControls.Correspondence.BinaryHTTPClient\\UpdateControls.Correspondence.BinaryHTTPClient.csproj
 		SccProjectTopLevelParentUniqueName32 = Correspondence.sln
 		SccProjectName32 = WP7/UpdateControls.Correspondence.BinaryHTTPClient
