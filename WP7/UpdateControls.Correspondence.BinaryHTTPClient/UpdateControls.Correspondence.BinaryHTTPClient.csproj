@@ -77,13 +77,11 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\HTTPConfiguration.cs">
       <Link>HTTPConfiguration.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\IHTTPConfigurationProvider.cs">
-      <Link>IHTTPConfigurationProvider.cs</Link>
-    </Compile>
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BinaryHTTPAsynchronousCommunicationStrategy.PushNotification.cs" />
+    <Compile Include="IHTTPConfigurationProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ToastNotificationObserver.cs" />
     <Compile Include="WindowsPhonePushSubscription.cs" />
