@@ -175,6 +175,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{AF
 		NuGet\Desktop\UnitTest\content\ModelTest.cs.pp = NuGet\Desktop\UnitTest\content\ModelTest.cs.pp
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{40B1960C-7433-4F35-9C51-B025CD3982D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{D08B1222-EE35-45D5-B57D-1DDCFDF14AA9}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Web\AllInOne\Correspondence.Web.AllInOne.nuspec = NuGet\Web\AllInOne\Correspondence.Web.AllInOne.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{49D99AE5-2149-4091-97DE-505BBCF8554C}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Web\App\Correspondence.Web.App.nuspec = NuGet\Web\App\Correspondence.Web.App.nuspec
+		NuGet\Web\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Web\App\content\ViewModels\MainViewModel.cs.pp
+		NuGet\Web\App\content\Models\NavigationModel.cs.pp = NuGet\Web\App\content\Models\NavigationModel.cs.pp
+		NuGet\Web\App\content\POXConfigurationProvider.cs.pp = NuGet\Web\App\content\POXConfigurationProvider.cs.pp
+		NuGet\Web\App\content\Readme.txt.pp = NuGet\Web\App\content\Readme.txt.pp
+		NuGet\Web\App\content\SynchronizationService.cs.pp = NuGet\Web\App\content\SynchronizationService.cs.pp
+		NuGet\Web\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Web\App\content\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{61740D33-5BCB-4988-A25B-31FE4255C796}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Web\UnitTest\Correspondence.Web.UnitTest.nuspec = NuGet\Web\UnitTest\Correspondence.Web.UnitTest.nuspec
+		NuGet\Web\UnitTest\content\ModelTest.cs.pp = NuGet\Web\UnitTest\content\ModelTest.cs.pp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 34
@@ -489,6 +513,7 @@ Global
 		{80C00D5E-131E-4742-B1A4-4F361C1F5B33} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{96475E40-26FC-4419-AD3E-2289D4013AD4} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{9154FF18-27A1-4F10-B394-D65662DD1336} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{40B1960C-7433-4F35-9C51-B025CD3982D0} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{182C379A-33E6-43DC-BF14-249146C73CDF} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
@@ -498,5 +523,8 @@ Global
 		{A9F7A16D-593D-4172-ADE0-1FB5265D77A1} = {9154FF18-27A1-4F10-B394-D65662DD1336}
 		{981FB2D8-7E43-483E-A2FA-21C2B47272B3} = {9154FF18-27A1-4F10-B394-D65662DD1336}
 		{AF631367-0A08-4024-984E-C4C8E53393C0} = {9154FF18-27A1-4F10-B394-D65662DD1336}
+		{D08B1222-EE35-45D5-B57D-1DDCFDF14AA9} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
+		{49D99AE5-2149-4091-97DE-505BBCF8554C} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
+		{61740D33-5BCB-4988-A25B-31FE4255C796} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
 	EndGlobalSection
 EndGlobal
