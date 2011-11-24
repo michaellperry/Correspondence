@@ -6,3 +6,6 @@ nuget pack WindowsPhone\AllInOne\Correspondence.WindowsPhone.AllInOne.nuspec
 nuget pack Silverlight\UnitTest\Correspondence.Silverlight.UnitTest.nuspec
 nuget pack Silverlight\App\Correspondence.Silverlight.App.nuspec
 nuget pack Silverlight\AllInOne\Correspondence.Silverlight.AllInOne.nuspec
+nuget pack Desktop\UnitTest\Correspondence.Desktop.UnitTest.nuspec
+nuget pack Desktop\App\Correspondence.Desktop.App.nuspec
+nuget pack Desktop\AllInOne\Correspondence.Desktop.AllInOne.nuspec
