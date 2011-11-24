@@ -55,7 +55,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj">
       <Project>{ADF2412E-F0E2-48C7-A2F3-DDCE3D2E6943}</Project>
-      <Name>UpdateControls.Correspondence.BinaryHTTPClient</Name>
+      <Name>UpdateControls.Correspondence.BinaryHTTPClient %28Desktop\UpdateControls.Correspondence.BinaryHTTPClient%29</Name>
     </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{04178710-8BE6-416F-9D41-909258CDE242}</Project>

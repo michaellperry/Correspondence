@@ -151,6 +151,30 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SQL", "Desktop\UpdateControls.Correspondence.SQL\UpdateControls.Correspondence.SQL.csproj", "{F9D9A782-F06E-48B7-B869-BC8D7913C256}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{9154FF18-27A1-4F10-B394-D65662DD1336}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{A9F7A16D-593D-4172-ADE0-1FB5265D77A1}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Desktop\AllInOne\Correspondence.Desktop.AllInOne.nuspec = NuGet\Desktop\AllInOne\Correspondence.Desktop.AllInOne.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{981FB2D8-7E43-483E-A2FA-21C2B47272B3}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Desktop\App\Correspondence.Desktop.App.nuspec = NuGet\Desktop\App\Correspondence.Desktop.App.nuspec
+		NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp
+		NuGet\Desktop\App\content\Models\NavigationModel.cs.pp = NuGet\Desktop\App\content\Models\NavigationModel.cs.pp
+		NuGet\Desktop\App\content\POXConfigurationProvider.cs.pp = NuGet\Desktop\App\content\POXConfigurationProvider.cs.pp
+		NuGet\Desktop\App\content\Readme.txt.pp = NuGet\Desktop\App\content\Readme.txt.pp
+		NuGet\Desktop\App\content\SynchronizationService.cs.pp = NuGet\Desktop\App\content\SynchronizationService.cs.pp
+		NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{AF631367-0A08-4024-984E-C4C8E53393C0}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Desktop\UnitTest\Correspondence.Desktop.UnitTest.nuspec = NuGet\Desktop\UnitTest\Correspondence.Desktop.UnitTest.nuspec
+		NuGet\Desktop\UnitTest\content\ModelTest.cs.pp = NuGet\Desktop\UnitTest\content\ModelTest.cs.pp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 34
@@ -464,11 +488,15 @@ Global
 		{CB489F9B-C65C-4443-B7F8-DA30818C1BAF} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{80C00D5E-131E-4742-B1A4-4F361C1F5B33} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{96475E40-26FC-4419-AD3E-2289D4013AD4} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{9154FF18-27A1-4F10-B394-D65662DD1336} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{182C379A-33E6-43DC-BF14-249146C73CDF} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{5E544625-E5E4-4C47-A2DD-8A6E42C074A8} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
 		{1F9D8122-A895-4BB2-968B-AE50B06367CC} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
 		{A1C3E34F-E21D-4CF1-95C9-23A098354BE1} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
+		{A9F7A16D-593D-4172-ADE0-1FB5265D77A1} = {9154FF18-27A1-4F10-B394-D65662DD1336}
+		{981FB2D8-7E43-483E-A2FA-21C2B47272B3} = {9154FF18-27A1-4F10-B394-D65662DD1336}
+		{AF631367-0A08-4024-984E-C4C8E53393C0} = {9154FF18-27A1-4F10-B394-D65662DD1336}
 	EndGlobalSection
 EndGlobal
