@@ -71,9 +71,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A-656F-46C5-AC58-EC984A4DDB42}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Model\Correspondence.Model.nuspec = NuGet\Model\Correspondence.Model.nuspec
-		NuGet\Model\content\Models\Identity.cs.pp = NuGet\Model\content\Models\Identity.cs.pp
-		NuGet\Model\content\Models\Model.fact.pp = NuGet\Model\content\Models\Model.fact.pp
-		NuGet\Model\content\Models\Model.tt = NuGet\Model\content\Models\Model.tt
+		NuGet\Model\content\Identity.cs.pp = NuGet\Model\content\Identity.cs.pp
+		NuGet\Model\content\Model.fact.pp = NuGet\Model\content\Model.fact.pp
+		NuGet\Model\content\Model.tt = NuGet\Model\content\Model.tt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CB489F9B-C65C-4443-B7F8-DA30818C1BAF}"

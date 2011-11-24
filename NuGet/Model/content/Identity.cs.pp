@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UpdateControls.Correspondence;
 
-namespace $rootnamespace$.Models
+namespace $rootnamespace$
 {
     public partial class Identity
     {

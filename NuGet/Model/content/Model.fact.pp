@@ -1,4 +1,4 @@
-namespace $rootnamespace$.Models;
+namespace $rootnamespace$;
 
 fact Identity {
 key:
