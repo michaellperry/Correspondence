@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7715413B-3D7F-481A-B8CA-9AEA8CBF542A}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UpdateControls.Correspondence.IsolatedStorage</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence.IsolatedStorage</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="mscorlib.extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\Duration.cs">
+      <Link>Duration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\FactTypeStore.cs">
+      <Link>FactTypeStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\IncomingTimestampStore.cs">
+      <Link>IncomingTimestampStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\IsolatedStorageStorageStrategy.cs">
+      <Link>IsolatedStorageStorageStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\MessageRecord.cs">
+      <Link>MessageRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\MessageStore.cs">
+      <Link>MessageStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\OutgoingTimestampStore.cs">
+      <Link>OutgoingTimestampStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerIdentifier.cs">
+      <Link>PeerIdentifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerPivotIdentifier.cs">
+      <Link>PeerPivotIdentifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerRecord.cs">
+      <Link>PeerRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerStore.cs">
+      <Link>PeerStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\QueryExecutor.cs">
+      <Link>QueryExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\RoleStore.cs">
+      <Link>RoleStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\SavedFactStore.cs">
+      <Link>SavedFactStore.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj">
+      <Project>{1B2D81DD-FE1E-4B43-89E9-9B5B1A080366}</Project>
+      <Name>UpdateControls.Correspondence.Data %28WP71\UpdateControls.Correspondence.Data%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
+      <Project>{95494E4C-1505-41A3-89B5-36C55040CCC0}</Project>
+      <Name>UpdateControls.Correspondence %28WP71\UpdateControls.Correspondence%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
