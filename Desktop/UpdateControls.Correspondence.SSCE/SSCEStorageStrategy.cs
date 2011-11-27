@@ -92,7 +92,27 @@ namespace UpdateControls.Correspondence.SSCE
 
 		public Guid ClientGuid
 		{
-			get { throw new NotImplementedException(); }
+            get
+            {
+                using (var session = new Session(_connectionString))
+                {
+                    session.Command.CommandText = "SELECT ClientGUID FROM Client";
+                    object result = session.Command.ExecuteScalar();
+                    if (result == null)
+                    {
+                        Guid clientGuid = Guid.NewGuid();
+                        session.Command.CommandText = "INSERT INTO Client (ClientGUID) VALUES (@ClientGUID)";
+                        AddParameter(session.Command, "@ClientGUID", clientGuid);
+                        session.Command.ExecuteNonQuery();
+                        session.Command.Parameters.Clear();
+                        return clientGuid;
+                    }
+                    else
+                    {
+                        return (Guid)result;
+                    }
+                }
+            }
 		}
 
         public bool GetID(string factName, out FactID id)
@@ -873,7 +893,24 @@ namespace UpdateControls.Correspondence.SSCE
 
         public bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId)
         {
-            throw new NotImplementedException();
+            using (var session = new Session(_connectionString))
+            {
+                session.Command.CommandText = "SELECT RemoteFactID FROM Share WHERE FKFactID=@LocalFactID AND FKPeerID=@PeerID";
+                AddParameter(session.Command, "@LocalFactID", localFactId.key);
+                AddParameter(session.Command, "@PeerId", peerId);
+                object result = session.Command.ExecuteScalar();
+                session.Command.Parameters.Clear();
+                if (result == null)
+                {
+                    remoteFactId = new FactID();
+                    return false;
+                }
+                else
+                {
+                    remoteFactId = new FactID { key = (long)result };
+                    return true;
+                }
+            }
         }
     }
 }

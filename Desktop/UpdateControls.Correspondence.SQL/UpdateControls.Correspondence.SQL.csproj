@@ -74,8 +74,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\Correspondence.0.sql" />
-    <Content Include="Scripts\Correspondence.1.sql" />
+    <EmbeddedResource Include="Scripts\Correspondence.0.sql" />
+    <EmbeddedResource Include="Scripts\Correspondence.1.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\UpdateControls.Correspondence\Mallardsoft.snk">

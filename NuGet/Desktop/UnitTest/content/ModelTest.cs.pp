@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Memory;
@@ -11,49 +10,49 @@ namespace $rootnamespace$
     [TestClass]
     public class ModelTest
     {
-        private Community _community;
-        private Community _otherCommunity;
-        //private Identity _identity;
-        //private Identity _otherIdentity;
+        private Community _communityFlynn;
+        private Community _communityAlan;
+        private Identity _identityFlynn;
+        private Identity _identityAlan;
 
         [TestInitialize]
         public void Initialize()
         {
             var sharedCommunication = new MemoryCommunicationStrategy();
-            _community = new Community(new MemoryStorageStrategy())
+            _communityFlynn = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
-                //.Register<CorrespondenceModel>()
-                //.Subscribe(() => _identity)
+                .Register<CorrespondenceModel>()
+                .Subscribe(() => _identityFlynn)
 				;
-            _otherCommunity = new Community(new MemoryStorageStrategy())
+            _communityAlan = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
-                //.Register<CorrespondenceModel>()
-                //.Subscribe(() => _otherIdentity)
+                .Register<CorrespondenceModel>()
+                .Subscribe(() => _identityAlan)
 				;
 
-            //_identity = _community.AddFact(new Identity("mike"));
-            //_otherIdentity = _otherCommunity.AddFact(new Identity("mike"));
+            _identityFlynn = _communityFlynn.AddFact(new Identity("flynn"));
+            _identityAlan = _communityAlan.AddFact(new Identity("alan"));
 		}
 
-        //[TestMethod]
-        //public void ThroughtIsInitiallyNull()
-        //{
-        //    Assert.IsNull(_otherIdentity.Me.Value);
-        //}
+        [TestMethod]
+        public void InitiallyNoMessages()
+        {
+            Assert.IsFalse(_identityFlynn.Messages.Any());
+        }
 
-        //[TestMethod]
-        //public void OtherDeviceReceivesThougths()
-        //{
-        //    _identity.Me = _community.AddFact(new Thought());
-        //
-        //    Synchronize();
-        //
-        //    Assert.IsNotNull(_otherIdentity.Me.Value);
-        //}
+        [TestMethod]
+        public void AlanSendsFlynnAMessage()
+        {
+            _identityAlan.SendMessage("flynn", "Reindeer flotilla");
+
+            Synchronize();
+
+            Assert.AreEqual("Reindeer flotilla", _identityFlynn.Messages.Single().Text);
+        }
 
         private void Synchronize()
         {
-            while (_community.Synchronize() || _otherCommunity.Synchronize()) ;
+            while (_communityFlynn.Synchronize() || _communityAlan.Synchronize()) ;
         }
 	}
 }

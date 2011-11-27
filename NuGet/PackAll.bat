@@ -9,3 +9,6 @@ nuget pack Silverlight\AllInOne\Correspondence.Silverlight.AllInOne.nuspec
 nuget pack Desktop\UnitTest\Correspondence.Desktop.UnitTest.nuspec
 nuget pack Desktop\App\Correspondence.Desktop.App.nuspec
 nuget pack Desktop\AllInOne\Correspondence.Desktop.AllInOne.nuspec
+nuget pack Web\UnitTest\Correspondence.Web.UnitTest.nuspec
+nuget pack Web\App\Correspondence.Web.App.nuspec
+nuget pack Web\AllInOne\Correspondence.Web.AllInOne.nuspec

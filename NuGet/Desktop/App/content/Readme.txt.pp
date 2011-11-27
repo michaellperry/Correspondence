@@ -1,15 +1,14 @@
 Create a ViewModelLocator in App.xaml:
 
 <Application ...
-             xmlns:vm="clr-namespace:$rootnamespace$.ViewModels"
-             >
+             xmlns:vm="clr-namespace:$rootnamespace$.ViewModels">
 
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator"/>
     </Application.Resources>
 
-Reverence it in MainPage.xaml:
+Reverence it in MainWindow.xaml:
 
-<UserControl 
-    ...
-    DataContext="{Binding Main, Source={StaticResource Locator}}">
+<Window 
+        ...
+        DataContext="{Binding Main, Source={StaticResource Locator}}">

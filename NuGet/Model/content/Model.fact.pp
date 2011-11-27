@@ -5,10 +5,22 @@ key:
     string anonymousId;
 
 query:
+	Message* messages {
+		Message m : m.recipient = this
+	}
+
     DisableToastNotification* isToastNotificationDisabled {
         DisableToastNotification d : d.identity = this
             where not d.isReenabled
     }
+}
+
+fact Message {
+key:
+	unique;
+	Identity sender;
+	publish Identity recipient;
+	string text;
 }
 
 fact DisableToastNotification {

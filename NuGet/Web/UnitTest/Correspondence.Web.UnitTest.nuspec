@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>Correspondence.Desktop.UnitTest</id>
-    <version>1.2.1.0</version>
+    <id>Correspondence.Web.UnitTest</id>
+    <version>1.3.0.0</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
-    <description>Add to a unit test application. Adds a multiple-client test suite.</description>
+    <description>Add to an MVC 3 unit test application. Adds a multiple-client test suite.</description>
     <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>
     <projectUrl>http://correspondence.codeplex.com/</projectUrl>
     <iconUrl>http://qedcode.com/images/logo32.png</iconUrl>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.2.1.0"/>
+      <dependency id="Correspondence" version="1.3.0.0"/>
     </dependencies>
   </metadata>
 </package>

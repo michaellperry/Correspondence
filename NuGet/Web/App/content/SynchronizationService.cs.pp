@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Threading;
 using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.IsolatedStorage;
-using UpdateControls.Correspondence.POXClient;
+using UpdateControls.Correspondence.BinaryHTTPClient;
+using UpdateControls.Correspondence.SSCE;
 using $rootnamespace$.Models;
 
 namespace $rootnamespace$
@@ -21,9 +22,10 @@ namespace $rootnamespace$
 
         public void Initialize()
         {
-            POXConfigurationProvider configurationProvider = new POXConfigurationProvider();
-            _community = new Community(IsolatedStorageStorageStrategy.Load())
-                .AddAsynchronousCommunicationStrategy(new POXAsynchronousCommunicationStrategy(configurationProvider))
+            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
+            string correspondenceDatabase = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CorrespondenceApp", "$rootnamespace$", "Correspondence.sdf");
+            _community = new Community(new SSCEStorageStrategy(correspondenceDatabase))
+                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _navigationModel.CurrentUser)
                 ;

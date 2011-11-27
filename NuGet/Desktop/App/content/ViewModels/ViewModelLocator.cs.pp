@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using $rootnamespace$.Models;
 using UpdateControls.XAML;
 
@@ -16,7 +17,7 @@ namespace $rootnamespace$.ViewModels
         {
             NavigationModel navigationModel = new NavigationModel();
             _synchronizationService = new SynchronizationService(navigationModel);
-            if (!DesignerProperties.IsInDesignTool)
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
                 _synchronizationService.Initialize();
             _main = new MainViewModel(_synchronizationService.Community, navigationModel, _synchronizationService);
         }
