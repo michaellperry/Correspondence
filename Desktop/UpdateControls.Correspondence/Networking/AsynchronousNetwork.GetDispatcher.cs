@@ -5,9 +5,12 @@ namespace UpdateControls.Correspondence.Networking
 {
     partial class AsynchronousNetwork
     {
-        private static void RunOnUIThread(Action action)
+        private void RunOnUIThread(Action action)
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(action);
+            if (_model.ClientApp)
+                Dispatcher.CurrentDispatcher.BeginInvoke(action);
+            else
+                System.Threading.ThreadPool.QueueUserWorkItem(o => action());
         }
     }
 }

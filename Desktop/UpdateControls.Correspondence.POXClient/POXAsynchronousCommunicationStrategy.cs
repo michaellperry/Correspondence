@@ -59,9 +59,6 @@ namespace UpdateControls.Correspondence.POXClient
                 ex =>
                 {
                     error(ex);
-                    callback(
-                        new FactTreeMemento(pivotTree.DatabaseId),
-                        Enumerable.Empty<PivotMemento>());
                 });
         }
 

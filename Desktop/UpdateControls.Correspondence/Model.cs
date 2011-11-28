@@ -17,6 +17,8 @@ namespace UpdateControls.Correspondence
 
 		private Community _community;
 		private IStorageStrategy _storageStrategy;
+
+        private bool _clientApp = true;
         private IDictionary<CorrespondenceFactType, ICorrespondenceFactFactory> _factoryByType =
             new Dictionary<CorrespondenceFactType, ICorrespondenceFactFactory>();
         private IDictionary<CorrespondenceFactType, List<QueryInvalidator>> _queryInvalidatorsByType =
@@ -35,6 +37,12 @@ namespace UpdateControls.Correspondence
             _community = community;
 			_storageStrategy = storageStrategy;
 		}
+
+        public bool ClientApp
+        {
+            get { return _clientApp; }
+            set { _clientApp = value; }
+        }
 
         public void AddType(CorrespondenceFactType type, ICorrespondenceFactFactory factory, FactMetadata factMetadata)
         {

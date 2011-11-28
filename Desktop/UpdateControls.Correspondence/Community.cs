@@ -27,6 +27,12 @@ namespace UpdateControls.Correspondence
 
 		partial void RegisterDefaultTypes();
 
+        public bool ClientApp
+        {
+            get { return _model.ClientApp; }
+            set { _model.ClientApp = value; }
+        }
+
         public Community AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
         {
             _network.AddCommunicationStrategy(communicationStrategy);

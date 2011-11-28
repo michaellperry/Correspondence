@@ -55,9 +55,6 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 ex =>
                 {
                     error(ex);
-                    callback(
-                        new FactTreeMemento(pivotTree.DatabaseId),
-                        Enumerable.Empty<PivotMemento>());
                 });
         }
 
