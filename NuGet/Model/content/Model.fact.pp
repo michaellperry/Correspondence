@@ -5,36 +5,57 @@ key:
     string anonymousId;
 
 query:
-	Message* messages {
-		Message m : m.recipient = this
+	MessageBoard *messageBoards {
+		Share s : s.identity = this
+		MessageBoard m : m = s.messageBoard
 	}
 
-    DisableToastNotification* isToastNotificationDisabled {
-        DisableToastNotification d : d.identity = this
-            where not d.isReenabled
+    EnableToastNotification* isToastNotificationEnabled {
+        EnableToastNotification e : e.identity = this
+            where not d.isDisabled
     }
+}
+
+fact Share {
+key:
+	publish Identity identity;
+	MessageBoard messageBoard;
+}
+
+fact MessageBoard {
+key:
+	string identifier;
+
+query:
+	Message* messages {
+		Message m : m.Forum = this
+	}
+}
+
+fact Domain {
+key:
 }
 
 fact Message {
 key:
 	unique;
-	Identity sender;
-	publish Identity recipient;
+	publish Forum forum;
+	publish Domain domain;
 	string text;
 }
 
-fact DisableToastNotification {
+fact EnableToastNotification {
 key:
     unique;
     Identity identity;
 
 query:
-    bool isReenabled {
-        exists EnableToastNotification e : e.disable = this
+    bool isDisabled {
+        exists DisableToastNotification d : d.enable = this
     }
 }
 
-fact EnableToastNotification {
+fact DisableToastNotification {
 key:
-    DisableToastNotification* disable;
+    EnableToastNotification* enable;
 }
