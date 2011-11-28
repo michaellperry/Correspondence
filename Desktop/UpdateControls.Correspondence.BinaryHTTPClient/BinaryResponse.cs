@@ -25,6 +25,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 return new SubscribeResponse();
             else if (token == UnsubscribeResponse.Token)
                 return new UnsubscribeResponse();
+            else if (token == InterruptResponse.Token)
+                return new InterruptResponse();
             else
                 throw new CorrespondenceException(String.Format("Unknown token {0}.", token));
         }
@@ -63,5 +65,9 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
     public class UnsubscribeResponse : BinaryResponse
     {
         public static byte Token = 4;
+    }
+    public class InterruptResponse : BinaryResponse
+    {
+        public static byte Token = 5;
     }
 }

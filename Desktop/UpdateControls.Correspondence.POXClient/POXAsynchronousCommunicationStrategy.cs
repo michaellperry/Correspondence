@@ -81,6 +81,10 @@ namespace UpdateControls.Correspondence.POXClient
                 });
         }
 
+        public void Interrupt(Guid clientGuid)
+        {
+        }
+
 		public event Action<FactTreeMemento> MessageReceived;
     }
 }

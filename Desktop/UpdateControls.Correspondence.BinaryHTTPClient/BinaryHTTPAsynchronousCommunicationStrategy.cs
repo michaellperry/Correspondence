@@ -77,6 +77,20 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 });
         }
 
+        public void Interrupt(Guid clientGuid)
+        {
+            InterruptRequest request = new InterruptRequest
+            {
+                Domain = _configuration.APIKey,
+                ClientGuid = clientGuid.ToString()
+            };
+            BinaryHTTPRequest.Begin(
+                _configuration,
+                request,
+                response => { },
+                ex => { });
+        }
+
         public event Action<FactTreeMemento> MessageReceived;
     }
 }

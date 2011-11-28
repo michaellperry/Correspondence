@@ -14,7 +14,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public void Write(BinaryWriter requestWriter)
         {
-            BinaryHelper.WriteByte(BinaryRequest.Version, requestWriter);
+            BinaryHelper.WriteByte(Version, requestWriter);
             BinaryHelper.WriteString(Domain, requestWriter);
             WriteInternal(requestWriter);
         }
@@ -32,7 +32,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         protected override void WriteInternal(BinaryWriter requestWriter)
         {
-            BinaryHelper.WriteByte(GetManyRequest.Token, requestWriter);
+            BinaryHelper.WriteByte(Token, requestWriter);
             new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
             BinaryHelper.WriteShort((short)PivotIds.Count, requestWriter);
             foreach (FactTimestamp factTimestamp in PivotIds)
@@ -53,7 +53,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         protected override void WriteInternal(BinaryWriter requestWriter)
         {
-            BinaryHelper.WriteByte(PostRequest.Token, requestWriter);
+            BinaryHelper.WriteByte(Token, requestWriter);
             new FactTreeSerlializer().SerlializeFactTree(MessageBody, requestWriter);
             BinaryHelper.WriteString(ClientGuid, requestWriter);
         }
@@ -69,7 +69,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         protected override void WriteInternal(BinaryWriter requestWriter)
         {
-            BinaryHelper.WriteByte(SubscribeRequest.Token, requestWriter);
+            BinaryHelper.WriteByte(Token, requestWriter);
             new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
             BinaryHelper.WriteLong(PivotId, requestWriter);
             BinaryHelper.WriteString(DeviceUri, requestWriter);
@@ -86,10 +86,22 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         protected override void WriteInternal(BinaryWriter requestWriter)
         {
-            BinaryHelper.WriteByte(UnsubscribeRequest.Token, requestWriter);
+            BinaryHelper.WriteByte(Token, requestWriter);
             new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
             BinaryHelper.WriteLong(PivotId, requestWriter);
             BinaryHelper.WriteString(DeviceUri, requestWriter);
+        }
+    }
+    public class InterruptRequest : BinaryRequest
+    {
+        public static byte Token = 5;
+
+        public string ClientGuid { get; set; }
+
+        protected override void WriteInternal(BinaryWriter requestWriter)
+        {
+            BinaryHelper.WriteByte(Token, requestWriter);
+            BinaryHelper.WriteString(ClientGuid, requestWriter);
         }
     }
 }

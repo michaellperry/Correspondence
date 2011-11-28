@@ -199,6 +199,15 @@ namespace UpdateControls.Correspondence.Networking
                     pushSubscription.Subscribe();
 				}
 			}
+
+            List<AsynchronousServerProxy> serverProxies = _serverProxies;
+            foreach (var serverProxy in serverProxies)
+            {
+                if (serverProxy.CommunicationStrategy.IsLongPolling)
+                    serverProxy.CommunicationStrategy.Interrupt(_model.ClientDatabaseGuid);
+            }
+
+            BeginReceiving();
 		}
 
         private void GetPivots(FactTreeMemento pivotTree, List<FactID> pivotIds, int peerId)
