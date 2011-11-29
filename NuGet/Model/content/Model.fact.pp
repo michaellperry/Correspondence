@@ -12,7 +12,7 @@ query:
 
     EnableToastNotification* isToastNotificationEnabled {
         EnableToastNotification e : e.identity = this
-            where not d.isDisabled
+            where not e.isDisabled
     }
 }
 
@@ -24,11 +24,11 @@ key:
 
 fact MessageBoard {
 key:
-	string identifier;
+	string topic;
 
 query:
 	Message* messages {
-		Message m : m.Forum = this
+		Message m : m.messageBoard = this
 	}
 }
 
@@ -39,7 +39,7 @@ key:
 fact Message {
 key:
 	unique;
-	publish Forum forum;
+	publish MessageBoard messageBoard;
 	publish Domain domain;
 	string text;
 }

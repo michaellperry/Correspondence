@@ -24,31 +24,36 @@ namespace $rootnamespace$
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _identityFlynn)
+                .Subscribe(() => _identityFlynn.MessageBoards)
 				;
             _communityAlan = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _identityAlan)
-				;
+                .Subscribe(() => _identityAlan.MessageBoards)
+                ;
 
             _identityFlynn = _communityFlynn.AddFact(new Identity("flynn"));
             _identityAlan = _communityAlan.AddFact(new Identity("alan"));
-		}
+            _identityFlynn.JoinMessageBoard("The Grid");
+            _identityAlan.JoinMessageBoard("The Grid");
+        }
 
         [TestMethod]
         public void InitiallyNoMessages()
         {
-            Assert.IsFalse(_identityFlynn.Messages.Any());
+            Assert.IsFalse(_identityAlan.MessageBoards.Single().Messages.Any());
         }
 
         [TestMethod]
-        public void AlanSendsFlynnAMessage()
+        public void FlynnSendsAMessage()
         {
-            _identityAlan.SendMessage("flynn", "Reindeer flotilla");
+            _identityFlynn.MessageBoards.Single().SendMessage("Reindeer flotilla");
 
             Synchronize();
 
-            Assert.AreEqual("Reindeer flotilla", _identityFlynn.Messages.Single().Text);
+            Message message = _identityAlan.MessageBoards.Single().Messages.Single();
+            Assert.AreEqual("Reindeer flotilla", message.Text);
         }
 
         private void Synchronize()

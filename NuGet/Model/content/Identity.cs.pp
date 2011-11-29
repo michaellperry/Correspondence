@@ -6,26 +6,26 @@ namespace $rootnamespace$
 {
     public partial class Identity
     {
-        public void SendMessage(string recipientId, string text)
-        {
-            Identity remoteIdentity = Community.AddFact(new Identity(recipientId));
-            Community.AddFact(new Message(this, remoteIdentity, text));
-        }
-
         public bool ToastNotificationEnabled
         {
-            get { return !IsToastNotificationDisabled.Any(); }
+            get { return IsToastNotificationEnabled.Any(); }
             set
             {
-                if (IsToastNotificationDisabled.Any() && value)
+                if (IsToastNotificationEnabled.Any() && !value)
                 {
-                    Community.AddFact(new EnableToastNotification(IsToastNotificationDisabled));
+                    Community.AddFact(new DisableToastNotification(IsToastNotificationEnabled));
                 }
-                else if (!IsToastNotificationDisabled.Any() && !value)
+                else if (!IsToastNotificationEnabled.Any() && value)
                 {
-                    Community.AddFact(new DisableToastNotification(this));
+                    Community.AddFact(new EnableToastNotification(this));
                 }
             }
+        }
+
+        public void JoinMessageBoard(string topic)
+        {
+            MessageBoard messageBoard = Community.AddFact(new MessageBoard(topic));
+            Community.AddFact(new Share(this, messageBoard));
         }
     }
 }
