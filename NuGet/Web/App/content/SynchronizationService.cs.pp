@@ -1,34 +1,31 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Windows.Threading;
+using System.Configuration;
+using System.Timers;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
-using UpdateControls.Correspondence.SSCE;
-using $rootnamespace$.Models;
+using UpdateControls.Correspondence.SQL;
+using UpdateControls.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace $rootnamespace$
 {
     public class SynchronizationService
     {
-        private NavigationModel _navigationModel;
         private Community _community;
-
-        public SynchronizationService(NavigationModel navigationModel)
-        {
-            _navigationModel = navigationModel;
-        }
+        private Domain _theDomain;
 
         public void Initialize()
         {
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
-            string correspondenceDatabase = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CorrespondenceApp", "$rootnamespace$", "Correspondence.sdf");
-            _community = new Community(new SSCEStorageStrategy(correspondenceDatabase))
+            string correspondenceConnectionString = ConfigurationManager.ConnectionStrings["ApplicationServices"].ConnectionString;
+            _community = new Community(new SQLStorageStrategy(correspondenceConnectionString).UpgradeDatabase())
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _navigationModel.CurrentUser)
+                .Subscribe(() => _theDomain)
                 ;
+            _community.ClientApp = false;
+            _theDomain = _community.AddFact(new Domain());
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -36,14 +33,14 @@ namespace $rootnamespace$
                 _community.BeginSending();
             };
 
-            // Periodically resume if there is an error.
-            DispatcherTimer synchronizeTimer = new DispatcherTimer();
-            synchronizeTimer.Tick += delegate
+            // Resume in 5 minutes if there is an error.
+            Timer synchronizeTimer = new Timer();
+            synchronizeTimer.Elapsed += delegate
             {
                 _community.BeginSending();
                 _community.BeginReceiving();
             };
-            synchronizeTimer.Interval = TimeSpan.FromSeconds(60.0);
+            synchronizeTimer.Interval = 5.0 * 60.0 * 1000.0;
             synchronizeTimer.Start();
 
             // And synchronize on startup.
@@ -56,14 +53,19 @@ namespace $rootnamespace$
             get { return _community; }
         }
 
-        public bool Synchronizing
-        {
-            get { return _community.Synchronizing; }
-        }
-
         public Exception LastException
         {
             get { return _community.LastException; }
+        }
+
+        public Identity GetIdentity(string userName)
+        {
+            return _community.AddFact(new Identity(userName));
+        }
+
+        public MessageBoard GetMessageBoard(string topic)
+        {
+            return _community.AddFact(new MessageBoard(topic));
         }
     }
 }

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
-using UpdateControls.Correspondence.POXClient;
-using $rootnamespace$.Models;
+using UpdateControls.Correspondence.BinaryHTTPClient;
 
 namespace $rootnamespace$
 {
@@ -21,7 +20,7 @@ namespace $rootnamespace$
 
         public void Initialize()
         {
-            POXConfigurationProvider configurationProvider = new POXConfigurationProvider();
+            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             _community = new Community(IsolatedStorageStorageStrategy.Load())
                 .AddAsynchronousCommunicationStrategy(new POXAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()

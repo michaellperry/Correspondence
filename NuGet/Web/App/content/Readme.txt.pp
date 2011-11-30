@@ -1,15 +1,19 @@
-Create a ViewModelLocator in App.xaml:
+Create a SynchronizationService in Global.asax.cs:
 
-<Application ...
-             xmlns:vm="clr-namespace:$rootnamespace$.ViewModels"
-             >
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        private static SynchronizationService _synchronizationService = new SynchronizationService();
 
-    <Application.Resources>
-        <vm:ViewModelLocator x:Key="Locator"/>
-    </Application.Resources>
+        public static SynchronizationService SynchronizationService
+        {
+            get { return _synchronizationService; }
+        }
 
-Reverence it in MainPage.xaml:
+		...
 
-<UserControl 
-    ...
-    DataContext="{Binding Main, Source={StaticResource Locator}}">
+        protected void Application_Start()
+        {
+            ...
+            SynchronizationService.Initialize();
+        }
+    }

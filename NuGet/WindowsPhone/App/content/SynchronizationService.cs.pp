@@ -5,8 +5,7 @@ using Microsoft.Phone.Info;
 using Microsoft.Phone.Net.NetworkInformation;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
-using UpdateControls.Correspondence.POXClient;
-using $rootnamespace$.Models;
+using UpdateControls.Correspondence.BinaryHTTPClient;
 
 namespace $rootnamespace$
 {
@@ -17,9 +16,9 @@ namespace $rootnamespace$
 
         public void Initialize()
         {
-            POXConfigurationProvider configurationProvider = new POXConfigurationProvider();
+            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             _community = new Community(IsolatedStorageStorageStrategy.Load())
-                .AddAsynchronousCommunicationStrategy(new POXAsynchronousCommunicationStrategy(configurationProvider))
+                .AddAsynchronousCommunicationStrategy(new HTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _identity)
                 ;
