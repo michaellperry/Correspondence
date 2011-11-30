@@ -233,7 +233,11 @@ namespace UpdateControls.Correspondence
             }
             else
             {
-                return ((IdentifiedFactMemento)messageBody.Get(factId)).Memento;
+                IdentifiedFactBase identifiedFact = messageBody.Get(factId);
+                if (identifiedFact is IdentifiedFactMemento)
+                    return ((IdentifiedFactMemento)identifiedFact).Memento;
+                else
+                    return null;
             }
         }
 
