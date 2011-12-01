@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using $rootnamespace$.Models;
 
 namespace $rootnamespace$.ViewModels
 {

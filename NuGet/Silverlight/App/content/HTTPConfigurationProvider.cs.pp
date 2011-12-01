@@ -10,7 +10,7 @@ namespace $rootnamespace$
         {
             get
             {
-                string address = "http://api.facetedworlds.com/correspondence_server_web/bin";
+                string address = "https://api.facetedworlds.com/correspondence_server_web/bin";
                 string apiKey = "<<Your API key>>";
 				int timeoutSeconds = 30;
                 return new HTTPConfiguration(address, "$rootnamespace$", apiKey, timeoutSeconds);

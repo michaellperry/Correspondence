@@ -70,6 +70,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Model\Correspondence.Model.nuspec = NuGet\Model\Correspondence.Model.nuspec
 		NuGet\Model\content\Identity.cs.pp = NuGet\Model\content\Identity.cs.pp
+		NuGet\Model\content\MessageBoard.cs.pp = NuGet\Model\content\MessageBoard.cs.pp
 		NuGet\Model\content\Model.fact.pp = NuGet\Model\content\Model.fact.pp
 		NuGet\Model\content\Model.tt = NuGet\Model\content\Model.tt
 	EndProjectSection
@@ -88,8 +89,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec = NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec
+		NuGet\WindowsPhone\App\content\HTTPConfigurationProvider.cs.pp = NuGet\WindowsPhone\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\WindowsPhone\App\content\POXConfigurationProvider.cs.pp = NuGet\WindowsPhone\App\content\POXConfigurationProvider.cs.pp
 		NuGet\WindowsPhone\App\content\Readme.txt.pp = NuGet\WindowsPhone\App\content\Readme.txt.pp
 		NuGet\WindowsPhone\App\content\ViewModels\SettingsViewModel.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\SettingsViewModel.cs.pp
 		NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp = NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp
@@ -119,9 +120,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1F9D8122-A895-4BB2-968B-AE50B06367CC}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec = NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec
+		NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp
 		NuGet\Silverlight\App\content\Models\NavigationModel.cs.pp = NuGet\Silverlight\App\content\Models\NavigationModel.cs.pp
-		NuGet\Silverlight\App\content\POXConfigurationProvider.cs.pp = NuGet\Silverlight\App\content\POXConfigurationProvider.cs.pp
 		NuGet\Silverlight\App\content\Readme.txt.pp = NuGet\Silverlight\App\content\Readme.txt.pp
 		NuGet\Silverlight\App\content\SynchronizationService.cs.pp = NuGet\Silverlight\App\content\SynchronizationService.cs.pp
 		NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp
@@ -159,9 +160,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{981FB2D8-7E43-483E-A2FA-21C2B47272B3}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Desktop\App\Correspondence.Desktop.App.nuspec = NuGet\Desktop\App\Correspondence.Desktop.App.nuspec
+		NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp
 		NuGet\Desktop\App\content\Models\NavigationModel.cs.pp = NuGet\Desktop\App\content\Models\NavigationModel.cs.pp
-		NuGet\Desktop\App\content\POXConfigurationProvider.cs.pp = NuGet\Desktop\App\content\POXConfigurationProvider.cs.pp
 		NuGet\Desktop\App\content\Readme.txt.pp = NuGet\Desktop\App\content\Readme.txt.pp
 		NuGet\Desktop\App\content\SynchronizationService.cs.pp = NuGet\Desktop\App\content\SynchronizationService.cs.pp
 		NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp
@@ -183,12 +184,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{49D99AE5-2149-4091-97DE-505BBCF8554C}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Web\App\Correspondence.Web.App.nuspec = NuGet\Web\App\Correspondence.Web.App.nuspec
-		NuGet\Web\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Web\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\Web\App\content\Models\NavigationModel.cs.pp = NuGet\Web\App\content\Models\NavigationModel.cs.pp
-		NuGet\Web\App\content\POXConfigurationProvider.cs.pp = NuGet\Web\App\content\POXConfigurationProvider.cs.pp
+		NuGet\Web\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Web\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Web\App\content\Readme.txt.pp = NuGet\Web\App\content\Readme.txt.pp
 		NuGet\Web\App\content\SynchronizationService.cs.pp = NuGet\Web\App\content\SynchronizationService.cs.pp
-		NuGet\Web\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Web\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{61740D33-5BCB-4988-A25B-31FE4255C796}"

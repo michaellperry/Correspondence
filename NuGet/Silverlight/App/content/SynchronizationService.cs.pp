@@ -5,6 +5,7 @@ using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
 using UpdateControls.Correspondence.BinaryHTTPClient;
+using $rootnamespace$.Models;
 
 namespace $rootnamespace$
 {
@@ -22,7 +23,7 @@ namespace $rootnamespace$
         {
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             _community = new Community(IsolatedStorageStorageStrategy.Load())
-                .AddAsynchronousCommunicationStrategy(new POXAsynchronousCommunicationStrategy(configurationProvider))
+                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _navigationModel.CurrentUser)
                 ;

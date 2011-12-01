@@ -18,7 +18,7 @@ namespace $rootnamespace$
         {
             get
             {
-                string address = "http://api.facetedworlds.com/correspondence_server_web/bin";
+                string address = "https://api.facetedworlds.com/correspondence_server_web/bin";
                 string apiKey = "<<Your API key>>";
                 return new HTTPConfiguration(address, "$rootnamespace$", apiKey);
             }
@@ -26,7 +26,7 @@ namespace $rootnamespace$
 
         public bool IsToastEnabled
         {
-            get { return Identity == null ? false : !Identity.IsToastNotificationDisabled.Any(); }
+            get { return Identity == null ? false : Identity.ToastNotificationEnabled; }
         }
     }
 }

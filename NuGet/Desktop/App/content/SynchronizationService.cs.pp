@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.SSCE;
+using $rootnamespace$.Models;
 
 namespace $rootnamespace$
 {
