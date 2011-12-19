@@ -11,7 +11,7 @@ namespace UpdateControls.Correspondence.Memory
     {
         private List<FactRecord> _factTable = new List<FactRecord>();
         private List<PeerRecord> _peerTable = new List<PeerRecord>();
-        private List<MessageMemento> _messageTable = new List<MessageMemento>();
+        private List<MessageRecord> _messageTable = new List<MessageRecord>();
         private readonly IDictionary<int, TimestampID> _outgoingTimestampByPeer = new Dictionary<int, TimestampID>();
         private IDictionary<PeerPivotIdentifier, TimestampID> _incomingTimestampByPeerAndPivot = new Dictionary<PeerPivotIdentifier, TimestampID>();
         private List<ShareRecord> _shareTable = new List<ShareRecord>();
@@ -68,20 +68,25 @@ namespace UpdateControls.Correspondence.Memory
                 // Store a message for each pivot.
                 _messageTable.AddRange(memento.Predecessors
                     .Where(predecessor => predecessor.IsPivot)
-                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactID)));
+                    .Select(predecessor => new MessageRecord(
+                        new MessageMemento(predecessor.ID, newFactID),
+                        newFactID,
+                        predecessor.Role)));
 
                 // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
                 List<FactID> nonPivots = memento.Predecessors
                     .Where(predecessor => !predecessor.IsPivot)
                     .Select(predecessor => predecessor.ID)
                     .ToList();
-                List<FactID> predecessorsPivots = _messageTable
-                    .Where(message => nonPivots.Contains(message.FactId))
-                    .Select(message => message.PivotId)
+                List<MessageRecord> predecessorsPivots = _messageTable
+                    .Where(message => nonPivots.Contains(message.Message.FactId))
                     .Distinct()
                     .ToList();
                 _messageTable.AddRange(predecessorsPivots
-                    .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID)));
+                    .Select(predecessorPivot => new MessageRecord(
+                        new MessageMemento(predecessorPivot.Message.PivotId, newFactID),
+                        predecessorPivot.AncestorFact,
+                        predecessorPivot.AncestorRole)));
 
                 return true;
             }
@@ -169,33 +174,28 @@ namespace UpdateControls.Correspondence.Memory
         {
             return _messageTable
                 .Where(message =>
-                    message.FactId.key > timestamp.Key &&
+                    message.Message.FactId.key > timestamp.Key &&
                     !_factTable.Any(fact =>
-                        fact.IdentifiedFactMemento.Id.Equals(message.FactId) &&
+                        fact.IdentifiedFactMemento.Id.Equals(message.Message.FactId) &&
                         fact.PeerId == peerId))
+                .Select(message => message.Message)
+                .Distinct()
                 .ToList();
         }
 
         public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
         {
             return _messageTable
-                .Where(message => message.PivotId.Equals(pivotId) && message.FactId.key > timestamp.Key)
-                .Select(message => message.FactId);
+                .Where(message => message.Message.PivotId.Equals(pivotId) && message.Message.FactId.key > timestamp.Key)
+                .Select(message => message.Message.FactId)
+                .Distinct();
         }
 
         public void Unpublish(FactID factId, RoleMemento role)
         {
-            var fact = _factTable.FirstOrDefault(f => f.IdentifiedFactMemento.Id.Equals(factId));
-            if (fact != null)
-            {
-                _messageTable.RemoveAll(message =>
-                    message.FactId.Equals(factId) &&
-                    fact.IdentifiedFactMemento.Memento.Predecessors.Any(predecessor =>
-                        predecessor.Role.Equals(role) &&
-                        predecessor.ID.Equals(message.PivotId)
-                    )
-                );
-            }
+            _messageTable.RemoveAll(message =>
+                message.AncestorFact.Equals(factId) &&
+                message.AncestorRole.Equals(role));
         }
 
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()

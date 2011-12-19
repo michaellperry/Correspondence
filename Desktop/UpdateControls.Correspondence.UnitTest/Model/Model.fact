@@ -119,6 +119,6 @@ key:
 
 fact Outcome {
 key:
-	Game game;
+	publish Game game;
 	Player? winner;
 }

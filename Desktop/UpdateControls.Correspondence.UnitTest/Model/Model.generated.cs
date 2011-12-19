@@ -24,7 +24,7 @@ digraph "UpdateControls.Correspondence.UnitTest.Model"
     Player -> User [color="red"]
     Player -> Game [color="red"]
     Move -> Player
-    Outcome -> Game
+    Outcome -> Game [color="red"]
     Outcome -> Player [label="  ?"]
 }
 **/
@@ -1374,7 +1374,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			_correspondenceFactType,
 			"game",
 			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
-			false));
+			true));
         public static Role RoleWinner = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"winner",

@@ -68,6 +68,9 @@
     <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
       <Link>MemoryStorageStrategy.cs</Link>
     </Compile>
+    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\MessageRecord.cs">
+      <Link>MessageRecord.cs</Link>
+    </Compile>
     <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
       <Link>PeerIdentifier.cs</Link>
     </Compile>
@@ -82,6 +85,9 @@
     </Compile>
     <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\ShareRecord.cs">
       <Link>ShareRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\Silverlight 4\UpdateControls.Correspondence.Memory\ListExtensions.cs">
+      <Link>ListExtensions.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

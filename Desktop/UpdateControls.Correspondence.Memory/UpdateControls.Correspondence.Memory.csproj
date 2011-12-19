@@ -81,6 +81,7 @@
     <Compile Include="FactRecord.cs" />
     <Compile Include="MemoryStorageStrategy.cs" />
     <Compile Include="MemoryCommunicationStrategy.cs" />
+    <Compile Include="MessageRecord.cs" />
     <Compile Include="PeerIdentifier.cs" />
     <Compile Include="PeerPivotIdentifier.cs" />
     <Compile Include="PeerRecord.cs" />
