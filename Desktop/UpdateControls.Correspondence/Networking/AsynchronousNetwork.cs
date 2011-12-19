@@ -86,16 +86,17 @@ namespace UpdateControls.Correspondence.Networking
         }
 
         private void Send()
-		{
+        {
             bool sending = false;
-			foreach (AsynchronousServerProxy serverProxy in _serverProxies)
-			{
-				TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
-                FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId, new List<UnpublishMemento>());
+            foreach (AsynchronousServerProxy serverProxy in _serverProxies)
+            {
+                TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
+                List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
+                FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId, unpublishedMessages);
                 if (messageBodies != null && messageBodies.Facts.Any())
                 {
                     sending = true;
-                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, delegate(bool succeeded)
+                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, unpublishedMessages, delegate(bool succeeded)
                     {
                         if (succeeded)
                         {
@@ -108,13 +109,13 @@ namespace UpdateControls.Correspondence.Networking
                         }
                     }, OnSendError);
                 }
-			}
+            }
 
             lock (this)
             {
                 _sending.Value = sending;
             }
-		}
+        }
 
         public void BeginReceiving()
         {

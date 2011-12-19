@@ -59,36 +59,36 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             }
         }
 
-        private void AddFactType(CorrespondenceFactType factType)
+        public void AddFactType(CorrespondenceFactType factType)
         {
             if (!_factTypes.Contains(factType))
                 _factTypes.Add(factType);
         }
 
-        private void AddRole(RoleMemento role)
+        public void AddRole(RoleMemento role)
         {
             if (!_roles.Contains(role))
                 _roles.Add(role);
         }
 
-        private short GetFactTypeId(CorrespondenceFactType factType)
+        public short GetFactTypeId(CorrespondenceFactType factType)
         {
             return (short)_factTypes.IndexOf(factType);
         }
 
-        private short GetRoleId(RoleMemento role)
+        public short GetRoleId(RoleMemento role)
         {
             return (short)_roles.IndexOf(role);
         }
 
-        private CorrespondenceFactType GetFactType(short factTypeId)
+        public CorrespondenceFactType GetFactType(short factTypeId)
         {
             if (0 > factTypeId || factTypeId >= _factTypes.Count)
                 throw new CorrespondenceException(String.Format("Fact type id {0} is out of range.", factTypeId));
             return _factTypes[factTypeId];
         }
 
-        private RoleMemento GetRole(short roleId)
+        public RoleMemento GetRole(short roleId)
         {
             if (0 > roleId || roleId >= _roles.Count)
                 throw new CorrespondenceException(String.Format("Role id {0} is out of range.", roleId));

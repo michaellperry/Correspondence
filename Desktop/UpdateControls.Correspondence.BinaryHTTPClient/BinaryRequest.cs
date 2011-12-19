@@ -8,7 +8,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 {
     public abstract class BinaryRequest
     {
-        public static byte Version = 1;
+        public static byte Version = 2;
 
         public string Domain { get; set; }
 
@@ -50,12 +50,24 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public FactTreeMemento MessageBody { get; set; }
         public string ClientGuid { get; set; }
+        public List<UnpublishMemento> UnpublishedMessages { get; set; }
 
         protected override void WriteInternal(BinaryWriter requestWriter)
         {
             BinaryHelper.WriteByte(Token, requestWriter);
-            new FactTreeSerlializer().SerlializeFactTree(MessageBody, requestWriter);
+            FactTreeSerlializer factTreeSerlializer = new FactTreeSerlializer();
+            foreach (var unpublishedMessage in UnpublishedMessages)
+            {
+                factTreeSerlializer.AddRole(unpublishedMessage.Role);
+            }
+            factTreeSerlializer.SerlializeFactTree(MessageBody, requestWriter);
             BinaryHelper.WriteString(ClientGuid, requestWriter);
+            BinaryHelper.WriteShort((short)UnpublishedMessages.Count, requestWriter);
+            foreach (var unpublishedMessage in UnpublishedMessages)
+            {
+                BinaryHelper.WriteLong(unpublishedMessage.MessageId.key, requestWriter);
+                BinaryHelper.WriteShort(factTreeSerlializer.GetRoleId(unpublishedMessage.Role), requestWriter);
+            }
         }
     }
     public class SubscribeRequest : BinaryRequest

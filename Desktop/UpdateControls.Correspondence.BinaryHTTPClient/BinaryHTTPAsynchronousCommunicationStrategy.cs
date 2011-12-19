@@ -58,7 +58,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 });
         }
 
-        public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, Action<bool> callback, Action<Exception> error)
+        public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, List<UnpublishMemento> unpublishedMessages, Action<bool> callback, Action<Exception> error)
         {
             PostRequest request = new PostRequest
             {
