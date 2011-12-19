@@ -185,7 +185,17 @@ namespace UpdateControls.Correspondence.Memory
 
         public void Unpublish(FactID factId, RoleMemento role)
         {
-            throw new NotImplementedException();
+            var fact = _factTable.FirstOrDefault(f => f.IdentifiedFactMemento.Id.Equals(factId));
+            if (fact != null)
+            {
+                _messageTable.RemoveAll(message =>
+                    message.FactId.Equals(factId) &&
+                    fact.IdentifiedFactMemento.Memento.Predecessors.Any(predecessor =>
+                        predecessor.Role.Equals(role) &&
+                        predecessor.ID.Equals(message.PivotId)
+                    )
+                );
+            }
         }
 
         public IEnumerable<IdentifiedFactMemento> LoadAllFacts()

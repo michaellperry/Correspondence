@@ -1528,6 +1528,14 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			community.AddQuery(
 				Player._correspondenceFactType,
 				Player.QueryIsNotActive.QueryDefinition);
+			community.AddUnpublisher(
+				Player.RoleUser,
+				Condition.WhereIsEmpty(Player.QueryIsActive)
+				);
+			community.AddUnpublisher(
+				Player.RoleGame,
+				Condition.WhereIsEmpty(Player.QueryIsActive)
+				);
 			community.AddType(
 				Move._correspondenceFactType,
 				new Move.CorrespondenceFactFactory(fieldSerializerByType),

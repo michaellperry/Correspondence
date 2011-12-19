@@ -67,6 +67,23 @@ namespace UpdateControls.Correspondence
                 .InvertQuery(query.Joins);
         }
 
+        public void AddUnpublisher(RoleMemento role, Condition publishCondition)
+        {
+            // Invert the query.
+            var queryInverter = new QueryInverter(role.DeclaringType, delegate(CorrespondenceFactType targetType, QueryDefinition inverse)
+            {
+                // Record the inverse as an unpublisher by the target type.
+                List<Unpublisher> unpublishers;
+                if (!_unpublishersByType.TryGetValue(targetType, out unpublishers))
+                {
+                    unpublishers = new List<Unpublisher>();
+                    _unpublishersByType.Add(targetType, unpublishers);
+                }
+                unpublishers.Add(new Unpublisher(inverse, publishCondition, role));
+            });
+            publishCondition.Accept(queryInverter);
+        }
+
         public IDisposable BeginDuration()
         {
             return _storageStrategy.BeginDuration();
@@ -168,13 +185,13 @@ namespace UpdateControls.Correspondence
         }
 
         public FactTreeMemento GetMessageBodies(ref TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
-		{
-			FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
+        {
+            FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
             IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessagesForServer(peerId, timestamp);
-			foreach (MessageMemento message in recentMessages)
-			{
-				if (message.FactId.key > timestamp.Key)
-					timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
+            foreach (MessageMemento message in recentMessages)
+            {
+                if (message.FactId.key > timestamp.Key)
+                    timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
                 FactMemento newFact = AddToFactTree(result, message.FactId, peerId);
 
                 FactMetadata factMetadata;
@@ -195,16 +212,19 @@ namespace UpdateControls.Correspondence
                                     bool published = conditionEvaluator.Evaluate(messageId, unpublisher.PublishCondition);
                                     if (!published)
                                     {
-                                        unpublishedMessages.Add(new UnpublishMemento(messageId, unpublisher.Role));
+                                        AddToFactTree(result, messageId, peerId);
+                                        UnpublishMemento unpublishMemento = new UnpublishMemento(messageId, unpublisher.Role);
+                                        if (!unpublishedMessages.Contains(unpublishMemento))
+                                            unpublishedMessages.Add(unpublishMemento);
                                     }
                                 }
                             }
                         }
                     }
                 }
-			}
-			return result;
-		}
+            }
+            return result;
+        }
 
 
         public FactMemento AddToFactTree(FactTreeMemento messageBody, FactID factId, int peerId)

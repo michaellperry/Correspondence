@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UpdateControls.Correspondence.Conditions;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
+using System.Linq;
 
 namespace UpdateControls.Correspondence
 {
@@ -35,7 +36,8 @@ namespace UpdateControls.Correspondence
                 else
                 {
                     // Record the partial inverse query because we are stepping up to predecessors.
-                    _recordInverse(_priorType, _inverse.Copy());
+                    if (_inverse.Joins.Any())
+                        _recordInverse(_priorType, _inverse.Copy());
 
                     // TODO: Allow inheritance.
                     //if (!_priorType.Equals(join.Role.TargetType))

@@ -92,7 +92,8 @@ fact Player {
 key:
 	publish User user
         where this.isActive;
-	publish Game game;
+	publish Game game
+        where this.isActive;
 	int index;
 
 query:

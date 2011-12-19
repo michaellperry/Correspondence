@@ -63,6 +63,12 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
+        public Community AddUnpublisher(Role role, Condition publishCondition)
+        {
+            _model.AddUnpublisher(role.RoleMemento, publishCondition);
+            return this;
+        }
+
         public Community Subscribe<T>(Func<IEnumerable<T>> pivots)
             where T : CorrespondenceFact
         {
