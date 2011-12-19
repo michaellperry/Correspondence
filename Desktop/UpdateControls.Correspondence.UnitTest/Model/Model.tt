@@ -303,7 +303,7 @@ namespace <#=targetNamespace.Name#>
 <#      Condition first = predecessor.PublishConditions.First(); #>
 				Condition.WhereIs<#=first.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=first.Type#>.<#=QueryName(first.Name)#>)
 <#        foreach (Condition condition in predecessor.PublishConditions.Skip(1)) { #>
-                .And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=condition.Type#>.<#=QueryName(condition.Name)#>)
+					.And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=condition.Type#>.<#=QueryName(condition.Name)#>)
 <#        } #>
 				);
 <#}#>

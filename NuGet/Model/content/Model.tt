@@ -296,7 +296,18 @@ namespace <#=targetNamespace.Name#>
 			community.AddQuery(
 				<#=c.Name#>._correspondenceFactType,
 				<#=c.Name#>.<#=QueryName(query.Name)#>.QueryDefinition);
-<#}}#>
+<#}#>
+<# foreach (Predecessor predecessor in c.Predecessors.Where(p => p.IsPivot && p.PublishConditions.Any())) { #>
+			community.AddUnpublisher(
+				<#=c.Name#>.<#=RoleName(predecessor.Name)#>,
+<#      Condition first = predecessor.PublishConditions.First(); #>
+				Condition.WhereIs<#=first.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=first.Type#>.<#=QueryName(first.Name)#>)
+<#        foreach (Condition condition in predecessor.PublishConditions.Skip(1)) { #>
+					.And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=condition.Type#>.<#=QueryName(condition.Name)#>)
+<#        } #>
+				);
+<#}#>
+<#}#>
 		}
 	}
 }
