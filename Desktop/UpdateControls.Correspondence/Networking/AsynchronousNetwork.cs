@@ -203,14 +203,17 @@ namespace UpdateControls.Correspondence.Networking
         {
             foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
             {
-                foreach (CorrespondenceFact pivot in subscription.Pivots)
+                if (subscription.Pivots != null)
                 {
-                    if (pivot == null)
-                        continue;
+                    foreach (CorrespondenceFact pivot in subscription.Pivots)
+                    {
+                        if (pivot == null)
+                            continue;
 
-                    FactID pivotId = pivot.ID;
-                    _model.AddToFactTree(pivotTree, pivotId, peerId);
-                    pivotIds.Add(pivotId);
+                        FactID pivotId = pivot.ID;
+                        _model.AddToFactTree(pivotTree, pivotId, peerId);
+                        pivotIds.Add(pivotId);
+                    }
                 }
             }
         }
