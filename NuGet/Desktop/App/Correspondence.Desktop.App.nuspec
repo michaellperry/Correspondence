@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.Desktop.App</id>
-    <version>1.3.0.0</version>
+    <version>1.3.1.0</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a WPF application project. Sets up isolated storage and POX synchronization.</description>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database WPF synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.3.0.0"/>
+      <dependency id="Correspondence" version="1.3.1.0"/>
     </dependencies>
   </metadata>
 </package>

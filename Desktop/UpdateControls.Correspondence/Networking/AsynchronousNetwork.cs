@@ -87,32 +87,32 @@ namespace UpdateControls.Correspondence.Networking
 
         private void Send()
         {
-            bool sending = false;
-            foreach (AsynchronousServerProxy serverProxy in _serverProxies)
-            {
-                TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
-                List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
-                FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId, unpublishedMessages);
-                if (messageBodies != null && messageBodies.Facts.Any())
-                {
-                    sending = true;
-                    serverProxy.CommunicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, unpublishedMessages, delegate(bool succeeded)
-                    {
-                        if (succeeded)
-                        {
-                            _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
-                            Send();
-                        }
-                        else
-                        {
-                            OnSendError(null);
-                        }
-                    }, OnSendError);
-                }
-            }
-
             lock (this)
             {
+                bool sending = false;
+                foreach (AsynchronousServerProxy serverProxy in _serverProxies)
+                {
+                    TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
+                    List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
+                    FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId, unpublishedMessages);
+                    if (messageBodies != null && messageBodies.Facts.Any())
+                    {
+                        sending = true;
+                        serverProxy.CommunicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, unpublishedMessages, delegate(bool succeeded)
+                        {
+                            if (succeeded)
+                            {
+                                _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
+                                Send();
+                            }
+                            else
+                            {
+                                OnSendError(null);
+                            }
+                        }, OnSendError);
+                    }
+                }
+
                 _sending.Value = sending;
             }
         }
@@ -130,53 +130,50 @@ namespace UpdateControls.Correspondence.Networking
 
         public void Receive()
         {
-            bool receiving = false;
-            foreach (AsynchronousServerProxy serverProxy in _serverProxies)
-            {
-                FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-                List<FactID> pivotIds = new List<FactID>();
-                lock (this)
-                {
-                    _depPushSubscriptions.OnGet();
-                    GetPivots(pivotTree, pivotIds, serverProxy.PeerId);
-                }
-
-                bool anyPivots = pivotIds.Any();
-                if (anyPivots)
-                {
-                    receiving = true;
-                    List<PivotMemento> pivots = new List<PivotMemento>();
-                    foreach (FactID pivotId in pivotIds)
-                    {
-                        TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
-                        pivots.Add(new PivotMemento(pivotId, timestamp));
-                    }
-                    serverProxy.CommunicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
-                    {
-                        bool receivedFacts = messageBody.Facts.Any();
-                        if (receivedFacts)
-                        {
-                            _model.ReceiveMessage(messageBody, serverProxy.PeerId);
-                            foreach (PivotMemento pivot in newTimestamps)
-                            {
-                                _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivot.PivotId, pivot.Timestamp);
-                            }
-                        }
-                        if (receivedFacts || serverProxy.CommunicationStrategy.IsLongPolling)
-                            Receive();
-                        else
-                        {
-                            lock (this)
-                            {
-                                _receiving.Value = false;
-                            }
-                        }
-                    }, OnReceiveError);
-                }
-            }
-
             lock (this)
             {
+                bool receiving = false;
+                foreach (AsynchronousServerProxy serverProxy in _serverProxies)
+                {
+                    FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+                    List<FactID> pivotIds = new List<FactID>();
+                    _depPushSubscriptions.OnGet();
+                    GetPivots(pivotTree, pivotIds, serverProxy.PeerId);
+
+                    bool anyPivots = pivotIds.Any();
+                    if (anyPivots)
+                    {
+                        receiving = true;
+                        List<PivotMemento> pivots = new List<PivotMemento>();
+                        foreach (FactID pivotId in pivotIds)
+                        {
+                            TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
+                            pivots.Add(new PivotMemento(pivotId, timestamp));
+                        }
+                        serverProxy.CommunicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
+                        {
+                            bool receivedFacts = messageBody.Facts.Any();
+                            if (receivedFacts)
+                            {
+                                _model.ReceiveMessage(messageBody, serverProxy.PeerId);
+                                foreach (PivotMemento pivot in newTimestamps)
+                                {
+                                    _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivot.PivotId, pivot.Timestamp);
+                                }
+                            }
+                            if (receivedFacts || serverProxy.CommunicationStrategy.IsLongPolling)
+                                Receive();
+                            else
+                            {
+                                lock (this)
+                                {
+                                    _receiving.Value = false;
+                                }
+                            }
+                        }, OnReceiveError);
+                    }
+                }
+
                 _receiving.Value = receiving;
             }
         }

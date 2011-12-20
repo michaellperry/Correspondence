@@ -58,6 +58,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             FactTreeSerlializer factTreeSerlializer = new FactTreeSerlializer();
             foreach (var unpublishedMessage in UnpublishedMessages)
             {
+                factTreeSerlializer.AddFactType(unpublishedMessage.Role.DeclaringType);
                 factTreeSerlializer.AddRole(unpublishedMessage.Role);
             }
             factTreeSerlializer.SerlializeFactTree(MessageBody, requestWriter);

@@ -64,7 +64,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             {
                 Domain = _configuration.APIKey,
                 MessageBody = messageBody,
-                ClientGuid = clientGuid.ToString()
+                ClientGuid = clientGuid.ToString(),
+                UnpublishedMessages = unpublishedMessages
             };
             BinaryHTTPRequest.Begin(
                 _configuration,
