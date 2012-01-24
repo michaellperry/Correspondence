@@ -203,6 +203,24 @@ namespace UpdateControls.Correspondence.Memory
             return _factTable.Select(record => record.IdentifiedFactMemento);
         }
 
+        public IdentifiedFactMemento LoadNextFact(FactID? lastFactId)
+        {
+            if (lastFactId == null)
+            {
+                return _factTable
+                    .Select(record => record.IdentifiedFactMemento)
+                    .FirstOrDefault();
+            }
+            else
+            {
+                return _factTable
+                    .SkipWhile(record => record.IdentifiedFactMemento.Id.key != lastFactId.Value.key)
+                    .Skip(1)
+                    .Select(record => record.IdentifiedFactMemento)
+                    .FirstOrDefault();
+            }
+        }
+
         public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
         {
             var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.RemoteFactId.Equals(remoteFactId));

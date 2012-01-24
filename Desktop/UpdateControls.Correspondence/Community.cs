@@ -152,6 +152,11 @@ namespace UpdateControls.Correspondence
             get { return _network.LastException; }
         }
 
+        public bool InvokeTransform(ITransform transform)
+        {
+            return _model.InvokeTransform(transform);
+        }
+
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
         {
             get { return _fieldSerializerByType; }

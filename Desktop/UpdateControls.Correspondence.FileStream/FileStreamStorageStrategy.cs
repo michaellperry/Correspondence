@@ -231,6 +231,11 @@ namespace UpdateControls.Correspondence.FileStream
             throw new NotImplementedException();
         }
 
+        public IdentifiedFactMemento LoadNextFact(FactID? lastFactId)
+        {
+            throw new NotImplementedException();
+        }
+
         public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
         {
             throw new NotImplementedException();

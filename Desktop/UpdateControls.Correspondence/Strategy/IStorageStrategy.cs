@@ -21,6 +21,7 @@ namespace UpdateControls.Correspondence.Strategy
         IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
         IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId);
         IEnumerable<IdentifiedFactMemento> LoadAllFacts();
+        IdentifiedFactMemento LoadNextFact(FactID? lastFactId);
 
         // Messages.
         TimestampID LoadOutgoingTimestamp(int peerId);

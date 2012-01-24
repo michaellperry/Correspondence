@@ -333,6 +333,18 @@ namespace UpdateControls.Correspondence
 			get { return _storageStrategy.ClientGuid; }
 		}
 
+        public bool InvokeTransform(ITransform transform)
+        {
+            IdentifiedFactMemento factMemento = _storageStrategy.LoadNextFact(transform.LastFactId);
+            if (factMemento == null)
+                return false;
+
+            CorrespondenceFact nextFact = GetFactByIdAndMemento(factMemento.Id, factMemento.Memento);
+            transform.Transform(nextFact, factMemento.Id, f => f.ID);
+
+            return true;
+        }
+
         internal IEnumerable<CorrespondenceFact> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             lock (this)

@@ -511,6 +511,11 @@ namespace UpdateControls.Correspondence.SSCE
             }
         }
 
+        public IdentifiedFactMemento LoadNextFact(FactID? lastFactId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<NamedFactMemento> LoadAllNamedFacts()
         {
             using (var session = new Session(_connectionString))

@@ -86,6 +86,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ICorrespondenceModel.cs">
       <Link>Strategy\ICorrespondenceModel.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ITransform.cs">
+      <Link>Strategy\ITransform.cs</Link>
+    </Compile>
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>

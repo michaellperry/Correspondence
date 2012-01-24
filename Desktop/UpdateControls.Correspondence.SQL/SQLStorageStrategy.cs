@@ -481,6 +481,34 @@ namespace UpdateControls.Correspondence.SQL
             }
         }
 
+        public IdentifiedFactMemento LoadNextFact(FactID? lastFactId)
+        {
+            using (var session = new Session(_connectionString))
+            {
+                // Get the next fact.
+                if (lastFactId != null)
+                {
+                    session.Command.CommandText = HEAD_SELECT +
+                        "WHERE f.FactID = (SELECT MIN(FactID) FROM Fact next WHERE FactID > @LastFactID) " +
+                        TAIL_JOIN +
+                        "ORDER BY p.PredecessorID";
+                    AddParameter(session.Command, "@LastFactID", lastFactId.Value.key);
+                }
+                else
+                {
+                    session.Command.CommandText = HEAD_SELECT +
+                        "WHERE f.FactID = (SELECT MIN(FactID) FROM Fact next) " +
+                        TAIL_JOIN +
+                        "ORDER BY p.PredecessorID";
+                }
+                using (IDataReader reader = session.Command.ExecuteReader())
+                {
+                    session.Command.Parameters.Clear();
+                    return LoadMementosFromReader(reader).FirstOrDefault();
+                }
+            }
+        }
+
         public IEnumerable<NamedFactMemento> LoadAllNamedFacts()
         {
             using (var session = new Session(_connectionString))

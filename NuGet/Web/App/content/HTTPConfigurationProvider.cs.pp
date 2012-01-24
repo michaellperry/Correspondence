@@ -10,9 +10,9 @@ namespace $rootnamespace$
         {
             get
             {
-                string address = "https://api.facetedworlds.com/correspondence_server_web/bin";
-                string apiKey = "<<Your API key>>";
-				int timeoutSeconds = 2 * 60;
+                string address = ConfigurationManager.AppSettings["CorrespondenceAddress"];
+                string apiKey = ConfigurationManager.AppSettings["CorrespondenceAPIKey"];
+                int timeoutSeconds = int.Parse(ConfigurationManager.AppSettings["CorrespondencePollingIntervalSeconds"]);
                 return new HTTPConfiguration(address, "$rootnamespace$", apiKey, timeoutSeconds);
             }
         }

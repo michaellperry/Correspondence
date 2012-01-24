@@ -266,6 +266,9 @@
     <Compile Include="..\..\desktop\updatecontrols.correspondence\strategy\IStorageStrategy.cs">
       <Link>Strategy\IStorageStrategy.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ITransform.cs">
+      <Link>Strategy\ITransform.cs</Link>
+    </Compile>
     <Compile Include="..\..\desktop\updatecontrols.correspondence\strategy\QueryOptions.cs">
       <Link>Strategy\QueryOptions.cs</Link>
     </Compile>

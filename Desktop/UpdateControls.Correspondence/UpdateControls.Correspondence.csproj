@@ -120,6 +120,7 @@
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
     <Compile Include="Strategy\ICorrespondenceModel.cs" />
     <Compile Include="Strategy\IPushSubscription.cs" />
+    <Compile Include="Strategy\ITransform.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="IQueryResult.cs" />
     <Compile Include="Mementos\FactTreeMemento.cs" />
