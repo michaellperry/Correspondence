@@ -127,6 +127,12 @@ namespace UpdateControls.Correspondence
             remove { _model.FactAdded -= value; }
         }
 
+        public event Action FactReceived
+        {
+            add { _model.FactReceived += value; }
+            remove { _model.FactReceived -= value; }
+        }
+
         public bool Synchronize()
         {
             return _network.Synchronize();
