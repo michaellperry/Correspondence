@@ -70,4 +70,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
     {
         public static byte Token = 5;
     }
+    public class NotifyResponse : BinaryResponse
+    {
+        public static byte Token = 6;
+    }
 }

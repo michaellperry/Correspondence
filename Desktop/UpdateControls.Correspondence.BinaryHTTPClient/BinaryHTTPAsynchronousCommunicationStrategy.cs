@@ -92,6 +92,24 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 ex => { });
         }
 
+        public void Notify(FactTreeMemento messageBody, FactID pivotId, Guid clientGuid, string text1, string text2)
+        {
+            NotifyRequest request = new NotifyRequest
+            {
+                Domain = _configuration.APIKey,
+                PivotTree = messageBody,
+                PivotId = pivotId.key,
+                ClientGuid = clientGuid.ToString(),
+                Text1 = text1,
+                Text2 = text2
+            };
+            BinaryHTTPRequest.Begin(
+                _configuration,
+                request,
+                response => { },
+                ex => { });
+        }
+
         public event Action<FactTreeMemento> MessageReceived;
     }
 }

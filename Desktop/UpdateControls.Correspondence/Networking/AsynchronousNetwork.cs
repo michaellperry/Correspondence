@@ -178,7 +178,22 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-		private void UpdatePushSubscriptions()
+        public void Notify(CorrespondenceFact pivot, string text1, string text2)
+        {
+            foreach (AsynchronousServerProxy proxy in _serverProxies)
+            {
+                FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+                _model.AddToFactTree(pivotTree, pivot.ID, proxy.PeerId);
+                proxy.CommunicationStrategy.Notify(
+                    pivotTree,
+                    pivot.ID,
+                    _model.ClientDatabaseGuid,
+                    text1,
+                    text2);
+            }
+        }
+
+        private void UpdatePushSubscriptions()
 		{
 			using (var bin = _pushSubscriptions.Recycle())
 			{

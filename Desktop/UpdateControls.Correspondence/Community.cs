@@ -163,6 +163,11 @@ namespace UpdateControls.Correspondence
             return _model.InvokeTransform(transform);
         }
 
+        public void Notify(CorrespondenceFact pivot, string text1, string text2)
+        {
+            _network.Notify(pivot, text1, text2);
+        }
+
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
         {
             get { return _fieldSerializerByType; }

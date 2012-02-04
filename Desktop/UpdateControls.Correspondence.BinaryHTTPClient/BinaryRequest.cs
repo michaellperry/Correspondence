@@ -117,4 +117,24 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             BinaryHelper.WriteString(ClientGuid, requestWriter);
         }
     }
+    public class NotifyRequest : BinaryRequest
+    {
+        public static byte Token = 6;
+
+        public FactTreeMemento PivotTree { get; set; }
+        public long PivotId { get; set; }
+        public string ClientGuid { get; set; }
+        public string Text1 { get; set; }
+        public string Text2 { get; set; }
+
+        protected override void WriteInternal(BinaryWriter requestWriter)
+        {
+            BinaryHelper.WriteByte(Token, requestWriter);
+            new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
+            BinaryHelper.WriteLong(PivotId, requestWriter);
+            BinaryHelper.WriteString(ClientGuid, requestWriter);
+            BinaryHelper.WriteString(Text1, requestWriter);
+            BinaryHelper.WriteString(Text2, requestWriter);
+        }
+    }
 }

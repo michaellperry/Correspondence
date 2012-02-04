@@ -66,5 +66,10 @@ namespace UpdateControls.Correspondence.Networking
         {
             get { return _asynchronousNetwork.LastException; }
         }
+
+        public void Notify(CorrespondenceFact pivot, string text1, string text2)
+        {
+            _asynchronousNetwork.Notify(pivot, text1, text2);
+        }
 	}
 }

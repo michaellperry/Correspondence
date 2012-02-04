@@ -85,6 +85,10 @@ namespace UpdateControls.Correspondence.POXClient
         {
         }
 
+        public void Notify(FactTreeMemento messageBody, FactID pivotId, Guid clientGuid, string text1, string text2)
+        {
+        }
+
 		public event Action<FactTreeMemento> MessageReceived;
     }
 }
