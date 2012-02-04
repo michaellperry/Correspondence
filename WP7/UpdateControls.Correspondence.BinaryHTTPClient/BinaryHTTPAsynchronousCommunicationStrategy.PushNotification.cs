@@ -40,7 +40,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                     _subscriptionByFactId.Add(pivotId, subscription);
                 }
                 subscription.ShouldBeSubscribed = true;
-                UpdateSubscriptions();
+                if (_configurationProvider.IsNotificationEnabled)
+                    UpdateSubscriptions();
                 return subscription;
             }
         }
