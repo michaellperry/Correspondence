@@ -8,6 +8,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 {
     public partial class BinaryHTTPAsynchronousCommunicationStrategy : IAsynchronousCommunicationStrategy
     {
+        private const string DefaultAPIKey = "<<Your API key>>";
+
         private HTTPConfiguration _configuration;
         private IHTTPConfigurationProvider _configurationProvider;
 
@@ -33,6 +35,9 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public void BeginGetMany(FactTreeMemento pivotTree, List<PivotMemento> pivots, Guid clientGuid, Action<FactTreeMemento, IEnumerable<PivotMemento>> callback, Action<Exception> error)
         {
+            if (_configuration.APIKey == DefaultAPIKey)
+                return;
+
             GetManyRequest request = new GetManyRequest
             {
                 Domain = _configuration.APIKey,
@@ -60,6 +65,9 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, List<UnpublishMemento> unpublishedMessages, Action<bool> callback, Action<Exception> error)
         {
+            if (_configuration.APIKey == DefaultAPIKey)
+                return;
+
             PostRequest request = new PostRequest
             {
                 Domain = _configuration.APIKey,
@@ -80,6 +88,9 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public void Interrupt(Guid clientGuid)
         {
+            if (_configuration.APIKey == DefaultAPIKey)
+                return;
+
             InterruptRequest request = new InterruptRequest
             {
                 Domain = _configuration.APIKey,
@@ -94,6 +105,9 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public void Notify(FactTreeMemento messageBody, FactID pivotId, Guid clientGuid, string text1, string text2)
         {
+            if (_configuration.APIKey == DefaultAPIKey)
+                return;
+
             NotifyRequest request = new NotifyRequest
             {
                 Domain = _configuration.APIKey,
