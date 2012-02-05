@@ -56,7 +56,14 @@ namespace UpdateControls.Correspondence
 
 		public TFact Fact
 		{
-            get { OnGet(); return _fact; }
+            get
+            {
+                lock (this)
+                {
+                    OnGet();
+                    return _fact;
+                }
+            }
 		}
 
         internal override IEnumerable<FactID> InternalFactIds

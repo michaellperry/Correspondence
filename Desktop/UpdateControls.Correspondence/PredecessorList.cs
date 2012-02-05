@@ -59,8 +59,11 @@ namespace UpdateControls.Correspondence
 
         public IEnumerator<TFact> GetEnumerator()
         {
-            OnGet();
-            return _facts.GetEnumerator();
+            lock (this)
+            {
+                OnGet();
+                return _facts.GetEnumerator();
+            }
         }
 
         #endregion
@@ -69,8 +72,11 @@ namespace UpdateControls.Correspondence
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            OnGet();
-            return _facts.GetEnumerator();
+            lock (this)
+            {
+                OnGet();
+                return _facts.GetEnumerator();
+            }
         }
 
         #endregion
