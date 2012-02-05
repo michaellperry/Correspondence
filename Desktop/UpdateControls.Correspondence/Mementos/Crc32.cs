@@ -2,14 +2,10 @@
 /// http://damieng.com/blog/2006/08/08/Calculating_CRC32_in_C_and_NET
 
 using System;
-using System.Security.Cryptography;
-using UpdateControls.Correspondence.Mementos;
 using System.Text;
 
-public class Crc32 : HashAlgorithm
+public static class Crc32
 {
-    public static Crc32 Default = new Crc32();
-
     public static int GetHashOfString(string str)
     {
         return GetHashOfBytes(Encoding.UTF8.GetBytes(str));
@@ -17,75 +13,15 @@ public class Crc32 : HashAlgorithm
 
     public static int GetHashOfBytes(byte[] data)
     {
-        byte[] hashBytes = Default.ComputeHash(data);
-        int hashCode = hashBytes[0] << 24 | hashBytes[1] << 16 | hashBytes[2] << 8 | hashBytes[3];
-        return hashCode;
+        return (int)~CalculateHash(DefaultTable, DefaultSeed, data, 0, data.Length);
     }
 
-    public const UInt32 DefaultPolynomial = 0xedb88320;
-    public const UInt32 DefaultSeed = 0xffffffff;
-
-    private UInt32 hash;
-    private UInt32 seed;
-    private UInt32[] table;
-    private static UInt32[] defaultTable;
-
-    public Crc32()
-    {
-        table = InitializeTable(DefaultPolynomial);
-        seed = DefaultSeed;
-        Initialize();
-    }
-
-    public Crc32(UInt32 polynomial, UInt32 seed)
-    {
-        table = InitializeTable(polynomial);
-        this.seed = seed;
-        Initialize();
-    }
-
-    public override void Initialize()
-    {
-        hash = seed;
-    }
-
-    protected override void HashCore(byte[] buffer, int start, int length)
-    {
-        hash = CalculateHash(table, hash, buffer, start, length);
-    }
-
-    protected override byte[] HashFinal()
-    {
-        byte[] hashBuffer = UInt32ToBigEndianBytes(~hash);
-        this.HashValue = hashBuffer;
-        return hashBuffer;
-    }
-
-    public override int HashSize
-    {
-        get { return 32; }
-    }
-
-    public static UInt32 Compute(byte[] buffer)
-    {
-        return ~CalculateHash(InitializeTable(DefaultPolynomial), DefaultSeed, buffer, 0, buffer.Length);
-    }
-
-    public static UInt32 Compute(UInt32 seed, byte[] buffer)
-    {
-        return ~CalculateHash(InitializeTable(DefaultPolynomial), seed, buffer, 0, buffer.Length);
-    }
-
-    public static UInt32 Compute(UInt32 polynomial, UInt32 seed, byte[] buffer)
-    {
-        return ~CalculateHash(InitializeTable(polynomial), seed, buffer, 0, buffer.Length);
-    }
+    private const UInt32 DefaultPolynomial = 0xedb88320;
+    private const UInt32 DefaultSeed = 0xffffffff;
+    private static uint[] DefaultTable = InitializeTable(DefaultPolynomial);
 
     private static UInt32[] InitializeTable(UInt32 polynomial)
     {
-        if (polynomial == DefaultPolynomial && defaultTable != null)
-            return defaultTable;
-
         UInt32[] createTable = new UInt32[256];
         for (int i = 0; i < 256; i++)
         {
@@ -97,9 +33,6 @@ public class Crc32 : HashAlgorithm
                     entry = entry >> 1;
             createTable[i] = entry;
         }
-
-        if (polynomial == DefaultPolynomial)
-            defaultTable = createTable;
 
         return createTable;
     }
@@ -113,15 +46,5 @@ public class Crc32 : HashAlgorithm
                 crc = (crc >> 8) ^ table[buffer[i] ^ crc & 0xff];
             }
         return crc;
-    }
-
-    private byte[] UInt32ToBigEndianBytes(UInt32 x)
-    {
-        return new byte[] {
-			(byte)((x >> 24) & 0xff),
-			(byte)((x >> 16) & 0xff),
-			(byte)((x >> 8) & 0xff),
-			(byte)(x & 0xff)
-		};
     }
 }
