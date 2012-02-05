@@ -1,32 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Net;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Ink;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using Microsoft.Phone.Notification;
+using System.Collections.Generic;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using System.IO;
 using UpdateControls.Correspondence.FieldSerializer;
 
-namespace UpdateControls.Correspondence.BinaryHTTPClient
+namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
 {
-    public partial class BinaryHTTPAsynchronousCommunicationStrategy
+    public class WindowsPhoneNotificationStrategy : INotificationStrategy
     {
+        private ToastNotificationObserver _toastNotificationObserver;
+        private HTTPConfiguration _configuration;
+
         private HttpNotificationChannel _httpChannel;
         private Dictionary<FactID, WindowsPhonePushSubscription> _subscriptionByFactId = new Dictionary<FactID, WindowsPhonePushSubscription>();
         private bool _receivedChannelUri = false;
         private bool _openPending = false;
 
-        private ToastNotificationObserver _toastNotificationObserver;
-
         private object _monitor = new object();
 
-        partial void Initialize()
+        public WindowsPhoneNotificationStrategy(IHTTPConfigurationProvider configurationProvider)
         {
-            _toastNotificationObserver = new ToastNotificationObserver(_configurationProvider);
-        }
-
-        public bool IsLongPolling
-        {
-            get { return false; }
+            _toastNotificationObserver = new ToastNotificationObserver(configurationProvider);
+            _configuration = configurationProvider.Configuration;
         }
 
         public IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
@@ -125,5 +131,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 }
             }
         }
+
+        public event Action<FactTreeMemento> MessageReceived;
     }
 }

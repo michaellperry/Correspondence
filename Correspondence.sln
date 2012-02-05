@@ -207,9 +207,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "WP71\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{D2995FBA-B312-4A5D-AD53-00117ECC598F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.Notification", "WP71\UpdateControls.Correspondence.BinaryHTTPClient.Notification\UpdateControls.Correspondence.BinaryHTTPClient.Notification.csproj", "{CD9FE8C4-2405-43DA-95E3-982B2F384BC3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 38
+		SccNumberOfProjects = 39
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -357,6 +359,10 @@ Global
 		SccProjectTopLevelParentUniqueName37 = Correspondence.sln
 		SccProjectName37 = WP71/UpdateControls.Correspondence.Memory
 		SccLocalPath37 = WP71\\UpdateControls.Correspondence.Memory
+		SccProjectUniqueName38 = WP71\\UpdateControls.Correspondence.BinaryHTTPClient.Notification\\UpdateControls.Correspondence.BinaryHTTPClient.Notification.csproj
+		SccProjectTopLevelParentUniqueName38 = Correspondence.sln
+		SccProjectName38 = WP71/UpdateControls.Correspondence.BinaryHTTPClient.Notification
+		SccLocalPath38 = WP71\\UpdateControls.Correspondence.BinaryHTTPClient.Notification
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -518,6 +524,10 @@ Global
 		{D2995FBA-B312-4A5D-AD53-00117ECC598F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2995FBA-B312-4A5D-AD53-00117ECC598F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2995FBA-B312-4A5D-AD53-00117ECC598F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD9FE8C4-2405-43DA-95E3-982B2F384BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD9FE8C4-2405-43DA-95E3-982B2F384BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD9FE8C4-2405-43DA-95E3-982B2F384BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD9FE8C4-2405-43DA-95E3-982B2F384BC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -574,5 +584,6 @@ Global
 		{1B2D81DD-FE1E-4B43-89E9-9B5B1A080366} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
 		{7715413B-3D7F-481A-B8CA-9AEA8CBF542A} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
 		{D2995FBA-B312-4A5D-AD53-00117ECC598F} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
+		{CD9FE8C4-2405-43DA-95E3-982B2F384BC3} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
 	EndGlobalSection
 EndGlobal

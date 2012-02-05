@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{69C8132D-AC3F-4BD6-9A1E-012F7E6D6844}</ProjectGuid>
+    <ProjectGuid>{CD9FE8C4-2405-43DA-95E3-982B2F384BC3}</ProjectGuid>
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UpdateControls.Correspondence.BinaryHTTPClient</RootNamespace>
-    <AssemblyName>UpdateControls.Correspondence.BinaryHTTPClient</AssemblyName>
+    <RootNamespace>UpdateControls.Correspondence.BinaryHTTPClient.Notification</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence.BinaryHTTPClient.Notification</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
@@ -52,45 +52,25 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="UpdateControls">
+    <Reference Include="UpdateControls, Version=2.1.4.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\UpdateControls.2.1.4.1\lib\sl4-windowsphone71\UpdateControls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\BinaryHTTPAsynchronousCommunicationStrategy.cs">
-      <Link>BinaryHTTPAsynchronousCommunicationStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\BinaryHTTPRequest.cs">
-      <Link>BinaryHTTPRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\BinaryRequest.cs">
-      <Link>BinaryRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\BinaryResponse.cs">
-      <Link>BinaryResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\FactTimestamp.cs">
-      <Link>FactTimestamp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\FactTreeSerlializer.cs">
-      <Link>FactTreeSerlializer.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\HTTPConfiguration.cs">
-      <Link>HTTPConfiguration.cs</Link>
-    </Compile>
-    <Compile Include="BinaryHTTPAsynchronousCommunicationStrategy.PushNotification.cs" />
-    <Compile Include="IHTTPConfigurationProvider.cs" />
-    <Compile Include="INotificationStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToastNotificationObserver.cs" />
+    <Compile Include="WindowsPhoneNotificationStrategy.cs" />
+    <Compile Include="WindowsPhonePushSubscription.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj">
+      <Project>{69C8132D-AC3F-4BD6-9A1E-012F7E6D6844}</Project>
+      <Name>UpdateControls.Correspondence.BinaryHTTPClient %28WP71\UpdateControls.Correspondence.BinaryHTTPClient%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{95494E4C-1505-41A3-89B5-36C55040CCC0}</Project>
       <Name>UpdateControls.Correspondence %28WP71\UpdateControls.Correspondence%29</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
