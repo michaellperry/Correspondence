@@ -5,6 +5,6 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 	{
 		HTTPConfiguration Configuration { get; }
         bool IsToastEnabled { get; }
-        bool IsNotificationEnabled { get; }
+        bool IsForegroundTask { get; }
 	}
 }

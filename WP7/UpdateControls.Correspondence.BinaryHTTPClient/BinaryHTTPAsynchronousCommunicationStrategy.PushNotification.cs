@@ -21,7 +21,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         partial void Initialize()
         {
-            _toastNotificationObserver = new ToastNotificationObserver(_configurationProvider);
+            if (_configurationProvider.IsForegroundTask)
+                _toastNotificationObserver = new ToastNotificationObserver(_configurationProvider);
         }
 
         public bool IsLongPolling
@@ -40,7 +41,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                     _subscriptionByFactId.Add(pivotId, subscription);
                 }
                 subscription.ShouldBeSubscribed = true;
-                if (_configurationProvider.IsNotificationEnabled)
+                if (_configurationProvider.IsForegroundTask)
                     UpdateSubscriptions();
                 return subscription;
             }
