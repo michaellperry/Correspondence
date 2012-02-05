@@ -205,7 +205,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage", "WP71\UpdateControls.Correspondence.IsolatedStorage\UpdateControls.Correspondence.IsolatedStorage.csproj", "{7715413B-3D7F-481A-B8CA-9AEA8CBF542A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{D2995FBA-B312-4A5D-AD53-00117ECC598F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "WP71\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{D2995FBA-B312-4A5D-AD53-00117ECC598F}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -353,10 +353,10 @@ Global
 		SccProjectTopLevelParentUniqueName36 = Correspondence.sln
 		SccProjectName36 = WP71/UpdateControls.Correspondence.IsolatedStorage
 		SccLocalPath36 = WP71\\UpdateControls.Correspondence.IsolatedStorage
-		SccProjectUniqueName37 = UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
+		SccProjectUniqueName37 = WP71\\UpdateControls.Correspondence.Memory\\UpdateControls.Correspondence.Memory.csproj
 		SccProjectTopLevelParentUniqueName37 = Correspondence.sln
-		SccProjectName37 = UpdateControls.Correspondence.Memory
-		SccLocalPath37 = UpdateControls.Correspondence.Memory
+		SccProjectName37 = WP71/UpdateControls.Correspondence.Memory
+		SccLocalPath37 = WP71\\UpdateControls.Correspondence.Memory
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi

@@ -56,55 +56,58 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\Duration.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Duration.cs">
       <Link>Duration.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\FactRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\FactRecord.cs">
       <Link>FactRecord.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\MemoryCommunicationStrategy.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryCommunicationStrategy.cs">
       <Link>MemoryCommunicationStrategy.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
       <Link>MemoryStorageStrategy.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\MessageRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MessageRecord.cs">
       <Link>MessageRecord.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
       <Link>PeerIdentifier.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
       <Link>PeerPivotIdentifier.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\PeerRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerRecord.cs">
       <Link>PeerRecord.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
       <Link>QueryExecutor.cs</Link>
     </Compile>
-    <Compile Include="..\Desktop\UpdateControls.Correspondence.Memory\ShareRecord.cs">
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\ShareRecord.cs">
       <Link>ShareRecord.cs</Link>
     </Compile>
-    <Compile Include="..\Silverlight 4\UpdateControls.Correspondence.Memory\ListExtensions.cs">
+    <Compile Include="..\..\Silverlight 4\UpdateControls.Correspondence.Memory\ListExtensions.cs">
       <Link>ListExtensions.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WP71\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
+    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{95494E4C-1505-41A3-89B5-36C55040CCC0}</Project>
       <Name>UpdateControls.Correspondence %28WP71\UpdateControls.Correspondence%29</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Desktop\UpdateControls.Correspondence.Memory\Mallardsoft.snk">
+    <None Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Mallardsoft.snk">
       <Link>Mallardsoft.snk</Link>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\WindowsPhone\UnitTest\lib\SL4-wp\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
