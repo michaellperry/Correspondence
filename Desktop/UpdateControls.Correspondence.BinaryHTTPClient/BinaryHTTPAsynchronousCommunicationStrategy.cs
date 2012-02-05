@@ -36,7 +36,10 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
         public void BeginGetMany(FactTreeMemento pivotTree, List<PivotMemento> pivots, Guid clientGuid, Action<FactTreeMemento, IEnumerable<PivotMemento>> callback, Action<Exception> error)
         {
             if (_configuration.APIKey == DefaultAPIKey)
+            {
+                error(new ArgumentException("Please register for an API key at http://qedcode.com/correspondence"));
                 return;
+            }
 
             GetManyRequest request = new GetManyRequest
             {
@@ -66,7 +69,11 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
         public void BeginPost(FactTreeMemento messageBody, Guid clientGuid, List<UnpublishMemento> unpublishedMessages, Action<bool> callback, Action<Exception> error)
         {
             if (_configuration.APIKey == DefaultAPIKey)
+            {
+                callback(false);
+                error(new ArgumentException("Please register for an API key at http://qedcode.com/correspondence"));
                 return;
+            }
 
             PostRequest request = new PostRequest
             {
