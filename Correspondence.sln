@@ -219,9 +219,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactualLive.UnitTest", "Sil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FactualLive", "Silverlight 5\FactualLive\FactualLive.csproj", "{5BDD2BF8-F434-402E-94DE-EA073C75F282}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual", "Silverlight 5\UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj", "{6616D02D-0ABE-4701-8831-0965E14D1FDC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEDCode.LLOne", "Silverlight 5\QEDCode.LLOne\QEDCode.LLOne.csproj", "{29B929D7-64E0-45F4-94BA-B03DFCB3953C}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 43
+		SccNumberOfProjects = 45
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -389,6 +393,14 @@ Global
 		SccProjectTopLevelParentUniqueName42 = Correspondence.sln
 		SccProjectName42 = Silverlight\u00205/FactualLive
 		SccLocalPath42 = Silverlight\u00205\\FactualLive
+		SccProjectUniqueName43 = Silverlight\u00205\\UpdateControls.Correspondence.Factual\\UpdateControls.Correspondence.Factual.csproj
+		SccProjectTopLevelParentUniqueName43 = Correspondence.sln
+		SccProjectName43 = Silverlight\u00205/UpdateControls.Correspondence.Factual
+		SccLocalPath43 = Silverlight\u00205\\UpdateControls.Correspondence.Factual
+		SccProjectUniqueName44 = Silverlight\u00205\\QEDCode.LLOne\\QEDCode.LLOne.csproj
+		SccProjectTopLevelParentUniqueName44 = Correspondence.sln
+		SccProjectName44 = Silverlight\u00205/QEDCode.LLOne
+		SccLocalPath44 = Silverlight\u00205\\QEDCode.LLOne
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -570,6 +582,14 @@ Global
 		{5BDD2BF8-F434-402E-94DE-EA073C75F282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BDD2BF8-F434-402E-94DE-EA073C75F282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BDD2BF8-F434-402E-94DE-EA073C75F282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6616D02D-0ABE-4701-8831-0965E14D1FDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6616D02D-0ABE-4701-8831-0965E14D1FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6616D02D-0ABE-4701-8831-0965E14D1FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6616D02D-0ABE-4701-8831-0965E14D1FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29B929D7-64E0-45F4-94BA-B03DFCB3953C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29B929D7-64E0-45F4-94BA-B03DFCB3953C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29B929D7-64E0-45F4-94BA-B03DFCB3953C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29B929D7-64E0-45F4-94BA-B03DFCB3953C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -631,5 +651,7 @@ Global
 		{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{6729341C-D93B-41C2-A8B7-36E74E81142C} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{5BDD2BF8-F434-402E-94DE-EA073C75F282} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
+		{6616D02D-0ABE-4701-8831-0965E14D1FDC} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
+		{29B929D7-64E0-45F4-94BA-B03DFCB3953C} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 	EndGlobalSection
 EndGlobal

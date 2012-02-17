@@ -82,6 +82,9 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DynamicModel.cs" />
+    <Compile Include="Models\FactualDefinition.cs" />
+    <Compile Include="Models\FactualError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +102,14 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\QEDCode.LLOne\QEDCode.LLOne.csproj">
+      <Project>{29B929D7-64E0-45F4-94BA-B03DFCB3953C}</Project>
+      <Name>QEDCode.LLOne %28Silverlight 5\QEDCode.LLOne%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj">
+      <Project>{6616D02D-0ABE-4701-8831-0965E14D1FDC}</Project>
+      <Name>UpdateControls.Correspondence.Factual %28Silverlight 5\UpdateControls.Correspondence.Factual%29</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj">
       <Project>{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1}</Project>
       <Name>UpdateControls.Correspondence.Memory %28Silverlight 5\UpdateControls.Correspondence.Memory%29</Name>

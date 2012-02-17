@@ -24,12 +24,6 @@ namespace QEDCode.LLOne
             _lineNumber = lineNumber;
         }
 
-        protected ParserException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            _lineNumber = info.GetInt32("LineNumber");
-        }
-
         public int LineNumber
         {
             get { return _lineNumber; }

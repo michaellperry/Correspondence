@@ -24,12 +24,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             _lineNumber = lineNumber;
         }
 
-        protected CompilerException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-            _lineNumber = info.GetInt32("LineNumber");
-        }
-
         public int LineNumber
         {
             get { return _lineNumber; }
