@@ -149,15 +149,12 @@ namespace UpdateControls.Correspondence.Data
 					{
 						// Both the parent and uncle are red, so change both to black and the grandparent to red.
 						_stream.Seek(parentReference.Position, SeekOrigin.Begin);
-						CheckByte((byte)NodeColor.Red);
 						WriteByte((byte)NodeColor.Black);
 						_stream.Seek(parentReference.Sibling, SeekOrigin.Begin);
-						CheckByte((byte)NodeColor.Red);
 						WriteByte((byte)NodeColor.Black);
 						if (stack.Count != 0)
 						{
 							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
-							CheckByte((byte)NodeColor.Black);
 							WriteByte((byte)NodeColor.Red);
 						}
 					}
@@ -168,42 +165,30 @@ namespace UpdateControls.Correspondence.Data
 						if (!leftChild && parentReference.LeftChild)
 						{
 							_stream.Seek(position, SeekOrigin.Begin);
-							CheckByte((byte)NodeColor.Red);
 							WriteByte((byte)NodeColor.Black);
 							_stream.Seek(position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
-							CheckLong(left);
 							WriteLong(parentReference.Position);
-							CheckLong(right);
 							WriteLong(grandparentReference.Position);
 							_stream.Seek(parentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long), SeekOrigin.Begin);
-							CheckLong(position);
 							WriteLong(left);
 							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
-							CheckByte((byte)NodeColor.Black);
 							WriteByte((byte)NodeColor.Red);
 							_stream.Seek(grandparentReference.Position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
-							CheckLong(parentReference.Position);
 							WriteLong(right);
 							newRoot = position;
 						}
 						else if (leftChild && !parentReference.LeftChild)
 						{
 							_stream.Seek(position, SeekOrigin.Begin);
-							CheckByte((byte)NodeColor.Red);
 							WriteByte((byte)NodeColor.Black);
 							_stream.Seek(position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
-							CheckLong(left);
 							WriteLong(grandparentReference.Position);
-							CheckLong(right);
 							WriteLong(parentReference.Position);
 							_stream.Seek(parentReference.Position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
-							CheckLong(position);
 							WriteLong(right);
 							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
-							CheckByte((byte)NodeColor.Black);
 							WriteByte((byte)NodeColor.Red);
 							_stream.Seek(grandparentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long), SeekOrigin.Begin);
-							CheckLong(parentReference.Position);
 							WriteLong(left);
 							newRoot = position;
 						}
@@ -337,21 +322,5 @@ namespace UpdateControls.Correspondence.Data
             WriteLong(factId);
             return position;
         }
-
-		private void CheckByte(byte expected)
-		{
-			byte b = ReadByte();
-			if (b != expected)
-				throw new InvariantException(String.Format("Incorrect byte overwritten. Expected {0}. Actual {1}.", expected, b));
-			_stream.Seek(-sizeof(byte), SeekOrigin.Current);
-		}
-
-		private void CheckLong(long expected)
-		{
-			long l = ReadLong();
-			if (l != expected)
-				throw new InvariantException(String.Format("Incorrect long overwritten. Expected {0}. Actual {1}.", expected, l));
-			_stream.Seek(-sizeof(long), SeekOrigin.Current);
-		}
 	}
 }
