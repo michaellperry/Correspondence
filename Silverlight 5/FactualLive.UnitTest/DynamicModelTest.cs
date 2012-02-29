@@ -19,7 +19,7 @@ namespace FactualLive.UnitTest
             var definition = FactualDefinition.Parse(@"fact Person {
                 unique;
                 }" );
-            Assert.AreEqual("Expected \"key\".", definition.Errors.Single().Message);
+            Assert.AreEqual("Key section is required.", definition.Errors.Single().Message);
         }
     }
 }
