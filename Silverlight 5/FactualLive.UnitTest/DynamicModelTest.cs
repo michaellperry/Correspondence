@@ -21,5 +21,15 @@ namespace FactualLive.UnitTest
                 }" );
             Assert.AreEqual("Key section is required.", definition.Errors.Single().Message);
         }
+
+        [TestMethod]
+        public void NoParseErrors()
+        {
+            var definition = FactualDefinition.Parse(@"fact Person {
+                key:
+                unique;
+                }");
+            Assert.AreEqual(0, definition.Errors.Count());
+        }
     }
 }

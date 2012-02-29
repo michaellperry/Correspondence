@@ -85,7 +85,9 @@
     <Compile Include="Models\DynamicModel.cs" />
     <Compile Include="Models\FactualDefinition.cs" />
     <Compile Include="Models\FactualError.cs" />
+    <Compile Include="Models\FactualSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -119,6 +121,7 @@
       <Name>UpdateControls.Correspondence %28Silverlight 5\UpdateControls.Correspondence%29</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

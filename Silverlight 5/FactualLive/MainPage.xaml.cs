@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using FactualLive.Models;
+using FactualLive.ViewModels;
+using UpdateControls.XAML;
 
 namespace FactualLive
 {
@@ -17,6 +11,11 @@ namespace FactualLive
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            DataContext = ForView.Wrap(new MainViewModel(new FactualSession()));
         }
     }
 }
