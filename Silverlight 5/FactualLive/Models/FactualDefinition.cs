@@ -4,6 +4,7 @@ using UpdateControls.Correspondence.Factual.Compiler;
 using System.IO;
 using UpdateControls.Correspondence.Factual.AST;
 using System.Linq;
+using UpdateControls.Correspondence.Factual.Metadata;
 
 namespace FactualLive.Models
 {
@@ -22,8 +23,17 @@ namespace FactualLive.Models
             {
                 FactualParser parser = new FactualParser(reader);
                 Namespace parsedNamespace = parser.Parse();
+                if (parsedNamespace == null)
+                {
+                    return new FactualDefinition(
+                        from error in parser.Errors
+                        select new FactualError(error.Message));
+                }
+
+                Analyzer analyzer = new Analyzer(parsedNamespace);
+                Analyzed metadata = analyzer.Analyze();
                 return new FactualDefinition(
-                    from error in parser.Errors
+                    from error in analyzer.Errors
                     select new FactualError(error.Message));
             }
         }

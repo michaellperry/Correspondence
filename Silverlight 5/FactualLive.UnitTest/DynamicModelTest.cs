@@ -31,5 +31,24 @@ namespace FactualLive.UnitTest
                 }");
             Assert.AreEqual(0, definition.Errors.Count());
         }
+
+        [TestMethod]
+        public void DisplayAnalysisErrors()
+        {
+            var definition = FactualDefinition.Parse(@"fact Person {
+                key:
+                  unique;
+
+                mutable:
+                  string Name;
+
+                query:
+                  Person* siblings {
+                    Person p : p.parent = this.parent
+                  }
+                }");
+
+            Assert.AreEqual("The member \"Person.parent\" is not defined.", definition.Errors.Single().Message);
+        }
     }
 }
