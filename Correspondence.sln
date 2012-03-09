@@ -223,9 +223,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEDCode.LLOne", "Silverlight 5\QEDCode.LLOne\QEDCode.LLOne.csproj", "{29B929D7-64E0-45F4-94BA-B03DFCB3953C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "Silverlight 5\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{8DF95246-CAB4-4BF8-A8DB-FD168706798B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage", "Silverlight 5\UpdateControls.Correspondence.IsolatedStorage\UpdateControls.Correspondence.IsolatedStorage.csproj", "{15D08BBA-292B-48F4-8517-2D5053317ADF}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 45
+		SccNumberOfProjects = 47
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -401,6 +405,14 @@ Global
 		SccProjectTopLevelParentUniqueName44 = Correspondence.sln
 		SccProjectName44 = Silverlight\u00205/QEDCode.LLOne
 		SccLocalPath44 = Silverlight\u00205\\QEDCode.LLOne
+		SccProjectUniqueName45 = Silverlight\u00205\\UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data.csproj
+		SccProjectTopLevelParentUniqueName45 = Correspondence.sln
+		SccProjectName45 = Silverlight\u00205/UpdateControls.Correspondence.Data
+		SccLocalPath45 = Silverlight\u00205\\UpdateControls.Correspondence.Data
+		SccProjectUniqueName46 = Silverlight\u00205\\UpdateControls.Correspondence.IsolatedStorage\\UpdateControls.Correspondence.IsolatedStorage.csproj
+		SccProjectTopLevelParentUniqueName46 = Correspondence.sln
+		SccProjectName46 = Silverlight\u00205/UpdateControls.Correspondence.IsolatedStorage
+		SccLocalPath46 = Silverlight\u00205\\UpdateControls.Correspondence.IsolatedStorage
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Correspondence.vsmdi
@@ -590,6 +602,14 @@ Global
 		{29B929D7-64E0-45F4-94BA-B03DFCB3953C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29B929D7-64E0-45F4-94BA-B03DFCB3953C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29B929D7-64E0-45F4-94BA-B03DFCB3953C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DF95246-CAB4-4BF8-A8DB-FD168706798B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DF95246-CAB4-4BF8-A8DB-FD168706798B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DF95246-CAB4-4BF8-A8DB-FD168706798B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DF95246-CAB4-4BF8-A8DB-FD168706798B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -653,5 +673,7 @@ Global
 		{5BDD2BF8-F434-402E-94DE-EA073C75F282} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{6616D02D-0ABE-4701-8831-0965E14D1FDC} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{29B929D7-64E0-45F4-94BA-B03DFCB3953C} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
+		{8DF95246-CAB4-4BF8-A8DB-FD168706798B} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
+		{15D08BBA-292B-48F4-8517-2D5053317ADF} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 	EndGlobalSection
 EndGlobal

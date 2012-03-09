@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{15D08BBA-292B-48F4-8517-2D5053317ADF}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UpdateControls.Correspondence.IsolatedStorage</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence.IsolatedStorage</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\Duration.cs">
+      <Link>Duration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\FactTypeStore.cs">
+      <Link>FactTypeStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\IncomingTimestampStore.cs">
+      <Link>IncomingTimestampStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\IsolatedStorageStorageStrategy.cs">
+      <Link>IsolatedStorageStorageStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\MessageRecord.cs">
+      <Link>MessageRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\MessageStore.cs">
+      <Link>MessageStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\OutgoingTimestampStore.cs">
+      <Link>OutgoingTimestampStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerIdentifier.cs">
+      <Link>PeerIdentifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerPivotIdentifier.cs">
+      <Link>PeerPivotIdentifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerRecord.cs">
+      <Link>PeerRecord.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\PeerStore.cs">
+      <Link>PeerStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\QueryExecutor.cs">
+      <Link>QueryExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\RoleStore.cs">
+      <Link>RoleStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\WP7\UpdateControls.Correspondence.IsolatedStorage %28WP7%29\SavedFactStore.cs">
+      <Link>SavedFactStore.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj">
+      <Project>{8DF95246-CAB4-4BF8-A8DB-FD168706798B}</Project>
+      <Name>UpdateControls.Correspondence.Data %28Silverlight 5\UpdateControls.Correspondence.Data%29</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
+      <Project>{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}</Project>
+      <Name>UpdateControls.Correspondence %28Silverlight 5\UpdateControls.Correspondence%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
