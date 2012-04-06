@@ -52,8 +52,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="UpdateControls">
-      <HintPath>..\..\packages\UpdateControls.2.1.4.1\lib\sl4-windowsphone71\UpdateControls.dll</HintPath>
+    <Reference Include="UpdateControls, Version=2.2.1.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\UpdateControls.2.2.1.1\lib\sl4-windowsphone71\UpdateControls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
