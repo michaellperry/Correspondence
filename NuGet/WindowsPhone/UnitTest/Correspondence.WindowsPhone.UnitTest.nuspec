@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.WindowsPhone.UnitTest</id>
-    <version>1.3.1.0</version>
+    <version>1.3.2.0</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a Windows Phone 7 application. Turns it into a multiple-client test suite.</description>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database wp7 synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.3.1.0"/>
+      <dependency id="Correspondence" version="1.3.2.0"/>
       <dependency id="silverlight.unittest.wp7" version="3.0.31115.2022"/>
     </dependencies>
   </metadata>
