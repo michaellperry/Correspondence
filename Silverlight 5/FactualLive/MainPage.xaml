@@ -13,7 +13,7 @@
             <RowDefinition Height="80*" />
         </Grid.RowDefinitions>
         
-        <TextBox Grid.Row="0" Margin="4" Text="{Binding Factual, Mode=TwoWay}" AcceptsReturn="True"/>
+        <TextBox Grid.Row="0" Margin="4" Text="{Binding Factual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True"/>
         <ListBox Grid.Row="1" Margin="4" ItemsSource="{Binding Errors}">
             <ListBox.ItemTemplate>
                 <DataTemplate>

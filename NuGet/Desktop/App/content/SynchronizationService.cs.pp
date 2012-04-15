@@ -6,19 +6,16 @@ using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.SSCE;
-using $rootnamespace$.Models;
 
 namespace $rootnamespace$
 {
     public class SynchronizationService
     {
-        private NavigationModel _navigationModel;
-        private Community _community;
+        private const string ThisIdentity = "$rootnamespace$.Identity.this";
+        private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
-        public SynchronizationService(NavigationModel navigationModel)
-        {
-            _navigationModel = navigationModel;
-        }
+        private Community _community;
+        private Identity _identity;
 
         public void Initialize()
         {
@@ -27,8 +24,16 @@ namespace $rootnamespace$
             _community = new Community(new SSCEStorageStrategy(correspondenceDatabase))
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _navigationModel.CurrentUser)
+                .Subscribe(() => _identity)
                 ;
+
+            _identity = _community.LoadFact<Identity>(ThisIdentity);
+            if (_identity == null)
+            {
+                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
+                _identity = _community.AddFact(new Identity(randomId));
+                _community.SetFact(ThisIdentity, _identity);
+            }
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -54,6 +59,11 @@ namespace $rootnamespace$
         public Community Community
         {
             get { return _community; }
+        }
+
+        public Identity Identity
+        {
+            get { return _identity; }
         }
 
         public bool Synchronizing

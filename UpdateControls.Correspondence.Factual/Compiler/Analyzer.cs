@@ -176,7 +176,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             if (!_root.Facts.Any(f => f.Name == sourceQuery.FactName))
                 throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", sourceQuery.FactName), sourceQuery.LineNumber);
             Source.Fact resultType;
-            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, sourceQuery.Name, sourceQuery.Sets, out resultType);
+            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, sourceQuery.Name, sourceQuery.Sets, sourceQuery.LineNumber, out resultType);
             if (sourceQuery.FactName != resultType.Name)
                 throw new CompilerException(
                     String.Format("The query results in \"{0}\", not \"{1}\".",
@@ -189,7 +189,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         private void AnalyzePredicate(Target.Class factClass, Source.Fact fact, Source.Predicate predicate)
         {
             Source.Fact resultType;
-            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, predicate.Sets, out resultType);
+            Target.Query targetQuery = GenerateTargetQuery(factClass, fact, predicate.Name, predicate.Sets, predicate.LineNumber, out resultType);
             factClass.AddPredicate(new Target.Predicate(
                 predicate.Existence == Source.ConditionModifier.Negative ?
                     Target.ConditionModifier.Negative :
@@ -246,9 +246,12 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
         }
 
-        private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, out Source.Fact resultType)
+        private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, int lineNumber, out Source.Fact resultType)
         {
             Target.Query targetQuery = new Target.Query(queryName);
+
+            if (!sets.Any())
+                throw new CompilerException("Define at least one set within a query.", lineNumber);
 
             // Follow the chain of predecessors on both sides of each set.
             Source.Set firstSet = sets.First();
