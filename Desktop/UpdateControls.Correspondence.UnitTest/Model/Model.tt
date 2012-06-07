@@ -137,20 +137,24 @@ namespace <#=targetNamespace.Name#>
 
         // Queries
 <# foreach (Query query in c.Queries) { #>
-        public static Query <#=QueryName(query.Name)#> = new Query()
+        public static Query Make<#=QueryName(query.Name)#>()
+		{
+			return new Query()
 <# foreach (Join join in query.Joins) { #>
 <#   if (join.Conditions.Any()) { #>
 <#      Condition first = join.Conditions.First(); #>
-            .Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>, Condition.WhereIs<#=first.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=first.Type#>.<#=QueryName(first.Name)#>)
+				.Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>, Condition.WhereIs<#=first.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=first.Type#>.Make<#=QueryName(first.Name)#>())
 <#        foreach (Condition condition in join.Conditions.Skip(1)) { #>
-                .And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=condition.Type#>.<#=QueryName(condition.Name)#>)
+					.And().Is<#=condition.Modifier == ConditionModifier.Positive ? "Not" : ""#>Empty(<#=condition.Type#>.Make<#=QueryName(condition.Name)#>())
 <#        } #>
-            )
+				)
 <#   } else { #>
-            .Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>)
+				.Join<#=join.Direction#>(<#=join.Type#>.<#=RoleName(join.Name)#>)
 <#   }#>
 <#}#>
             ;
+		}
+        public static Query <#=QueryName(query.Name)#> = Make<#=QueryName(query.Name)#>();
 <#}#>
 
         // Predicates
@@ -184,7 +188,7 @@ namespace <#=targetNamespace.Name#>
             <#=Separator(",")#><#=ParameterType(predecessor)#> <#=predecessor.Name#>
 <#}#>
 <# foreach (Field field in c.Fields) {#>
-            <#=Separator(",")#><#=FieldType(field)#> <#=field.Name#>
+            <#=Separator(",")#><#=PropertyType(field)#> <#=field.Name#>
 <#}#>
             )
         {
@@ -196,7 +200,7 @@ namespace <#=targetNamespace.Name#>
             _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, <#=RoleName(predecessor.Name)#>, <#=predecessor.Name#>);
 <#}#>
 <# foreach (Field field in c.Fields) {#>
-            _<#=field.Name#> = <#=field.Name#>;
+            _<#=field.Name#> = <#=field.Name#><#=(field.Cardinality == Cardinality.Many) ? ".ToList()" : ""#>;
 <#}#>
         }
 
@@ -385,7 +389,7 @@ private static string ResultTypeNative(ResultValueNative result)
     if (result.Cardinality == Cardinality.One)
         return NativeTypeName(result.NativeType);
     else if (result.Cardinality == Cardinality.Many)
-        return string.Format("List<{0}>", NativeTypeName(result.NativeType));
+        return string.Format("IEnumerable<{0}>", NativeTypeName(result.NativeType));
     else
     {
         if (IsReferenceType(result.NativeType))
@@ -398,7 +402,7 @@ private static string ResultTypeNative(ResultValueNative result)
 private static string ResultTypeFact(ResultValueFact result)
 {
     if (result.Cardinality == Cardinality.Many)
-        return string.Format("List<{0}>", result.FactType);
+        return string.Format("IEnumerable<{0}>", result.FactType);
     else
         return result.FactType;
 }

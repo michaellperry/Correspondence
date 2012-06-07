@@ -78,10 +78,14 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Roles
 
         // Queries
-        public static Query QueryActiveLogOns = new Query()
-            .JoinSuccessors(LogOn.RoleMachine, Condition.WhereIsEmpty(LogOn.QueryIsActive)
-            )
+        public static Query MakeQueryActiveLogOns()
+		{
+			return new Query()
+				.JoinSuccessors(LogOn.RoleMachine, Condition.WhereIsEmpty(LogOn.MakeQueryIsActive())
+				)
             ;
+		}
+        public static Query QueryActiveLogOns = MakeQueryActiveLogOns();
 
         // Predicates
 
@@ -178,27 +182,47 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Roles
 
         // Queries
-        public static Query QueryFavoriteColor = new Query()
-            .JoinSuccessors(User__favoriteColor.RoleUser, Condition.WhereIsEmpty(User__favoriteColor.QueryIsCurrent)
-            )
+        public static Query MakeQueryFavoriteColor()
+		{
+			return new Query()
+				.JoinSuccessors(User__favoriteColor.RoleUser, Condition.WhereIsEmpty(User__favoriteColor.MakeQueryIsCurrent())
+				)
             ;
-        public static Query QueryBetterFavoriteColor = new Query()
-            .JoinSuccessors(User__betterFavoriteColor.RoleUser, Condition.WhereIsEmpty(User__betterFavoriteColor.QueryIsCurrent)
-            )
+		}
+        public static Query QueryFavoriteColor = MakeQueryFavoriteColor();
+        public static Query MakeQueryBetterFavoriteColor()
+		{
+			return new Query()
+				.JoinSuccessors(User__betterFavoriteColor.RoleUser, Condition.WhereIsEmpty(User__betterFavoriteColor.MakeQueryIsCurrent())
+				)
             ;
-        public static Query QueryActivePlayers = new Query()
-            .JoinSuccessors(Player.RoleUser, Condition.WhereIsEmpty(Player.QueryIsActive)
-            )
+		}
+        public static Query QueryBetterFavoriteColor = MakeQueryBetterFavoriteColor();
+        public static Query MakeQueryActivePlayers()
+		{
+			return new Query()
+				.JoinSuccessors(Player.RoleUser, Condition.WhereIsEmpty(Player.MakeQueryIsActive())
+				)
             ;
-        public static Query QueryFinishedPlayers = new Query()
-            .JoinSuccessors(Player.RoleUser, Condition.WhereIsNotEmpty(Player.QueryIsNotActive)
-            )
+		}
+        public static Query QueryActivePlayers = MakeQueryActivePlayers();
+        public static Query MakeQueryFinishedPlayers()
+		{
+			return new Query()
+				.JoinSuccessors(Player.RoleUser, Condition.WhereIsNotEmpty(Player.MakeQueryIsNotActive())
+				)
             ;
-        public static Query QueryFinishedGames = new Query()
-            .JoinSuccessors(Player.RoleUser)
-            .JoinPredecessors(Player.RoleGame, Condition.WhereIsNotEmpty(Game.QueryIsFinished)
-            )
+		}
+        public static Query QueryFinishedPlayers = MakeQueryFinishedPlayers();
+        public static Query MakeQueryFinishedGames()
+		{
+			return new Query()
+				.JoinSuccessors(Player.RoleUser)
+				.JoinPredecessors(Player.RoleGame, Condition.WhereIsNotEmpty(Game.MakeQueryIsFinished())
+				)
             ;
+		}
+        public static Query QueryFinishedGames = MakeQueryFinishedGames();
 
         // Predicates
 
@@ -344,9 +368,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			false));
 
         // Queries
-        public static Query QueryIsCurrent = new Query()
-            .JoinSuccessors(User__favoriteColor.RolePrior)
+        public static Query MakeQueryIsCurrent()
+		{
+			return new Query()
+				.JoinSuccessors(User__favoriteColor.RolePrior)
             ;
+		}
+        public static Query QueryIsCurrent = MakeQueryIsCurrent();
 
         // Predicates
         public static Condition IsCurrent = Condition.WhereIsEmpty(QueryIsCurrent);
@@ -468,9 +496,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			false));
 
         // Queries
-        public static Query QueryIsCurrent = new Query()
-            .JoinSuccessors(User__betterFavoriteColor.RolePrior)
+        public static Query MakeQueryIsCurrent()
+		{
+			return new Query()
+				.JoinSuccessors(User__betterFavoriteColor.RolePrior)
             ;
+		}
+        public static Query QueryIsCurrent = MakeQueryIsCurrent();
 
         // Predicates
         public static Condition IsCurrent = Condition.WhereIsEmpty(QueryIsCurrent);
@@ -681,9 +713,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			false));
 
         // Queries
-        public static Query QueryIsActive = new Query()
-            .JoinSuccessors(LogOff.RoleLogOn)
+        public static Query MakeQueryIsActive()
+		{
+			return new Query()
+				.JoinSuccessors(LogOff.RoleLogOn)
             ;
+		}
+        public static Query QueryIsActive = MakeQueryIsActive();
 
         // Predicates
         public static Condition IsActive = Condition.WhereIsEmpty(QueryIsActive);
@@ -886,19 +922,35 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Roles
 
         // Queries
-        public static Query QueryPlayers = new Query()
-            .JoinSuccessors(Player.RoleGame)
+        public static Query MakeQueryPlayers()
+		{
+			return new Query()
+				.JoinSuccessors(Player.RoleGame)
             ;
-        public static Query QueryMoves = new Query()
-            .JoinSuccessors(Player.RoleGame)
-            .JoinSuccessors(Move.RolePlayer)
+		}
+        public static Query QueryPlayers = MakeQueryPlayers();
+        public static Query MakeQueryMoves()
+		{
+			return new Query()
+				.JoinSuccessors(Player.RoleGame)
+				.JoinSuccessors(Move.RolePlayer)
             ;
-        public static Query QueryOutcomes = new Query()
-            .JoinSuccessors(Outcome.RoleGame)
+		}
+        public static Query QueryMoves = MakeQueryMoves();
+        public static Query MakeQueryOutcomes()
+		{
+			return new Query()
+				.JoinSuccessors(Outcome.RoleGame)
             ;
-        public static Query QueryIsFinished = new Query()
-            .JoinSuccessors(Outcome.RoleGame)
+		}
+        public static Query QueryOutcomes = MakeQueryOutcomes();
+        public static Query MakeQueryIsFinished()
+		{
+			return new Query()
+				.JoinSuccessors(Outcome.RoleGame)
             ;
+		}
+        public static Query QueryIsFinished = MakeQueryIsFinished();
 
         // Predicates
         public static Condition IsFinished = Condition.WhereIsNotEmpty(QueryIsFinished);
@@ -1135,17 +1187,29 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			true));
 
         // Queries
-        public static Query QueryMoves = new Query()
-            .JoinSuccessors(Move.RolePlayer)
+        public static Query MakeQueryMoves()
+		{
+			return new Query()
+				.JoinSuccessors(Move.RolePlayer)
             ;
-        public static Query QueryIsActive = new Query()
-            .JoinPredecessors(Player.RoleGame)
-            .JoinSuccessors(Outcome.RoleGame)
+		}
+        public static Query QueryMoves = MakeQueryMoves();
+        public static Query MakeQueryIsActive()
+		{
+			return new Query()
+				.JoinPredecessors(Player.RoleGame)
+				.JoinSuccessors(Outcome.RoleGame)
             ;
-        public static Query QueryIsNotActive = new Query()
-            .JoinPredecessors(Player.RoleGame)
-            .JoinSuccessors(Outcome.RoleGame)
+		}
+        public static Query QueryIsActive = MakeQueryIsActive();
+        public static Query MakeQueryIsNotActive()
+		{
+			return new Query()
+				.JoinPredecessors(Player.RoleGame)
+				.JoinSuccessors(Outcome.RoleGame)
             ;
+		}
+        public static Query QueryIsNotActive = MakeQueryIsNotActive();
 
         // Predicates
         public static Condition IsActive = Condition.WhereIsEmpty(QueryIsActive);
