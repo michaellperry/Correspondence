@@ -933,12 +933,20 @@ namespace UpdateControls.Correspondence.SQL
 
         private static bool ExecuteScript(int versionId, IDbCommand command)
         {
-            Stream scriptStream = GetScriptStream(String.Format("Correspondence.{0}.sql", versionId));
+            string scriptName = String.Format("Correspondence.{0}.sql", versionId);
+            Stream scriptStream = GetScriptStream(scriptName);
             if (scriptStream == null)
                 return false;
 
             command.CommandText = ReadScriptFromStream(scriptStream);
-            command.ExecuteNonQuery();
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(String.Format("Exception wile running scipt {0}. {1}", scriptName, ex.Message));
+            }
             return true;
         }
 
