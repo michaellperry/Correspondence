@@ -12,16 +12,13 @@ namespace UpdateControls.Correspondence.FieldSerializer
 		public object ReadData(BinaryReader input)
 		{
 			long ticks = input.ReadInt64();
-			byte kind = input.ReadByte();
-			return new DateTime(ticks, (DateTimeKind)kind);
+			return new DateTime(ticks, DateTimeKind.Utc);
 		}
 
 		public void WriteData(BinaryWriter output, object value)
 		{
-			long ticks = ((DateTime)value).Ticks;
-			byte kind = (byte)((DateTime)value).Kind;
+			long ticks = ((DateTime)value).ToUniversalTime().Ticks;
 			output.Write(ticks);
-			output.Write(kind);
 		}
 	}
 }
