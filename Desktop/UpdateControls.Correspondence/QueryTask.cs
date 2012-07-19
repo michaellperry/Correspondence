@@ -7,8 +7,9 @@ namespace UpdateControls.Correspondence
 {
     public class QueryTask
     {
-        private bool _completedSynchronously = true;
+        private bool _completedSynchronously = false;
         private List<CorrespondenceFact> _result;
+        private List<Action<QueryTask>> _continuations = new List<Action<QueryTask>>();
 
         public bool CompletedSynchronously
         {
@@ -22,12 +23,20 @@ namespace UpdateControls.Correspondence
 
         public void ContinueWith(Action<QueryTask> continuation)
         {
-            throw new NotImplementedException();
+            _continuations.Add(continuation);
+        }
+
+        public void Complete(List<CorrespondenceFact> result)
+        {
+            _result = result;
+            foreach (var continuation in _continuations)
+                continuation(this);
         }
 
         public static QueryTask FromResult(List<CorrespondenceFact> result)
         {
             var task = new QueryTask();
+            task._completedSynchronously = true;
             task._result = result;
             return task;
         }

@@ -25,11 +25,27 @@ namespace UpdateControls.Correspondence.Mementos
             task._result = result;
             return task;
         }
+
+        public override void AddContinuation(Action<IdentifiedFactMementoTask> continuation)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public abstract class IdentifiedFactMementoTask
     {
         public abstract bool CompletedSynchronously { get; }
         public abstract List<IdentifiedFactMemento> Result { get; }
+        public abstract void AddContinuation(Action<IdentifiedFactMementoTask> continuation);
+
+        public QueryTask ContinueWith(Func<IdentifiedFactMementoTask, List<CorrespondenceFact>> continuation)
+        {
+            QueryTask queryTask = new QueryTask();
+            AddContinuation(delegate(IdentifiedFactMementoTask t)
+            {
+                queryTask.Complete(continuation(t));
+            });
+            return queryTask;
+        }
     }
 }

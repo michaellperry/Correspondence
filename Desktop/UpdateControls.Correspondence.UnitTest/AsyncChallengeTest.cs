@@ -13,13 +13,15 @@ namespace UpdateControls.Correspondence.UnitTest
     public class AsyncChallengeTest
     {
         private Community _community;
+        private AsyncMemoryStorageStrategy _memory;
         private User _alan;
         private User _flynn;
 
         [TestInitialize]
         public void Initialize()
         {
-            _community = new Community(new AsyncMemoryStorageStrategy())
+            _memory = new AsyncMemoryStorageStrategy();
+            _community = new Community(_memory)
                 .Register<Model.CorrespondenceModel>();
 
             _alan = _community.AddFact(new User("alan1"));
@@ -39,6 +41,14 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Player player = _alan.Challenge(_flynn);
 
+            // Still empty.
+            Pred.Assert(_alan,
+                Has<User>.Property(u => u.ActivePlayers, Is.Empty<Player>())
+            );
+
+            _memory.Quiesce();
+
+            // Not empty anymore.
             Pred.Assert(_alan,
                 Has<User>.Property(u => u.ActivePlayers, Contains<Player>.That(
                     Is.SameAs(player)
@@ -51,6 +61,14 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Player player = _alan.Challenge(_flynn);
 
+            // Not yet.
+            Pred.Assert(_flynn,
+                Has<User>.Property(u => u.ActivePlayers, Is.Empty<Player>())
+            );
+
+            _memory.Quiesce();
+
+            // Now.
             Pred.Assert(_flynn,
                 Has<User>.Property(u => u.ActivePlayers, Contains<Player>.That(
                     Has<Player>.Property(p => p.Game, Is.SameAs(player.Game)) &

@@ -361,7 +361,19 @@ namespace UpdateControls.Correspondence
                 }
             }
             else
-                throw new NotImplementedException();
+            {
+                return task.ContinueWith(delegate(IdentifiedFactMementoTask t)
+                {
+                    List<IdentifiedFactMemento> facts = task.Result;
+                    lock (this)
+                    {
+                        return facts
+                            .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
+                            .Where(m => m != null)
+                            .ToList();
+                    }
+                });
+            }
         }
 
         private CorrespondenceFact GetFactByIdAndMemento(FactID id, FactMemento memento)

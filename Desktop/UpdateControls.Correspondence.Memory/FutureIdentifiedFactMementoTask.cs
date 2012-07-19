@@ -10,6 +10,7 @@ namespace UpdateControls.Correspondence.Memory
     {
         private Func<List<IdentifiedFactMemento>> _action;
         private List<IdentifiedFactMemento> _result;
+        private List<Action<IdentifiedFactMementoTask>> _continuations = new List<Action<IdentifiedFactMementoTask>>();
 
         public FutureIdentifiedFactMementoTask(Func<List<IdentifiedFactMemento>> action)
         {
@@ -19,6 +20,8 @@ namespace UpdateControls.Correspondence.Memory
         public void Run()
         {
             _result = _action();
+            foreach (var continuation in _continuations)
+                continuation(this);
         }
 
         public override bool CompletedSynchronously
@@ -35,6 +38,11 @@ namespace UpdateControls.Correspondence.Memory
 
                 return _result;
             }
+        }
+
+        public override void AddContinuation(Action<IdentifiedFactMementoTask> continuation)
+        {
+            _continuations.Add(continuation);
         }
     }
 }
