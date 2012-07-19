@@ -178,11 +178,6 @@ namespace UpdateControls.Correspondence
             return _model.GetFactByID(id);
 		}
 
-        internal IEnumerable<CorrespondenceFact> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
-        {
-            return _model.ExecuteQuery(queryDefinition, startingId, options);
-        }
-
         internal QueryTask ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             return _model.ExecuteQueryAsync(queryDefinition, startingId, options);

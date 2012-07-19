@@ -73,7 +73,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactID michael = SaveUser("Michael");
             QueryDefinition messagesFromUser = new QueryDefinition();
             messagesFromUser.AddJoin(true, _fromRole, null);
-            var messages = _storage.QueryForFacts(messagesFromUser, michael, null);
+            var messages = _storage.QueryForFactsAsync(messagesFromUser, michael, null).Result;
 
             Assert.AreEqual(2, messages.Count());
             Assert.AreEqual(_messageType, messages.ElementAt(0).Memento.FactType);
@@ -88,7 +88,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             FactID jenny = SaveUser("Jenny");
             QueryDefinition messagesFromUser = new QueryDefinition();
             messagesFromUser.AddJoin(true, _fromRole, null);
-            var messages = _storage.QueryForFacts(messagesFromUser, jenny, null);
+            var messages = _storage.QueryForFactsAsync(messagesFromUser, jenny, null).Result;
 
             Assert.AreEqual(2, messages.Count());
             Assert.AreEqual(_messageType, messages.ElementAt(0).Memento.FactType);
@@ -105,7 +105,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             acknowledges.AddJoin(true, _messageRole, null);
             QueryDefinition unacknowledgedMessagesToUser = new QueryDefinition();
             unacknowledgedMessagesToUser.AddJoin(true, _toRole, new WhereIsEmptyCondition(acknowledges));
-            var messages = _storage.QueryForFacts(unacknowledgedMessagesToUser, michael, null);
+            var messages = _storage.QueryForFactsAsync(unacknowledgedMessagesToUser, michael, null).Result;
 
             Assert.AreEqual(1, messages.Count());
             Assert.AreEqual(_messageType, messages.Single().Memento.FactType);
@@ -120,7 +120,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             acknowledges.AddJoin(true, _messageRole, null);
             QueryDefinition unacknowledgedMessagesToUser = new QueryDefinition();
             unacknowledgedMessagesToUser.AddJoin(true, _toRole, new WhereIsNotEmptyCondition(acknowledges));
-            var messages = _storage.QueryForFacts(unacknowledgedMessagesToUser, michael, null);
+            var messages = _storage.QueryForFactsAsync(unacknowledgedMessagesToUser, michael, null).Result;
 
             Assert.AreEqual(1, messages.Count());
             Assert.AreEqual(_messageType, messages.Single().Memento.FactType);
@@ -134,7 +134,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage.UnitTest
             QueryDefinition friendsQuery = new QueryDefinition();
             friendsQuery.AddJoin(true, _fromRole, null);
             friendsQuery.AddJoin(false, _toRole, null);
-            var friends = _storage.QueryForFacts(friendsQuery, michael, null);
+            var friends = _storage.QueryForFactsAsync(friendsQuery, michael, null).Result;
 
             Assert.AreEqual(2, friends.Count());
             Assert.AreEqual(_userType, friends.ElementAt(0).Memento.FactType);

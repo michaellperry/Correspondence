@@ -346,18 +346,6 @@ namespace UpdateControls.Correspondence
             return true;
         }
 
-        internal IEnumerable<CorrespondenceFact> ExecuteQuery(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
-        {
-            lock (this)
-            {
-                List<IdentifiedFactMemento> facts = _storageStrategy.QueryForFacts(queryDefinition, startingId, options).ToList();
-                return facts
-                    .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
-                    .Where(m => m != null)
-                    .ToList();
-            }
-        }
-
         internal QueryTask ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             IdentifiedFactMementoTask task = _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
