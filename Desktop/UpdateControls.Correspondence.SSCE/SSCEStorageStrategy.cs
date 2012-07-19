@@ -549,6 +549,11 @@ namespace UpdateControls.Correspondence.SSCE
             return id;
         }
 
+        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        {
+            return IdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+        }
+
         public void SaveShare(int peerId, FactID remoteFactId, FactID localFactId)
         {
             using (var session = new Session(_connectionString))

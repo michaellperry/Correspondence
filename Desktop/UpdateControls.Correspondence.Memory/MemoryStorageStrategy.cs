@@ -120,6 +120,11 @@ namespace UpdateControls.Correspondence.Memory
                 .Reverse();
         }
 
+        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        {
+            return IdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+        }
+
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
         {
             return QueryForFacts(queryDefinition, startingId, null).Select(im => im.Id);

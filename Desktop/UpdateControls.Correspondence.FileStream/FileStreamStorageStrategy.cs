@@ -175,6 +175,11 @@ namespace UpdateControls.Correspondence.FileStream
             }
         }
 
+        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        {
+            return IdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+        }
+
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
         {
             using (HistoricalTree factTree = OpenFactTree())

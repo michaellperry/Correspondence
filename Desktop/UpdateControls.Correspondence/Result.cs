@@ -8,10 +8,18 @@ namespace UpdateControls.Correspondence
     public class Result<TResultType> : IEnumerable<TResultType>, IQueryResult
         where TResultType : CorrespondenceFact
     {
+        private enum State
+        {
+            Unloaded,
+            Loading,
+            Loaded
+        }
+
         private CorrespondenceFact _startingPoint;
         private Query _query;
         private QueryOptions _options;
-        private List<TResultType> _results;
+        private List<TResultType> _results = new List<TResultType>();
+        private State _state = State.Unloaded;
         private Independent _indResults = new Independent();
 
         public Result(CorrespondenceFact startingPoint, Query query)
@@ -34,8 +42,7 @@ namespace UpdateControls.Correspondence
             {
                 _indResults.OnGet();
                 LoadResults();
-                List<TResultType> results = new List<TResultType>(_results);
-                return results.GetEnumerator();
+                return _results.GetEnumerator();
             }
         }
 
@@ -45,21 +52,42 @@ namespace UpdateControls.Correspondence
             {
                 _indResults.OnGet();
                 LoadResults();
-                List<TResultType> results = new List<TResultType>(_results);
-                return results.GetEnumerator();
+                return _results.GetEnumerator();
             }
         }
 
         private void LoadResults()
         {
             // If the results are not cached, load them.
-            if (_results == null)
+            if (_state == State.Unloaded)
             {
                 // Load the results from storage and cache them.
-                _results =
-                    _startingPoint.InternalCommunity.ExecuteQuery(_query.QueryDefinition, _startingPoint.ID, _options)
+                QueryTask queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
+                    _query.QueryDefinition, _startingPoint.ID, _options);
+                if (queryTask.CompletedSynchronously)
+                {
+                    _results = queryTask.Result
+                        .OfType<TResultType>()
+                        .ToList();
+                    _state = State.Loaded;
+                }
+                else
+                {
+                    _state = State.Loading;
+                    queryTask.ContinueWith(ExecuteQueryCompleted);
+                }
+            }
+        }
+
+        private void ExecuteQueryCompleted(QueryTask queryTask)
+        {
+            lock (this)
+            {
+                _indResults.OnSet();
+                _results = queryTask.Result
                     .OfType<TResultType>()
                     .ToList();
+                _state = State.Loaded;
             }
         }
 
@@ -67,14 +95,33 @@ namespace UpdateControls.Correspondence
         {
 			lock (this)
 			{
-			    _indResults.OnSet();
-			    UnloadResults();
+                if (_state == State.Loaded)
+                {
+                    if (_indResults.HasDependents)
+                    {
+                        // Load the results from storage and cache them.
+                        QueryTask queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
+                            _query.QueryDefinition, _startingPoint.ID, _options);
+                        if (queryTask.CompletedSynchronously)
+                        {
+                            _indResults.OnSet();
+                            _results = queryTask.Result
+                                .OfType<TResultType>()
+                                .ToList();
+                            _state = State.Loaded;
+                        }
+                        else
+                        {
+                            _state = State.Loading;
+                            queryTask.ContinueWith(ExecuteQueryCompleted);
+                        }
+                    }
+                    else
+                    {
+                        _state = State.Unloaded;
+                    }
+                }
 			}
-        }
-
-        private void UnloadResults()
-        {
-            _results = null;
         }
     }
 }

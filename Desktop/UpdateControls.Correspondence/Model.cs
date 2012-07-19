@@ -358,6 +358,24 @@ namespace UpdateControls.Correspondence
             }
         }
 
+        internal QueryTask ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        {
+            IdentifiedFactMementoTask task = _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
+            if (task.CompletedSynchronously)
+            {
+                List<IdentifiedFactMemento> facts = task.Result;
+                lock (this)
+                {
+                    return QueryTask.FromResult(facts
+                        .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
+                        .Where(m => m != null)
+                        .ToList());
+                }
+            }
+            else
+                throw new NotImplementedException();
+        }
+
         private CorrespondenceFact GetFactByIdAndMemento(FactID id, FactMemento memento)
         {
             // Check for null.

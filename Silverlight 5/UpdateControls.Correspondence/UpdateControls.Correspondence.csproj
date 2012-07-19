@@ -162,6 +162,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactMemento.cs">
       <Link>Mementos\IdentifiedFactMemento.cs</Link>
     </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactMementoTask.cs">
+      <Link>Mementos\IdentifiedFactMementoTask.cs</Link>
+    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactRemote.cs">
       <Link>Mementos\IdentifiedFactRemote.cs</Link>
     </Compile>
@@ -245,6 +248,9 @@
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\QueryInverter.cs">
       <Link>QueryInverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\QueryTask.cs">
+      <Link>QueryTask.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Result.cs">
       <Link>Result.cs</Link>

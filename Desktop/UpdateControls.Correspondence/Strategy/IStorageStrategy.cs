@@ -19,6 +19,7 @@ namespace UpdateControls.Correspondence.Strategy
         bool Save(FactMemento memento, int peerId, out FactID id);
         bool FindExistingFact(FactMemento memento, out FactID id);
         IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
+        IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
         IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId);
         IEnumerable<IdentifiedFactMemento> LoadAllFacts();
         IdentifiedFactMemento LoadNextFact(FactID? lastFactId);
