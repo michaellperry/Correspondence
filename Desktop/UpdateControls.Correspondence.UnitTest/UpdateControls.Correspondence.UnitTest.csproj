@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="CaptureTest.cs" />
     <Compile Include="ChallengeTest.cs" />
+    <Compile Include="AsyncChallengeTest.cs" />
     <Compile Include="FieldSerializerTest.cs" />
     <Compile Include="MockCommunicationStrategy.cs" />
     <Compile Include="MockTransform.cs" />

@@ -7,7 +7,7 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Memory
 {
-    public class MemoryStorageStrategy : IStorageStrategy
+    public class AsyncMemoryStorageStrategy : IStorageStrategy
     {
         private List<FactRecord> _factTable = new List<FactRecord>();
         private List<PeerRecord> _peerTable = new List<PeerRecord>();
@@ -18,6 +18,17 @@ namespace UpdateControls.Correspondence.Memory
         private IDictionary<string, FactID> _namedFacts = new Dictionary<string, FactID>();
 
         private Guid _clientGuid = Guid.NewGuid();
+
+        private Queue<FutureIdentifiedFactMementoTask> _futureTasks = new Queue<FutureIdentifiedFactMementoTask>();
+
+        public void Quiesce()
+        {
+            while (_futureTasks.Any())
+            {
+                var task = _futureTasks.Dequeue();
+                task.Run();
+            }
+        }
 
         public IDisposable BeginDuration()
         {
@@ -113,21 +124,21 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
-        {
-            return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento))
-                .ExecuteQuery(queryDefinition, startingId, options)
-                .Reverse();
-        }
-
         public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return CompletedIdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+            FutureIdentifiedFactMementoTask task = new FutureIdentifiedFactMementoTask(() =>
+                new QueryExecutor(_factTable
+                    .Select(f => f.IdentifiedFactMemento))
+                .ExecuteQuery(queryDefinition, startingId, options)
+                .Reverse()
+                .ToList());
+            _futureTasks.Enqueue(task);
+            return task;
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
         {
-            return QueryForFacts(queryDefinition, startingId, null).Select(im => im.Id);
+            return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento)).ExecuteQuery(queryDefinition, startingId, null).Reverse().Select(im => im.Id);
         }
 
         public int SavePeer(string protocolName, string peerName)

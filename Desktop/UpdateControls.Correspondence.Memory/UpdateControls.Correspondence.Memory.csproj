@@ -78,7 +78,9 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AsyncMemoryStorageStrategy.cs" />
     <Compile Include="FactRecord.cs" />
+    <Compile Include="FutureIdentifiedFactMementoTask.cs" />
     <Compile Include="MemoryStorageStrategy.cs" />
     <Compile Include="MemoryCommunicationStrategy.cs" />
     <Compile Include="MessageRecord.cs" />

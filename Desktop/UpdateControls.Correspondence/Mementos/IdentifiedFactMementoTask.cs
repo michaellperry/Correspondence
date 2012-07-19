@@ -5,30 +5,31 @@ using System.Text;
 
 namespace UpdateControls.Correspondence.Mementos
 {
-    public class IdentifiedFactMementoTask
+    public class CompletedIdentifiedFactMementoTask : IdentifiedFactMementoTask
     {
-        private bool _completedSynchronously = true;
         private List<IdentifiedFactMemento> _result;
 
-        private IdentifiedFactMementoTask()
+        public override bool CompletedSynchronously
         {
+            get { return true; }
         }
 
-        public bool CompletedSynchronously
-        {
-            get { return _completedSynchronously; }
-        }
-
-        public List<IdentifiedFactMemento> Result
+        public override List<IdentifiedFactMemento> Result
         {
             get { return _result; }
         }
 
         public static IdentifiedFactMementoTask FromResult(List<IdentifiedFactMemento> result)
         {
-            var task = new IdentifiedFactMementoTask();
+            var task = new CompletedIdentifiedFactMementoTask();
             task._result = result;
             return task;
         }
+    }
+
+    public abstract class IdentifiedFactMementoTask
+    {
+        public abstract bool CompletedSynchronously { get; }
+        public abstract List<IdentifiedFactMemento> Result { get; }
     }
 }

@@ -294,7 +294,7 @@ namespace UpdateControls.Correspondence.SQL
 
         public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return IdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+            return CompletedIdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
         }
 
         internal string AppendJoins(Session session, QueryDefinition queryDefinition, StringBuilder queryString, List<int> roleIds, StringBuilder conditions, int depth, string priorAlias)

@@ -551,7 +551,7 @@ namespace UpdateControls.Correspondence.SSCE
 
         public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return IdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+            return CompletedIdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
         }
 
         public void SaveShare(int peerId, FactID remoteFactId, FactID localFactId)
