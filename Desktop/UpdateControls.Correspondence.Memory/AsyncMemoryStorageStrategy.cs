@@ -20,13 +20,30 @@ namespace UpdateControls.Correspondence.Memory
         private Guid _clientGuid = Guid.NewGuid();
 
         private Queue<FutureIdentifiedFactMementoTask> _futureTasks = new Queue<FutureIdentifiedFactMementoTask>();
+        private Queue<FutureIdentifiedFactMementoTask> _calculatedTasks = new Queue<FutureIdentifiedFactMementoTask>();
 
         public void Quiesce()
+        {
+            CalculateResults();
+            DeliverResults();
+        }
+
+        public void CalculateResults()
         {
             while (_futureTasks.Any())
             {
                 var task = _futureTasks.Dequeue();
-                task.Run();
+                task.CalculateResults();
+                _calculatedTasks.Enqueue(task);
+            }
+        }
+
+        public void DeliverResults()
+        {
+            while (_calculatedTasks.Any())
+            {
+                var task = _calculatedTasks.Dequeue();
+                task.DeliverResults();
             }
         }
 

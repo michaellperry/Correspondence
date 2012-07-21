@@ -17,9 +17,13 @@ namespace UpdateControls.Correspondence.Memory
             _action = action;
         }
 
-        public void Run()
+        public void CalculateResults()
         {
             _result = _action();
+        }
+
+        public void DeliverResults()
+        {
             foreach (var continuation in _continuations)
                 continuation(this);
         }
