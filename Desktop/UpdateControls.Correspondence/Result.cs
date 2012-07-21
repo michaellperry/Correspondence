@@ -12,7 +12,8 @@ namespace UpdateControls.Correspondence
         {
             Unloaded,
             Loading,
-            Loaded
+            Loaded,
+            Invalidated
         }
 
         private CorrespondenceFact _startingPoint;
@@ -87,7 +88,36 @@ namespace UpdateControls.Correspondence
                 _results = queryTask.Result
                     .OfType<TResultType>()
                     .ToList();
-                _state = State.Loaded;
+                if (_state == State.Loading)
+                {
+                    _state = State.Loaded;
+                }
+                else if (_state == State.Invalidated)
+                {
+                    if (_indResults.HasDependents)
+                    {
+                        // Load the results from storage and cache them.
+                        queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
+                            _query.QueryDefinition, _startingPoint.ID, _options);
+                        if (queryTask.CompletedSynchronously)
+                        {
+                            _indResults.OnSet();
+                            _results = queryTask.Result
+                                .OfType<TResultType>()
+                                .ToList();
+                            _state = State.Loaded;
+                        }
+                        else
+                        {
+                            _state = State.Loading;
+                            queryTask.ContinueWith(ExecuteQueryCompleted);
+                        }
+                    }
+                    else
+                    {
+                        _state = State.Unloaded;
+                    }
+                }
             }
         }
 
@@ -120,6 +150,10 @@ namespace UpdateControls.Correspondence
                     {
                         _state = State.Unloaded;
                     }
+                }
+                else if (_state == State.Loading)
+                {
+                    _state = State.Invalidated;
                 }
 			}
         }
