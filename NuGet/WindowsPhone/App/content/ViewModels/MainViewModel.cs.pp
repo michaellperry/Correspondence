@@ -5,12 +5,12 @@ namespace $rootnamespace$.ViewModels
 {
     public class MainViewModel
     {
-        private Identity _identity;
+        private Individual _individual;
         private SynchronizationService _synhronizationService;
 
-        public MainViewModel(Identity identity, SynchronizationService synhronizationService)
+        public MainViewModel(Individual individual, SynchronizationService synhronizationService)
         {
-            _identity = identity;
+            _individual = individual;
             _synhronizationService = synhronizationService;
         }
 

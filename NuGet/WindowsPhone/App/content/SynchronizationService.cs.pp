@@ -12,7 +12,7 @@ namespace $rootnamespace$
     public class SynchronizationService
     {
         private Community _community;
-        private Identity _identity;
+        private Individual _individual;
 
         public void Initialize()
         {
@@ -20,11 +20,11 @@ namespace $rootnamespace$
             _community = new Community(IsolatedStorageStorageStrategy.Load())
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _identity)
+                .Subscribe(() => _individual)
                 ;
 
-            _identity = _community.AddFact(new Identity(GetAnonymousUserId()));
-            configurationProvider.Identity = _identity;
+            _individual = _community.AddFact(new Individual(GetAnonymousUserId()));
+            configurationProvider.Individual = _individual;
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -48,9 +48,9 @@ namespace $rootnamespace$
             get { return _community; }
         }
 
-        public Identity Identity
+        public Individual Individual
         {
-            get { return _identity; }
+            get { return _individual; }
         }
 
         public void Synchronize()

@@ -12,8 +12,8 @@ namespace $rootnamespace$
     {
         private Community _communityFlynn;
         private Community _communityAlan;
-        private Identity _identityFlynn;
-        private Identity _identityAlan;
+        private Individual _individualFlynn;
+        private Individual _individualAlan;
 
         [TestInitialize]
         public void Initialize()
@@ -22,36 +22,36 @@ namespace $rootnamespace$
             _communityFlynn = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _identityFlynn)
-                .Subscribe(() => _identityFlynn.MessageBoards)
+                .Subscribe(() => _individualFlynn)
+                .Subscribe(() => _individualFlynn.MessageBoards)
 				;
             _communityAlan = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _identityAlan)
-                .Subscribe(() => _identityAlan.MessageBoards)
+                .Subscribe(() => _individualAlan)
+                .Subscribe(() => _individualAlan.MessageBoards)
                 ;
 
-            _identityFlynn = _communityFlynn.AddFact(new Identity("flynn"));
-            _identityAlan = _communityAlan.AddFact(new Identity("alan"));
-            _identityFlynn.JoinMessageBoard("The Grid");
-            _identityAlan.JoinMessageBoard("The Grid");
+            _individualFlynn = _communityFlynn.AddFact(new Individual("flynn"));
+            _individualAlan = _communityAlan.AddFact(new Individual("alan"));
+            _individualFlynn.JoinMessageBoard("The Grid");
+            _individualAlan.JoinMessageBoard("The Grid");
         }
 
         [TestMethod]
         public void InitiallyNoMessages()
         {
-            Assert.IsFalse(_identityAlan.MessageBoards.Single().Messages.Any());
+            Assert.IsFalse(_individualAlan.MessageBoards.Single().Messages.Any());
         }
 
         [TestMethod]
         public void FlynnSendsAMessage()
         {
-            _identityFlynn.MessageBoards.Single().SendMessage("Reindeer flotilla");
+            _individualFlynn.MessageBoards.Single().SendMessage("Reindeer flotilla");
 
             Synchronize();
 
-            Message message = _identityAlan.MessageBoards.Single().Messages.Single();
+            Message message = _individualAlan.MessageBoards.Single().Messages.Single();
             Assert.AreEqual("Reindeer flotilla", message.Text);
         }
 

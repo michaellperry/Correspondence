@@ -58,9 +58,9 @@ namespace $rootnamespace$
             get { return _community.LastException; }
         }
 
-        public Identity GetIdentity(string userName)
+        public Individual GetIndividual(string userName)
         {
-            return _community.AddFact(new Identity(userName));
+            return _community.AddFact(new Individual(userName));
         }
 
         public MessageBoard GetMessageBoard(string topic)

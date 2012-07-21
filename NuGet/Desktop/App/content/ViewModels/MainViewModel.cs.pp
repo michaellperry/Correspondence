@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using $rootnamespace$.Models;
 using UpdateControls.Correspondence;
 using UpdateControls.XAML;
 
@@ -11,13 +10,11 @@ namespace $rootnamespace$.ViewModels
     public class MainViewModel
     {
         private Community _community;
-        private NavigationModel _navigationModel;
         private SynchronizationService _synhronizationService;
 
-        public MainViewModel(Community community, NavigationModel navigationModel, SynchronizationService synhronizationService)
+        public MainViewModel(Community community, SynchronizationService synhronizationService)
         {
             _community = community;
-            _navigationModel = navigationModel;
             _synhronizationService = synhronizationService;
         }
 

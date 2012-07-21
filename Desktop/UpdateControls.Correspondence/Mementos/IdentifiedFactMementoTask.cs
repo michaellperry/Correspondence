@@ -5,6 +5,23 @@ using System.Text;
 
 namespace UpdateControls.Correspondence.Mementos
 {
+    public abstract class IdentifiedFactMementoTask
+    {
+        public abstract bool CompletedSynchronously { get; }
+        public abstract List<IdentifiedFactMemento> Result { get; }
+        public abstract void AddContinuation(Action<IdentifiedFactMementoTask> continuation);
+
+        public QueryTask ContinueWith(Func<IdentifiedFactMementoTask, List<CorrespondenceFact>> continuation)
+        {
+            QueryTask queryTask = new QueryTask();
+            AddContinuation(delegate(IdentifiedFactMementoTask t)
+            {
+                queryTask.Complete(continuation(t));
+            });
+            return queryTask;
+        }
+    }
+
     public class CompletedIdentifiedFactMementoTask : IdentifiedFactMementoTask
     {
         private List<IdentifiedFactMemento> _result;
@@ -32,20 +49,57 @@ namespace UpdateControls.Correspondence.Mementos
         }
     }
 
-    public abstract class IdentifiedFactMementoTask
+    public class PendingIdentifiedFactMementoTask : IdentifiedFactMementoTask
     {
-        public abstract bool CompletedSynchronously { get; }
-        public abstract List<IdentifiedFactMemento> Result { get; }
-        public abstract void AddContinuation(Action<IdentifiedFactMementoTask> continuation);
+        private List<Action<IdentifiedFactMementoTask>> _continuations;
+        private List<IdentifiedFactMemento> _result;
 
-        public QueryTask ContinueWith(Func<IdentifiedFactMementoTask, List<CorrespondenceFact>> continuation)
+        public override bool CompletedSynchronously
         {
-            QueryTask queryTask = new QueryTask();
-            AddContinuation(delegate(IdentifiedFactMementoTask t)
+            get { return false; }
+        }
+
+        public override List<IdentifiedFactMemento> Result
+        {
+            get
             {
-                queryTask.Complete(continuation(t));
-            });
-            return queryTask;
+                lock (this)
+                {
+                    return _result;
+                }
+            }
+        }
+
+        public override void AddContinuation(Action<IdentifiedFactMementoTask> continuation)
+        {
+            bool isComplete = false;
+            lock (this)
+            {
+                if (_result == null)
+                {
+                    if (_continuations == null)
+                        _continuations = new List<Action<IdentifiedFactMementoTask>>();
+                    _continuations.Add(continuation);
+                }
+                else
+                    isComplete = true;
+            }
+            if (isComplete)
+                continuation(this);
+        }
+
+        public void Complete(List<IdentifiedFactMemento> result)
+        {
+            List<Action<IdentifiedFactMementoTask>> continuations;
+            lock (this)
+            {
+                _result = result;
+                continuations = _continuations;
+                _continuations = null;
+            }
+            if (continuations != null)
+                foreach (var continuation in continuations)
+                    continuation(this);
         }
     }
 }

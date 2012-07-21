@@ -7,6 +7,7 @@ using UpdateControls.Correspondence.Data;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using System.Threading;
 
 namespace UpdateControls.Correspondence.IsolatedStorage
 {
@@ -173,7 +174,18 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
-        public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        {
+            var task = new PendingIdentifiedFactMementoTask();
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                var result = QueryForFacts(queryDefinition, startingId, options).ToList();
+                task.Complete(result);
+            });
+            return task;
+        }
+
+        private IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             lock (this)
             {
@@ -185,11 +197,6 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                         .ToList();
                 }
             }
-        }
-
-        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
-        {
-            return CompletedIdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
@@ -343,7 +350,6 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                 OutgoingTimestampStore.DeleteAll(store);
             }
         }
-
 
         public bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId)
         {

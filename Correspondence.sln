@@ -69,7 +69,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A-656F-46C5-AC58-EC984A4DDB42}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Model\Correspondence.Model.nuspec = NuGet\Model\Correspondence.Model.nuspec
-		NuGet\Model\content\Identity.cs.pp = NuGet\Model\content\Identity.cs.pp
+		NuGet\Model\content\Individual.cs.pp = NuGet\Model\content\Individual.cs.pp
 		NuGet\Model\content\MessageBoard.cs.pp = NuGet\Model\content\MessageBoard.cs.pp
 		NuGet\Model\content\Model.fact.pp = NuGet\Model\content\Model.fact.pp
 		NuGet\Model\content\Model.tt = NuGet\Model\content\Model.tt
@@ -185,6 +185,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{49D99AE5-214
 		NuGet\Web\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Web\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Web\App\content\Readme.txt.pp = NuGet\Web\App\content\Readme.txt.pp
 		NuGet\Web\App\content\SynchronizationService.cs.pp = NuGet\Web\App\content\SynchronizationService.cs.pp
+		NuGet\Web\App\content\web.config.transform = NuGet\Web\App\content\web.config.transform
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{61740D33-5BCB-4988-A25B-31FE4255C796}"

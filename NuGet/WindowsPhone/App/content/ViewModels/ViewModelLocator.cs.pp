@@ -17,8 +17,8 @@ namespace $rootnamespace$.ViewModels
             _synchronizationService = new SynchronizationService();
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
-            _main = new MainViewModel(_synchronizationService.Identity, _synchronizationService);
-            _settings = new SettingsViewModel(_synchronizationService.Identity);
+            _main = new MainViewModel(_synchronizationService.Individual, _synchronizationService);
+            _settings = new SettingsViewModel(_synchronizationService.Individual);
         }
 
         public object Main

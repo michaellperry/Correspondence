@@ -5,17 +5,17 @@ namespace $rootnamespace$.ViewModels
 {
     public class SettingsViewModel
     {
-        private Identity _identity;
+        private Individual _individual;
 
-        public SettingsViewModel(Identity identity)
+        public SettingsViewModel(Individual individual)
         {
-            _identity = identity;
+            _individual = individual;
         }
 
         public bool EnableToastNotification
         {
-            get { return _identity.ToastNotificationEnabled; }
-            set { _identity.ToastNotificationEnabled = value; }
+            get { return _individual.ToastNotificationEnabled; }
+            set { _individual.ToastNotificationEnabled = value; }
         }
     }
 }

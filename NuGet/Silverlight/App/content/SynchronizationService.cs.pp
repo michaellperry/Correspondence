@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
@@ -10,11 +11,11 @@ namespace $rootnamespace$
 {
     public class SynchronizationService
     {
-        private const string ThisIdentity = "$rootnamespace$.Identity.this";
+        private const string ThisIndividual = "$rootnamespace$.Individual.this";
         private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
         private Community _community;
-        private Identity _identity;
+        private Individual _individual;
 
         public void Initialize()
         {
@@ -22,15 +23,15 @@ namespace $rootnamespace$
             _community = new Community(IsolatedStorageStorageStrategy.Load())
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
-                .Subscribe(() => _identity)
+                .Subscribe(() => _individual)
                 ;
 
-            _identity = _community.LoadFact<Identity>(ThisIdentity);
-            if (_identity == null)
+            _individual = _community.LoadFact<Individual>(ThisIndividual);
+            if (_individual == null)
             {
                 string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
-                _identity = _community.AddFact(new Identity(randomId));
-                _community.SetFact(ThisIdentity, _identity);
+                _individual = _community.AddFact(new Individual(randomId));
+                _community.SetFact(ThisIndividual, _individual);
             }
 
             // Synchronize whenever the user has something to send.
@@ -59,9 +60,9 @@ namespace $rootnamespace$
             get { return _community; }
         }
 
-        public Identity Identity
+        public Individual Individual
         {
-            get { return _identity; }
+            get { return _individual; }
         }
 
         public bool Synchronizing

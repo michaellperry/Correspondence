@@ -4,7 +4,7 @@ using UpdateControls.Correspondence;
 
 namespace $rootnamespace$
 {
-    public partial class Identity
+    public partial class Individual
     {
         public bool ToastNotificationEnabled
         {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using $rootnamespace$.Models;
 using UpdateControls.XAML;
 
 namespace $rootnamespace$.ViewModels
@@ -14,11 +13,10 @@ namespace $rootnamespace$.ViewModels
 
         public ViewModelLocator()
         {
-            NavigationModel navigationModel = new NavigationModel();
-            _synchronizationService = new SynchronizationService(navigationModel);
+            _synchronizationService = new SynchronizationService();
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
-            _main = new MainViewModel(_synchronizationService.Community, navigationModel, _synchronizationService);
+            _main = new MainViewModel(_synchronizationService.Community, _synchronizationService);
         }
 
         public object Main
