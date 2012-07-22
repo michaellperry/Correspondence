@@ -18,7 +18,8 @@ namespace $rootnamespace$
         {
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             _community = new Community(IsolatedStorageStorageStrategy.Load())
-                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
+                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider)
+	                .SetNotificationStrategy(new WindowsPhoneNotificationStrategy(configurationProvider)))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individual)
                 ;
