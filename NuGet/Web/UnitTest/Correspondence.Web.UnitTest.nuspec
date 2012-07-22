@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.Web.UnitTest</id>
-    <version>1.4.0.1</version>
+    <version>1.4.0.2</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to an MVC 3 unit test application. Adds a multiple-client test suite.</description>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.4.0.1"/>
+      <dependency id="Correspondence" version="1.4.0.2"/>
     </dependencies>
   </metadata>
 </package>
