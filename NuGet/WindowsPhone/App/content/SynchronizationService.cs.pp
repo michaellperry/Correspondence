@@ -6,6 +6,7 @@ using Microsoft.Phone.Net.NetworkInformation;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
 using UpdateControls.Correspondence.BinaryHTTPClient;
+using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
 
 namespace $rootnamespace$
 {
