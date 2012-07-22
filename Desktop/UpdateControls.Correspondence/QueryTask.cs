@@ -7,9 +7,20 @@ namespace UpdateControls.Correspondence
 {
     public class QueryTask
     {
-        private bool _completedSynchronously = false;
+        private bool _completedSynchronously;
         private List<CorrespondenceFact> _result;
-        private List<Action<QueryTask>> _continuations = new List<Action<QueryTask>>();
+        private Action<QueryTask> _continuation = null;
+
+        public QueryTask() :
+            this(false, null)
+        {
+        }
+
+        private QueryTask(bool completedSynchronously, List<CorrespondenceFact> result)
+        {
+            _completedSynchronously = completedSynchronously;
+            _result = result;
+        }
 
         public bool CompletedSynchronously
         {
@@ -23,22 +34,44 @@ namespace UpdateControls.Correspondence
 
         public void ContinueWith(Action<QueryTask> continuation)
         {
-            _continuations.Add(continuation);
+            if (!SetContinuation(continuation))
+                continuation(this);
+        }
+
+        private bool SetContinuation(Action<QueryTask> continuation)
+        {
+            lock (this)
+            {
+                if (_result == null)
+                {
+                    _continuation = continuation;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void Complete(List<CorrespondenceFact> result)
         {
-            _result = result;
-            foreach (var continuation in _continuations)
+            Action<QueryTask> continuation = SetResult(result);
+            if (continuation != null)
                 continuation(this);
+        }
+
+        private Action<QueryTask> SetResult(List<CorrespondenceFact> result)
+        {
+            lock (this)
+            {
+                _result = result;
+                var continuation = _continuation;
+                _continuation = null;
+                return continuation;
+            }
         }
 
         public static QueryTask FromResult(List<CorrespondenceFact> result)
         {
-            var task = new QueryTask();
-            task._completedSynchronously = true;
-            task._result = result;
-            return task;
+            return new QueryTask(true, result);
         }
     }
 }
