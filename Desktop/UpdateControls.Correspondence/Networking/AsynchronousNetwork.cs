@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
-using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -25,7 +23,6 @@ namespace UpdateControls.Correspondence.Networking
 
 			_depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
 			_depPushSubscriptions.Invalidated += TriggerSubscriptionUpdate;
-            _depPushSubscriptions.OnGet();
 		}
 
 		public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
@@ -66,12 +63,14 @@ namespace UpdateControls.Correspondence.Networking
 
         public void BeginSending()
         {
+            _depPushSubscriptions.OnGet();
             foreach (var serverProxy in _serverProxies)
                 serverProxy.BeginSending();
         }
 
         public void BeginReceiving()
         {
+            _depPushSubscriptions.OnGet();
             foreach (var serverProxy in _serverProxies)
                 serverProxy.BeginReceiving();
         }

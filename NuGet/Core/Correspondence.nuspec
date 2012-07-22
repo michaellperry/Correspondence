@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence</id>
-    <version>1.4.0.3</version>
+    <version>1.4.0.4</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Persistence and synchronization for occasionally connected Windows Phone 7 applications.</description>
