@@ -25,6 +25,7 @@ namespace UpdateControls.Correspondence.Networking
 
 			_depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
 			_depPushSubscriptions.Invalidated += TriggerSubscriptionUpdate;
+            _depPushSubscriptions.OnGet();
 		}
 
 		public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
