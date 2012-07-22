@@ -97,14 +97,15 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 );
 
             // type -> (native_type | identifier) ("?" | "*")?
-            // native_type -> "int" | "float" | "char" | "string" | "date" | "time"
+            // native_type -> "int" | "float" | "char" | "string" | "date" | "time" | "byte"
             var nativeTypeNameRule =
                 Reduce(Terminal(Symbol.String), t => new NativeTypeAtLine(NativeType.String, t.LineNumber)) |
                 Reduce(Terminal(Symbol.Int), t => new NativeTypeAtLine(NativeType.Int, t.LineNumber)) |
                 Reduce(Terminal(Symbol.Float), t => new NativeTypeAtLine(NativeType.Float, t.LineNumber)) |
                 Reduce(Terminal(Symbol.Char), t => new NativeTypeAtLine(NativeType.Char, t.LineNumber)) |
                 Reduce(Terminal(Symbol.Date), t => new NativeTypeAtLine(NativeType.Date, t.LineNumber)) |
-                Reduce(Terminal(Symbol.Time), t => new NativeTypeAtLine(NativeType.Time, t.LineNumber));
+                Reduce(Terminal(Symbol.Time), t => new NativeTypeAtLine(NativeType.Time, t.LineNumber)) |
+                Reduce(Terminal(Symbol.Byte), t => new NativeTypeAtLine(NativeType.Byte, t.LineNumber));
             var cardinalityRule = Optional(
                 Reduce(Terminal(Symbol.Question), t => Cardinality.Optional) |
                 Reduce(Terminal(Symbol.Asterisk), t => Cardinality.Many),

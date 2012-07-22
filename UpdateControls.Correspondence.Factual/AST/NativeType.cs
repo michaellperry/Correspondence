@@ -9,6 +9,7 @@ namespace UpdateControls.Correspondence.Factual.AST
         Float,
         Char,
         Date,
-        Time
+        Time,
+        Byte
     }
 }

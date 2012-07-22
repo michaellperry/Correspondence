@@ -18,7 +18,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             { Source.NativeType.Float,  Target.NativeType.Float },
             { Source.NativeType.Char,   Target.NativeType.Char },
             { Source.NativeType.Date,   Target.NativeType.Date },
-            { Source.NativeType.Time,   Target.NativeType.Time }
+            { Source.NativeType.Time,   Target.NativeType.Time },
+            { Source.NativeType.Byte,   Target.NativeType.Byte }
         };
 
         private static Dictionary<Source.Cardinality, Target.Cardinality> _cardinalityMap = new Dictionary<Source.Cardinality, Target.Cardinality>()

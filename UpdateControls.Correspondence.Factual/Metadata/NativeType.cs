@@ -9,6 +9,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         Float,
         Char,
         Date,
-        Time
+        Time,
+        Byte
     }
 }
