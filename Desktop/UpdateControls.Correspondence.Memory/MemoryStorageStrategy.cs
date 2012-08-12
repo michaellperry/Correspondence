@@ -41,83 +41,96 @@ namespace UpdateControls.Correspondence.Memory
 
         public FactMemento Load(FactID id)
         {
-            FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
-            if (factRecord != null)
-                return factRecord.IdentifiedFactMemento.Memento;
-            else
-                throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
+            lock (this)
+            {
+                FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
+                if (factRecord != null)
+                    return factRecord.IdentifiedFactMemento.Memento;
+                else
+                    throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
+            }
         }
 
         public bool Save(FactMemento memento, int peerId, out FactID id)
         {
-            // See if the fact already exists.
-            FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
-            if (fact == null)
+            lock (this)
             {
-                // It doesn't, so create it.
-                FactID newFactID = new FactID() { key = _factTable.Count + 1 };
-                id = newFactID;
-                fact = new FactRecord()
+                // See if the fact already exists.
+                FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
+                if (fact == null)
                 {
-                    IdentifiedFactMemento = new IdentifiedFactMemento(id, memento),
-                    PeerId = peerId
-                };
+                    // It doesn't, so create it.
+                    FactID newFactID = new FactID() { key = _factTable.Count + 1 };
+                    id = newFactID;
+                    fact = new FactRecord()
+                    {
+                        IdentifiedFactMemento = new IdentifiedFactMemento(id, memento),
+                        PeerId = peerId
+                    };
 
-                _factTable.Add(fact);
+                    _factTable.Add(fact);
 
-                // Store a message for each pivot.
-                _messageTable.AddRange(memento.Predecessors
-                    .Where(predecessor => predecessor.IsPivot)
-                    .Select(predecessor => new MessageRecord(
-                        new MessageMemento(predecessor.ID, newFactID),
-                        newFactID,
-                        predecessor.Role)));
+                    // Store a message for each pivot.
+                    _messageTable.AddRange(memento.Predecessors
+                        .Where(predecessor => predecessor.IsPivot)
+                        .Select(predecessor => new MessageRecord(
+                            new MessageMemento(predecessor.ID, newFactID),
+                            newFactID,
+                            predecessor.Role)));
 
-                // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
-                List<FactID> nonPivots = memento.Predecessors
-                    .Where(predecessor => !predecessor.IsPivot)
-                    .Select(predecessor => predecessor.ID)
-                    .ToList();
-                List<MessageRecord> predecessorsPivots = _messageTable
-                    .Where(message => nonPivots.Contains(message.Message.FactId))
-                    .Distinct()
-                    .ToList();
-                _messageTable.AddRange(predecessorsPivots
-                    .Select(predecessorPivot => new MessageRecord(
-                        new MessageMemento(predecessorPivot.Message.PivotId, newFactID),
-                        predecessorPivot.AncestorFact,
-                        predecessorPivot.AncestorRole)));
+                    // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
+                    List<FactID> nonPivots = memento.Predecessors
+                        .Where(predecessor => !predecessor.IsPivot)
+                        .Select(predecessor => predecessor.ID)
+                        .ToList();
+                    List<MessageRecord> predecessorsPivots = _messageTable
+                        .Where(message => nonPivots.Contains(message.Message.FactId))
+                        .Distinct()
+                        .ToList();
+                    _messageTable.AddRange(predecessorsPivots
+                        .Select(predecessorPivot => new MessageRecord(
+                            new MessageMemento(predecessorPivot.Message.PivotId, newFactID),
+                            predecessorPivot.AncestorFact,
+                            predecessorPivot.AncestorRole)));
 
-                return true;
-            }
-            else
-            {
-                id = fact.IdentifiedFactMemento.Id;
-                return false;
+                    return true;
+                }
+                else
+                {
+                    id = fact.IdentifiedFactMemento.Id;
+                    return false;
+                }
             }
         }
 
         public bool FindExistingFact(FactMemento memento, out FactID id)
         {
-            // See if the fact already exists.
-            FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
-            if (fact == null)
+            lock (this)
             {
-                id = new FactID();
-                return false;
-            }
-            else
-            {
-                id = fact.IdentifiedFactMemento.Id;
-                return true;
+                // See if the fact already exists.
+                FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
+                if (fact == null)
+                {
+                    id = new FactID();
+                    return false;
+                }
+                else
+                {
+                    id = fact.IdentifiedFactMemento.Id;
+                    return true;
+                }
             }
         }
 
         public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento))
-                .ExecuteQuery(queryDefinition, startingId, options)
-                .Reverse();
+            lock (this)
+            {
+                return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento))
+                    .ExecuteQuery(queryDefinition, startingId, options)
+                    .Reverse()
+                    .ToList();
+            }
         }
 
         public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
@@ -177,15 +190,18 @@ namespace UpdateControls.Correspondence.Memory
 
         public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
         {
-            return _messageTable
-                .Where(message =>
-                    message.Message.FactId.key > timestamp.Key &&
-                    !_factTable.Any(fact =>
-                        fact.IdentifiedFactMemento.Id.Equals(message.Message.FactId) &&
-                        fact.PeerId == peerId))
-                .Select(message => message.Message)
-                .Distinct()
-                .ToList();
+            lock (this)
+            {
+                return _messageTable
+                    .Where(message =>
+                        message.Message.FactId.key > timestamp.Key &&
+                        !_factTable.Any(fact =>
+                            fact.IdentifiedFactMemento.Id.Equals(message.Message.FactId) &&
+                            fact.PeerId == peerId))
+                    .Select(message => message.Message)
+                    .Distinct()
+                    .ToList();
+            }
         }
 
         public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
@@ -210,19 +226,22 @@ namespace UpdateControls.Correspondence.Memory
 
         public IdentifiedFactMemento LoadNextFact(FactID? lastFactId)
         {
-            if (lastFactId == null)
+            lock (this)
             {
-                return _factTable
-                    .Select(record => record.IdentifiedFactMemento)
-                    .FirstOrDefault();
-            }
-            else
-            {
-                return _factTable
-                    .SkipWhile(record => record.IdentifiedFactMemento.Id.key != lastFactId.Value.key)
-                    .Skip(1)
-                    .Select(record => record.IdentifiedFactMemento)
-                    .FirstOrDefault();
+                if (lastFactId == null)
+                {
+                    return _factTable
+                        .Select(record => record.IdentifiedFactMemento)
+                        .FirstOrDefault();
+                }
+                else
+                {
+                    return _factTable
+                        .SkipWhile(record => record.IdentifiedFactMemento.Id.key != lastFactId.Value.key)
+                        .Skip(1)
+                        .Select(record => record.IdentifiedFactMemento)
+                        .FirstOrDefault();
+                }
             }
         }
 
