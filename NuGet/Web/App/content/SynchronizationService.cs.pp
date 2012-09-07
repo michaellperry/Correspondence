@@ -1,8 +1,11 @@
 using System;
 using System.Configuration;
+using System.IO;
 using System.Timers;
+using System.Web.Hosting;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
+using UpdateControls.Correspondence.FileStream;
 using UpdateControls.Correspondence.SQL;
 using UpdateControls.Collections;
 using System.Collections.Generic;
@@ -18,8 +21,15 @@ namespace $rootnamespace$
         public void Initialize()
         {
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
-            string correspondenceConnectionString = ConfigurationManager.ConnectionStrings["ApplicationServices"].ConnectionString;
-            _community = new Community(new SQLStorageStrategy(correspondenceConnectionString).UpgradeDatabase())
+
+			// TODO: Uncomment these lines to choose a database storage strategy.
+            // string correspondenceConnectionString = ConfigurationManager.ConnectionStrings["Correspondence"].ConnectionString;
+			// var storageStrategy = new SQLStorageStrategy(correspondenceConnectionString).UpgradeDatabase();
+
+            string path = Path.Combine(HostingEnvironment.MapPath("~/App_Data"), "Correspondence");
+			var storageStrategy = FileStreamStorageStrategy.Load(path);
+
+            _community = new Community(storageStrategy)
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _theDomain)
