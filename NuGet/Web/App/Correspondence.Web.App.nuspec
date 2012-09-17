@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.Web.App</id>
-    <version>1.4.0.7</version>
+    <version>1.4.0.8</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to an MVC 3 application project. Sets up SQL storage and HTTP synchronization.</description>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database MVC synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.4.0.7"/>
+      <dependency id="Correspondence" version="1.4.0.8"/>
     </dependencies>
   </metadata>
 </package>

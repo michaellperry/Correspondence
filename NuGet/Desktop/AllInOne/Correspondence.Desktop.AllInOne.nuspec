@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.Desktop.AllInOne</id>
-    <version>1.4.0.7</version>
+    <version>1.4.0.8</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a WPF application project. Puts everything in one project. Not good for unit testing.</description>
@@ -13,8 +13,8 @@
     <language>en-US</language>
     <tags>nosql database WPF synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence.Desktop.App" version="1.4.0.7"/>
-      <dependency id="Correspondence.Model" version="1.4.0.7"/>
+      <dependency id="Correspondence.Desktop.App" version="1.4.0.8"/>
+      <dependency id="Correspondence.Model" version="1.4.0.8"/>
     </dependencies>
   </metadata>
 </package>

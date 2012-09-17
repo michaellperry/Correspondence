@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Linq;
 using UpdateControls.Fields;
 using UpdateControls.Correspondence.BinaryHTTPClient;
