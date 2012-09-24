@@ -249,7 +249,7 @@ namespace <#=targetNamespace.Name#>
 
         // Query result access
 <# foreach (Result result in c.Results.OfType<ResultDirect>()) { #>
-        public IEnumerable<<#=result.Type#>> <#=Capitalize(result.Query.Name)#>
+        public <#=ResultClass(result)#> <#=Capitalize(result.Query.Name)#>
         {
             get { return _<#=result.Query.Name#>; }
         }

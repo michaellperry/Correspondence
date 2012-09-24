@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence.Strategy;
+using System.Threading;
 
 namespace UpdateControls.Correspondence
 {
@@ -21,6 +22,7 @@ namespace UpdateControls.Correspondence
         private QueryOptions _options;
         private List<TResultType> _results = new List<TResultType>();
         private State _state = State.Unloaded;
+        private ManualResetEvent _loaded = new ManualResetEvent(false);
         private Independent _indResults = new Independent();
 
         public Result(CorrespondenceFact startingPoint, Query query)
@@ -47,6 +49,20 @@ namespace UpdateControls.Correspondence
             }
         }
 
+        public IEnumerable<TResultType> Steady()
+        {
+            lock (this)
+            {
+                _indResults.OnGet();
+                LoadResults();
+            }
+            _loaded.WaitOne();
+            lock (this)
+            {
+                return _results;
+            }
+        }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             lock (this)
@@ -70,11 +86,11 @@ namespace UpdateControls.Correspondence
                     _results = queryTask.Result
                         .OfType<TResultType>()
                         .ToList();
-                    _state = State.Loaded;
+                    SetState(State.Loaded);
                 }
                 else
                 {
-                    _state = State.Loading;
+                    SetState(State.Loading);
                     queryTask.ContinueWith(ExecuteQueryCompleted);
                 }
             }
@@ -90,7 +106,7 @@ namespace UpdateControls.Correspondence
                     .ToList();
                 if (_state == State.Loading)
                 {
-                    _state = State.Loaded;
+                    SetState(State.Loaded);
                 }
                 else if (_state == State.Invalidated)
                 {
@@ -105,17 +121,17 @@ namespace UpdateControls.Correspondence
                             _results = queryTask.Result
                                 .OfType<TResultType>()
                                 .ToList();
-                            _state = State.Loaded;
+                            SetState(State.Loaded);
                         }
                         else
                         {
-                            _state = State.Loading;
+                            SetState(State.Loading);
                             queryTask.ContinueWith(ExecuteQueryCompleted);
                         }
                     }
                     else
                     {
-                        _state = State.Unloaded;
+                        SetState(State.Unloaded);
                     }
                 }
             }
@@ -138,24 +154,36 @@ namespace UpdateControls.Correspondence
                             _results = queryTask.Result
                                 .OfType<TResultType>()
                                 .ToList();
-                            _state = State.Loaded;
+                            SetState(State.Loaded);
                         }
                         else
                         {
-                            _state = State.Loading;
+                            SetState(State.Loading);
                             queryTask.ContinueWith(ExecuteQueryCompleted);
                         }
                     }
                     else
                     {
-                        _state = State.Unloaded;
+                        SetState(State.Unloaded);
                     }
                 }
                 else if (_state == State.Loading)
                 {
-                    _state = State.Invalidated;
+                    SetState(State.Invalidated);
                 }
 			}
+        }
+
+        private void SetState(State newState)
+        {
+            bool wasLoaded = _state == State.Loaded;
+            bool isLoaded = newState == State.Loaded;
+
+            _state = newState;
+            if (wasLoaded && !isLoaded)
+                _loaded.Reset();
+            else if (!wasLoaded && isLoaded)
+                _loaded.Set();
         }
     }
 }

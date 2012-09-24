@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
 using Predassert;
+using System.Threading;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -54,6 +55,23 @@ namespace UpdateControls.Correspondence.UnitTest
                     Is.SameAs(player)
                 ))
             );
+        }
+
+        [TestMethod]
+        public void UserStartsAGame_Steady()
+        {
+            Player player = _alan.Challenge(_flynn);
+
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                Thread.Sleep(500);
+                _memory.Quiesce();
+            });
+
+            // The steady state is not empty.
+            var players = _alan.ActivePlayers.Steady();
+            Assert.IsTrue(players.Any(), "The collection is still empty.");
+            Assert.IsTrue(players.Contains(player));
         }
 
         [TestMethod]

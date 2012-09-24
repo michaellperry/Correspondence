@@ -126,7 +126,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 
         // Query result access
-        public IEnumerable<LogOn> ActiveLogOns
+        public Result<LogOn> ActiveLogOns
         {
             get { return _activeLogOns; }
         }
@@ -272,15 +272,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
-        public IEnumerable<Player> ActivePlayers
+        public Result<Player> ActivePlayers
         {
             get { return _activePlayers; }
         }
-        public IEnumerable<Player> FinishedPlayers
+        public Result<Player> FinishedPlayers
         {
             get { return _finishedPlayers; }
         }
-        public IEnumerable<Game> FinishedGames
+        public Result<Game> FinishedGames
         {
             get { return _finishedGames; }
         }
@@ -996,15 +996,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 
         // Query result access
-        public IEnumerable<Player> Players
+        public Result<Player> Players
         {
             get { return _players; }
         }
-        public IEnumerable<Move> Moves
+        public Result<Move> Moves
         {
             get { return _moves; }
         }
-        public IEnumerable<Outcome> Outcomes
+        public Result<Outcome> Outcomes
         {
             get { return _outcomes; }
         }
@@ -1269,7 +1269,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Query result access
-        public IEnumerable<Move> Moves
+        public Result<Move> Moves
         {
             get { return _moves; }
         }
