@@ -286,24 +286,26 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Mutable property access
-        public Disputable<string> FavoriteColor
+        public TransientDisputable<User__favoriteColor, string> FavoriteColor
         {
-            get { return _favoriteColor.Select(fact => fact.Value).AsDisputable(); }
+            get { return _favoriteColor.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				if (_favoriteColor.Count() != 1 || !object.Equals(_favoriteColor.Single().Value, value.Value))
+				var current = _favoriteColor.Steady().ToList();
+				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
 					Community.AddFact(new User__favoriteColor(this, _favoriteColor, value.Value));
 				}
 			}
         }
 
-        public Disputable<Color> BetterFavoriteColor
+        public TransientDisputable<User__betterFavoriteColor, Color> BetterFavoriteColor
         {
-            get { return _betterFavoriteColor.Select(fact => fact.Value).AsDisputable(); }
+            get { return _betterFavoriteColor.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				if (_betterFavoriteColor.Count() != 1 || !object.Equals(_betterFavoriteColor.Single().Value, value.Value))
+				var current = _betterFavoriteColor.Steady().ToList();
+				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
 					Community.AddFact(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));
 				}

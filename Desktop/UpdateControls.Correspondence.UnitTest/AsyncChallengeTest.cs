@@ -62,11 +62,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Player player = _alan.Challenge(_flynn);
 
-            ThreadPool.QueueUserWorkItem(delegate
-            {
-                Thread.Sleep(500);
-                _memory.Quiesce();
-            });
+            QuiesceLater();
 
             // The steady state is not empty.
             var players = _alan.ActivePlayers.Steady();
@@ -96,6 +92,31 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
+        [Ignore]
+        public void PropertyIsInconsistent()
+        {
+            _flynn.FavoriteColor = "Blue";
+
+            // It's still blank.
+            Assert.AreEqual(null, _flynn.FavoriteColor.Value);
+
+            _memory.Quiesce();
+
+            // Now it's set.
+            Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);
+        }
+
+        [TestMethod]
+        public void PropertyIsConsistent_Steady()
+        {
+            _flynn.FavoriteColor = "Blue";
+
+            QuiesceLater();
+
+            Assert.AreEqual("Blue", _flynn.FavoriteColor.Steady().Value);
+        }
+
+        [TestMethod]
         public void SurvivesARaceCondition()
         {
             _alan.Challenge(_flynn);
@@ -119,6 +140,15 @@ namespace UpdateControls.Correspondence.UnitTest
 
             // And now we can see both.
             Assert.AreEqual(2, _alan.ActivePlayers.Count());
+        }
+
+        private void QuiesceLater()
+        {
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                Thread.Sleep(500);
+                _memory.Quiesce();
+            });
         }
     }
 }

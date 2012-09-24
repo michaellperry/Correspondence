@@ -63,6 +63,11 @@ namespace UpdateControls.Correspondence
             }
         }
 
+        public TransientDisputable<TResultType, TValue> AsTransientDisputable<TValue>(Func<TResultType, TValue> selector)
+        {
+            return new TransientDisputable<TResultType, TValue>(this, selector);
+        }
+
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             lock (this)
@@ -184,6 +189,55 @@ namespace UpdateControls.Correspondence
                 _loaded.Reset();
             else if (!wasLoaded && isLoaded)
                 _loaded.Set();
+        }
+    }
+
+    public class TransientDisputable<TFact, TValue>
+        where TFact : CorrespondenceFact
+    {
+        private readonly Result<TFact> _result;
+        private readonly Func<TFact, TValue> _selector;
+        private readonly TValue _value;
+
+        public TransientDisputable(Result<TFact> result, Func<TFact, TValue> selector)
+        {
+            _result = result;
+            _selector = selector;
+        }
+
+        private TransientDisputable(TValue value)
+        {
+            _value = value;
+        }
+
+        public TValue Value
+        {
+            get { return _result != null ? _result.Select(_selector).FirstOrDefault() : _value; }
+        }
+
+        public bool InConflict
+        {
+            get { return _result.Count() > 1; }
+        }
+
+        public IEnumerable<TValue> Candidates
+        {
+            get { return _result.Select(_selector); }
+        }
+
+        public Disputable<TValue> Steady()
+        {
+            return _result.Steady().Select(_selector).AsDisputable();
+        }
+
+        public static implicit operator TValue(TransientDisputable<TFact, TValue> disputable)
+        {
+            return disputable.Value;
+        }
+
+        public static implicit operator TransientDisputable<TFact, TValue>(TValue value)
+        {
+            return new TransientDisputable<TFact, TValue>(value);
         }
     }
 }
