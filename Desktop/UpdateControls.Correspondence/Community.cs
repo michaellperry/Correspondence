@@ -76,6 +76,13 @@ namespace UpdateControls.Correspondence
             return this;
         }
 
+        public Community Subscribe<T>(Func<Result<T>> pivots)
+            where T : CorrespondenceFact
+        {
+            _network.Subscribe(new Subscription(this, () => pivots().OfType<CorrespondenceFact>()));
+            return this;
+        }
+
         public Community Subscribe<T>(Func<T> pivot)
             where T : CorrespondenceFact
         {
