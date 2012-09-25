@@ -60,14 +60,21 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public void UserStartsAGame_Steady()
         {
-            Player player = _alan.Challenge(_flynn);
+            QuiescePeriodically();
 
-            QuiesceLater();
+            try
+            {
+                Player player = _alan.Challenge(_flynn);
 
-            // The steady state is not empty.
-            var players = _alan.ActivePlayers.Steady();
-            Assert.IsTrue(players.Any(), "The collection is still empty.");
-            Assert.IsTrue(players.Contains(player));
+                // The steady state is not empty.
+                var players = _alan.ActivePlayers.Steady();
+                Assert.IsTrue(players.Any(), "The collection is still empty.");
+                Assert.IsTrue(players.Contains(player));
+            }
+            finally
+            {
+                Done();
+            }
         }
 
         [TestMethod]
@@ -92,7 +99,6 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        [Ignore]
         public void PropertyIsInconsistent()
         {
             _flynn.FavoriteColor = "Blue";
@@ -109,11 +115,18 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public void PropertyIsConsistent_Steady()
         {
-            _flynn.FavoriteColor = "Blue";
+            QuiescePeriodically();
 
-            QuiesceLater();
+            try
+            {
+                _flynn.FavoriteColor = "Blue";
 
-            Assert.AreEqual("Blue", _flynn.FavoriteColor.Steady().Value);
+                Assert.AreEqual("Blue", _flynn.FavoriteColor.Steady().Value);
+            }
+            finally
+            {
+                Done();
+            }
         }
 
         [TestMethod]
@@ -142,13 +155,26 @@ namespace UpdateControls.Correspondence.UnitTest
             Assert.AreEqual(2, _alan.ActivePlayers.Count());
         }
 
-        private void QuiesceLater()
+        private bool _done = false;
+        private Thread _background;
+
+        private void QuiescePeriodically()
         {
-            ThreadPool.QueueUserWorkItem(delegate
+            _background = new Thread(delegate(object o)
             {
-                Thread.Sleep(500);
-                _memory.Quiesce();
+                while (!_done)
+                {
+                    Thread.Sleep(100);
+                    _memory.Quiesce();
+                }
             });
+            _background.Start();
+        }
+
+        private void Done()
+        {
+            _done = true;
+            _background.Join();
         }
     }
 }
