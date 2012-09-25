@@ -130,6 +130,7 @@ namespace UpdateControls.Correspondence.UnitTest
             {
                 _flynn.FavoriteColor = "Blue";
 
+                // Ensure that the value is loaded.
                 Assert.AreEqual("Blue", _flynn.FavoriteColor.Ensure().Value);
             }
             finally
