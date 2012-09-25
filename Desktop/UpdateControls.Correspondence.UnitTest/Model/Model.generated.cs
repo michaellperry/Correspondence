@@ -291,7 +291,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _favoriteColor.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				var current = _favoriteColor.Steady().ToList();
+				var current = _favoriteColor.Ensure().ToList();
 				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
 					Community.AddFact(new User__favoriteColor(this, _favoriteColor, value.Value));
@@ -304,7 +304,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _betterFavoriteColor.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				var current = _betterFavoriteColor.Steady().ToList();
+				var current = _betterFavoriteColor.Ensure().ToList();
 				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
 					Community.AddFact(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));

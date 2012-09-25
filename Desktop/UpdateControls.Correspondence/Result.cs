@@ -49,7 +49,7 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public IEnumerable<TResultType> Steady()
+        public IEnumerable<TResultType> Ensure()
         {
             lock (this)
             {
@@ -225,9 +225,9 @@ namespace UpdateControls.Correspondence
             get { return _result.Select(_selector); }
         }
 
-        public Disputable<TValue> Steady()
+        public Disputable<TValue> Ensure()
         {
-            return _result.Steady().Select(_selector).AsDisputable();
+            return _result.Ensure().Select(_selector).AsDisputable();
         }
 
         public static implicit operator TValue(TransientDisputable<TFact, TValue> disputable)

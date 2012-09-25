@@ -58,7 +58,7 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void UserStartsAGame_Steady()
+        public void UserStartsAGame_Ensured()
         {
             QuiescePeriodically();
 
@@ -66,8 +66,8 @@ namespace UpdateControls.Correspondence.UnitTest
             {
                 Player player = _alan.Challenge(_flynn);
 
-                // The steady state is not empty.
-                var players = _alan.ActivePlayers.Steady();
+                // Ensure that we have loaded the players.
+                var players = _alan.ActivePlayers.Ensure();
                 Assert.IsTrue(players.Any(), "The collection is still empty.");
                 Assert.IsTrue(players.Contains(player));
             }
@@ -101,19 +101,28 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public void PropertyIsInconsistent()
         {
-            _flynn.FavoriteColor = "Blue";
+            QuiescePeriodically();
 
-            // It's still blank.
-            Assert.AreEqual(null, _flynn.FavoriteColor.Value);
+            try
+            {
+                _flynn.FavoriteColor = "Blue";
 
-            _memory.Quiesce();
+                // It's still blank.
+                Assert.AreEqual(null, _flynn.FavoriteColor.Value);
 
-            // Now it's set.
-            Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);
+                _memory.Quiesce();
+
+                // Now it's set.
+                Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);
+            }
+            finally
+            {
+                Done();
+            }
         }
 
         [TestMethod]
-        public void PropertyIsConsistent_Steady()
+        public void EnsuredPropertyIsConsistent()
         {
             QuiescePeriodically();
 
@@ -121,7 +130,7 @@ namespace UpdateControls.Correspondence.UnitTest
             {
                 _flynn.FavoriteColor = "Blue";
 
-                Assert.AreEqual("Blue", _flynn.FavoriteColor.Steady().Value);
+                Assert.AreEqual("Blue", _flynn.FavoriteColor.Ensure().Value);
             }
             finally
             {
