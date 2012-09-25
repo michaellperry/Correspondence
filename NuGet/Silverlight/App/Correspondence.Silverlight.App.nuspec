@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.Silverlight.App</id>
-    <version>1.4.1.1</version>
+    <version>1.4.1.2</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Add to a Silverlight application project. Sets up isolated storage and POX synchronization.</description>
@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database silverlight synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" version="1.4.1.1"/>
+      <dependency id="Correspondence" version="1.4.1.2"/>
     </dependencies>
   </metadata>
 </package>
