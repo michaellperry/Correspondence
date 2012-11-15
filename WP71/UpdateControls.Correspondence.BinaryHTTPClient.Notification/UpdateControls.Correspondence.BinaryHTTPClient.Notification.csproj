@@ -22,6 +22,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,8 +54,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="mscorlib.extensions" />
-    <Reference Include="UpdateControls, Version=2.2.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\UpdateControls.2.2.1.1\lib\sl4-windowsphone71\UpdateControls.dll</HintPath>
+    <Reference Include="UpdateControls, Version=2.2.1.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\updatecontrols.2.2.1.4\lib\sl4-windowsphone71\UpdateControls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +81,7 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\WindowsPhone\App\lib\SL4-windowsphone71\"</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
