@@ -1,0 +1,124 @@
+﻿namespace UpdateControls.Correspondence.UnitTest.Model;
+
+fact Machine {
+key:
+	unique;
+	
+query:
+	LogOn *activeLogOns {
+		LogOn l : l.machine = this
+			where l.isActive
+	}
+}
+
+fact User {
+key:
+	string userName;
+
+mutable:
+	publish string favoriteColor;
+	publish Color betterFavoriteColor;
+
+query:
+	Player* activePlayers {
+		Player p : p.user = this
+			where p.isActive
+	}
+
+	Player* finishedPlayers {
+		Player p : p.user = this
+			where p.isNotActive
+	}
+
+	Game* finishedGames {
+		Player p : p.user = this
+		Game g : p.game = g
+			where g.isFinished
+	}
+}
+
+fact Color {
+key:
+	string name;
+}
+
+fact LogOn {
+key:
+	unique;
+	User user;
+	Machine machine;
+	
+query:
+	bool isActive {
+		not exists LogOff lo : lo.logOn = this
+	}
+}
+
+fact LogOff {
+key:
+	LogOn logOn;
+}
+
+fact Game {
+key:
+	unique;
+
+query:
+	Player* players {
+		Player p : p.game = this
+	}
+
+	Move* moves {
+		Move m : m.player.game = this
+	}
+
+	Outcome* outcomes {
+		Outcome o : o.game = this
+	}
+
+	bool isFinished {
+		exists Outcome o : o.game = this
+	}
+}
+
+fact GameName {
+key:
+	Game game;
+	string name;
+	GameName* prior;
+}
+
+fact Player {
+key:
+	publish User user
+        where this.isActive;
+	publish Game game
+        where this.isActive;
+	int index;
+
+query:
+	Move* moves {
+		Move m : m.player = this
+	}
+
+	bool isActive {
+		not exists Outcome o : o.game = this.game
+	}
+
+	bool isNotActive {
+		exists Outcome o : o.game = this.game
+	}
+}
+
+fact Move {
+key:
+	Player player;
+	int index;
+	int square;
+}
+
+fact Outcome {
+key:
+	publish Game game;
+	Player? winner;
+}

@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8CA9E44C-1CD6-4736-AEEF-BF0DA059AC6B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UpdateControls.Correspondence</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Community.cs" />
+    <Compile Include="Community.Platform.cs" />
+    <Compile Include="Condition.cs" />
+    <Compile Include="Conditions\AndCondition.cs" />
+    <Compile Include="Conditions\AndConditionBuilder.cs" />
+    <Compile Include="Conditions\ConditionEvaluator.cs" />
+    <Compile Include="Conditions\IConditionVisitor.cs" />
+    <Compile Include="Conditions\SimpleCondition.cs" />
+    <Compile Include="CorrespondenceException.cs" />
+    <Compile Include="CorrespondenceFact.cs" />
+    <Compile Include="Disputable.cs" />
+    <Compile Include="FactMetadata.cs" />
+    <Compile Include="FieldSerializer\BinaryHelper.cs" />
+    <Compile Include="FieldSerializer\ByteFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\CharFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DateTimeFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DecimalFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DoubleFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\FloatFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\IntFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\LongFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
+    <Compile Include="ICommunity.cs" />
+    <Compile Include="IQueryResult.cs" />
+    <Compile Include="Mementos\CorrespondenceFactType.cs" />
+    <Compile Include="Mementos\Crc32.cs" />
+    <Compile Include="Mementos\FactID.cs" />
+    <Compile Include="Mementos\FactMemento.cs" />
+    <Compile Include="Mementos\FactTreeMemento.cs" />
+    <Compile Include="Mementos\GetResultMemento.cs" />
+    <Compile Include="Mementos\IdentifiedFactBase.cs" />
+    <Compile Include="Mementos\IdentifiedFactMemento.cs" />
+    <Compile Include="Mementos\IdentifiedFactMementoTask.cs" />
+    <Compile Include="Mementos\IdentifiedFactRemote.cs" />
+    <Compile Include="Mementos\MessageMemento.cs" />
+    <Compile Include="Mementos\NamedFactMemento.cs" />
+    <Compile Include="Mementos\PivotMemento.cs" />
+    <Compile Include="Mementos\PredecessorMemento.cs" />
+    <Compile Include="Mementos\RoleMemento.cs" />
+    <Compile Include="Mementos\TimestampID.cs" />
+    <Compile Include="Mementos\UnpublishMemento.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Networking\AsynchronousNetwork.cs" />
+    <Compile Include="Networking\AsynchronousServerProxy.cs" />
+    <Compile Include="Networking\ISubscriptionProvider.cs" />
+    <Compile Include="Networking\Network.cs" />
+    <Compile Include="Networking\PushSubscriptionProxy.cs" />
+    <Compile Include="Networking\ResultAggregate.cs" />
+    <Compile Include="Networking\SynchronizeResult.cs" />
+    <Compile Include="Networking\SynchronousNetwork.cs" />
+    <Compile Include="PredecessorBase.cs" />
+    <Compile Include="PredecessorList.cs" />
+    <Compile Include="PredecessorObj.cs" />
+    <Compile Include="PredecessorOpt.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\InvalidatedQuery.cs" />
+    <Compile Include="Queries\Join.cs" />
+    <Compile Include="Queries\QueryDefinition.cs" />
+    <Compile Include="Queries\QueryInvalidator.cs" />
+    <Compile Include="Queries\Unpublisher.cs" />
+    <Compile Include="Query.cs" />
+    <Compile Include="QueryInverter.cs" />
+    <Compile Include="QueryTask.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="RoleBase.cs" />
+    <Compile Include="RoleRelationship.cs" />
+    <Compile Include="Service\IService.cs" />
+    <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
+    <Compile Include="Strategy\ICorrespondenceModel.cs" />
+    <Compile Include="Strategy\IFieldSerializer.cs" />
+    <Compile Include="Strategy\IPushSubscription.cs" />
+    <Compile Include="Strategy\IStorageStrategy.cs" />
+    <Compile Include="Strategy\ITransform.cs" />
+    <Compile Include="Strategy\QueryOptions.cs" />
+    <Compile Include="Subscription.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UpdateControls, Version=2.2.1.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\updatecontrols.2.2.1.4\lib\NetCore45\UpdateControls.dll</HintPath>
+    </Reference>
+    <Reference Include="UpdateControls.XAML, Version=2.2.1.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\updatecontrols.2.2.1.4\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mallardsoft.snk" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
+    <VisualStudioVersion>11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Mallardsoft.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
