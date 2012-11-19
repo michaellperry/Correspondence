@@ -20,32 +20,11 @@ namespace UpdateControls.Correspondence.Memory
 
         private Guid _clientGuid = Guid.NewGuid();
 
-        private Queue<FutureIdentifiedFactMementoTask> _futureTasks = new Queue<FutureIdentifiedFactMementoTask>();
-        private Queue<FutureIdentifiedFactMementoTask> _calculatedTasks = new Queue<FutureIdentifiedFactMementoTask>();
+        private Queue<Task<List<IdentifiedFactMemento>>> _futureTasks = new Queue<Task<List<IdentifiedFactMemento>>>();
 
         public void Quiesce()
         {
-            CalculateResults();
-            DeliverResults();
-        }
-
-        public void CalculateResults()
-        {
-            while (_futureTasks.Any())
-            {
-                var task = _futureTasks.Dequeue();
-                task.CalculateResults();
-                _calculatedTasks.Enqueue(task);
-            }
-        }
-
-        public void DeliverResults()
-        {
-            while (_calculatedTasks.Any())
-            {
-                var task = _calculatedTasks.Dequeue();
-                task.DeliverResults();
-            }
+            Task.WaitAll(_futureTasks.ToArray());
         }
 
         public IDisposable BeginDuration()
@@ -149,9 +128,9 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            FutureIdentifiedFactMementoTask task = new FutureIdentifiedFactMementoTask(() =>
+            Task<List<IdentifiedFactMemento>> task = Task.Run(() =>
                 new QueryExecutor(_factTable
                     .Select(f => f.IdentifiedFactMemento))
                 .ExecuteQuery(queryDefinition, startingId, options)

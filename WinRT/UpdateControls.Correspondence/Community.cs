@@ -192,9 +192,9 @@ namespace UpdateControls.Correspondence
             return _model.GetFactByID(id);
 		}
 
-        internal QueryTask ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return _model.ExecuteQueryAsync(queryDefinition, startingId, options);
+            return await _model.ExecuteQueryAsync(queryDefinition, startingId, options);
         }
     }
 }

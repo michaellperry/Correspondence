@@ -140,32 +140,6 @@ namespace UpdateControls.Correspondence.UnitTest
             }
         }
 
-        [TestMethod]
-        public void SurvivesARaceCondition()
-        {
-            _alan.ChallengeAsync(_flynn);
-
-            // Start loading.
-            Assert.IsFalse(_alan.ActivePlayers.Any(), "The ActivePlayers list should be initially empty.");
-
-            _memory.CalculateResults();
-
-            // Make a change while it is loading.
-            _flynn.ChallengeAsync(_alan);
-
-            Assert.IsFalse(_alan.ActivePlayers.Any(), "The ActivePlayers list should still be empty.");
-
-            _memory.DeliverResults();
-
-            // Now we can see the first one.
-            Assert.AreEqual(1, _alan.ActivePlayers.Count());
-
-            _memory.Quiesce();
-
-            // And now we can see both.
-            Assert.AreEqual(2, _alan.ActivePlayers.Count());
-        }
-
         private bool _done = false;
         private Task _background;
 

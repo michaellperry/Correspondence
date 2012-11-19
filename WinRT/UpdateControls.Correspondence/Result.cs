@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence.Strategy;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence
 {
@@ -84,9 +85,9 @@ namespace UpdateControls.Correspondence
             if (_state == State.Unloaded)
             {
                 // Load the results from storage and cache them.
-                QueryTask queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
+                Task<List<CorrespondenceFact>> queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
                     _query.QueryDefinition, _startingPoint.ID, _options);
-                if (queryTask.CompletedSynchronously)
+                if (queryTask.IsCompleted)
                 {
                     _results = queryTask.Result
                         .OfType<TResultType>()
@@ -101,7 +102,7 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        private void ExecuteQueryCompleted(QueryTask queryTask)
+        private void ExecuteQueryCompleted(Task<List<CorrespondenceFact>> queryTask)
         {
             lock (this)
             {
@@ -120,7 +121,7 @@ namespace UpdateControls.Correspondence
                         // Load the results from storage and cache them.
                         queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
                             _query.QueryDefinition, _startingPoint.ID, _options);
-                        if (queryTask.CompletedSynchronously)
+                        if (queryTask.IsCompleted)
                         {
                             _indResults.OnSet();
                             _results = queryTask.Result
@@ -151,9 +152,9 @@ namespace UpdateControls.Correspondence
                     if (_indResults.HasDependents)
                     {
                         // Load the results from storage and cache them.
-                        QueryTask queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
+                        Task<List<CorrespondenceFact>> queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
                             _query.QueryDefinition, _startingPoint.ID, _options);
-                        if (queryTask.CompletedSynchronously)
+                        if (queryTask.IsCompleted)
                         {
                             _indResults.OnSet();
                             _results = queryTask.Result

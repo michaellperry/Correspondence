@@ -12,10 +12,8 @@ namespace UpdateControls.Correspondence.UnitTest
     public class ThreadSafeHashCodeTest
     {
         private const int KnownHashCode = 1611906182;
-        private const int HashCount = 2000000;
 
         private CountdownEvent _threadsRunning;
-        private int _computedHashCode = KnownHashCode;
 
         [TestInitialize]
         public void Initialize()

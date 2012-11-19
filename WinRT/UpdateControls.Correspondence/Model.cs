@@ -397,33 +397,15 @@ namespace UpdateControls.Correspondence
             return true;
         }
 
-        internal QueryTask ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            IdentifiedFactMementoTask task = _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
-            if (task.CompletedSynchronously)
+            List<IdentifiedFactMemento> facts = await _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
+            using (await _lock.EnterAsync())
             {
-                List<IdentifiedFactMemento> facts = task.Result;
-                lock (this)
-                {
-                    return QueryTask.FromResult(facts
-                        .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
-                        .Where(m => m != null)
-                        .ToList());
-                }
-            }
-            else
-            {
-                return task.ContinueWith(delegate(IdentifiedFactMementoTask t)
-                {
-                    List<IdentifiedFactMemento> facts = task.Result;
-                    lock (this)
-                    {
-                        return facts
-                            .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
-                            .Where(m => m != null)
-                            .ToList();
-                    }
-                });
+                return facts
+                    .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
+                    .Where(m => m != null)
+                    .ToList();
             }
         }
 
