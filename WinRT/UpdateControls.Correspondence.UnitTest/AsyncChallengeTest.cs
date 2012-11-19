@@ -39,9 +39,9 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void UserStartsAGame()
+        public async Task UserStartsAGame()
         {
-            Player player = _alan.Challenge(_flynn);
+            Player player = await _alan.ChallengeAsync(_flynn);
 
             // Still empty.
             Pred.Assert(_alan,
@@ -59,13 +59,13 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void UserStartsAGame_Ensured()
+        public async Task UserStartsAGame_Ensured()
         {
             QuiescePeriodically();
 
             try
             {
-                Player player = _alan.Challenge(_flynn);
+                Player player = await _alan.ChallengeAsync(_flynn);
 
                 // Ensure that we have loaded the players.
                 var players = _alan.ActivePlayers.Ensure();
@@ -79,9 +79,9 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void OpponentSeesTheGame()
+        public async Task OpponentSeesTheGame()
         {
-            Player player = _alan.Challenge(_flynn);
+            Player player = await _alan.ChallengeAsync(_flynn);
 
             // Not yet.
             Pred.Assert(_flynn,
@@ -143,7 +143,7 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public void SurvivesARaceCondition()
         {
-            _alan.Challenge(_flynn);
+            _alan.ChallengeAsync(_flynn);
 
             // Start loading.
             Assert.IsFalse(_alan.ActivePlayers.Any(), "The ActivePlayers list should be initially empty.");
@@ -151,7 +151,7 @@ namespace UpdateControls.Correspondence.UnitTest
             _memory.CalculateResults();
 
             // Make a change while it is loading.
-            _flynn.Challenge(_alan);
+            _flynn.ChallengeAsync(_alan);
 
             Assert.IsFalse(_alan.ActivePlayers.Any(), "The ActivePlayers list should still be empty.");
 

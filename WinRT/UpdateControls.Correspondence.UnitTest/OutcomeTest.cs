@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
 using Predassert;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -17,14 +18,14 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _flynn;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             _community = new Community(new MemoryStorageStrategy())
                 .Register<Model.CorrespondenceModel>();
 
             _alan = _community.AddFact(new User("alan1"));
             _flynn = _community.AddFact(new User("flynn1"));
-            Player playerAlan = _alan.Challenge(_flynn);
+            Player playerAlan = await _alan.ChallengeAsync(_flynn);
             Player playerFlynn = _flynn.ActivePlayers.Single();
 
             playerAlan.MakeMove(0, 0);

@@ -36,9 +36,9 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void UserStartsAGame()
+        public async Task UserStartsAGame()
         {
-            Player player = _alan.Challenge(_flynn);
+            Player player = await _alan.ChallengeAsync(_flynn);
 
             Pred.Assert(_alan,
                 Has<User>.Property(u => u.ActivePlayers, Contains<Player>.That(
@@ -48,9 +48,9 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void OpponentSeesTheGame()
+        public async Task OpponentSeesTheGame()
         {
-            Player player = _alan.Challenge(_flynn);
+            Player player = await _alan.ChallengeAsync(_flynn);
 
             Pred.Assert(_flynn,
                 Has<User>.Property(u => u.ActivePlayers, Contains<Player>.That(

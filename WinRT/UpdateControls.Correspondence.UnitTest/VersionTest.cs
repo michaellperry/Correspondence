@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using UpdateControls.Correspondence.UnitTest.Model;
 using UpdateControls.Correspondence.Memory;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -20,7 +21,7 @@ namespace UpdateControls.Correspondence.UnitTest
         private MemoryStorageStrategy _storageFlynn;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             // Alan is on version 2. He can understand more facts that Flynn.
             MemoryCommunicationStrategy sharedCommunication = new MemoryCommunicationStrategy();
@@ -39,7 +40,7 @@ namespace UpdateControls.Correspondence.UnitTest
 
             _userAlan = _communityAlan.AddFact(new User("alan1"));
             _userFlynn = _communityFlynn.AddFact(new User("flynn1"));
-            _playerAlan = _userAlan.Challenge(_communityAlan.AddFact(new User("flynn1")));
+            _playerAlan = await _userAlan.ChallengeAsync(_communityAlan.AddFact(new User("flynn1")));
             Synchronize();
             _playerFlynn = _userFlynn.ActivePlayers.Single();
         }

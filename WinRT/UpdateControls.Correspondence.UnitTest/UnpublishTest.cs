@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
@@ -15,7 +16,7 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _remoteAlan;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             MemoryCommunicationStrategy sharedCommunication = new MemoryCommunicationStrategy();
             _community = new Community(new MemoryStorageStrategy())
@@ -34,7 +35,7 @@ namespace UpdateControls.Correspondence.UnitTest
             _alan = _community.AddFact(new User("alan1"));
             _flynn = _community.AddFact(new User("flynn1"));
             _remoteAlan = _remoteCommunity.AddFact(new User("alan1"));
-            Player playerAlan = _alan.Challenge(_flynn);
+            Player playerAlan = await _alan.ChallengeAsync(_flynn);
             Player playerFlynn = _flynn.ActivePlayers.Single();
 
             playerAlan.MakeMove(0, 0);
