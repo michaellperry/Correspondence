@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Networking;
 using UpdateControls.Correspondence.Queries;
@@ -107,6 +108,12 @@ namespace UpdateControls.Correspondence
             where T : CorrespondenceFact
         {
             return _model.AddFact<T>(prototype);
+        }
+
+        public async Task<T> AddFactAsync<T>(T prototype)
+            where T : CorrespondenceFact
+        {
+            return await _model.AddFactAsync<T>(prototype);
         }
 
         public T FindFact<T>(T prototype)

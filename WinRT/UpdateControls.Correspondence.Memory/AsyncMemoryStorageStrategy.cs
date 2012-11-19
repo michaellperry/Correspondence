@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
@@ -125,6 +126,13 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
+        public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
+        {
+            FactID id;
+            bool wasSaved = Save(memento, peerId, out id);
+            return new SaveResult { WasSaved = wasSaved, Id = id };
+        }
+
         public bool FindExistingFact(FactMemento memento, out FactID id)
         {
             // See if the fact already exists.
@@ -156,6 +164,11 @@ namespace UpdateControls.Correspondence.Memory
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
         {
             return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento)).ExecuteQuery(queryDefinition, startingId, null).Reverse().Select(im => im.Id);
+        }
+
+        public async Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
+        {
+            return QueryForIds(queryDefinition, startingId);
         }
 
         public int SavePeer(string protocolName, string peerName)

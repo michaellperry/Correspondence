@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence
 {
@@ -6,6 +7,8 @@ namespace UpdateControls.Correspondence
     {
         IDisposable BeginDuration();
         T AddFact<T>(T prototype)
+            where T : CorrespondenceFact;
+        Task<T> AddFactAsync<T>(T prototype)
             where T : CorrespondenceFact;
         T FindFact<T>(T prototype)
             where T : CorrespondenceFact;

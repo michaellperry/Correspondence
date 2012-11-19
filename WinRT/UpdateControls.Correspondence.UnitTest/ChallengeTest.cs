@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
 using Predassert;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -17,13 +18,13 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _flynn;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             _community = new Community(new MemoryStorageStrategy())
                 .Register<Model.CorrespondenceModel>();
 
-            _alan = _community.AddFact(new User("alan1"));
-            _flynn = _community.AddFact(new User("flynn1"));
+            _alan = await _community.AddFactAsync(new User("alan1"));
+            _flynn = await _community.AddFactAsync(new User("flynn1"));
         }
 
         [TestMethod]

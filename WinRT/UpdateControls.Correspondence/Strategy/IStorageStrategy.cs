@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using System;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.Strategy
 {
@@ -17,9 +18,11 @@ namespace UpdateControls.Correspondence.Strategy
         void SetID(string factName, FactID id);
         FactMemento Load(FactID id);
         bool Save(FactMemento memento, int peerId, out FactID id);
+        Task<SaveResult> SaveAsync(FactMemento memento, int peerId);
         bool FindExistingFact(FactMemento memento, out FactID id);
         IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
         IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId);
+        Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId);
         IEnumerable<IdentifiedFactMemento> LoadAllFacts();
         IdentifiedFactMemento LoadNextFact(FactID? lastFactId);
 

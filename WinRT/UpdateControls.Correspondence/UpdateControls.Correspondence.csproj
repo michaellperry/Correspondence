@@ -105,6 +105,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AwaitableCriticalSection.cs" />
     <Compile Include="Community.cs" />
     <Compile Include="Community.Platform.cs" />
     <Compile Include="Condition.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Strategy\IStorageStrategy.cs" />
     <Compile Include="Strategy\ITransform.cs" />
     <Compile Include="Strategy\QueryOptions.cs" />
+    <Compile Include="Strategy\SaveResult.cs" />
     <Compile Include="Subscription.cs" />
   </ItemGroup>
   <ItemGroup>
