@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 
 namespace UpdateControls.Correspondence.Strategy
@@ -7,7 +8,7 @@ namespace UpdateControls.Correspondence.Strategy
     {
         string ProtocolName { get; }
         string PeerName { get; }
-        GetResultMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp);
+        Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp);
         void Post(FactTreeMemento messageBody, List<UnpublishMemento> unpublishedMessages);
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 
@@ -35,6 +36,11 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         public GetResultMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
+        {
+            return GetAsync(pivotTree, pivotId, timestamp).Result;
+        }
+
+        public async Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
             _pivotTree = pivotTree;
             return new GetResultMemento(_mockMessageBodies.Dequeue(), new TimestampID(0, 0));

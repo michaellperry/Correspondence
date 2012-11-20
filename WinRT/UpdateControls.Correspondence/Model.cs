@@ -169,11 +169,11 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public CorrespondenceFact LoadFact(string factName)
+        public async Task<CorrespondenceFact> LoadFactAsync(string factName)
         {
             FactID id;
             if (_storageStrategy.GetID(factName, out id))
-                return GetFactByID(id);
+                return await GetFactByIDAsync(id);
             else
                 return null;
         }
@@ -191,7 +191,7 @@ namespace UpdateControls.Correspondence
             {
                 if (message.FactId.key > timestamp.Key)
                     timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
-                FactMemento newFact = AddToFactTree(result, message.FactId, peerId);
+                FactMemento newFact = await AddToFactTreeAsync(result, message.FactId, peerId);
 
                 FactMetadata factMetadata;
                 if (newFact != null && _metadataByFactType.TryGetValue(newFact.FactType, out factMetadata))
@@ -211,7 +211,7 @@ namespace UpdateControls.Correspondence
                                     bool published = conditionEvaluator.Evaluate(messageId, unpublisher.PublishCondition);
                                     if (!published)
                                     {
-                                        AddToFactTree(result, messageId, peerId);
+                                        await AddToFactTreeAsync(result, messageId, peerId);
                                         UnpublishMemento unpublishMemento = new UnpublishMemento(messageId, unpublisher.Role);
                                         if (!unpublishedMessages.Contains(unpublishMemento))
                                             unpublishedMessages.Add(unpublishMemento);
@@ -226,11 +226,11 @@ namespace UpdateControls.Correspondence
         }
 
 
-        public FactMemento AddToFactTree(FactTreeMemento messageBody, FactID factId, int peerId)
+        public async Task<FactMemento> AddToFactTreeAsync(FactTreeMemento messageBody, FactID factId, int peerId)
         {
             if (!messageBody.Contains(factId))
             {
-                CorrespondenceFact fact = GetFactByID(factId);
+                CorrespondenceFact fact = await GetFactByIDAsync(factId);
                 if (fact != null)
                 {
                     FactID remoteId;
@@ -242,7 +242,7 @@ namespace UpdateControls.Correspondence
                     {
                         FactMemento factMemento = CreateMementoFromFact(fact);
                         foreach (PredecessorMemento predecessor in factMemento.Predecessors)
-                            AddToFactTree(messageBody, predecessor.ID, peerId);
+                            await AddToFactTreeAsync(messageBody, predecessor.ID, peerId);
                         messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
 
                         return factMemento;
@@ -308,13 +308,13 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public CorrespondenceFact GetFactByID(FactID id)
+        public async Task<CorrespondenceFact> GetFactByIDAsync(FactID id)
         {
             // Check for null.
             if (id.key == 0)
                 return null;
 
-            lock (this)
+            using (await _lock.EnterAsync())
             {
                 // See if the object is already loaded.
                 CorrespondenceFact obj;
@@ -322,12 +322,12 @@ namespace UpdateControls.Correspondence
                     return obj;
 
                 // If not, load it from storage.
-                FactMemento memento = _storageStrategy.Load(id);
+                FactMemento memento = await _storageStrategy.LoadAsync(id);
                 return CreateFactFromMemento(id, memento);
             }
         }
 
-		public Guid ClientDatabaseGuid
+        public Guid ClientDatabaseGuid
 		{
 			get { return _storageStrategy.ClientGuid; }
 		}

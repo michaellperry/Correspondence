@@ -2,6 +2,8 @@ using UpdateControls.Correspondence.Mementos;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence
 {
@@ -12,7 +14,7 @@ namespace UpdateControls.Correspondence
 	{
 		private RoleMemento _role;
         private FactID _factId;
-		private TFact _fact;
+		private Independent<TFact> _fact;
         private Community _community;
 
 		public PredecessorObj(
@@ -30,7 +32,7 @@ namespace UpdateControls.Correspondence
 
 			_role = role.RoleMemento;
             _factId = obj.ID;
-			_fact = obj;
+            _fact = new Independent<TFact>(obj);
 
             subject.SetPredecessor(_role, this);
 		}
@@ -42,6 +44,7 @@ namespace UpdateControls.Correspondence
             base(subject, false)
 		{
 			_role = role.RoleMemento;
+            _fact = new Independent<TFact>();
 
             List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
             if (facts.Count < 1)
@@ -74,20 +77,14 @@ namespace UpdateControls.Correspondence
             get { yield return _factId; }
         }
 
-        protected override void PopulateCache(Community community)
+        protected override async Task PopulateCacheAsync(Community community)
         {
             // Resovle the ID to an object.
-            _fact = (TFact)community.GetFactByID(_factId);
-        }
-
-        protected override void EmptyCache()
-        {
-            _fact = null;
-        }
-
-        internal override Type FactType
-        {
-            get { return typeof(TFact); }
+            TFact fact = await community.GetFactByIDAsync(_factId) as TFact;
+            lock (this)
+            {
+                _fact.Value = fact;
+            }
         }
 	}
 }

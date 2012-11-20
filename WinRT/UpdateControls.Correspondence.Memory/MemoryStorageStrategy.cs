@@ -20,6 +20,8 @@ namespace UpdateControls.Correspondence.Memory
 
         private Guid _clientGuid = Guid.NewGuid();
 
+        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
+
 		public Guid ClientGuid
 		{
             get { return _clientGuid; }
@@ -35,9 +37,9 @@ namespace UpdateControls.Correspondence.Memory
             _namedFacts[factName] = id;
         }
 
-        public FactMemento Load(FactID id)
+        public async Task<FactMemento> LoadAsync(FactID id)
         {
-            lock (this)
+            using (await _lock.EnterAsync())
             {
                 FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
                 if (factRecord != null)

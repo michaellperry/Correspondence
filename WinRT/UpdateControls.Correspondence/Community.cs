@@ -111,9 +111,9 @@ namespace UpdateControls.Correspondence
             return _model.FindFact<T>(prototype);
         }
 
-        public T LoadFact<T>(string factName) where T : CorrespondenceFact
+        public async Task<T> LoadFact<T>(string factName) where T : CorrespondenceFact
         {
-            CorrespondenceFact fact = _model.LoadFact(factName);
+            CorrespondenceFact fact = await _model.LoadFactAsync(factName);
             if (fact != null && fact is T)
                 return (T)fact;
             return null;
@@ -171,9 +171,9 @@ namespace UpdateControls.Correspondence
             get { return _fieldSerializerByType; }
         }
 
-		internal CorrespondenceFact GetFactByID( FactID id )
+		internal async Task<CorrespondenceFact> GetFactByIDAsync( FactID id )
 		{
-            return _model.GetFactByID(id);
+            return await _model.GetFactByIDAsync(id);
 		}
 
         internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)

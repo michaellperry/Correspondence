@@ -1,33 +1,40 @@
 using System.Collections.Generic;
 using System;
 using UpdateControls.Correspondence.Mementos;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence
 {
     public abstract class PredecessorBase
     {
+        private enum State
+        {
+            Unloaded,
+            Loading,
+            Loaded
+        }
+
         private CorrespondenceFact _subject;
-        private bool _cached;
+        private State _state;
 
         protected PredecessorBase(CorrespondenceFact subject, bool cached)
         {
             _subject = subject;
-            _cached = cached;
+            _state = cached ? State.Loaded : State.Unloaded;
         }
 
         internal abstract Community Community { get; }
         internal abstract IEnumerable<FactID> InternalFactIds { get; }
-        protected abstract void PopulateCache(Community community);
-        protected abstract void EmptyCache();
-        internal abstract Type FactType { get; }
+        protected abstract Task PopulateCacheAsync(Community community);
 
-        protected void OnGet()
+        protected async void OnGet()
         {
-            if (!_cached)
+            if (_state == State.Unloaded)
             {
+                _state = State.Loading;
                 // Cache the predecessor.
-                _cached = true;
-                PopulateCache(_subject.InternalCommunity);
+                await PopulateCacheAsync(_subject.InternalCommunity);
+                _state = State.Loaded;
             }
         }
     }

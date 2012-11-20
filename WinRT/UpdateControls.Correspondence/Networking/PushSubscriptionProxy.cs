@@ -20,13 +20,13 @@ namespace UpdateControls.Correspondence.Networking
             _pivot = pivot;
         }
 
-		public void Subscribe()
+		public async void Subscribe()
 		{
 			if (_pushSubscription == null)
 			{
 				FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
 				FactID pivotId = _pivot.ID;
-				_model.AddToFactTree(pivotTree, pivotId, _serverProxy.PeerId);
+				await _model.AddToFactTreeAsync(pivotTree, pivotId, _serverProxy.PeerId);
 				_pushSubscription = _serverProxy.CommunicationStrategy.SubscribeForPush(pivotTree, pivotId, _model.ClientDatabaseGuid);
 			}
 		}

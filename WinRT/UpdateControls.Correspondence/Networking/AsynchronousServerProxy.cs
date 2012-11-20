@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Fields;
@@ -152,14 +153,14 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        private void Receive()
+        private async void Receive()
         {
-            lock (this)
+            using (await _lock.EnterAsync())
             {
                 FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
                 List<FactID> pivotIds = new List<FactID>();
                 _depPushSubscriptions.OnGet();
-                GetPivots(pivotTree, pivotIds, _peerId);
+                await GetPivotsAsync(pivotTree, pivotIds, _peerId);
 
                 bool anyPivots = pivotIds.Any();
                 if (anyPivots)
@@ -213,10 +214,10 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        public void Notify(CorrespondenceFact pivot, string text1, string text2)
+        public async void Notify(CorrespondenceFact pivot, string text1, string text2)
         {
             FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-            _model.AddToFactTree(pivotTree, pivot.ID, _peerId);
+            await _model.AddToFactTreeAsync(pivotTree, pivot.ID, _peerId);
             _communicationStrategy.Notify(
                 pivotTree,
                 pivot.ID,
@@ -245,7 +246,7 @@ namespace UpdateControls.Correspondence.Networking
 			}
 		}
 
-        private void GetPivots(FactTreeMemento pivotTree, List<FactID> pivotIds, int peerId)
+        private async Task GetPivotsAsync(FactTreeMemento pivotTree, List<FactID> pivotIds, int peerId)
         {
             foreach (Subscription subscription in _subscriptionProvider.Subscriptions)
             {
@@ -257,7 +258,7 @@ namespace UpdateControls.Correspondence.Networking
                             continue;
 
                         FactID pivotId = pivot.ID;
-                        _model.AddToFactTree(pivotTree, pivotId, peerId);
+                        await _model.AddToFactTreeAsync(pivotTree, pivotId, peerId);
                         pivotIds.Add(pivotId);
                     }
                 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 
@@ -20,7 +21,7 @@ namespace UpdateControls.Correspondence.Memory
             get { return "Local"; }
         }
 
-        public GetResultMemento Get(FactTreeMemento pivotTree, FactID remotePivotId, TimestampID timestamp)
+        public async Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID remotePivotId, TimestampID timestamp)
         {
             FactID? localPivotId = FindExistingFact(remotePivotId, pivotTree);
             if (!localPivotId.HasValue)
@@ -30,7 +31,7 @@ namespace UpdateControls.Correspondence.Memory
             long nextTimestamp = recentMessages.Any() ? recentMessages.Max(message => message.key) : timestamp.Key;
             FactTreeMemento messageBody = new FactTreeMemento(_databaseId);
             foreach (FactID recentMessage in recentMessages)
-                AddToFactTree(messageBody, recentMessage);
+                await AddToFactTreeAsync(messageBody, recentMessage);
 
             return new GetResultMemento(messageBody, new TimestampID(_databaseId, nextTimestamp));
         }
@@ -96,13 +97,13 @@ namespace UpdateControls.Correspondence.Memory
             return localIdByRemoteId[remotePivotId];
         }
 
-        private void AddToFactTree(FactTreeMemento messageBody, FactID factId)
+        private async Task AddToFactTreeAsync(FactTreeMemento messageBody, FactID factId)
         {
             if (!messageBody.Contains(factId))
             {
-                FactMemento fact = _repository.Load(factId);
+                FactMemento fact = await _repository.LoadAsync(factId);
                 foreach (PredecessorMemento predecessor in fact.Predecessors)
-                    AddToFactTree(messageBody, predecessor.ID);
+                    await AddToFactTreeAsync(messageBody, predecessor.ID);
                 messageBody.Add(new IdentifiedFactMemento(factId, fact));
             }
         }

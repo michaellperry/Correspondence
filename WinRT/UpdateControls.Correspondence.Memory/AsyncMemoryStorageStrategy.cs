@@ -22,6 +22,8 @@ namespace UpdateControls.Correspondence.Memory
 
         private Queue<Task<List<IdentifiedFactMemento>>> _futureTasks = new Queue<Task<List<IdentifiedFactMemento>>>();
 
+        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
+
         public void Quiesce()
         {
             Task.WaitAll(_futureTasks.ToArray());
@@ -42,13 +44,16 @@ namespace UpdateControls.Correspondence.Memory
             _namedFacts[factName] = id;
         }
 
-        public FactMemento Load(FactID id)
+        public async Task<FactMemento> LoadAsync(FactID id)
         {
-            FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
-            if (factRecord != null)
-                return factRecord.IdentifiedFactMemento.Memento;
-            else
-                throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
+            using (await _lock.EnterAsync())
+            {
+                FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
+                if (factRecord != null)
+                    return factRecord.IdentifiedFactMemento.Memento;
+                else
+                    throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
+            }
         }
 
         public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)

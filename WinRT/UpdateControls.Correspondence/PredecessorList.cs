@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence
 {
@@ -11,7 +13,7 @@ namespace UpdateControls.Correspondence
     {
 		private RoleMemento _role;
         private List<FactID> _factIds;
-		private List<TFact> _facts;
+		private Independent<List<TFact>> _facts;
         private Community _community;
 
 		public PredecessorList(
@@ -32,8 +34,8 @@ namespace UpdateControls.Correspondence
 				throw new CorrespondenceException("A fact cannot be added to a different community than its predecessors.");
             
             _role = role.RoleMemento;
-			_facts = facts.ToList();
-            _factIds = _facts.Select(o => o.ID).ToList();
+			_facts = new Independent<List<TFact>>(facts.ToList());
+            _factIds = _facts.Value.Select(o => o.ID).ToList();
 
 			subject.SetPredecessor( _role, this );
 		}
@@ -45,6 +47,7 @@ namespace UpdateControls.Correspondence
             base(subject, false)
 		{
 			_role = role.RoleMemento;
+            _facts = new Independent<List<TFact>>(new List<TFact>());
 
             _factIds = memento.GetPredecessorIdsByRole(_role).ToList();
 			subject.SetPredecessor( _role, this );
@@ -62,7 +65,7 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 OnGet();
-                return _facts.GetEnumerator();
+                return _facts.Value.GetEnumerator();
             }
         }
 
@@ -75,7 +78,7 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 OnGet();
-                return _facts.GetEnumerator();
+                return _facts.Value.GetEnumerator();
             }
         }
 
@@ -86,23 +89,19 @@ namespace UpdateControls.Correspondence
             get { return _factIds; }
         }
 
-        protected override void PopulateCache(Community community)
+        protected override async Task PopulateCacheAsync(Community community)
         {
             // Resolve each ID to an object.
-            _facts = _factIds
-                .Select(id => community.GetFactByID(id))
-                .Cast<TFact>()
-                .ToList();
-        }
-
-        protected override void EmptyCache()
-        {
-            _facts = null;
-        }
-
-        internal override Type FactType
-        {
-            get { return typeof(TFact); }
+            List<TFact> facts = new List<TFact>();
+            foreach (var id in _factIds)
+            {
+                TFact fact = await community.GetFactByIDAsync(id) as TFact;
+                facts.Add(fact);
+            }
+            lock (this)
+            {
+                _facts.Value = facts;
+            }
         }
     }
 }

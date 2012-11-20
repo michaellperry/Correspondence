@@ -7,6 +7,7 @@ using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Mementos;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -32,7 +33,12 @@ namespace UpdateControls.Correspondence.UnitTest
 
         public GetResultMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
-            return _innerCommunicationStrategy.Get(pivotTree, pivotId, timestamp);
+            return GetAsync(pivotTree, pivotId, timestamp).Result;
+        }
+
+        public async Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
+        {
+            return await _innerCommunicationStrategy.GetAsync(pivotTree, pivotId, timestamp);
         }
 
         public void Post(FactTreeMemento messageBody, List<UnpublishMemento> unpublishedMessages)

@@ -54,7 +54,7 @@ namespace UpdateControls.Correspondence.Networking
                 bool any = false;
                 if (await SynchronizeOutgoingAsync())
                     any = true;
-                if (SynchronizeIncoming())
+                if (await SynchronizeIncomingAsync())
                     any = true;
                 return any;
             }
@@ -103,7 +103,7 @@ namespace UpdateControls.Correspondence.Networking
             return any;
         }
 
-        private bool SynchronizeIncoming()
+        private async Task<bool> SynchronizeIncomingAsync()
         {
             bool any = false;
             foreach (ServerProxy serverProxy in _serverProxies)
@@ -117,9 +117,9 @@ namespace UpdateControls.Correspondence.Networking
 
                         FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
                         FactID pivotId = pivot.ID;
-                        _model.AddToFactTree(pivotTree, pivotId, serverProxy.PeerId);
+                        await _model.AddToFactTreeAsync(pivotTree, pivotId, serverProxy.PeerId);
                         TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
-                        GetResultMemento result = serverProxy.CommunicationStrategy.Get(pivotTree, pivotId, timestamp);
+                        GetResultMemento result = await serverProxy.CommunicationStrategy.GetAsync(pivotTree, pivotId, timestamp);
                         if (result.FactTree.Facts.Any())
                         {
                             _model.ReceiveMessage(result.FactTree, serverProxy.PeerId);
