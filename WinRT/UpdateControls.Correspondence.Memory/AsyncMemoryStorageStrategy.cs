@@ -56,8 +56,11 @@ namespace UpdateControls.Correspondence.Memory
                 throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
 
-        public bool Save(FactMemento memento, int peerId, out FactID id)
+        public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
         {
+            FactID id;
+            bool wasSaved;
+
             // See if the fact already exists.
             FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
             if (fact == null)
@@ -96,19 +99,13 @@ namespace UpdateControls.Correspondence.Memory
                         predecessorPivot.AncestorFact,
                         predecessorPivot.AncestorRole)));
 
-                return true;
+                wasSaved = true;
             }
             else
             {
                 id = fact.IdentifiedFactMemento.Id;
-                return false;
+                wasSaved = false;
             }
-        }
-
-        public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
-        {
-            FactID id;
-            bool wasSaved = Save(memento, peerId, out id);
             return new SaveResult { WasSaved = wasSaved, Id = id };
         }
 
@@ -140,14 +137,9 @@ namespace UpdateControls.Correspondence.Memory
             return task;
         }
 
-        public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
-        {
-            return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento)).ExecuteQuery(queryDefinition, startingId, null).Reverse().Select(im => im.Id);
-        }
-
         public async Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
         {
-            return QueryForIds(queryDefinition, startingId);
+            return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento)).ExecuteQuery(queryDefinition, startingId, null).Reverse().Select(im => im.Id);
         }
 
         public int SavePeer(string protocolName, string peerName)

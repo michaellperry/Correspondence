@@ -52,11 +52,6 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public bool Save(FactMemento memento, int peerId, out FactID id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
         {
             FactID id;
@@ -131,11 +126,6 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             lock (this)
@@ -145,11 +135,6 @@ namespace UpdateControls.Correspondence.Memory
                     .Reverse()
                     .ToList();
             }
-        }
-
-        public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)

@@ -93,57 +93,9 @@ namespace UpdateControls.Correspondence
             return _storageStrategy.BeginDuration();
         }
 
-        public T AddFact<T>(T prototype) where T : CorrespondenceFact
-        {
-            return AddFact<T>(prototype, 0);
-        }
-
         public async Task<T> AddFactAsync<T>(T prototype) where T : CorrespondenceFact
         {
             return await AddFactAsync<T>(prototype, 0);
-        }
-
-        private T AddFact<T>(T prototype, int peerId) where T : CorrespondenceFact
-        {
-            // Save invalidate actions until after the lock
-            // because they reenter if a fact is removed.
-            Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries = new Dictionary<InvalidatedQuery, InvalidatedQuery>();
-
-            lock (this)
-            {
-                if (prototype.InternalCommunity != null)
-                    throw new CorrespondenceException("A fact may only belong to one community");
-
-                foreach (RoleMemento role in prototype.PredecessorRoles)
-                {
-                    PredecessorBase predecessor = prototype.GetPredecessor(role);
-                    if (predecessor.Community != null && predecessor.Community != _community)
-                        throw new CorrespondenceException("A fact cannot be added to a different community than its predecessors.");
-                }
-
-                FactMemento memento = CreateMementoFromFact(prototype);
-
-                // See if we already have the fact in memory.
-                CorrespondenceFact fact;
-                if (_factByMemento.TryGetValue(memento, out fact))
-                    return (T)fact;
-
-                FactID id = AddFactMemento(peerId, memento, invalidatedQueries);
-
-                // Turn the prototype into the real fact.
-                prototype.ID = id;
-                prototype.SetCommunity(_community);
-                _factByID.Add(prototype.ID, prototype);
-                _factByMemento.Add(memento, prototype);
-            }
-
-            foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries.Keys)
-                invalidatedQuery.Invalidate();
-
-            if (FactAdded != null)
-                FactAdded(prototype);
-
-            return prototype;
         }
 
         private async Task<T> AddFactAsync<T>(T prototype, int peerId) where T : CorrespondenceFact
@@ -493,51 +445,6 @@ namespace UpdateControls.Correspondence
             }
 
             return memento;
-        }
-
-        private FactID AddFactMemento(int peerId, FactMemento memento, Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries)
-        {
-            // Set the ID and add the object to the community.
-            FactID id;
-            if (_storageStrategy.Save(memento, peerId, out id))
-            {
-                // Invalidate all of the queries affected by the new object.
-                List<QueryInvalidator> invalidators;
-                FactMetadata metadata;
-                if (_metadataByFactType.TryGetValue(memento.FactType, out metadata))
-                {
-                    foreach (CorrespondenceFactType factType in metadata.ConvertableTypes)
-                        if (_queryInvalidatorsByType.TryGetValue(factType, out invalidators))
-                        {
-                            foreach (QueryInvalidator invalidator in invalidators)
-                            {
-                                List<FactID> targetFactIds;
-                                if (invalidator.TargetFacts.CanExecuteFromMemento)
-                                    // If the inverse query is simple, the results are already in the memento.
-                                    targetFactIds = invalidator.TargetFacts.ExecuteFromMemento(memento);
-                                else
-                                    // The query is more complex, so go to the storage strategy.
-                                    targetFactIds = _storageStrategy.QueryForIds(invalidator.TargetFacts, id).ToList();
-
-                                foreach (FactID targetObjectId in targetFactIds)
-                                {
-                                    CorrespondenceFact targetObject;
-                                    if (_factByID.TryGetValue(targetObjectId, out targetObject))
-                                    {
-                                        QueryDefinition invalidQuery = invalidator.InvalidQuery;
-                                        InvalidatedQuery query = new InvalidatedQuery(targetObject, invalidQuery);
-                                        if (!invalidatedQueries.ContainsKey(query))
-                                            invalidatedQueries.Add(query, query);
-                                    }
-                                }
-                            }
-                        }
-                }
-
-                if (FactReceived != null)
-                    FactReceived();
-            }
-            return id;
         }
 
         private async Task<FactID> AddFactMementoAsync(int peerId, FactMemento memento, Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries)

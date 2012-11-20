@@ -104,12 +104,6 @@ namespace UpdateControls.Correspondence
             return _model.BeginDuration();
         }
 
-        public T AddFact<T>(T prototype)
-            where T : CorrespondenceFact
-        {
-            return _model.AddFact<T>(prototype);
-        }
-
         public async Task<T> AddFactAsync<T>(T prototype)
             where T : CorrespondenceFact
         {
