@@ -24,24 +24,31 @@ namespace UpdateControls.Correspondence.Memory
 
         private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
 
+        private static Task Done = Task.WhenAll();
+
         public void Quiesce()
         {
             Task.WaitAll(_futureTasks.ToArray());
         }
 
-		public Guid ClientGuid
-		{
-            get { return _clientGuid; }
-		}
-
-        public bool GetID(string factName, out FactID id)
+        public Task<Guid> GetClientGuidAsync()
         {
-            return _namedFacts.TryGetValue(factName, out id);
+            return Task.FromResult(_clientGuid);
         }
 
-        public void SetID(string factName, FactID id)
+        public Task<FactID?> GetIDAsync(string factName)
+        {
+            FactID id;
+            if (_namedFacts.TryGetValue(factName, out id))
+                return Task.FromResult<FactID?>(id);
+            else
+                return Task.FromResult<FactID?>(null);
+        }
+
+        public Task SetIDAsync(string factName, FactID id)
         {
             _namedFacts[factName] = id;
+            return Done;
         }
 
         public async Task<FactMemento> LoadAsync(FactID id)
@@ -56,7 +63,7 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
+        public Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
         {
             FactID id;
             bool wasSaved;
@@ -106,7 +113,7 @@ namespace UpdateControls.Correspondence.Memory
                 id = fact.IdentifiedFactMemento.Id;
                 wasSaved = false;
             }
-            return new SaveResult { WasSaved = wasSaved, Id = id };
+            return Task.FromResult(new SaveResult { WasSaved = wasSaved, Id = id });
         }
 
         public async Task<FactID?> FindExistingFactAsync(FactMemento memento)
@@ -138,12 +145,16 @@ namespace UpdateControls.Correspondence.Memory
             return task;
         }
 
-        public async Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
+        public Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
         {
-            return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento)).ExecuteQuery(queryDefinition, startingId, null).Reverse().Select(im => im.Id);
+            return Task.FromResult(new QueryExecutor(
+                _factTable.Select(f => f.IdentifiedFactMemento))
+                .ExecuteQuery(queryDefinition, startingId, null)
+                .Reverse()
+                .Select(im => im.Id));
         }
 
-        public async Task<int> SavePeerAsync(string protocolName, string peerName)
+        public Task<int> SavePeerAsync(string protocolName, string peerName)
         {
             PeerRecord peerRecord = _peerTable.FirstOrDefault(peer =>
                 peer.ProtocolName == protocolName &&
@@ -157,40 +168,42 @@ namespace UpdateControls.Correspondence.Memory
                     PeerName = peerName
                 };
             }
-            return peerRecord.PeerId;
+            return Task.FromResult(peerRecord.PeerId);
         }
 
-        public async Task<TimestampID> LoadOutgoingTimestampAsync(int peerId)
+        public Task<TimestampID> LoadOutgoingTimestampAsync(int peerId)
         {
             TimestampID timestamp;
             if (_outgoingTimestampByPeer.TryGetValue(peerId, out timestamp))
-                return timestamp;
+                return Task.FromResult(timestamp);
             else
-                return new TimestampID();
+                return Task.FromResult(new TimestampID());
         }
 
-        public async Task SaveOutgoingTimestampAsync(int peerId, TimestampID timestamp)
+        public Task SaveOutgoingTimestampAsync(int peerId, TimestampID timestamp)
         {
             _outgoingTimestampByPeer[peerId] = timestamp;
+            return Done;
         }
 
-        public async Task<TimestampID> LoadIncomingTimestampAsync(int peerId, FactID pivotId)
+        public Task<TimestampID> LoadIncomingTimestampAsync(int peerId, FactID pivotId)
         {
             TimestampID timestamp;
             if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(peerId, pivotId), out timestamp))
-                return timestamp;
+                return Task.FromResult(timestamp);
             else
-                return new TimestampID();
+                return Task.FromResult(new TimestampID());
         }
 
-        public async Task SaveIncomingTimestampAsync(int peerId, FactID pivotId, TimestampID timestamp)
+        public Task SaveIncomingTimestampAsync(int peerId, FactID pivotId, TimestampID timestamp)
         {
             _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(peerId, pivotId)] = timestamp;
+            return Done;
         }
 
-        public async Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
+        public Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
         {
-            return _messageTable
+            return Task.FromResult<IEnumerable<MessageMemento>>(_messageTable
                 .Where(message =>
                     message.Message.FactId.key > timestamp.Key &&
                     !_factTable.Any(fact =>
@@ -198,29 +211,29 @@ namespace UpdateControls.Correspondence.Memory
                         fact.PeerId == peerId))
                 .Select(message => message.Message)
                 .Distinct()
-                .ToList();
+                .ToList());
         }
 
-        public async Task<FactID> GetFactIDFromShareAsync(int peerId, FactID remoteFactId)
+        public Task<FactID> GetFactIDFromShareAsync(int peerId, FactID remoteFactId)
         {
             var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.RemoteFactId.Equals(remoteFactId));
             if (share != null)
-                return share.LocalFactId;
+                return Task.FromResult(share.LocalFactId);
 
             throw new CorrespondenceException(String.Format("Share not found for peer {0} and remote fact {1}.", peerId, remoteFactId.key));
         }
 
-        public async Task<FactID?> GetRemoteIdAsync(FactID localFactId, int peerId)
+        public Task<FactID?> GetRemoteIdAsync(FactID localFactId, int peerId)
         {
             var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.LocalFactId.Equals(localFactId));
             if (share != null)
             {
-                return share.RemoteFactId;
+                return Task.FromResult<FactID?>(share.RemoteFactId);
             }
-            return null;
+            return Task.FromResult<FactID?>(null);
         }
 
-        public async Task SaveShareAsync(int peerId, FactID remoteFactId, FactID localFactId)
+        public Task SaveShareAsync(int peerId, FactID remoteFactId, FactID localFactId)
         {
             _shareTable.Add(new ShareRecord
             {
@@ -228,6 +241,7 @@ namespace UpdateControls.Correspondence.Memory
                 RemoteFactId = remoteFactId,
                 LocalFactId = localFactId
             });
+            return Done;
         }
     }
 }

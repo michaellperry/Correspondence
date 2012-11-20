@@ -81,12 +81,14 @@ namespace UpdateControls.Correspondence.Memory
             await right.AcceptAsync(this);
         }
 
-        public async Task VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
+        public Task VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
         {
             if (isEmpty)
                 _match = _match.Where(f => !ExecuteQuery(subQuery, f.Id, null).Any());
             else
                 _match = _match.Where(f => ExecuteQuery(subQuery, f.Id, null).Any());
+
+            return Task.WhenAll();
         }
     }
 }

@@ -10,11 +10,11 @@ namespace UpdateControls.Correspondence.Strategy
 	/// </summary>
 	public interface IStorageStrategy
     {
-		Guid ClientGuid { get; }
+        Task<Guid> GetClientGuidAsync();
 
 		// Facts.
-        bool GetID(string factName, out FactID id);
-        void SetID(string factName, FactID id);
+        Task<FactID?> GetIDAsync(string factName);
+        Task SetIDAsync(string factName, FactID id);
         Task<FactMemento> LoadAsync(FactID id);
         Task<SaveResult> SaveAsync(FactMemento memento, int peerId);
         Task<FactID?> FindExistingFactAsync(FactMemento memento);

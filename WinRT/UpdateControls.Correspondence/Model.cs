@@ -171,16 +171,16 @@ namespace UpdateControls.Correspondence
 
         public async Task<CorrespondenceFact> LoadFactAsync(string factName)
         {
-            FactID id;
-            if (_storageStrategy.GetID(factName, out id))
-                return await GetFactByIDAsync(id);
+            FactID? id = await _storageStrategy.GetIDAsync(factName);
+            if (id.HasValue)
+                return await GetFactByIDAsync(id.Value);
             else
                 return null;
         }
 
-        public void SetFact(string factName, CorrespondenceFact obj)
+        public async Task SetFactAsync(string factName, CorrespondenceFact obj)
         {
-            _storageStrategy.SetID(factName, obj.ID);
+            await _storageStrategy.SetIDAsync(factName, obj.ID);
         }
 
         public async Task<GetResultMemento> GetMessageBodiesAsync(TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
@@ -327,10 +327,10 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public Guid ClientDatabaseGuid
-		{
-			get { return _storageStrategy.ClientGuid; }
-		}
+        public async Task<Guid> GetClientDatabaseGuidAsync()
+        {
+            return await _storageStrategy.GetClientGuidAsync();
+        }
 
         internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {

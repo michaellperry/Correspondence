@@ -67,7 +67,7 @@ namespace UpdateControls.Correspondence
             await right.AcceptAsync(this);
         }
 
-        public async Task VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
+        public Task VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
         {
             // Push
             CorrespondenceFactType pushPriorType = _priorType;
@@ -79,6 +79,8 @@ namespace UpdateControls.Correspondence
             // Pop
             _priorType = pushPriorType;
             _inverse = pushQueryDefinition;
+
+            return Task.WhenAll();
         }
     }
 }

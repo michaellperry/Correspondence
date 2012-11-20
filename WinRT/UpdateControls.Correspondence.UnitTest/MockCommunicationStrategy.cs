@@ -40,10 +40,10 @@ namespace UpdateControls.Correspondence.UnitTest
             return GetAsync(pivotTree, pivotId, timestamp).Result;
         }
 
-        public async Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
+        public Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
             _pivotTree = pivotTree;
-            return new GetResultMemento(_mockMessageBodies.Dequeue(), new TimestampID(0, 0));
+            return Task.FromResult(new GetResultMemento(_mockMessageBodies.Dequeue(), new TimestampID(0, 0)));
         }
 
         public void Post(FactTreeMemento messageBody, List<UnpublishMemento> unpublishedMessages)

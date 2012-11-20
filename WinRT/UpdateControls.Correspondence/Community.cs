@@ -119,9 +119,9 @@ namespace UpdateControls.Correspondence
             return null;
         }
 
-		public void SetFact( string objectName, CorrespondenceFact fact )
+		public async Task SetFactAsync( string objectName, CorrespondenceFact fact )
 		{
-            _model.SetFact(objectName, fact);
+            await _model.SetFactAsync(objectName, fact);
 		}
 
         public event Action<CorrespondenceFact> FactAdded

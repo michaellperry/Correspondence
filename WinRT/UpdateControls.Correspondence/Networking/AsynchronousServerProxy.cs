@@ -108,7 +108,7 @@ namespace UpdateControls.Correspondence.Networking
                 bool anyMessages = messageBodies != null && messageBodies.Facts.Any();
                 if (anyMessages)
                 {
-                    _communicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, unpublishedMessages, async delegate(bool succeeded)
+                    _communicationStrategy.BeginPost(messageBodies, await _model.GetClientDatabaseGuidAsync(), unpublishedMessages, async delegate(bool succeeded)
                     {
                         if (succeeded)
                         {
@@ -171,7 +171,7 @@ namespace UpdateControls.Correspondence.Networking
                         TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(_peerId, pivotId);
                         pivots.Add(new PivotMemento(pivotId, timestamp));
                     }
-                    _communicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, async delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
+                    _communicationStrategy.BeginGetMany(pivotTree, pivots, await _model.GetClientDatabaseGuidAsync(), async delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
                     {
                         bool receivedFacts = messageBody.Facts.Any();
                         if (receivedFacts)
@@ -221,7 +221,7 @@ namespace UpdateControls.Correspondence.Networking
             _communicationStrategy.Notify(
                 pivotTree,
                 pivot.ID,
-                _model.ClientDatabaseGuid,
+                await _model.GetClientDatabaseGuidAsync(),
                 text1,
                 text2);
         }
@@ -291,10 +291,10 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        public void AfterTriggerSubscriptionUpdate()
+        public async void AfterTriggerSubscriptionUpdate()
         {
             if (_communicationStrategy.IsLongPolling)
-                _communicationStrategy.Interrupt(_model.ClientDatabaseGuid);
+                _communicationStrategy.Interrupt(await _model.GetClientDatabaseGuidAsync());
 
             BeginReceiving();
         }
