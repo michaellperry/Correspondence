@@ -9,6 +9,7 @@ using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Mementos;
 using System.IO;
 using UpdateControls.Correspondence.FieldSerializer;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -27,7 +28,7 @@ namespace UpdateControls.Correspondence.UnitTest
 		private long _nextFactId = 1L;
 
 		[TestInitialize]
-		public void Initialize()
+		public async Task Initialize()
 		{
 			_memoryCommunicationStrategy = new MemoryCommunicationStrategy();
 			_recorder = new RecordingCommunicationStrategy(_memoryCommunicationStrategy);
@@ -35,15 +36,15 @@ namespace UpdateControls.Correspondence.UnitTest
 				.AddCommunicationStrategy(_recorder)
                 .Register<Model.CorrespondenceModel>()
 				.Subscribe(() => _michael);
-			_michael = CreateUser("michael");
+			_michael = await CreateUserAsync("michael");
 		}
 
         [TestMethod]
-        public void WhenAFactIsPublishedToTwoPredecessors_ThenThatFactIsPostedOnce()
+        public async Task WhenAFactIsPublishedToTwoPredecessors_ThenThatFactIsPostedOnce()
         {
-			Game game = CreateGame();
-			Player player = game.CreatePlayer(_michael);
-			while (_community.Synchronize());
+			Game game = await CreateGameAsync();
+			Player player = await game.CreatePlayerAsync(_michael);
+			while (await _community.SynchronizeAsync());
 
             IEnumerable<FactTreeMemento> postedTrees = _recorder.Posted;
             Assert.AreEqual(1, postedTrees.Count());
@@ -51,7 +52,7 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
 		[TestMethod]
-		public void WhenAFactIsReceived_ThenThatFactIsNotPosted()
+		public async Task WhenAFactIsReceived_ThenThatFactIsNotPosted()
 		{
 			FactTreeMemento gameTreeMemento = new FactTreeMemento(0L);
 			IdentifiedFactMemento gameMemento = CreateGameMemento();
@@ -63,21 +64,21 @@ namespace UpdateControls.Correspondence.UnitTest
 			_memoryCommunicationStrategy.Post(gameTreeMemento, new List<UnpublishMemento>());
 
 			Assert.AreEqual(0, _michael.ActivePlayers.Count());
-			while (_community.Synchronize());
+			while (await _community.SynchronizeAsync());
 			Assert.AreEqual(1, _michael.ActivePlayers.Count());
 
             IEnumerable<FactTreeMemento> postedTrees = _recorder.Posted;
             Assert.AreEqual(0, postedTrees.Count());
 		}
 
-		private Game CreateGame()
+		private async Task<Game> CreateGameAsync()
 		{
-			return _community.AddFact(new Game());
+			return await _community.AddFactAsync(new Game());
 		}
 
-		private User CreateUser(string userName)
+		private async Task<User> CreateUserAsync(string userName)
 		{
-			return _community.AddFact(new User(userName));
+            return await _community.AddFactAsync(new User(userName));
 		}
 
 		private IdentifiedFactMemento CreateGameMemento()

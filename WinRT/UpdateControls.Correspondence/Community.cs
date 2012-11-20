@@ -147,9 +147,9 @@ namespace UpdateControls.Correspondence
             remove { _model.FactReceived -= value; }
         }
 
-        public bool Synchronize()
+        public async Task<bool> SynchronizeAsync()
         {
-            return _network.Synchronize();
+            return await _network.SynchronizeAsync();
         }
 
         public void BeginReceiving()

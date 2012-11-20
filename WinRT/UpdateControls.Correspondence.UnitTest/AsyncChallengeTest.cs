@@ -20,14 +20,14 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _flynn;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             _memory = new AsyncMemoryStorageStrategy();
             _community = new Community(_memory)
                 .Register<Model.CorrespondenceModel>();
 
-            _alan = _community.AddFact(new User("alan1"));
-            _flynn = _community.AddFact(new User("flynn1"));
+            _alan = await _community.AddFactAsync(new User("alan1"));
+            _flynn = await _community.AddFactAsync(new User("flynn1"));
         }
 
         [TestMethod]

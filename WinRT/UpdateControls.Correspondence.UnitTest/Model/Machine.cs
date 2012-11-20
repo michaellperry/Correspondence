@@ -7,15 +7,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 {
     public partial class Machine
     {
-        public void LogOnUser(string userName)
+        public async void LogOnUser(string userName)
         {
-            Community.AddFact(new LogOn(Community.AddFact(new User(userName)), this));
+            await Community.AddFactAsync(new LogOn(await Community.AddFactAsync(new User(userName)), this));
         }
 
         public void LogOffUser()
         {
             foreach (LogOn logon in ActiveLogOns)
-                Community.AddFact(new LogOff(logon));
+                Community.AddFactAsync(new LogOff(logon));
         }
     }
 }

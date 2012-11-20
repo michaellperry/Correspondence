@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Mementos;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.Conditions
 {
@@ -23,20 +24,20 @@ namespace UpdateControls.Correspondence.Conditions
         {
             _startingId = startingId;
             _result = true;
-            publishCondition.Accept(this);
+            publishCondition.AcceptAsync(this);
             return _result;
         }
 
-        public void VisitAnd(Condition left, Condition right)
+        public async Task VisitAndAsync(Condition left, Condition right)
         {
-            left.Accept(this);
+            await left.AcceptAsync(this);
             if (_result)
-                right.Accept(this);
+                await right.AcceptAsync(this);
         }
 
-        public void VisitSimple(bool isEmpty, Queries.QueryDefinition subQuery)
+        public async Task VisitSimpleAsync(bool isEmpty, Queries.QueryDefinition subQuery)
         {
-            bool any = _storageStrategy.QueryForIds(subQuery, _startingId).Any();
+            bool any = (await _storageStrategy.QueryForIdsAsync(subQuery, _startingId)).Any();
             _result = (any && !isEmpty || !any && isEmpty);
         }
     }

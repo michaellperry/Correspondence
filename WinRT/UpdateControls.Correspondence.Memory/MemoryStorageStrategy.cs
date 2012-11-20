@@ -54,6 +54,13 @@ namespace UpdateControls.Correspondence.Memory
 
         public bool Save(FactMemento memento, int peerId, out FactID id)
         {
+            throw new NotImplementedException();
+        }
+
+        public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
+        {
+            FactID id;
+            bool wasSaved;
             lock (this)
             {
                 // See if the fact already exists.
@@ -94,20 +101,14 @@ namespace UpdateControls.Correspondence.Memory
                             predecessorPivot.AncestorFact,
                             predecessorPivot.AncestorRole)));
 
-                    return true;
+                    wasSaved = true;
                 }
                 else
                 {
                     id = fact.IdentifiedFactMemento.Id;
-                    return false;
+                    wasSaved = false;
                 }
             }
-        }
-
-        public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
-        {
-            FactID id;
-            bool wasSaved = Save(memento, peerId, out id);
             return new SaveResult { WasSaved = wasSaved, Id = id };
         }
 
@@ -132,6 +133,11 @@ namespace UpdateControls.Correspondence.Memory
 
         public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        {
             lock (this)
             {
                 return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento))
@@ -141,19 +147,16 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public async Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
-        {
-            return QueryForFacts(queryDefinition, startingId, options).ToList();
-        }
-
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)
         {
-            return QueryForFacts(queryDefinition, startingId, null).Select(im => im.Id);
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
         {
-            return QueryForIds(queryDefinition, startingId);
+            return QueryForFactsAsync(queryDefinition, startingId, null)
+                .Result
+                .Select(im => im.Id);
         }
 
         public int SavePeer(string protocolName, string peerName)

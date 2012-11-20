@@ -265,7 +265,7 @@ namespace <#=targetNamespace.Name#>
 				var current = _<#=result.Query.Name#>.Ensure().ToList();
 				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
-					Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+					Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
 				}
 			}
         }
@@ -280,7 +280,7 @@ namespace <#=targetNamespace.Name#>
 				var current = _<#=result.Query.Name#>.Ensure().ToList();
 				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
-					Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+					Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
 				}
 			}
         }

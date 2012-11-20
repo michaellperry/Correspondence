@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.Conditions
 {
@@ -21,9 +22,9 @@ namespace UpdateControls.Correspondence.Conditions
             return string.Format("{0} and {1}", _left.ToString(prior), _right.ToString(prior));
         }
 
-        public override void Accept(IConditionVisitor visitor)
+        public override async Task AcceptAsync(IConditionVisitor visitor)
         {
-            visitor.VisitAnd(_left, _right);
+            await visitor.VisitAndAsync(_left, _right);
         }
 
         public override bool Equals(object obj)

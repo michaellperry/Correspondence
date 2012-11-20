@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Conditions;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
@@ -60,7 +61,7 @@ namespace UpdateControls.Correspondence.Memory
 
                 // Include the condition, if specified.
                 if (finalJoin.Condition != null)
-                    finalJoin.Condition.Accept(this);
+                    finalJoin.Condition.AcceptAsync(this);
             }
 
             // Pop.
@@ -73,14 +74,14 @@ namespace UpdateControls.Correspondence.Memory
             return result;
         }
 
-        public void VisitAnd(Condition left, Condition right)
+        public async Task VisitAndAsync(Condition left, Condition right)
         {
             // Apply both filters.
-            left.Accept(this);
-            right.Accept(this);
+            await left.AcceptAsync(this);
+            await right.AcceptAsync(this);
         }
 
-        public void VisitSimple(bool isEmpty, QueryDefinition subQuery)
+        public async Task VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
         {
             if (isEmpty)
                 _match = _match.Where(f => !ExecuteQuery(subQuery, f.Id, null).Any());

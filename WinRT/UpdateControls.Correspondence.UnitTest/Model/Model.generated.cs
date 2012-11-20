@@ -294,7 +294,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				var current = _favoriteColor.Ensure().ToList();
 				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
-					Community.AddFact(new User__favoriteColor(this, _favoriteColor, value.Value));
+					Community.AddFactAsync(new User__favoriteColor(this, _favoriteColor, value.Value));
 				}
 			}
         }
@@ -307,7 +307,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				var current = _betterFavoriteColor.Ensure().ToList();
 				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 				{
-					Community.AddFact(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));
+					Community.AddFactAsync(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));
 				}
 			}
         }

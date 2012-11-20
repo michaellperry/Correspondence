@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Queries;
 
 namespace UpdateControls.Correspondence.Conditions
@@ -19,9 +20,9 @@ namespace UpdateControls.Correspondence.Conditions
             return (_isEmpty ? "empty " : "not empty ") + _subQuery.ToString(prior);
         }
 
-        public override void Accept(IConditionVisitor visitor)
+        public override async Task AcceptAsync(IConditionVisitor visitor)
         {
-            visitor.VisitSimple(_isEmpty, _subQuery);
+            await visitor.VisitSimpleAsync(_isEmpty, _subQuery);
         }
 
         public override bool Equals(object obj)

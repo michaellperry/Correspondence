@@ -1,12 +1,13 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest.Model
 {
 	public partial class Game
 	{
-		public Player CreatePlayer(User person)
+		public async Task<Player> CreatePlayerAsync(User person)
 		{
-			return Community.AddFact(new Player(person, this, 0));
+			return await Community.AddFactAsync(new Player(person, this, 0));
 		}
 
 		public Outcome Outcome
@@ -16,7 +17,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		public void DeclareWinner(Player winner)
 		{
-			Community.AddFact(new Outcome(this, winner));
+			Community.AddFactAsync(new Outcome(this, winner));
 		}
 	}
 }

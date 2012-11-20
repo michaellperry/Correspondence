@@ -13,7 +13,7 @@ namespace UpdateControls.Correspondence
         T FindFact<T>(T prototype)
             where T : CorrespondenceFact;
         event Action<CorrespondenceFact> FactAdded;
-        bool Synchronize();
+        Task<bool> SynchronizeAsync();
         void BeginSending();
         void BeginReceiving();
         bool Synchronizing { get; }

@@ -85,7 +85,7 @@ namespace UpdateControls.Correspondence
                 }
                 unpublishers.Add(new Unpublisher(inverse, publishCondition, role));
             });
-            publishCondition.Accept(queryInverter);
+            publishCondition.AcceptAsync(queryInverter);
         }
 
         public IDisposable BeginDuration()
@@ -236,7 +236,7 @@ namespace UpdateControls.Correspondence
             _storageStrategy.SetID(factName, obj.ID);
         }
 
-        public FactTreeMemento GetMessageBodies(ref TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
+        public async Task<GetResultMemento> GetMessageBodiesAsync(TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
         {
             FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
             IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessagesForServer(peerId, timestamp);
@@ -257,7 +257,7 @@ namespace UpdateControls.Correspondence
                         {
                             foreach (Unpublisher unpublisher in unpublishers)
                             {
-                                IEnumerable<FactID> messageIds = _storageStrategy.QueryForIds(unpublisher.MessageFacts, message.FactId);
+                                IEnumerable<FactID> messageIds = await _storageStrategy.QueryForIdsAsync(unpublisher.MessageFacts, message.FactId);
                                 foreach (FactID messageId in messageIds)
                                 {
                                     ConditionEvaluator conditionEvaluator = new ConditionEvaluator(_storageStrategy);
@@ -275,7 +275,7 @@ namespace UpdateControls.Correspondence
                     }
                 }
             }
-            return result;
+            return new GetResultMemento(result, timestamp);
         }
 
 
@@ -313,16 +313,16 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public void ReceiveMessage(FactTreeMemento messageBody, int peerId)
+        public async void ReceiveMessage(FactTreeMemento messageBody, int peerId)
         {
             Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries = new Dictionary<InvalidatedQuery, InvalidatedQuery>();
 
-            lock (this)
+            using (await _lock.EnterAsync())
             {
                 IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
                 foreach (IdentifiedFactBase identifiedFact in messageBody.Facts)
                 {
-                    FactID localId = ReceiveFact(identifiedFact, peerId, invalidatedQueries, localIdByRemoteId);
+                    FactID localId = await ReceiveFactAsync(identifiedFact, peerId, invalidatedQueries, localIdByRemoteId);
                     FactID remoteId = identifiedFact.Id;
                     localIdByRemoteId.Add(remoteId, localId);
                 }
@@ -332,7 +332,7 @@ namespace UpdateControls.Correspondence
                 invalidatedQuery.Invalidate();
         }
 
-        private FactID ReceiveFact(IdentifiedFactBase identifiedFact, int peerId, Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries, IDictionary<FactID, FactID> localIdByRemoteId)
+        private async Task<FactID> ReceiveFactAsync(IdentifiedFactBase identifiedFact, int peerId, Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries, IDictionary<FactID, FactID> localIdByRemoteId)
         {
             if (identifiedFact is IdentifiedFactMemento)
             {
@@ -349,7 +349,7 @@ namespace UpdateControls.Correspondence
                     })
                     .Where(pred => pred != null));
 
-                FactID localId = AddFactMemento(peerId, translatedMemento, invalidatedQueries);
+                FactID localId = await AddFactMementoAsync(peerId, translatedMemento, invalidatedQueries);
                 _storageStrategy.SaveShare(peerId, identifiedFact.Id, localId);
 
                 return localId;

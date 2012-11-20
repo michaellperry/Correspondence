@@ -38,29 +38,31 @@ namespace UpdateControls.Correspondence.UnitTest
                 .Subscribe(() => _userFlynn)
                 .Subscribe(() => _userFlynn.ActivePlayers.Select(player => player.Game));
 
-            _userAlan = _communityAlan.AddFact(new User("alan1"));
-            _userFlynn = _communityFlynn.AddFact(new User("flynn1"));
-            _playerAlan = await _userAlan.ChallengeAsync(_communityAlan.AddFact(new User("flynn1")));
-            Synchronize();
+            _userAlan = await _communityAlan.AddFactAsync(new User("alan1"));
+            _userFlynn = await _communityFlynn.AddFactAsync(new User("flynn1"));
+            _playerAlan = await _userAlan.ChallengeAsync(await _communityAlan.AddFactAsync(new User("flynn1")));
+            await Synchronize();
             _playerFlynn = _userFlynn.ActivePlayers.Single();
         }
 
         [TestMethod]
-        public void AlanCanSendAMessage()
+        public async Task AlanCanSendAMessage()
         {
             int factCount = _storageFlynn.LoadAllFacts().Count();
 
-            _communityAlan.AddFact(new Message(_playerAlan, "This system's got more bugs than a bait store."));
-            Synchronize();
+            await _communityAlan.AddFactAsync(new Message(_playerAlan, "This system's got more bugs than a bait store."));
+            await Synchronize();
 
             // Flynn can't understand the fact, but it gets stored until he upgrades.
             int newFactCount = _storageFlynn.LoadAllFacts().Count();
             Assert.AreEqual(factCount + 1, newFactCount);
         }
 
-        private void Synchronize()
+        private async Task Synchronize()
         {
-            while (_communityAlan.Synchronize() || _communityFlynn.Synchronize()) ;
+            while (
+                await _communityAlan.SynchronizeAsync() ||
+                await _communityFlynn.SynchronizeAsync()) ;
         }
     }
 }

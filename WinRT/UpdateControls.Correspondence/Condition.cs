@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Conditions;
 
 namespace UpdateControls.Correspondence
@@ -27,6 +28,6 @@ namespace UpdateControls.Correspondence
             return ToString("this");
         }
 
-        public abstract void Accept(IConditionVisitor visitor);
+        public abstract Task AcceptAsync(IConditionVisitor visitor);
 	}
 }

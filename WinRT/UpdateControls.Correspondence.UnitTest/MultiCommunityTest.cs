@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -27,15 +28,15 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void WhenLogOnToOtherMachine_ShouldThrow()
+        public async Task WhenLogOnToOtherMachine_ShouldThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOne = _playerOneCommuniy.AddFact(new User("one"));
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOne = await _playerOneCommuniy.AddFactAsync(new User("one"));
 
             try
             {
-                _playerTwoCommuniy.AddFact(new LogOn(playerOne, playerOneMachine));
-                Assert.Fail("AddFact did not throw.");
+                await _playerTwoCommuniy.AddFactAsync(new LogOn(playerOne, playerOneMachine));
+                Assert.Fail("AddFactAsync did not throw.");
             }
             catch (CorrespondenceException ex)
             {
@@ -44,34 +45,34 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void WhenOptionalPredecessorIsNull_ShouldNotThrow()
+        public async Task WhenOptionalPredecessorIsNull_ShouldNotThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
-            Game game = _playerOneCommuniy.AddFact(new Game());
-            Player playerOnePlayer = _playerOneCommuniy.AddFact(new Player(playerOneUser, game, 0));
-            Outcome outcome = _playerOneCommuniy.AddFact(new Outcome(game, null));
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
+            Player playerOnePlayer = await _playerOneCommuniy.AddFactAsync(new Player(playerOneUser, game, 0));
+            Outcome outcome = await _playerOneCommuniy.AddFactAsync(new Outcome(game, null));
         }
 
         [TestMethod]
-        public void WhenListPredecessorIsEmpty_ShouldNotThrow()
+        public async Task WhenListPredecessorIsEmpty_ShouldNotThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
-            Game game = _playerOneCommuniy.AddFact(new Game());
-            GameName gameName = _playerOneCommuniy.AddFact(new GameName(game, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
+            GameName gameName = await _playerOneCommuniy.AddFactAsync(new GameName(game, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
         }
 
         [TestMethod]
-        public void WhenSinglePredecessorHasNoCommunity_ShouldThrow()
+        public async Task WhenSinglePredecessorHasNoCommunity_ShouldThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
             Game game = new Game();
             try
             {
-                Player playerOnePlayer = _playerOneCommuniy.AddFact(new Player(playerOneUser, game, 0));
-                Assert.Fail("AddFact should have thrown.");
+                Player playerOnePlayer = await _playerOneCommuniy.AddFactAsync(new Player(playerOneUser, game, 0));
+                Assert.Fail("AddFactAsync should have thrown.");
             }
             catch (CorrespondenceException ex)
             {
@@ -80,16 +81,16 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void WhenListPredecessorHasNoCommunity_ShouldThrow()
+        public async Task WhenListPredecessorHasNoCommunity_ShouldThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
-            Game game = _playerOneCommuniy.AddFact(new Game());
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
             GameName gameName = new GameName(game, new List<GameName>(), "Fischer Spasky 1971, Game 3");
             try
             {
-                GameName secondGame = _playerOneCommuniy.AddFact(new GameName(game, new List<GameName>() { gameName }, "Fischer Spasky 1971, Game 3"));
-                Assert.Fail("AddFact should have thrown.");
+                GameName secondGame = await _playerOneCommuniy.AddFactAsync(new GameName(game, new List<GameName>() { gameName }, "Fischer Spasky 1971, Game 3"));
+                Assert.Fail("AddFactAsync should have thrown.");
             }
             catch (CorrespondenceException exception)
             {
@@ -98,18 +99,18 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void WhenListPredecessorFromADifferentCommunity_ShouldThrow()
+        public async Task WhenListPredecessorFromADifferentCommunity_ShouldThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
-            Game playerOneGame = _playerOneCommuniy.AddFact(new Game());
-			GameName gameName = _playerOneCommuniy.AddFact(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
+            Game playerOneGame = await _playerOneCommuniy.AddFactAsync(new Game());
+			GameName gameName = await _playerOneCommuniy.AddFactAsync(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
 			
-			Game playerTwoGame = _playerTwoCommuniy.AddFact(new Game());
+			Game playerTwoGame = await _playerTwoCommuniy.AddFactAsync(new Game());
 			try
             {
-                GameName secondGame = _playerTwoCommuniy.AddFact(new GameName(playerTwoGame, new List<GameName>() { gameName }, "Fischer Spasky 1971, Game 3"));
-                Assert.Fail("AddFact should have thrown.");
+                GameName secondGame = await _playerTwoCommuniy.AddFactAsync(new GameName(playerTwoGame, new List<GameName>() { gameName }, "Fischer Spasky 1971, Game 3"));
+                Assert.Fail("AddFactAsync should have thrown.");
             }
             catch (CorrespondenceException exception)
             {
@@ -118,19 +119,19 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void WhenListPredecessorFromDifferentCommunities_ShouldThrow()
+        public async Task WhenListPredecessorFromDifferentCommunities_ShouldThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
-            Game playerOneGame = _playerOneCommuniy.AddFact(new Game());
-			GameName gameName = _playerOneCommuniy.AddFact(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
-			
-			Game playerTwoGame = _playerTwoCommuniy.AddFact(new Game());
-			GameName secondName = _playerTwoCommuniy.AddFact(new GameName(playerTwoGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
+            Game playerOneGame = await _playerOneCommuniy.AddFactAsync(new Game());
+            GameName gameName = await _playerOneCommuniy.AddFactAsync(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
+
+            Game playerTwoGame = await _playerTwoCommuniy.AddFactAsync(new Game());
+            GameName secondName = await _playerTwoCommuniy.AddFactAsync(new GameName(playerTwoGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
 			try
             {
-                GameName secondGame = _playerOneCommuniy.AddFact(new GameName(playerOneGame, new List<GameName>() { gameName, secondName }, "Fischer Spasky 1971, Game 3"));
-                Assert.Fail("AddFact should have thrown.");
+                GameName secondGame = await _playerOneCommuniy.AddFactAsync(new GameName(playerOneGame, new List<GameName>() { gameName, secondName }, "Fischer Spasky 1971, Game 3"));
+                Assert.Fail("AddFactAsync should have thrown.");
             }
             catch (CorrespondenceException exception)
             {
@@ -139,16 +140,16 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void WhenOptionalPredecessorIsNotPartOfCommunity_ShouldThrow()
+        public async Task WhenOptionalPredecessorIsNotPartOfCommunity_ShouldThrow()
         {
-            Machine playerOneMachine = _playerOneCommuniy.AddFact(new Machine());
-            User playerOneUser = _playerOneCommuniy.AddFact(new User("one"));
-            Game game = _playerOneCommuniy.AddFact(new Game());
+            Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
+            User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
             Player playerOnePlayer = new Player(playerOneUser, game, 0);
             try
             {
-                Outcome outcome = _playerOneCommuniy.AddFact(new Outcome(game, playerOnePlayer));
-                Assert.Fail("AddFact should have thrown");
+                Outcome outcome = await _playerOneCommuniy.AddFactAsync(new Outcome(game, playerOnePlayer));
+                Assert.Fail("AddFactAsync should have thrown");
             }
             catch (CorrespondenceException exception)
             {

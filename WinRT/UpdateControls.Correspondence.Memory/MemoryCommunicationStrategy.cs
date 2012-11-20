@@ -48,7 +48,7 @@ namespace UpdateControls.Correspondence.Memory
                     translatedMemento.Data = memento.Data;
                     translatedMemento.AddPredecessors(memento.Predecessors
                         .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
-                    _repository.Save(translatedMemento, 0, out localId);
+                    localId = _repository.SaveAsync(translatedMemento, 0).Result.Id;
                 }
                 else
                 {

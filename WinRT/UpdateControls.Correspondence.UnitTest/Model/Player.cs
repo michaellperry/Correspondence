@@ -5,7 +5,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 	{
 		public void MakeMove(int index, int square)
 		{
-			Community.AddFact(new Move(this, index, square));
+			Community.AddFactAsync(new Move(this, index, square));
 		}
 	}
 }

@@ -4,6 +4,7 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 using System;
 using UpdateControls.Fields;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -40,13 +41,13 @@ namespace UpdateControls.Correspondence.Networking
             });
 		}
 
-		public bool Synchronize()
+		public async Task<bool> SynchronizeAsync()
 		{
             Synchronizing = true;
             try
             {
                 bool any = false;
-                if (SynchronizeOutgoing())
+                if (await SynchronizeOutgoingAsync())
                     any = true;
                 if (SynchronizeIncoming())
                     any = true;
@@ -76,14 +77,16 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        private bool SynchronizeOutgoing()
+        private async Task<bool> SynchronizeOutgoingAsync()
         {
             bool any = false;
             foreach (ServerProxy serverProxy in _serverProxies)
             {
                 List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
                 TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
-                FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, serverProxy.PeerId, unpublishedMessages);
+                GetResultMemento result = await _model.GetMessageBodiesAsync(timestamp, serverProxy.PeerId, unpublishedMessages);
+                timestamp = result.Timestamp;
+                FactTreeMemento messageBodies = result.FactTree;
                 if (messageBodies != null && messageBodies.Facts.Any())
                 {
                     serverProxy.CommunicationStrategy.Post(messageBodies, unpublishedMessages);

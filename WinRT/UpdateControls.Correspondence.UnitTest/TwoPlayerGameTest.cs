@@ -32,10 +32,10 @@ namespace UpdateControls.Correspondence.UnitTest
                 .Subscribe(() => _userFlynn)
                 .Subscribe(() => _userFlynn.ActivePlayers.Select(player => player.Game));
 
-            _userAlan = _communityAlan.AddFact(new User("alan1"));
-            _userFlynn = _communityFlynn.AddFact(new User("flynn1"));
-            _playerAlan = await _userAlan.ChallengeAsync(_communityAlan.AddFact(new User("flynn1")));
-            Synchronize();
+            _userAlan = await _communityAlan.AddFactAsync(new User("alan1"));
+            _userFlynn = await _communityFlynn.AddFactAsync(new User("flynn1"));
+            _playerAlan = await _userAlan.ChallengeAsync(await _communityAlan.AddFactAsync(new User("flynn1")));
+            await Synchronize();
             _playerFlynn = _userFlynn.ActivePlayers.Single();
         }
 
@@ -61,10 +61,10 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void FlynnSeesAlansMove()
+        public async Task FlynnSeesAlansMove()
         {
             _playerAlan.MakeMove(0, 0);
-            Synchronize();
+            await Synchronize();
 
             Pred.Assert(_playerFlynn.Game,
                 Has<Game>.Property(g => g.Moves, Contains<Move>.That(
@@ -93,12 +93,12 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void AlanSeesFlynnsResponse()
+        public async Task AlanSeesFlynnsResponse()
         {
             _playerAlan.MakeMove(0, 0);
-            Synchronize();
+            await Synchronize();
             _playerFlynn.MakeMove(1, 42);
-            Synchronize();
+            await Synchronize();
 
             Pred.Assert(_playerAlan.Game,
                 Has<Game>.Property(g => g.Moves, Contains<Move>.That(
@@ -112,9 +112,11 @@ namespace UpdateControls.Correspondence.UnitTest
             );
         }
 
-        private void Synchronize()
+        private async Task Synchronize()
         {
-            while (_communityAlan.Synchronize() || _communityFlynn.Synchronize()) ;
+            while (
+                await _communityAlan.SynchronizeAsync() ||
+                await _communityFlynn.SynchronizeAsync()) ;
         }
 	}
 }

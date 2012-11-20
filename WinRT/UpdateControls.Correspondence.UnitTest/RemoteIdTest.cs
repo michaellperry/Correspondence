@@ -3,6 +3,7 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Memory;
 using System.Linq;
 using UpdateControls.Correspondence.UnitTest.Model;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -13,7 +14,7 @@ namespace UpdateControls.Correspondence.UnitTest
         private static CorrespondenceFactType TYPE_Outcome = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1);
 
         [TestMethod]
-        public void CanReceiveATreeWithARemoteId()
+        public async Task CanReceiveATreeWithARemoteId()
         {
             FactTreeMemento messageBody = new FactTreeMemento(0)
                 .Add(new IdentifiedFactRemote(new FactID { key = 1 }, new FactID { key = 42 }))
@@ -32,17 +33,17 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(communication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
-            game = community.AddFact(new Game());
+            game = await community.AddFactAsync(new Game());
             storage.SaveShare(1, new FactID { key = 42 }, new FactID { key = 1 });
 
-            community.Synchronize();
+            await community.SynchronizeAsync();
 
             Outcome outcome = game.Outcomes.Single();
             Assert.IsNull(outcome.Winner);
         }
 
         [TestMethod]
-        public void WillCallGetWithARemoteFactID()
+        public async Task WillCallGetWithARemoteFactID()
         {
             Game sourceGame = new Game();
             Game game = null;
@@ -60,14 +61,14 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(communication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
-            game = community.AddFact(sourceGame);
+            game = await community.AddFactAsync(sourceGame);
 
             // On the first synchronize, we get the game memento.
-            bool gotSomething = community.Synchronize();
+            bool gotSomething = await community.SynchronizeAsync();
             Assert.IsTrue(gotSomething);
 
             // On the second synchronize, we ask for successors of the game.
-            gotSomething = community.Synchronize();
+            gotSomething = await community.SynchronizeAsync();
             Assert.IsFalse(gotSomething);
 
             // We knew the remote ID, so we used it.

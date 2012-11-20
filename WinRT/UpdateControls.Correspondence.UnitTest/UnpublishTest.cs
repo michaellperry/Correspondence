@@ -32,9 +32,9 @@ namespace UpdateControls.Correspondence.UnitTest
                 .Subscribe(() => _remoteAlan.ActivePlayers.Select(player => player.Game))
                 ;
 
-            _alan = _community.AddFact(new User("alan1"));
-            _flynn = _community.AddFact(new User("flynn1"));
-            _remoteAlan = _remoteCommunity.AddFact(new User("alan1"));
+            _alan = await _community.AddFactAsync(new User("alan1"));
+            _flynn = await _community.AddFactAsync(new User("flynn1"));
+            _remoteAlan = await _remoteCommunity.AddFactAsync(new User("alan1"));
             Player playerAlan = await _alan.ChallengeAsync(_flynn);
             Player playerFlynn = _flynn.ActivePlayers.Single();
 
@@ -43,35 +43,35 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void PlayerIsPublished()
+        public async Task PlayerIsPublished()
         {
-            Synchronize();
-            SynchronizeRemote();
+            await Synchronize();
+            await SynchronizeRemote();
 
             Assert.AreEqual(1, _remoteAlan.ActivePlayers.Count());
             Assert.AreEqual(0, _remoteAlan.FinishedPlayers.Count());
         }
 
         [TestMethod]
-        public void WhenOutcomePostedAfterFetch_RemoteSeesOutcome()
+        public async Task WhenOutcomePostedAfterFetch_RemoteSeesOutcome()
         {
-            Synchronize();
-            SynchronizeRemote();
+            await Synchronize();
+            await SynchronizeRemote();
             PostOutcome();
-            Synchronize();
-            SynchronizeRemote();
+            await Synchronize();
+            await SynchronizeRemote();
 
             Assert.AreEqual(0, _remoteAlan.ActivePlayers.Count());
             Assert.AreEqual(1, _remoteAlan.FinishedPlayers.Count());
         }
 
         [TestMethod]
-        public void WhenOutcomePostedBeforeFetch_PlayerIsUnpublished()
+        public async Task WhenOutcomePostedBeforeFetch_PlayerIsUnpublished()
         {
-            Synchronize();
+            await Synchronize();
             PostOutcome();
-            Synchronize();
-            SynchronizeRemote();
+            await Synchronize();
+            await SynchronizeRemote();
 
             Assert.AreEqual(0, _remoteAlan.ActivePlayers.Count());
             Assert.AreEqual(0, _remoteAlan.FinishedPlayers.Count());
@@ -84,14 +84,14 @@ namespace UpdateControls.Correspondence.UnitTest
             game.DeclareWinner(playerFlynn);
         }
 
-        private void Synchronize()
+        private async Task Synchronize()
         {
-            while (_community.Synchronize()) ;
+            while (await _community.SynchronizeAsync()) ;
         }
 
-        private void SynchronizeRemote()
+        private async Task SynchronizeRemote()
         {
-            while (_remoteCommunity.Synchronize()) ;
+            while (await _remoteCommunity.SynchronizeAsync()) ;
         }
     }
 }

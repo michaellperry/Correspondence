@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
@@ -16,7 +17,7 @@ namespace UpdateControls.Correspondence.UnitTest
         private MemoryStorageStrategy _storageAlan;
 
         [TestInitialize]
-        public void Initialize()
+        public async Task Initialize()
         {
             var sharedCommunication = new MemoryCommunicationStrategy();
             _storageAlan = new MemoryStorageStrategy();
@@ -29,8 +30,8 @@ namespace UpdateControls.Correspondence.UnitTest
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _otherAlan);
 
-            _alan = _community.AddFact(new User("alan1"));
-            _otherAlan = _otherCommunity.AddFact(new User("alan1"));
+            _alan = await _community.AddFactAsync(new User("alan1"));
+            _otherAlan = await _otherCommunity.AddFactAsync(new User("alan1"));
         }
 
         [TestMethod]
@@ -70,21 +71,21 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void PropertySetFromTwoCommunitiesHasConflict()
+        public async Task PropertySetFromTwoCommunitiesHasConflict()
         {
             _alan.FavoriteColor = "Blue";
             _otherAlan.FavoriteColor = "Red";
-            Synchronize();
+            await Synchronize();
 
             Assert.IsTrue(_alan.FavoriteColor.InConflict);
         }
 
         [TestMethod]
-        public void CanSeeCandidatesOfConflict()
+        public async Task CanSeeCandidatesOfConflict()
         {
             _alan.FavoriteColor = "Blue";
             _otherAlan.FavoriteColor = "Red";
-            Synchronize();
+            await Synchronize();
 
             IEnumerable<string> candidates = _alan.FavoriteColor.Candidates;
             Assert.IsTrue(candidates.Contains("Blue"));
@@ -111,69 +112,71 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void CanSetMutableFactProperty()
+        public async Task CanSetMutableFactProperty()
         {
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             Color color = _alan.BetterFavoriteColor;
 
             Assert.AreEqual("Blue", color.Name);
         }
 
         [TestMethod]
-        public void CanChangeMutableFactProperty()
+        public async Task CanChangeMutableFactProperty()
         {
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Red"));
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Red"));
             Color color = _alan.BetterFavoriteColor;
 
             Assert.AreEqual("Red", color.Name);
         }
 
         [TestMethod]
-        public void RedundantSetOfFactPropertyDoesNotCreateAFact()
+        public async Task RedundantSetOfFactPropertyDoesNotCreateAFact()
         {
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             int before = _storageAlan.LoadAllFacts().Count();
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             int after = _storageAlan.LoadAllFacts().Count();
 
             Assert.AreEqual(before, after);
         }
 
         [TestMethod]
-        public void FactPropertySetFromOneCommunityHasNoConflict()
+        public async Task FactPropertySetFromOneCommunityHasNoConflict()
         {
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Red"));
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Red"));
 
             Assert.IsFalse(_alan.BetterFavoriteColor.InConflict);
         }
 
         [TestMethod]
-        public void FactPropertySetFromTwoCommunitiesHasConflict()
+        public async Task FactPropertySetFromTwoCommunitiesHasConflict()
         {
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
-            _otherAlan.BetterFavoriteColor = _otherCommunity.AddFact(new Color("Red"));
-            Synchronize();
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
+            _otherAlan.BetterFavoriteColor = await _otherCommunity.AddFactAsync(new Color("Red"));
+            await Synchronize();
 
             Assert.IsTrue(_alan.BetterFavoriteColor.InConflict);
         }
 
         [TestMethod]
-        public void CanSeeCandidatesOfFactConflict()
+        public async Task CanSeeCandidatesOfFactConflict()
         {
-            _alan.BetterFavoriteColor = _community.AddFact(new Color("Blue"));
-            _otherAlan.BetterFavoriteColor = _otherCommunity.AddFact(new Color("Red"));
-            Synchronize();
+            _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
+            _otherAlan.BetterFavoriteColor = await _otherCommunity.AddFactAsync(new Color("Red"));
+            await Synchronize();
 
             IEnumerable<Color> candidates = _alan.BetterFavoriteColor.Candidates;
             Assert.IsTrue(candidates.Any(color => color.Name == "Blue"));
             Assert.IsTrue(candidates.Any(color => color.Name == "Red"));
         }
 
-        private void Synchronize()
+        private async Task Synchronize()
         {
-            while (_community.Synchronize() || _otherCommunity.Synchronize()) ;
+            while (
+                await _community.SynchronizeAsync() ||
+                await _otherCommunity.SynchronizeAsync()) ;
         }
     }
 }

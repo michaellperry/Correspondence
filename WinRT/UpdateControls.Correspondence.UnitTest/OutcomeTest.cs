@@ -23,8 +23,8 @@ namespace UpdateControls.Correspondence.UnitTest
             _community = new Community(new MemoryStorageStrategy())
                 .Register<Model.CorrespondenceModel>();
 
-            _alan = _community.AddFact(new User("alan1"));
-            _flynn = _community.AddFact(new User("flynn1"));
+            _alan = await _community.AddFactAsync(new User("alan1"));
+            _flynn = await _community.AddFactAsync(new User("flynn1"));
             Player playerAlan = await _alan.ChallengeAsync(_flynn);
             Player playerFlynn = _flynn.ActivePlayers.Single();
 

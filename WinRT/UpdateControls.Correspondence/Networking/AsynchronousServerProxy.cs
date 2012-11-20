@@ -32,6 +32,8 @@ namespace UpdateControls.Correspondence.Networking
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
 		private Dependent _depPushSubscriptions;
 
+        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
+
         public AsynchronousServerProxy(
             ISubscriptionProvider subscriptionProvider, 
             Model model, 
@@ -93,13 +95,15 @@ namespace UpdateControls.Correspondence.Networking
             Send();
         }
 
-        private void Send()
+        private async void Send()
         {
-            lock (this)
+            using (await _lock.EnterAsync())
             {
                 TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(_peerId);
                 List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
-                FactTreeMemento messageBodies = _model.GetMessageBodies(ref timestamp, _peerId, unpublishedMessages);
+                var result = await _model.GetMessageBodiesAsync(timestamp, _peerId, unpublishedMessages);
+                timestamp = result.Timestamp;
+                FactTreeMemento messageBodies = result.FactTree;
                 bool anyMessages = messageBodies != null && messageBodies.Facts.Any();
                 if (anyMessages)
                 {

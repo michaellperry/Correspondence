@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Networking
@@ -52,9 +53,9 @@ namespace UpdateControls.Correspondence.Networking
             _asynchronousNetwork.BeginSending();
         }
 
-        public bool Synchronize()
+        public async Task<bool> SynchronizeAsync()
         {
-			return _synchronousNetwork.Synchronize();
+			return await _synchronousNetwork.SynchronizeAsync();
 		}
 
         public bool Synchronizing

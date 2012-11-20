@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -33,9 +34,9 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void FactAddedBeforeServiceStarts()
+        public async Task FactAddedBeforeServiceStarts()
         {
-            Machine newMachine = _community.AddFact(new Machine());
+            Machine newMachine = await _community.AddFactAsync(new Machine());
             bool canContinue = _community.InvokeTransform(_transform);
 
             Assert.IsTrue(canContinue);
@@ -47,18 +48,18 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void FactAddedTriggersTheService()
+        public async Task FactAddedTriggersTheService()
         {
             bool canContinue = _community.InvokeTransform(_transform);
             Assert.IsFalse(canContinue);
             Assert.AreEqual(0, _triggerCount);
 
-            Machine newMachine = _community.AddFact(new Machine());
+            Machine newMachine = await _community.AddFactAsync(new Machine());
             Assert.AreEqual(1, _triggerCount);
         }
 
         [TestMethod]
-        public void FactReceivedTriggersTheService()
+        public async Task FactReceivedTriggersTheService()
         {
             Community thatCommunity;
             User thisUser = null;
@@ -68,19 +69,21 @@ namespace UpdateControls.Correspondence.UnitTest
             _community
                 .AddCommunicationStrategy(sharedCommunication)
                 .Subscribe(() => thisUser);
-            thisUser = _community.AddFact(new User("me"));
+            thisUser = await _community.AddFactAsync(new User("me"));
             thatCommunity = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => thatUser);
-            thatUser = thatCommunity.AddFact(new User("me"));
+            thatUser = await thatCommunity.AddFactAsync(new User("me"));
             Assert.AreEqual(1, _triggerCount);
 
-            Game game = thatCommunity.AddFact(new Game());
-            thatCommunity.AddFact(new Player(thatUser, game, 0));
+            Game game = await thatCommunity.AddFactAsync(new Game());
+            await thatCommunity.AddFactAsync(new Player(thatUser, game, 0));
             Assert.AreEqual(1, _triggerCount);
 
-            while (_community.Synchronize() || thatCommunity.Synchronize()) ;
+            while (
+                await _community.SynchronizeAsync() ||
+                await thatCommunity.SynchronizeAsync()) ;
 
             Assert.AreEqual(3, _triggerCount);
         }
