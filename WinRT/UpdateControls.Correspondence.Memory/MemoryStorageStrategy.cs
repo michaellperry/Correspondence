@@ -156,7 +156,7 @@ namespace UpdateControls.Correspondence.Memory
             return peerRecord.PeerId;
         }
 
-        public TimestampID LoadOutgoingTimestamp(int peerId)
+        public async Task<TimestampID> LoadOutgoingTimestampAsync(int peerId)
         {
             TimestampID timestamp;
             if (_outgoingTimestampByPeer.TryGetValue(peerId, out timestamp))
@@ -165,12 +165,12 @@ namespace UpdateControls.Correspondence.Memory
                 return new TimestampID();
         }
 
-        public void SaveOutgoingTimestamp(int peerId, TimestampID timestamp)
+        public async Task SaveOutgoingTimestampAsync(int peerId, TimestampID timestamp)
         {
             _outgoingTimestampByPeer[peerId] = timestamp;
         }
 
-        public TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId)
+        public async Task<TimestampID> LoadIncomingTimestampAsync(int peerId, FactID pivotId)
         {
             TimestampID timestamp;
             if (_incomingTimestampByPeerAndPivot.TryGetValue(new PeerPivotIdentifier(peerId, pivotId), out timestamp))
@@ -179,12 +179,12 @@ namespace UpdateControls.Correspondence.Memory
                 return new TimestampID();
         }
 
-        public void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp)
+        public async Task SaveIncomingTimestampAsync(int peerId, FactID pivotId, TimestampID timestamp)
         {
             _incomingTimestampByPeerAndPivot[new PeerPivotIdentifier(peerId, pivotId)] = timestamp;
         }
 
-        public IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp)
+        public async Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
         {
             lock (this)
             {

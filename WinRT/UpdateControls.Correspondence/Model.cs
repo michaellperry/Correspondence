@@ -186,7 +186,7 @@ namespace UpdateControls.Correspondence
         public async Task<GetResultMemento> GetMessageBodiesAsync(TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
         {
             FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
-            IEnumerable<MessageMemento> recentMessages = _storageStrategy.LoadRecentMessagesForServer(peerId, timestamp);
+            IEnumerable<MessageMemento> recentMessages = await _storageStrategy.LoadRecentMessagesForServerAsync(peerId, timestamp);
             foreach (MessageMemento message in recentMessages)
             {
                 if (message.FactId.key > timestamp.Key)

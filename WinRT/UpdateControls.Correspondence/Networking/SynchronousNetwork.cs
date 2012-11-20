@@ -88,14 +88,14 @@ namespace UpdateControls.Correspondence.Networking
             foreach (ServerProxy serverProxy in _serverProxies)
             {
                 List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
-                TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(serverProxy.PeerId);
+                TimestampID timestamp = await _storageStrategy.LoadOutgoingTimestampAsync(serverProxy.PeerId);
                 GetResultMemento result = await _model.GetMessageBodiesAsync(timestamp, serverProxy.PeerId, unpublishedMessages);
                 timestamp = result.Timestamp;
                 FactTreeMemento messageBodies = result.FactTree;
                 if (messageBodies != null && messageBodies.Facts.Any())
                 {
                     serverProxy.CommunicationStrategy.Post(messageBodies, unpublishedMessages);
-                    _storageStrategy.SaveOutgoingTimestamp(serverProxy.PeerId, timestamp);
+                    await _storageStrategy.SaveOutgoingTimestampAsync(serverProxy.PeerId, timestamp);
                     any = true;
                 }
             }
@@ -118,12 +118,12 @@ namespace UpdateControls.Correspondence.Networking
                         FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
                         FactID pivotId = pivot.ID;
                         await _model.AddToFactTreeAsync(pivotTree, pivotId, serverProxy.PeerId);
-                        TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(serverProxy.PeerId, pivotId);
+                        TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(serverProxy.PeerId, pivotId);
                         GetResultMemento result = await serverProxy.CommunicationStrategy.GetAsync(pivotTree, pivotId, timestamp);
                         if (result.FactTree.Facts.Any())
                         {
                             _model.ReceiveMessage(result.FactTree, serverProxy.PeerId);
-                            _storageStrategy.SaveIncomingTimestamp(serverProxy.PeerId, pivotId, result.Timestamp);
+                            await _storageStrategy.SaveIncomingTimestampAsync(serverProxy.PeerId, pivotId, result.Timestamp);
                             any = true;
                         }
                     }

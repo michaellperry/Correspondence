@@ -100,7 +100,7 @@ namespace UpdateControls.Correspondence.Networking
         {
             using (await _lock.EnterAsync())
             {
-                TimestampID timestamp = _storageStrategy.LoadOutgoingTimestamp(_peerId);
+                TimestampID timestamp = await _storageStrategy.LoadOutgoingTimestampAsync(_peerId);
                 List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
                 var result = await _model.GetMessageBodiesAsync(timestamp, _peerId, unpublishedMessages);
                 timestamp = result.Timestamp;
@@ -108,11 +108,11 @@ namespace UpdateControls.Correspondence.Networking
                 bool anyMessages = messageBodies != null && messageBodies.Facts.Any();
                 if (anyMessages)
                 {
-                    _communicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, unpublishedMessages, delegate(bool succeeded)
+                    _communicationStrategy.BeginPost(messageBodies, _model.ClientDatabaseGuid, unpublishedMessages, async delegate(bool succeeded)
                     {
                         if (succeeded)
                         {
-                            _storageStrategy.SaveOutgoingTimestamp(_peerId, timestamp);
+                            await _storageStrategy.SaveOutgoingTimestampAsync(_peerId, timestamp);
                             Send();
                         }
                         else
@@ -168,10 +168,10 @@ namespace UpdateControls.Correspondence.Networking
                     List<PivotMemento> pivots = new List<PivotMemento>();
                     foreach (FactID pivotId in pivotIds)
                     {
-                        TimestampID timestamp = _storageStrategy.LoadIncomingTimestamp(_peerId, pivotId);
+                        TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(_peerId, pivotId);
                         pivots.Add(new PivotMemento(pivotId, timestamp));
                     }
-                    _communicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
+                    _communicationStrategy.BeginGetMany(pivotTree, pivots, _model.ClientDatabaseGuid, async delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
                     {
                         bool receivedFacts = messageBody.Facts.Any();
                         if (receivedFacts)
@@ -179,7 +179,7 @@ namespace UpdateControls.Correspondence.Networking
                             _model.ReceiveMessage(messageBody, _peerId);
                             foreach (PivotMemento pivot in newTimestamps)
                             {
-                                _storageStrategy.SaveIncomingTimestamp(_peerId, pivot.PivotId, pivot.Timestamp);
+                                await _storageStrategy.SaveIncomingTimestampAsync(_peerId, pivot.PivotId, pivot.Timestamp);
                             }
                         }
                         if (receivedFacts || _communicationStrategy.IsLongPolling)

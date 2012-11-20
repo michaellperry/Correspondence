@@ -22,11 +22,11 @@ namespace UpdateControls.Correspondence.Strategy
         Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId);
 
         // Messages.
-        TimestampID LoadOutgoingTimestamp(int peerId);
-        void SaveOutgoingTimestamp(int peerId, TimestampID timestamp);
-        TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId);
-        void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp);
-        IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp);
+        Task<TimestampID> LoadOutgoingTimestampAsync(int peerId);
+        Task SaveOutgoingTimestampAsync(int peerId, TimestampID timestamp);
+        Task<TimestampID> LoadIncomingTimestampAsync(int peerId, FactID pivotId);
+        Task SaveIncomingTimestampAsync(int peerId, FactID pivotId, TimestampID timestamp);
+        Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp);
 
         // Networking.
         Task<int> SavePeerAsync(string protocolName, string peerName);
