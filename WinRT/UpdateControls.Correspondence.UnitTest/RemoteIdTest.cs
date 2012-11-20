@@ -34,7 +34,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
             game = await community.AddFactAsync(new Game());
-            storage.SaveShare(1, new FactID { key = 42 }, new FactID { key = 1 });
+            await storage.SaveShareAsync(1, new FactID { key = 42 }, new FactID { key = 1 });
 
             await community.SynchronizeAsync();
 

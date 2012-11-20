@@ -201,7 +201,7 @@ namespace UpdateControls.Correspondence.Memory
                 .ToList();
         }
 
-        public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
+        public async Task<FactID> GetFactIDFromShareAsync(int peerId, FactID remoteFactId)
         {
             var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.RemoteFactId.Equals(remoteFactId));
             if (share != null)
@@ -210,19 +210,17 @@ namespace UpdateControls.Correspondence.Memory
             throw new CorrespondenceException(String.Format("Share not found for peer {0} and remote fact {1}.", peerId, remoteFactId.key));
         }
 
-        public bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId)
+        public async Task<FactID?> GetRemoteIdAsync(FactID localFactId, int peerId)
         {
             var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.LocalFactId.Equals(localFactId));
             if (share != null)
             {
-                remoteFactId = share.RemoteFactId;
-                return true;
+                return share.RemoteFactId;
             }
-            remoteFactId = new FactID();
-            return false;
+            return null;
         }
 
-        public void SaveShare(int peerId, FactID remoteFactId, FactID localFactId)
+        public async Task SaveShareAsync(int peerId, FactID remoteFactId, FactID localFactId)
         {
             _shareTable.Add(new ShareRecord
             {

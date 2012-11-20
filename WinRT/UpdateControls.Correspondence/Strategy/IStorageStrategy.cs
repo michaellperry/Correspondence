@@ -30,8 +30,8 @@ namespace UpdateControls.Correspondence.Strategy
 
         // Networking.
         Task<int> SavePeerAsync(string protocolName, string peerName);
-        FactID GetFactIDFromShare(int peerId, FactID remoteFactId);
-        bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId);
-        void SaveShare(int peerId, FactID remoteFactId, FactID localFactId);
+        Task<FactID> GetFactIDFromShareAsync(int peerId, FactID remoteFactId);
+        Task<FactID?> GetRemoteIdAsync(FactID localFactId, int peerId);
+        Task SaveShareAsync(int peerId, FactID remoteFactId, FactID localFactId);
     }
 }

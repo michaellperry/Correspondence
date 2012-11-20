@@ -233,10 +233,10 @@ namespace UpdateControls.Correspondence
                 CorrespondenceFact fact = await GetFactByIDAsync(factId);
                 if (fact != null)
                 {
-                    FactID remoteId;
-                    if (_storageStrategy.GetRemoteId(factId, peerId, out remoteId))
+                    FactID? remoteId = await _storageStrategy.GetRemoteIdAsync(factId, peerId);
+                    if (remoteId.HasValue)
                     {
-                        messageBody.Add(new IdentifiedFactRemote(factId, remoteId));
+                        messageBody.Add(new IdentifiedFactRemote(factId, remoteId.Value));
                     }
                     else
                     {
@@ -297,14 +297,14 @@ namespace UpdateControls.Correspondence
                     .Where(pred => pred != null));
 
                 FactID localId = await AddFactMementoAsync(peerId, translatedMemento, invalidatedQueries);
-                _storageStrategy.SaveShare(peerId, identifiedFact.Id, localId);
+                await _storageStrategy.SaveShareAsync(peerId, identifiedFact.Id, localId);
 
                 return localId;
             }
             else
             {
                 IdentifiedFactRemote identifiedFactRemote = (IdentifiedFactRemote)identifiedFact;
-                return _storageStrategy.GetFactIDFromShare(peerId, identifiedFactRemote.RemoteId);
+                return await _storageStrategy.GetFactIDFromShareAsync(peerId, identifiedFactRemote.RemoteId);
             }
         }
 
