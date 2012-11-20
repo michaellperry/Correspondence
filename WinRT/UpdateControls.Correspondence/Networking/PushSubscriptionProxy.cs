@@ -27,7 +27,10 @@ namespace UpdateControls.Correspondence.Networking
 				FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
 				FactID pivotId = _pivot.ID;
 				await _model.AddToFactTreeAsync(pivotTree, pivotId, _serverProxy.PeerId);
-                _pushSubscription = _serverProxy.CommunicationStrategy.SubscribeForPush(pivotTree, pivotId, await _model.GetClientDatabaseGuidAsync());
+                _pushSubscription = await _serverProxy.CommunicationStrategy.SubscribeForPushAsync(
+                    pivotTree,
+                    pivotId,
+                    await _model.GetClientDatabaseGuidAsync());
 			}
 		}
 

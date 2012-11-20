@@ -108,18 +108,19 @@ namespace UpdateControls.Correspondence.Networking
                 bool anyMessages = messageBodies != null && messageBodies.Facts.Any();
                 if (anyMessages)
                 {
-                    _communicationStrategy.BeginPost(messageBodies, await _model.GetClientDatabaseGuidAsync(), unpublishedMessages, async delegate(bool succeeded)
+                    try
                     {
-                        if (succeeded)
-                        {
-                            await _storageStrategy.SaveOutgoingTimestampAsync(_peerId, timestamp);
-                            Send();
-                        }
-                        else
-                        {
-                            OnSendError(null);
-                        }
-                    }, OnSendError);
+                        await _communicationStrategy.PostAsync(
+                            messageBodies,
+                            await _model.GetClientDatabaseGuidAsync(),
+                            unpublishedMessages);
+                        await _storageStrategy.SaveOutgoingTimestampAsync(_peerId, timestamp);
+                        Send();
+                    }
+                    catch (Exception e)
+                    {
+                        OnSendError(e);
+                    }
                 }
 
                 _sending.Value = anyMessages;
@@ -171,13 +172,18 @@ namespace UpdateControls.Correspondence.Networking
                         TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(_peerId, pivotId);
                         pivots.Add(new PivotMemento(pivotId, timestamp));
                     }
-                    _communicationStrategy.BeginGetMany(pivotTree, pivots, await _model.GetClientDatabaseGuidAsync(), async delegate(FactTreeMemento messageBody, IEnumerable<PivotMemento> newTimestamps)
+                    try
                     {
-                        bool receivedFacts = messageBody.Facts.Any();
+                        GetManyResultMemento result = await _communicationStrategy.GetManyAsync(
+                            pivotTree,
+                            pivots,
+                            await _model.GetClientDatabaseGuidAsync());
+
+                        bool receivedFacts = result.MessageBody.Facts.Any();
                         if (receivedFacts)
                         {
-                            _model.ReceiveMessage(messageBody, _peerId);
-                            foreach (PivotMemento pivot in newTimestamps)
+                            _model.ReceiveMessage(result.MessageBody, _peerId);
+                            foreach (PivotMemento pivot in result.NewTimestamps)
                             {
                                 await _storageStrategy.SaveIncomingTimestampAsync(_peerId, pivot.PivotId, pivot.Timestamp);
                             }
@@ -189,7 +195,11 @@ namespace UpdateControls.Correspondence.Networking
                             if (EndReceiving())
                                 Receive();
                         }
-                    }, OnReceiveError);
+                    }
+                    catch (Exception e)
+                    {
+                        OnReceiveError(e);
+                    }
                 }
 
                 if (_receiveState.Value == ReceiveState.Receiving && !anyPivots)
@@ -218,7 +228,7 @@ namespace UpdateControls.Correspondence.Networking
         {
             FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
             await _model.AddToFactTreeAsync(pivotTree, pivot.ID, _peerId);
-            _communicationStrategy.Notify(
+            await _communicationStrategy.NotifyAsync(
                 pivotTree,
                 pivot.ID,
                 await _model.GetClientDatabaseGuidAsync(),
@@ -294,7 +304,8 @@ namespace UpdateControls.Correspondence.Networking
         public async void AfterTriggerSubscriptionUpdate()
         {
             if (_communicationStrategy.IsLongPolling)
-                _communicationStrategy.Interrupt(await _model.GetClientDatabaseGuidAsync());
+                await _communicationStrategy.InterruptAsync(
+                    await _model.GetClientDatabaseGuidAsync());
 
             BeginReceiving();
         }

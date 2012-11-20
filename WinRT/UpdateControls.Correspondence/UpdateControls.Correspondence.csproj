@@ -136,10 +136,10 @@
     <Compile Include="Mementos\FactID.cs" />
     <Compile Include="Mementos\FactMemento.cs" />
     <Compile Include="Mementos\FactTreeMemento.cs" />
+    <Compile Include="Mementos\GetManyResultMemento.cs" />
     <Compile Include="Mementos\GetResultMemento.cs" />
     <Compile Include="Mementos\IdentifiedFactBase.cs" />
     <Compile Include="Mementos\IdentifiedFactMemento.cs" />
-    <Compile Include="Mementos\IdentifiedFactMementoTask.cs" />
     <Compile Include="Mementos\IdentifiedFactRemote.cs" />
     <Compile Include="Mementos\MessageMemento.cs" />
     <Compile Include="Mementos\NamedFactMemento.cs" />
