@@ -17,7 +17,7 @@ namespace UpdateControls.Correspondence.Strategy
         void SetID(string factName, FactID id);
         Task<FactMemento> LoadAsync(FactID id);
         Task<SaveResult> SaveAsync(FactMemento memento, int peerId);
-        bool FindExistingFact(FactMemento memento, out FactID id);
+        Task<FactID?> FindExistingFactAsync(FactMemento memento);
         Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
         Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId);
 

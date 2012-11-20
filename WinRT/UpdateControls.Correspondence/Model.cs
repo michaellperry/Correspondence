@@ -136,10 +136,10 @@ namespace UpdateControls.Correspondence
             return prototype;
         }
 
-        public T FindFact<T>(T prototype)
+        public async Task<T> FindFactAsync<T>(T prototype)
                 where T : CorrespondenceFact
         {
-            lock (this)
+            using (await _lock.EnterAsync())
             {
                 if (prototype.InternalCommunity != null)
                     throw new CorrespondenceException("A fact may only belong to one community");
@@ -152,10 +152,10 @@ namespace UpdateControls.Correspondence
                     return (T)fact;
 
                 // If the object is alredy in storage, load it.
-                FactID id;
-                if (_storageStrategy.FindExistingFact(memento, out id))
+                FactID? existingFactId = await _storageStrategy.FindExistingFactAsync(memento);
+                if (existingFactId.HasValue)
                 {
-                    prototype.ID = id;
+                    prototype.ID = existingFactId.Value;
                     prototype.SetCommunity(_community);
                     _factByID.Add(prototype.ID, prototype);
                     _factByMemento.Add(memento, prototype);

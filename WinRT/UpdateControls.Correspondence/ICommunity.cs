@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence
     {
         Task<T> AddFactAsync<T>(T prototype)
             where T : CorrespondenceFact;
-        T FindFact<T>(T prototype)
+        Task<T> FindFactAsync<T>(T prototype)
             where T : CorrespondenceFact;
         event Action<CorrespondenceFact> FactAdded;
         Task<bool> SynchronizeAsync();

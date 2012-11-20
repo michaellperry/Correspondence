@@ -23,7 +23,7 @@ namespace UpdateControls.Correspondence.Memory
 
         public async Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID remotePivotId, TimestampID timestamp)
         {
-            FactID? localPivotId = FindExistingFact(remotePivotId, pivotTree);
+            FactID? localPivotId = await FindExistingFact(remotePivotId, pivotTree);
             if (!localPivotId.HasValue)
                 return new GetResultMemento(new FactTreeMemento(_databaseId), new TimestampID(_databaseId, timestamp.Key));
 
@@ -69,7 +69,7 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        private FactID? FindExistingFact(FactID remotePivotId, FactTreeMemento messageBody)
+        private async Task<FactID?> FindExistingFact(FactID remotePivotId, FactTreeMemento messageBody)
         {
             IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
             foreach (IdentifiedFactBase identifiedFact in messageBody.Facts)
@@ -82,7 +82,10 @@ namespace UpdateControls.Correspondence.Memory
                     translatedMemento.Data = memento.Data;
                     translatedMemento.AddPredecessors(memento.Predecessors
                         .Select(remote => new PredecessorMemento(remote.Role, localIdByRemoteId[remote.ID], remote.IsPivot)));
-                    if (!_repository.FindExistingFact(translatedMemento, out localId))
+                    FactID? existingFactId = await _repository.FindExistingFactAsync(translatedMemento);
+                    if (existingFactId.HasValue)
+                        localId = existingFactId.Value;
+                    else
                         return null;
                 }
                 else

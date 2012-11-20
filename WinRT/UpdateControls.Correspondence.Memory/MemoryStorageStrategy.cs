@@ -104,21 +104,19 @@ namespace UpdateControls.Correspondence.Memory
             return new SaveResult { WasSaved = wasSaved, Id = id };
         }
 
-        public bool FindExistingFact(FactMemento memento, out FactID id)
+        public async Task<FactID?> FindExistingFactAsync(FactMemento memento)
         {
-            lock (this)
+            using (await _lock.EnterAsync())
             {
                 // See if the fact already exists.
                 FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
                 if (fact == null)
                 {
-                    id = new FactID();
-                    return false;
+                    return null;
                 }
                 else
                 {
-                    id = fact.IdentifiedFactMemento.Id;
-                    return true;
+                    return fact.IdentifiedFactMemento.Id;
                 }
             }
         }
