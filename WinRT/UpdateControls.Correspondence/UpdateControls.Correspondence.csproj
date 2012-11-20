@@ -154,7 +154,6 @@
     <Compile Include="Networking\ISubscriptionProvider.cs" />
     <Compile Include="Networking\Network.cs" />
     <Compile Include="Networking\PushSubscriptionProxy.cs" />
-    <Compile Include="Networking\ResultAggregate.cs" />
     <Compile Include="Networking\SynchronizeResult.cs" />
     <Compile Include="Networking\SynchronousNetwork.cs" />
     <Compile Include="PredecessorBase.cs" />
@@ -181,7 +180,6 @@
     <Compile Include="Strategy\IFieldSerializer.cs" />
     <Compile Include="Strategy\IPushSubscription.cs" />
     <Compile Include="Strategy\IStorageStrategy.cs" />
-    <Compile Include="Strategy\ITransform.cs" />
     <Compile Include="Strategy\QueryOptions.cs" />
     <Compile Include="Strategy\SaveResult.cs" />
     <Compile Include="Subscription.cs" />

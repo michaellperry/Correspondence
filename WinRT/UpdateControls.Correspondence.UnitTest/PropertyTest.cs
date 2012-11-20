@@ -96,9 +96,9 @@ namespace UpdateControls.Correspondence.UnitTest
         public void RedundantSetOfSimplePropertyDoesNotCreateAFact()
         {
             _alan.FavoriteColor = "Blue";
-            int before = _storageAlan.LoadAllFacts().Count();
+            int before = _storageAlan.GetFactCount();
             _alan.FavoriteColor = "Blue";
-            int after = _storageAlan.LoadAllFacts().Count();
+            int after = _storageAlan.GetFactCount();
 
             Assert.AreEqual(before, after);
         }
@@ -134,9 +134,9 @@ namespace UpdateControls.Correspondence.UnitTest
         public async Task RedundantSetOfFactPropertyDoesNotCreateAFact()
         {
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
-            int before = _storageAlan.LoadAllFacts().Count();
+            int before = _storageAlan.GetFactCount();
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
-            int after = _storageAlan.LoadAllFacts().Count();
+            int after = _storageAlan.GetFactCount();
 
             Assert.AreEqual(before, after);
         }

@@ -5,7 +5,6 @@ namespace UpdateControls.Correspondence
 {
     public interface ICommunity
     {
-        IDisposable BeginDuration();
         Task<T> AddFactAsync<T>(T prototype)
             where T : CorrespondenceFact;
         T FindFact<T>(T prototype)

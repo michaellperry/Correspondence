@@ -20,11 +20,6 @@ namespace UpdateControls.Correspondence.Memory
 
         private Guid _clientGuid = Guid.NewGuid();
 
-        public IDisposable BeginDuration()
-        {
-            return new Duration();
-        }
-
 		public Guid ClientGuid
 		{
             get { return _clientGuid; }
@@ -220,30 +215,9 @@ namespace UpdateControls.Correspondence.Memory
                 message.AncestorRole.Equals(role));
         }
 
-        public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
+        public int GetFactCount()
         {
-            return _factTable.Select(record => record.IdentifiedFactMemento);
-        }
-
-        public IdentifiedFactMemento LoadNextFact(FactID? lastFactId)
-        {
-            lock (this)
-            {
-                if (lastFactId == null)
-                {
-                    return _factTable
-                        .Select(record => record.IdentifiedFactMemento)
-                        .FirstOrDefault();
-                }
-                else
-                {
-                    return _factTable
-                        .SkipWhile(record => record.IdentifiedFactMemento.Id.key != lastFactId.Value.key)
-                        .Skip(1)
-                        .Select(record => record.IdentifiedFactMemento)
-                        .FirstOrDefault();
-                }
-            }
+            return _factTable.Count;
         }
 
         public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
@@ -275,11 +249,6 @@ namespace UpdateControls.Correspondence.Memory
                 RemoteFactId = remoteFactId,
                 LocalFactId = localFactId
             });
-        }
-
-        public IEnumerable<NamedFactMemento> LoadAllNamedFacts()
-        {
-            throw new NotImplementedException();
         }
     }
 }

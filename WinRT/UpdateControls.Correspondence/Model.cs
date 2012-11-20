@@ -88,11 +88,6 @@ namespace UpdateControls.Correspondence
             publishCondition.AcceptAsync(queryInverter);
         }
 
-        public IDisposable BeginDuration()
-        {
-            return _storageStrategy.BeginDuration();
-        }
-
         public async Task<T> AddFactAsync<T>(T prototype) where T : CorrespondenceFact
         {
             return await AddFactAsync<T>(prototype, 0);
@@ -336,18 +331,6 @@ namespace UpdateControls.Correspondence
 		{
 			get { return _storageStrategy.ClientGuid; }
 		}
-
-        public bool InvokeTransform(ITransform transform)
-        {
-            IdentifiedFactMemento factMemento = _storageStrategy.LoadNextFact(transform.LastFactId);
-            if (factMemento == null)
-                return false;
-
-            CorrespondenceFact nextFact = GetFactByIdAndMemento(factMemento.Id, factMemento.Memento);
-            transform.Transform(nextFact, factMemento.Id, f => f.ID);
-
-            return true;
-        }
 
         internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {

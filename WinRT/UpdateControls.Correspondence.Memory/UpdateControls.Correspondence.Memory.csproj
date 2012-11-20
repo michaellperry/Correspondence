@@ -106,9 +106,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AsyncMemoryStorageStrategy.cs" />
-    <Compile Include="Duration.cs" />
     <Compile Include="FactRecord.cs" />
-    <Compile Include="FutureIdentifiedFactMementoTask.cs" />
     <Compile Include="MemoryCommunicationStrategy.cs" />
     <Compile Include="MemoryStorageStrategy.cs" />
     <Compile Include="MessageRecord.cs" />

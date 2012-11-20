@@ -48,13 +48,13 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task AlanCanSendAMessage()
         {
-            int factCount = _storageFlynn.LoadAllFacts().Count();
+            int factCount = _storageFlynn.GetFactCount();
 
             await _communityAlan.AddFactAsync(new Message(_playerAlan, "This system's got more bugs than a bait store."));
             await Synchronize();
 
             // Flynn can't understand the fact, but it gets stored until he upgrades.
-            int newFactCount = _storageFlynn.LoadAllFacts().Count();
+            int newFactCount = _storageFlynn.GetFactCount();
             Assert.AreEqual(factCount + 1, newFactCount);
         }
 

@@ -7,7 +7,7 @@ namespace UpdateControls.Correspondence.Memory
 {
     public class MemoryCommunicationStrategy : ICommunicationStrategy
     {
-        private IStorageStrategy _repository = new MemoryStorageStrategy();
+        private MemoryStorageStrategy _repository = new MemoryStorageStrategy();
         private long _databaseId = 0L;
 
         public string ProtocolName

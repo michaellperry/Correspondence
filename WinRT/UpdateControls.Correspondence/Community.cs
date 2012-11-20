@@ -99,11 +99,6 @@ namespace UpdateControls.Correspondence
 			return this;
 		}
 
-        public IDisposable BeginDuration()
-        {
-            return _model.BeginDuration();
-        }
-
         public async Task<T> AddFactAsync<T>(T prototype)
             where T : CorrespondenceFact
         {
@@ -164,11 +159,6 @@ namespace UpdateControls.Correspondence
         public Exception LastException
         {
             get { return _network.LastException; }
-        }
-
-        public bool InvokeTransform(ITransform transform)
-        {
-            return _model.InvokeTransform(transform);
         }
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)

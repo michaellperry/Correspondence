@@ -27,11 +27,6 @@ namespace UpdateControls.Correspondence.Memory
             Task.WaitAll(_futureTasks.ToArray());
         }
 
-        public IDisposable BeginDuration()
-        {
-            return new Duration();
-        }
-
 		public Guid ClientGuid
 		{
             get { return _clientGuid; }
@@ -200,44 +195,6 @@ namespace UpdateControls.Correspondence.Memory
                 .ToList();
         }
 
-        public IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp)
-        {
-            return _messageTable
-                .Where(message => message.Message.PivotId.Equals(pivotId) && message.Message.FactId.key > timestamp.Key)
-                .Select(message => message.Message.FactId)
-                .Distinct();
-        }
-
-        public void Unpublish(FactID factId, RoleMemento role)
-        {
-            _messageTable.RemoveAll(message =>
-                message.AncestorFact.Equals(factId) &&
-                message.AncestorRole.Equals(role));
-        }
-
-        public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
-        {
-            return _factTable.Select(record => record.IdentifiedFactMemento);
-        }
-
-        public IdentifiedFactMemento LoadNextFact(FactID? lastFactId)
-        {
-            if (lastFactId == null)
-            {
-                return _factTable
-                    .Select(record => record.IdentifiedFactMemento)
-                    .FirstOrDefault();
-            }
-            else
-            {
-                return _factTable
-                    .SkipWhile(record => record.IdentifiedFactMemento.Id.key != lastFactId.Value.key)
-                    .Skip(1)
-                    .Select(record => record.IdentifiedFactMemento)
-                    .FirstOrDefault();
-            }
-        }
-
         public FactID GetFactIDFromShare(int peerId, FactID remoteFactId)
         {
             var share = _shareTable.FirstOrDefault(s => s.PeerId == peerId && s.RemoteFactId.Equals(remoteFactId));
@@ -267,11 +224,6 @@ namespace UpdateControls.Correspondence.Memory
                 RemoteFactId = remoteFactId,
                 LocalFactId = localFactId
             });
-        }
-
-        public IEnumerable<NamedFactMemento> LoadAllNamedFacts()
-        {
-            throw new NotImplementedException();
         }
     }
 }

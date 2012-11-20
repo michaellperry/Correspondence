@@ -10,7 +10,6 @@ namespace UpdateControls.Correspondence.Strategy
 	/// </summary>
 	public interface IStorageStrategy
     {
-        IDisposable BeginDuration();
 		Guid ClientGuid { get; }
 
 		// Facts.
@@ -21,8 +20,6 @@ namespace UpdateControls.Correspondence.Strategy
         bool FindExistingFact(FactMemento memento, out FactID id);
         Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
         Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId);
-        IEnumerable<IdentifiedFactMemento> LoadAllFacts();
-        IdentifiedFactMemento LoadNextFact(FactID? lastFactId);
 
         // Messages.
         TimestampID LoadOutgoingTimestamp(int peerId);
@@ -30,14 +27,11 @@ namespace UpdateControls.Correspondence.Strategy
         TimestampID LoadIncomingTimestamp(int peerId, FactID pivotId);
         void SaveIncomingTimestamp(int peerId, FactID pivotId, TimestampID timestamp);
         IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp);
-        IEnumerable<FactID> LoadRecentMessagesForClient(FactID pivotId, TimestampID timestamp);
-        void Unpublish(FactID factId, RoleMemento role);
 
         // Networking.
         int SavePeer(string protocolName, string peerName);
         FactID GetFactIDFromShare(int peerId, FactID remoteFactId);
         bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId);
         void SaveShare(int peerId, FactID remoteFactId, FactID localFactId);
-        IEnumerable<NamedFactMemento> LoadAllNamedFacts();
     }
 }

@@ -120,7 +120,6 @@
     <Compile Include="ChallengeTest.cs" />
     <Compile Include="FieldSerializerTest.cs" />
     <Compile Include="MockCommunicationStrategy.cs" />
-    <Compile Include="MockTransform.cs" />
     <Compile Include="Model\Game.cs" />
     <Compile Include="Model\Machine.cs" />
     <Compile Include="Model\Model.generated.cs">
@@ -139,7 +138,6 @@
     <Compile Include="RedundantFactsTest.cs" />
     <Compile Include="RemoteIdTest.cs" />
     <Compile Include="ThreadSafeHashCodeTest.cs" />
-    <Compile Include="TransformTest.cs" />
     <Compile Include="TwoPlayerGameTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnpublishTest.cs" />
