@@ -29,7 +29,7 @@ namespace UpdateControls.Correspondence.Strategy
         IEnumerable<MessageMemento> LoadRecentMessagesForServer(int peerId, TimestampID timestamp);
 
         // Networking.
-        int SavePeer(string protocolName, string peerName);
+        Task<int> SavePeerAsync(string protocolName, string peerName);
         FactID GetFactIDFromShare(int peerId, FactID remoteFactId);
         bool GetRemoteId(FactID localFactId, int peerId, out FactID remoteFactId);
         void SaveShare(int peerId, FactID remoteFactId, FactID localFactId);

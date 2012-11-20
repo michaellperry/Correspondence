@@ -137,7 +137,7 @@ namespace UpdateControls.Correspondence.Memory
             return new QueryExecutor(_factTable.Select(f => f.IdentifiedFactMemento)).ExecuteQuery(queryDefinition, startingId, null).Reverse().Select(im => im.Id);
         }
 
-        public int SavePeer(string protocolName, string peerName)
+        public async Task<int> SavePeerAsync(string protocolName, string peerName)
         {
             PeerRecord peerRecord = _peerTable.FirstOrDefault(peer =>
                 peer.ProtocolName == protocolName &&

@@ -25,6 +25,8 @@ namespace UpdateControls.Correspondence.Networking
 
         private Independent<bool> _synchronizing = new Independent<bool>();
 
+        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
+
 		public SynchronousNetwork(ISubscriptionProvider subscriptionProvider, Model model, IStorageStrategy storageStrategy)
 		{
 			_subscriptionProvider = subscriptionProvider;
@@ -32,13 +34,16 @@ namespace UpdateControls.Correspondence.Networking
 			_storageStrategy = storageStrategy;
 		}
 
-		public void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
+		public async void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
 		{
-            _serverProxies.Add(new ServerProxy
+            using (await _lock.EnterAsync())
             {
-                CommunicationStrategy = communicationStrategy,
-                PeerId = _storageStrategy.SavePeer(communicationStrategy.ProtocolName, communicationStrategy.PeerName)
-            });
+                _serverProxies.Add(new ServerProxy
+                {
+                    CommunicationStrategy = communicationStrategy,
+                    PeerId = await _storageStrategy.SavePeerAsync(communicationStrategy.ProtocolName, communicationStrategy.PeerName)
+                });
+            }
 		}
 
 		public async Task<bool> SynchronizeAsync()
