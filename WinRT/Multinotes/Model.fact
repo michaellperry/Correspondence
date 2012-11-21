@@ -1,0 +1,79 @@
+namespace Multinotes.Model;
+
+fact Individual {
+key:
+    string anonymousId;
+
+query:
+	MessageBoard *messageBoards {
+		Share s : s.individual = this
+			where not s.isDeleted
+		MessageBoard m : m = s.messageBoard
+	}
+
+	Share* shares {
+		Share s : s.individual = this
+			where not s.isDeleted
+	}
+
+    EnableToastNotification* isToastNotificationEnabled {
+        EnableToastNotification e : e.individual = this
+            where not e.isDisabled
+    }
+}
+
+fact Share {
+key:
+	unique;
+	publish Individual individual
+		where not this.isDeleted;
+	MessageBoard messageBoard;
+
+query:
+	bool isDeleted {
+		exists ShareDelete d : d.share = this
+	}
+}
+
+fact ShareDelete {
+key:
+	publish Share share;
+}
+
+fact MessageBoard {
+key:
+	string topic;
+
+query:
+	Message* messages {
+		Message m : m.messageBoard = this
+	}
+}
+
+fact Domain {
+key:
+}
+
+fact Message {
+key:
+	unique;
+	publish MessageBoard messageBoard;
+	publish Domain domain;
+	string text;
+}
+
+fact EnableToastNotification {
+key:
+    unique;
+    Individual individual;
+
+query:
+    bool isDisabled {
+        exists DisableToastNotification d : d.enable = this
+    }
+}
+
+fact DisableToastNotification {
+key:
+    EnableToastNotification* enable;
+}

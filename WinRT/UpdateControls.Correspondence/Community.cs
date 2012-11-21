@@ -111,7 +111,7 @@ namespace UpdateControls.Correspondence
             return await _model.FindFactAsync<T>(prototype);
         }
 
-        public async Task<T> LoadFact<T>(string factName) where T : CorrespondenceFact
+        public async Task<T> LoadFactAsync<T>(string factName) where T : CorrespondenceFact
         {
             CorrespondenceFact fact = await _model.LoadFactAsync(factName);
             if (fact != null && fact is T)
