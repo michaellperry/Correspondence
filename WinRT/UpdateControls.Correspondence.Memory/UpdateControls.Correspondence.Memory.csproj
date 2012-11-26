@@ -118,16 +118,6 @@
     <Compile Include="ShareRecord.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="UpdateControls, Version=2.2.1.3, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\updatecontrols.2.2.1.4\lib\NetCore45\UpdateControls.dll</HintPath>
-    </Reference>
-    <Reference Include="UpdateControls.XAML, Version=2.2.1.3, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\updatecontrols.2.2.1.4\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Mallardsoft.snk" />
     <None Include="packages.config" />
   </ItemGroup>
@@ -136,6 +126,16 @@
       <Project>{8ca9e44c-1cd6-4736-aeef-bf0da059ac6b}</Project>
       <Name>UpdateControls.Correspondence</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UpdateControls, Version=2.2.1.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\UpdateControls.2.2.1.5\lib\NetCore45\UpdateControls.dll</HintPath>
+    </Reference>
+    <Reference Include="UpdateControls.XAML, Version=2.2.1.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\UpdateControls.2.2.1.5\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>

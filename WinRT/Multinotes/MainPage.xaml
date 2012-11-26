@@ -9,6 +9,26 @@
     DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock FontSize="32" Text="{Binding Title}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" FontSize="32" Text="{Binding Title}" />
+        <ListBox Grid.Row="1" ItemsSource="{Binding MessageBoards}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock FontSize="28" Text="{Binding Topic}"/>
+                        <ListBox ItemsSource="{Binding Messages}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="24" Text="{Binding Text}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Page>
