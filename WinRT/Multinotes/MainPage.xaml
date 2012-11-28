@@ -359,8 +359,8 @@
         		<RowDefinition Height="Auto"/>
         		<RowDefinition Height="637*"/>
         	</Grid.RowDefinitions>
-        	<TextBox FontSize="26" Margin="12" Text="{Binding Message, Mode=TwoWay}" Height="47" />
-        	<Button Grid.Row="1" Style="{StaticResource AddTaskAppBarButtonStyle}" Foreground="Black" Margin="8" Command="{Binding Main.SendMessage, Mode=OneWay, Source={StaticResource Locator}}"/>
+        	<TextBox FontSize="26" Margin="12" Text="{Binding Text, Mode=TwoWay}" Height="47" />
+        	<Button Grid.Row="1" Style="{StaticResource AddTaskAppBarButtonStyle}" Foreground="Black" Margin="8" Command="{Binding SendMessage, Mode=OneWay}"/>
         	<ListBox Grid.Column="0" ItemsSource="{Binding SelectedMessageBoard.Messages}" SelectedItem="{Binding SelectedMessageBoard.SelectedMessage, Mode=TwoWay}" ItemTemplate="{StaticResource ActionHeaderTemplate}" BorderThickness="0" Background="{StaticResource ProjectBackgroundBrush}" Style="{StaticResource ActionListBoxStyle}" Foreground="{StaticResource ProjectForegroundBrush}" ItemContainerStyle="{StaticResource ActionListBoxItemStyle}" Grid.Row="2"/>
         </Grid>
     </Grid>

@@ -130,7 +130,7 @@ namespace Multinotes.ViewModels
                     .When(() => _selection.SelectedShare != null)
                     .Do(delegate
                     {
-                        if (ConfirmLeaveBoard != null && ConfirmLeaveBoard(_selection.SelectedShare.MessageBoard))
+                        if (ConfirmLeaveBoard == null || ConfirmLeaveBoard(_selection.SelectedShare.MessageBoard))
                         {
                             _selection.SelectedShare.Leave();
                             _selection.SelectedShare = null;
