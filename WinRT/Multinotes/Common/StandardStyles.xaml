@@ -418,10 +418,10 @@
                                 Foreground="{TemplateBinding Foreground}"
                                 FontSize="16"
                                 TextAlignment="Center"
-                                Width="88"
+                                Width="140"
                                 MaxHeight="32"
                                 TextTrimming="WordEllipsis"
-                                Style="{StaticResource BasicTextStyle}" VerticalAlignment="Center" Margin="4,0,0,0"/>
+                                Style="{StaticResource BasicTextStyle}" VerticalAlignment="Center" Margin="4,10,0,9"/>
                         </StackPanel>
                         <Rectangle
                                 x:Name="FocusVisualWhite"
@@ -543,43 +543,18 @@
 
     <Style x:Key="DeleteProjectAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="DeleteProjectAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Delete Project"/>
+        <Setter Property="AutomationProperties.Name" Value="Leave Group"/>
         <Setter Property="Content" Value="&#xE106;"/>
     </Style>
     <Style x:Key="AddProjectAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SurfaceButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="AddProjectAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Add Project"/>
+        <Setter Property="AutomationProperties.Name" Value="Join Group"/>
         <Setter Property="Content" Value="&#xE109;"/>
-    </Style>
-    <Style x:Key="DeleteTaskAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
-        <Setter Property="AutomationProperties.AutomationId" Value="DeleteTaskAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Delete Task"/>
-        <Setter Property="Content" Value="&#xE106;"/>
     </Style>
     <Style x:Key="AddTaskAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource SurfaceButtonStyle}">
         <Setter Property="AutomationProperties.AutomationId" Value="AddTaskAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Add Task"/>
+        <Setter Property="AutomationProperties.Name" Value="Post Message"/>
         <Setter Property="Content" Value="&#xE109;"/>
-    </Style>
-    <Style x:Key="ProjectUpAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
-        <Setter Property="AutomationProperties.AutomationId" Value="ProjectUpAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Project Up"/>
-        <Setter Property="Content" Value="↑"/>
-    </Style>
-    <Style x:Key="ProjectDownAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
-        <Setter Property="AutomationProperties.AutomationId" Value="ProjectDownAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Project Down"/>
-        <Setter Property="Content" Value="↓"/>
-    </Style>
-    <Style x:Key="TaskUpAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
-        <Setter Property="AutomationProperties.AutomationId" Value="TaskUpAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Task Up"/>
-        <Setter Property="Content" Value="↑"/>
-    </Style>
-    <Style x:Key="TaskDownAppBarButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource AppBarButtonStyle}">
-        <Setter Property="AutomationProperties.AutomationId" Value="TaskDownAppBarButton"/>
-        <Setter Property="AutomationProperties.Name" Value="Task Down"/>
-        <Setter Property="Content" Value="↓"/>
     </Style>
 
     <!-- Title area styles -->

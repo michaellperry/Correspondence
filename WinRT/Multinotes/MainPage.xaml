@@ -346,52 +346,31 @@
         <Grid Background="{StaticResource DocumentBackgroundBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Button Style="{StaticResource AddProjectAppBarButtonStyle}" Command="{Binding AddProject}" Margin="8"/>
-            <ListBox ItemsSource="{Binding MessageBoards}" SelectedItem="{Binding SelectedMessageBoard, Mode=TwoWay}" ItemTemplate="{StaticResource ProjectHeaderTemplate}" BorderThickness="0" Background="{StaticResource DocumentBackgroundBrush}" Style="{StaticResource ProjectListBoxStyle}" Foreground="#FFEAEAEA" ItemContainerStyle="{StaticResource ProjectListBoxItemStyle}" Grid.Row="1"/>
-        </Grid>
-        <Grid Grid.Column="1" DataContext="{Binding SelectedMessageBoard}" Background="{StaticResource ProjectBackgroundBrush}">
-            <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBox x:Name="ProjectNameTextBox" Text="{Binding Topic}" FontSize="26" Margin="8" Background="{StaticResource ProjectBackgroundBrush}" BorderBrush="{x:Null}" Height="47"/>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="363*"/>
-                    <ColumnDefinition Width="745*"/>
-                </Grid.ColumnDefinitions>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="637*"/>
-                    </Grid.RowDefinitions>
-                    <Button Style="{StaticResource AddTaskAppBarButtonStyle}" Foreground="Black" Margin="8" Command="{Binding Main.AddAction, Mode=OneWay, Source={StaticResource Locator}}"/>
-                    <ListBox Grid.Column="0" ItemsSource="{Binding Messages}" SelectedItem="{Binding SelectedMessage, Mode=TwoWay}" ItemTemplate="{StaticResource ActionHeaderTemplate}" BorderThickness="0" Background="{StaticResource ProjectBackgroundBrush}" Style="{StaticResource ActionListBoxStyle}" Foreground="{StaticResource ProjectForegroundBrush}" ItemContainerStyle="{StaticResource ActionListBoxItemStyle}" Grid.Row="1"/>
-                </Grid>
-                <StackPanel Grid.Column="1" Orientation="Vertical" DataContext="{Binding ActionDetail}" Background="{StaticResource ActionBackgroundBrush}">
-                    <TextBlock Text="Task" Margin="8" FontSize="16"/>
-                    <TextBox x:Name="ActionNameTextBox" Text="{Binding Name, Mode=TwoWay}" Margin="8" FontSize="20"/>
-                    <TextBlock Text="Description" Margin="8" FontSize="16"/>
-                    <TextBox Text="{Binding Description, Mode=TwoWay}" Margin="8" TextWrapping="Wrap" Height="170" FontSize="20"/>
-                    <CheckBox Content="Completed" IsChecked="{Binding IsComplete, Mode=TwoWay}" FontSize="16" Margin="8"/>
-                </StackPanel>
-            </Grid>
+			<TextBox Grid.Row="0" Margin="12" FontSize="26" Text="{Binding Topic, Mode=TwoWay}" Height="47" />
+            <Button Grid.Row="1" Style="{StaticResource AddProjectAppBarButtonStyle}" Command="{Binding JoinGroup}" Margin="8,8,0,8"/>
+            <ListBox ItemsSource="{Binding MessageBoards}" SelectedItem="{Binding SelectedMessageBoard, Mode=TwoWay}" ItemTemplate="{StaticResource ProjectHeaderTemplate}" BorderThickness="0" Background="{StaticResource DocumentBackgroundBrush}" Style="{StaticResource ProjectListBoxStyle}" Foreground="#FFEAEAEA" ItemContainerStyle="{StaticResource ProjectListBoxItemStyle}" Grid.Row="2"/>
+        </Grid>
+        <Grid  Background="{StaticResource ProjectBackgroundBrush}" Grid.Column="1">
+        	<Grid.RowDefinitions>
+        		<RowDefinition Height="Auto"/>
+        		<RowDefinition Height="Auto"/>
+        		<RowDefinition Height="637*"/>
+        	</Grid.RowDefinitions>
+        	<TextBox FontSize="26" Margin="12" Text="{Binding Message, Mode=TwoWay}" Height="47" />
+        	<Button Grid.Row="1" Style="{StaticResource AddTaskAppBarButtonStyle}" Foreground="Black" Margin="8" Command="{Binding Main.SendMessage, Mode=OneWay, Source={StaticResource Locator}}"/>
+        	<ListBox Grid.Column="0" ItemsSource="{Binding SelectedMessageBoard.Messages}" SelectedItem="{Binding SelectedMessageBoard.SelectedMessage, Mode=TwoWay}" ItemTemplate="{StaticResource ActionHeaderTemplate}" BorderThickness="0" Background="{StaticResource ProjectBackgroundBrush}" Style="{StaticResource ActionListBoxStyle}" Foreground="{StaticResource ProjectForegroundBrush}" ItemContainerStyle="{StaticResource ActionListBoxItemStyle}" Grid.Row="2"/>
         </Grid>
     </Grid>
     <Page.BottomAppBar>
         <AppBar>
             <Grid Height="84">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource DeleteProjectAppBarButtonStyle}" Command="{Binding DeleteProject}"/>
-                    <Button Style="{StaticResource ProjectDownAppBarButtonStyle}" Command="{Binding MoveProjectDown}" />
-                    <Button Style="{StaticResource ProjectUpAppBarButtonStyle}" Command="{Binding MoveProjectUp}" />
+                    <Button Style="{StaticResource DeleteProjectAppBarButtonStyle}" Command="{Binding LeaveBoard}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource DeleteTaskAppBarButtonStyle}" Command="{Binding DeleteAction}"/>
-                    <Button Style="{StaticResource TaskDownAppBarButtonStyle}" Command="{Binding MoveActionDown}" />
-                    <Button Style="{StaticResource TaskUpAppBarButtonStyle}" Command="{Binding MoveActionUp}" />
                 </StackPanel>
             </Grid>
         </AppBar>

@@ -30,7 +30,7 @@ namespace Multinotes.ViewModels
                     .When(() => !string.IsNullOrWhiteSpace(_selection.Topic))
                     .Do(delegate
                     {
-                        var board = _individual.JoinMessageBoardAsync(_selection.Topic);
+                        var share = _individual.JoinMessageBoardAsync(_selection.Topic);
                         _selection.Topic = null;
                     });
             }

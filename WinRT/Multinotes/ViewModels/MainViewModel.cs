@@ -79,6 +79,12 @@ namespace Multinotes.ViewModels
             }
         }
 
+        public string Topic
+        {
+            get { return _selection.Topic; }
+            set { _selection.Topic = value; }
+        }
+
         public string Text
         {
             get { return _selection.Text; }
@@ -97,6 +103,21 @@ namespace Multinotes.ViewModels
                     {
                         _selection.SelectedShare.MessageBoard.SendMessageAsync(_selection.Text);
                         _selection.Text = null;
+                    });
+            }
+        }
+
+        public ICommand JoinGroup
+        {
+            get
+            {
+                return MakeCommand
+                    .When(() => !String.IsNullOrEmpty(_selection.Topic))
+                    .Do(async delegate
+                    {
+                        Share share = await _individual.JoinMessageBoardAsync(_selection.Topic);
+                        _selection.SelectedShare = share;
+                        _selection.Topic = null;
                     });
             }
         }

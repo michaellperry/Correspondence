@@ -23,11 +23,11 @@ namespace Multinotes.Model
             }
         }
 
-        public async Task<MessageBoard> JoinMessageBoardAsync(string topic)
+        public async Task<Share> JoinMessageBoardAsync(string topic)
         {
             MessageBoard messageBoard = await Community.AddFactAsync(new MessageBoard(topic));
-            await Community.AddFactAsync(new Share(this, messageBoard));
-            return messageBoard;
+            Share share = await Community.AddFactAsync(new Share(this, messageBoard));
+            return share;
         }
     }
 }

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.XAML.Wrapper;
 using Windows.UI.Core;
+using Windows.UI.Xaml;
 
 namespace UpdateControls.Correspondence.Networking
 {
-	class AsynchronousNetwork
+	class AsynchronousNetwork : IUpdatable
 	{
 		private ISubscriptionProvider _subscriptionProvider;
 		private Model _model;
@@ -15,8 +17,6 @@ namespace UpdateControls.Correspondence.Networking
         private List<AsynchronousServerProxy> _serverProxies = new List<AsynchronousServerProxy>();
 
 		private Dependent _depPushSubscriptions;
-
-        private CoreDispatcher _dispatcher;
 
         private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
 
@@ -27,11 +27,10 @@ namespace UpdateControls.Correspondence.Networking
             _storageStrategy = storageStrategy;
 
             _depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
-            _depPushSubscriptions.Invalidated += TriggerSubscriptionUpdate;
-
-            CoreWindow coreWindow = CoreWindow.GetForCurrentThread();
-            if (coreWindow != null)
-                _dispatcher = coreWindow.Dispatcher;
+            _depPushSubscriptions.Invalidated += delegate
+            {
+                AffectedSet.CaptureDependent(this);
+            };
         }
 
 		public async void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
@@ -99,24 +98,12 @@ namespace UpdateControls.Correspondence.Networking
                 serverProxy.TriggerSubscriptionUpdate();
 		}
 
-        private void TriggerSubscriptionUpdate()
+        public void UpdateNow()
         {
-            RunOnUIThread(new Action(() =>
-            {
-                _depPushSubscriptions.OnGet();
+            _depPushSubscriptions.OnGet();
 
-                foreach (var serverProxy in _serverProxies)
-                    serverProxy.AfterTriggerSubscriptionUpdate();
-            }));
-        }
-
-        private async void RunOnUIThread(Action action)
-        {
-            if (_dispatcher != null)
-                await _dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                    delegate { action(); });
-            else
-                action();
+            foreach (var serverProxy in _serverProxies)
+                serverProxy.AfterTriggerSubscriptionUpdate();
         }
     }
 }
