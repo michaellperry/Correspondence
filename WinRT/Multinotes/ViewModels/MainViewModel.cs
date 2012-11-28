@@ -63,11 +63,20 @@ namespace Multinotes.ViewModels
             }
         }
 
-        public void SetSelectedMessageBoard(MessageBoardViewModel value)
+        public MessageBoardViewModel SelectedMessageBoard
         {
-            _selection.SelectedShare = value == null
-                ? null
-                : value.Share;
+            get
+            {
+                return _selection.SelectedShare == null
+                    ? null
+                    : new MessageBoardViewModel(_selection.SelectedShare);
+            }
+            set
+            {
+                _selection.SelectedShare = value == null
+                    ? null
+                    : value.Share;
+            }
         }
 
         public string Text

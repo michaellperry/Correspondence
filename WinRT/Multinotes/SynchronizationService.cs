@@ -35,6 +35,7 @@ namespace Multinotes
                 individual = await _community.AddFactAsync(new Individual(Guid.NewGuid().ToString()));
                 await _community.SetFactAsync(ThisIndividual, individual);
                 await individual.JoinMessageBoardAsync("Video Games");
+                await individual.JoinMessageBoardAsync("Tulsa TechFest 2012");
             }
             _individual.Value = individual;
             configurationProvider.Individual = individual;

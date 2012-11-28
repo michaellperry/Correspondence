@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Linq;
 using Multinotes.Models;
 using UpdateControls.XAML;
 
@@ -16,14 +17,16 @@ namespace Multinotes.ViewModels
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
                 _synchronizationService.Initialize();
             _selection = new MessageBoardSelectionModel();
+            if (_synchronizationService.Individual != null)
+                _selection.SelectedShare = _synchronizationService.Individual.Shares
+                    .FirstOrDefault();
         }
 
         public object Main
         {
             get
             {
-                return Get(() =>
-                    _synchronizationService.Individual == null
+                return Get(() => _synchronizationService.Individual == null
                     ? null
                     : ForView.Wrap(new MainViewModel(_synchronizationService.Individual, _synchronizationService, _selection)));
             }
