@@ -7,21 +7,21 @@ namespace UpdateControls.Correspondence
 {
 	public class Condition
 	{
-        private List<SimpleCondition> _clauses = new List<SimpleCondition>();
+        private List<Clause> _clauses = new List<Clause>();
 
         public static Condition WhereIsEmpty(Query query)
         {
-            SimpleCondition clause = new SimpleCondition(true, query);
+            Clause clause = new Clause(true, query);
             Condition condition = new Condition();
-            condition._clauses.Add(clause);
+            condition.Clauses.Add(clause);
             return condition;
         }
 
         public static Condition WhereIsNotEmpty(Query query)
         {
-            SimpleCondition clause = new SimpleCondition(false, query);
+            Clause clause = new Clause(false, query);
             Condition condition = new Condition();
-            condition._clauses.Add(clause);
+            condition.Clauses.Add(clause);
             return condition;
         }
 
@@ -30,7 +30,7 @@ namespace UpdateControls.Correspondence
             return new AndConditionBuilder(this);
         }
 
-        public List<SimpleCondition> Clauses
+        public List<Clause> Clauses
         {
             get { return _clauses; }
         }

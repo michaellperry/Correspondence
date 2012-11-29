@@ -12,13 +12,13 @@ namespace UpdateControls.Correspondence.Conditions
 
         public Condition IsEmpty(Query query)
         {
-            _condition.Clauses.Add(new SimpleCondition(true, query));
+            _condition.Clauses.Add(new Clause(true, query));
             return _condition;
         }
 
         public Condition IsNotEmpty(Query query)
         {
-            _condition.Clauses.Add(new SimpleCondition(false, query));
+            _condition.Clauses.Add(new Clause(false, query));
             return _condition;
         }
     }

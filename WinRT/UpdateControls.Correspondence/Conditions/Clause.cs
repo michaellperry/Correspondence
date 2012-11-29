@@ -2,12 +2,12 @@
 
 namespace UpdateControls.Correspondence.Conditions
 {
-    public class SimpleCondition
+    public class Clause
     {
 		private bool _isEmpty;
 		private QueryDefinition _subQuery;
 
-        internal SimpleCondition(bool isEmpty, Query subQuery)
+        internal Clause(bool isEmpty, Query subQuery)
 		{
 			_isEmpty = isEmpty;
 			_subQuery = subQuery.QueryDefinition;
@@ -37,7 +37,7 @@ namespace UpdateControls.Correspondence.Conditions
         {
             if (this == obj)
                 return true;
-            SimpleCondition that = obj as SimpleCondition;
+            Clause that = obj as Clause;
             if (that == null)
                 return false;
             return this._isEmpty.Equals(that._isEmpty) && this._subQuery.Equals(that._subQuery);

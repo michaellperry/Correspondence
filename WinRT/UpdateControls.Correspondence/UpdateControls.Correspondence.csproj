@@ -111,7 +111,7 @@
     <Compile Include="Condition.cs" />
     <Compile Include="Conditions\AndConditionBuilder.cs" />
     <Compile Include="Conditions\ConditionEvaluator.cs" />
-    <Compile Include="Conditions\SimpleCondition.cs" />
+    <Compile Include="Conditions\Clause.cs" />
     <Compile Include="CorrespondenceException.cs" />
     <Compile Include="CorrespondenceFact.cs" />
     <Compile Include="Disputable.cs" />
