@@ -12,6 +12,9 @@ namespace UpdateControls.Correspondence.FileStream
 {
     public class FileStreamStorageStrategy : IStorageStrategy
     {
+        private Table<PeerRecord> _peerTable = new Table<PeerRecord>(
+            "PeerTable.bin", PeerRecord.Read, PeerRecord.Write);
+
         public Task<Guid> GetClientGuidAsync()
         {
             throw new NotImplementedException();
@@ -77,9 +80,25 @@ namespace UpdateControls.Correspondence.FileStream
             throw new NotImplementedException();
         }
 
-        public Task<int> SavePeerAsync(string protocolName, string peerName)
+        public async Task<int> SavePeerAsync(string protocolName, string peerName)
         {
-            throw new NotImplementedException();
+            await _peerTable.LoadAsync();
+            PeerRecord peer = _peerTable.Records
+                .FirstOrDefault(row =>
+                    row.ProtocolName == protocolName &&
+                    row.PeerName == peerName);
+            if (peer == null)
+            {
+                peer = new PeerRecord
+                {
+                    ProtocolName = protocolName,
+                    PeerName = peerName,
+                    PeerId = _peerTable.Records.Count() + 1
+                };
+                await _peerTable.SaveAsync(peer);
+            }
+
+            return peer.PeerId;
         }
 
         public Task<FactID> GetFactIDFromShareAsync(int peerId, FactID remoteFactId)

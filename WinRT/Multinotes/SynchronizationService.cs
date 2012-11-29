@@ -7,6 +7,9 @@ using Multinotes.Model;
 using UpdateControls.Correspondence.Memory;
 using System.Net.NetworkInformation;
 using UpdateControls.Fields;
+using UpdateControls.Correspondence.FileStream;
+using System.IO;
+using UpdateControls.XAML.Wrapper;
 
 namespace Multinotes
 {
@@ -20,7 +23,7 @@ namespace Multinotes
         public async void Initialize()
         {
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
-            _community = new Community(new MemoryStorageStrategy())
+            _community = new Community(new FileStreamStorageStrategy())
                 .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => Individual)

@@ -168,6 +168,14 @@
       <Project>{92bb8962-2835-4f9b-8883-8694cfb58122}</Project>
       <Name>UpdateControls.Correspondence.BinaryHTTPClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj">
+      <Project>{2b257b46-9991-43bc-8f26-6b6967e32d8f}</Project>
+      <Name>UpdateControls.Correspondence.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj">
+      <Project>{84f04656-f0e6-4d6c-8efa-6b72877174a8}</Project>
+      <Name>UpdateControls.Correspondence.FileStream</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj">
       <Project>{9f6489ee-968f-46c6-8c6f-2a7a1c9d9889}</Project>
       <Name>UpdateControls.Correspondence.Memory</Name>
@@ -181,13 +189,13 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="UpdateControls, Version=2.2.1.5, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls, Version=2.2.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UpdateControls.2.2.1.5\lib\NetCore45\UpdateControls.dll</HintPath>
+      <HintPath>..\packages\UpdateControls.2.2.1.6\lib\NetCore45\UpdateControls.dll</HintPath>
     </Reference>
-    <Reference Include="UpdateControls.XAML, Version=2.2.1.5, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls.XAML, Version=2.2.1.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UpdateControls.2.2.1.5\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
+      <HintPath>..\packages\UpdateControls.2.2.1.6\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
