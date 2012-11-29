@@ -8,37 +8,28 @@ using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.Conditions
 {
-    public class ConditionEvaluator : IConditionVisitor
+    public class ConditionEvaluator
     {
         private IStorageStrategy _storageStrategy;
 
         private FactID _startingId;
-        private bool _result;
 
         public ConditionEvaluator(IStorageStrategy storageStrategy)
         {
             _storageStrategy = storageStrategy;
         }
 
-        public bool Evaluate(FactID startingId, Condition publishCondition)
+        public async Task<bool> EvaluateAsync(FactID startingId, Condition publishCondition)
         {
             _startingId = startingId;
-            _result = true;
-            publishCondition.AcceptAsync(this);
-            return _result;
-        }
+            foreach (var clause in publishCondition.Clauses)
+            {
+                bool any = (await _storageStrategy.QueryForIdsAsync(clause.SubQuery, _startingId)).Any();
+                if (!any && !clause.IsEmpty || any && clause.IsEmpty)
+                    return false;
+            }
 
-        public async Task VisitAndAsync(Condition left, Condition right)
-        {
-            await left.AcceptAsync(this);
-            if (_result)
-                await right.AcceptAsync(this);
-        }
-
-        public async Task VisitSimpleAsync(bool isEmpty, Queries.QueryDefinition subQuery)
-        {
-            bool any = (await _storageStrategy.QueryForIdsAsync(subQuery, _startingId)).Any();
-            _result = (any && !isEmpty || !any && isEmpty);
+            return true;
         }
     }
 }

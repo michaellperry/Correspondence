@@ -9,7 +9,7 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.Memory
 {
-    public class QueryExecutor : IConditionVisitor
+    public class QueryExecutor
     {
         private IEnumerable<IdentifiedFactMemento> _facts;
 
@@ -61,7 +61,7 @@ namespace UpdateControls.Correspondence.Memory
 
                 // Include the condition, if specified.
                 if (finalJoin.Condition != null)
-                    finalJoin.Condition.AcceptAsync(this);
+                    HandleCondition(finalJoin.Condition);
             }
 
             // Pop.
@@ -74,21 +74,23 @@ namespace UpdateControls.Correspondence.Memory
             return result;
         }
 
-        public async Task VisitAndAsync(Condition left, Condition right)
+        private void HandleCondition(Condition condition)
         {
-            // Apply both filters.
-            await left.AcceptAsync(this);
-            await right.AcceptAsync(this);
+            if (condition != null)
+            {
+                foreach (var clause in condition.Clauses)
+                {
+                    VisitSimple(clause.IsEmpty, clause.SubQuery);
+                }
+            }
         }
 
-        public Task VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
+        public void VisitSimple(bool isEmpty, QueryDefinition subQuery)
         {
             if (isEmpty)
                 _match = _match.Where(f => !ExecuteQuery(subQuery, f.Id, null).Any());
             else
                 _match = _match.Where(f => ExecuteQuery(subQuery, f.Id, null).Any());
-
-            return Task.WhenAll();
         }
     }
 }

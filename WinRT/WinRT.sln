@@ -20,9 +20,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multinotes", "Multinotes\Multinotes.csproj", "{1A617083-0013-41C1-B4DC-CCCD7C972B01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{84F04656-F0E6-4D6C-8EFA-6B72877174A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{2B257B46-9991-43BC-8F26-6B6967E32D8F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -44,6 +48,12 @@ Global
 		SccProjectUniqueName6 = Multinotes\\Multinotes.csproj
 		SccProjectName6 = Multinotes
 		SccLocalPath6 = Multinotes
+		SccProjectUniqueName7 = UpdateControls.Correspondence.FileStream\\UpdateControls.Correspondence.FileStream.csproj
+		SccProjectName7 = UpdateControls.Correspondence.FileStream
+		SccLocalPath7 = UpdateControls.Correspondence.FileStream
+		SccProjectUniqueName8 = UpdateControls.Correspondence.Data\\UpdateControls.Correspondence.Data.csproj
+		SccProjectName8 = UpdateControls.Correspondence.Data
+		SccLocalPath8 = UpdateControls.Correspondence.Data
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -168,6 +178,38 @@ Global
 		{1A617083-0013-41C1-B4DC-CCCD7C972B01}.Release|x86.ActiveCfg = Release|x86
 		{1A617083-0013-41C1-B4DC-CCCD7C972B01}.Release|x86.Build.0 = Release|x86
 		{1A617083-0013-41C1-B4DC-CCCD7C972B01}.Release|x86.Deploy.0 = Release|x86
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|ARM.ActiveCfg = Debug|ARM
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|ARM.Build.0 = Debug|ARM
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|x64.ActiveCfg = Debug|x64
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|x64.Build.0 = Debug|x64
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|x86.ActiveCfg = Debug|x86
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Debug|x86.Build.0 = Debug|x86
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|ARM.ActiveCfg = Release|ARM
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|ARM.Build.0 = Release|ARM
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|x64.ActiveCfg = Release|x64
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|x64.Build.0 = Release|x64
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|x86.ActiveCfg = Release|x86
+		{84F04656-F0E6-4D6C-8EFA-6B72877174A8}.Release|x86.Build.0 = Release|x86
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|ARM.ActiveCfg = Debug|ARM
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|ARM.Build.0 = Debug|ARM
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|x64.ActiveCfg = Debug|x64
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|x64.Build.0 = Debug|x64
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|x86.ActiveCfg = Debug|x86
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Debug|x86.Build.0 = Debug|x86
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|ARM.ActiveCfg = Release|ARM
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|ARM.Build.0 = Release|ARM
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|x64.ActiveCfg = Release|x64
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|x64.Build.0 = Release|x64
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|x86.ActiveCfg = Release|x86
+		{2B257B46-9991-43BC-8F26-6B6967E32D8F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

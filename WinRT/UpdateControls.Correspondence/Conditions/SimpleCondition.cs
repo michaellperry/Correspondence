@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using UpdateControls.Correspondence.Queries;
+﻿using UpdateControls.Correspondence.Queries;
 
 namespace UpdateControls.Correspondence.Conditions
 {
-    public class SimpleCondition : Condition
+    public class SimpleCondition
     {
 		private bool _isEmpty;
 		private QueryDefinition _subQuery;
@@ -15,14 +13,24 @@ namespace UpdateControls.Correspondence.Conditions
 			_subQuery = subQuery.QueryDefinition;
 		}
 
-        public override string ToString(string prior)
+        public bool IsEmpty
+        {
+            get { return _isEmpty; }
+        }
+
+        public QueryDefinition SubQuery
+        {
+            get { return _subQuery; }
+        }
+
+        public string ToString(string prior)
         {
             return (_isEmpty ? "empty " : "not empty ") + _subQuery.ToString(prior);
         }
 
-        public override async Task AcceptAsync(IConditionVisitor visitor)
+        public override string ToString()
         {
-            await visitor.VisitSimpleAsync(_isEmpty, _subQuery);
+            return ToString("this");
         }
 
         public override bool Equals(object obj)

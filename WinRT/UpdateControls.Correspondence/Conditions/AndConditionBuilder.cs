@@ -3,21 +3,23 @@ namespace UpdateControls.Correspondence.Conditions
 {
     public class AndConditionBuilder
     {
-        private Condition _left;
+        private Condition _condition;
 
-        public AndConditionBuilder(Condition left)
+        public AndConditionBuilder(Condition condition)
         {
-            _left = left;
+            _condition = condition;
         }
 
         public Condition IsEmpty(Query query)
         {
-            return new AndCondition(_left, Condition.WhereIsEmpty(query));
+            _condition.Clauses.Add(new SimpleCondition(true, query));
+            return _condition;
         }
 
         public Condition IsNotEmpty(Query query)
         {
-            return new AndCondition(_left, Condition.WhereIsNotEmpty(query));
+            _condition.Clauses.Add(new SimpleCondition(false, query));
+            return _condition;
         }
     }
 }

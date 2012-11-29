@@ -85,7 +85,7 @@ namespace UpdateControls.Correspondence
                 }
                 unpublishers.Add(new Unpublisher(inverse, publishCondition, role));
             });
-            publishCondition.AcceptAsync(queryInverter);
+            queryInverter.HandleCondition(publishCondition);
         }
 
         public async Task<T> AddFactAsync<T>(T prototype) where T : CorrespondenceFact
@@ -208,7 +208,7 @@ namespace UpdateControls.Correspondence
                                 foreach (FactID messageId in messageIds)
                                 {
                                     ConditionEvaluator conditionEvaluator = new ConditionEvaluator(_storageStrategy);
-                                    bool published = conditionEvaluator.Evaluate(messageId, unpublisher.PublishCondition);
+                                    bool published = await conditionEvaluator.EvaluateAsync(messageId, unpublisher.PublishCondition);
                                     if (!published)
                                     {
                                         await AddToFactTreeAsync(result, messageId, peerId);

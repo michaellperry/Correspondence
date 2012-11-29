@@ -109,10 +109,8 @@
     <Compile Include="Community.cs" />
     <Compile Include="Community.Platform.cs" />
     <Compile Include="Condition.cs" />
-    <Compile Include="Conditions\AndCondition.cs" />
     <Compile Include="Conditions\AndConditionBuilder.cs" />
     <Compile Include="Conditions\ConditionEvaluator.cs" />
-    <Compile Include="Conditions\IConditionVisitor.cs" />
     <Compile Include="Conditions\SimpleCondition.cs" />
     <Compile Include="CorrespondenceException.cs" />
     <Compile Include="CorrespondenceFact.cs" />

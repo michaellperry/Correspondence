@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using UpdateControls.Correspondence.Conditions;
+using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence
 {
-    class QueryInverter : IConditionVisitor
+    class QueryInverter
     {
         private CorrespondenceFactType _priorType;
         private Action<CorrespondenceFactType, QueryDefinition> _recordInverse;
@@ -50,8 +48,7 @@ namespace UpdateControls.Correspondence
                 _inverse.PrependInverse(join, condition);
 
                 // Dive into the sub query.
-                if (join.Condition != null)
-                    join.Condition.AcceptAsync(this);
+                HandleCondition(join.Condition);
 
                 condition = join.Condition;
             }
@@ -60,14 +57,18 @@ namespace UpdateControls.Correspondence
             _recordInverse(_priorType, _inverse);
         }
 
-        public async Task VisitAndAsync(Condition left, Condition right)
+        public void HandleCondition(Condition condition)
         {
-            // Visit each side.
-            await left.AcceptAsync(this);
-            await right.AcceptAsync(this);
+            if (condition != null)
+            {
+                foreach (var clause in condition.Clauses)
+                {
+                    VisitSimpleAsync(clause.IsEmpty, clause.SubQuery);
+                }
+            }
         }
 
-        public Task VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
+        private void VisitSimpleAsync(bool isEmpty, QueryDefinition subQuery)
         {
             // Push
             CorrespondenceFactType pushPriorType = _priorType;
@@ -79,8 +80,6 @@ namespace UpdateControls.Correspondence
             // Pop
             _priorType = pushPriorType;
             _inverse = pushQueryDefinition;
-
-            return Task.WhenAll();
         }
     }
 }
