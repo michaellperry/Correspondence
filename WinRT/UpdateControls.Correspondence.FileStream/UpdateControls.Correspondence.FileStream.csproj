@@ -114,8 +114,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactTypeRecord.cs" />
     <Compile Include="FileStreamStorageStrategy.cs" />
+    <Compile Include="IncomingTimestampRecord.cs" />
     <Compile Include="MessageRecord.cs" />
+    <Compile Include="OutgoingTimestampRecord.cs" />
+    <Compile Include="RoleRecord.cs" />
+    <Compile Include="SavedFactRecord.cs" />
     <Compile Include="PeerIdentifier.cs" />
     <Compile Include="PeerPivotIdentifier.cs" />
     <Compile Include="PeerRecord.cs" />

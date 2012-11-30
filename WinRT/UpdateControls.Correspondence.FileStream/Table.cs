@@ -50,7 +50,7 @@ namespace UpdateControls.Correspondence.FileStream
             _records = records;
         }
 
-        public async Task SaveAsync(TRecord record)
+        public async Task AppendAsync(TRecord record)
         {
             var correspondenceFolder = await ApplicationData.Current.LocalFolder
                 .GetFolderAsync("Correspondence");
@@ -65,6 +65,27 @@ namespace UpdateControls.Correspondence.FileStream
                     using (BinaryWriter writer = new BinaryWriter(stream))
                     {
                         _write(writer, record);
+                    }
+                });
+            }
+            _records.Add(record);
+        }
+
+        public async Task SaveAsync()
+        {
+            var correspondenceFolder = await ApplicationData.Current.LocalFolder
+                .GetFolderAsync("Correspondence");
+            var tableFile = await correspondenceFolder
+                .CreateFileAsync(_fileName, CreationCollisionOption.ReplaceExisting);
+
+            using (var stream = await tableFile.OpenStreamForWriteAsync())
+            {
+                await Task.Run(delegate
+                {
+                    using (BinaryWriter writer = new BinaryWriter(stream))
+                    {
+                        foreach (var record in _records)
+                            _write(writer, record);
                     }
                 });
             }
