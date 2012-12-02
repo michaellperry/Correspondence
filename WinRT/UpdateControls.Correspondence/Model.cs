@@ -199,7 +199,7 @@ namespace UpdateControls.Correspondence
                 {
                     if (message.FactId.key > timestamp.Key)
                         timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
-                    FactMemento newFact = await AddToFactTreeAsync(result, message.FactId, peerId);
+                    FactMemento newFact = await AddToFactTreeInternalAsync(result, message.FactId, peerId);
 
                     FactMetadata factMetadata;
                     if (newFact != null && _metadataByFactType.TryGetValue(newFact.FactType, out factMetadata))
@@ -219,7 +219,7 @@ namespace UpdateControls.Correspondence
                                         bool published = await conditionEvaluator.EvaluateAsync(messageId, unpublisher.PublishCondition);
                                         if (!published)
                                         {
-                                            await AddToFactTreeAsync(result, messageId, peerId);
+                                            await AddToFactTreeInternalAsync(result, messageId, peerId);
                                             UnpublishMemento unpublishMemento = new UnpublishMemento(messageId, unpublisher.Role);
                                             if (!unpublishedMessages.Contains(unpublishMemento))
                                                 unpublishedMessages.Add(unpublishMemento);
@@ -239,36 +239,7 @@ namespace UpdateControls.Correspondence
         {
             using (await _lock.EnterAsync())
             {
-                if (!messageBody.Contains(factId))
-                {
-                    CorrespondenceFact fact = await GetFactByIDInternalAsync(factId);
-                    if (fact != null)
-                    {
-                        FactID? remoteId = await _storageStrategy.GetRemoteIdAsync(factId, peerId);
-                        if (remoteId.HasValue)
-                        {
-                            messageBody.Add(new IdentifiedFactRemote(factId, remoteId.Value));
-                        }
-                        else
-                        {
-                            FactMemento factMemento = CreateMementoFromFact(fact);
-                            foreach (PredecessorMemento predecessor in factMemento.Predecessors)
-                                await AddToFactTreeAsync(messageBody, predecessor.ID, peerId);
-                            messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
-
-                            return factMemento;
-                        }
-                    }
-                    return null;
-                }
-                else
-                {
-                    IdentifiedFactBase identifiedFact = messageBody.Get(factId);
-                    if (identifiedFact is IdentifiedFactMemento)
-                        return ((IdentifiedFactMemento)identifiedFact).Memento;
-                    else
-                        return null;
-                }
+                return await AddToFactTreeInternalAsync(messageBody, factId, peerId);
             }
         }
 
@@ -364,6 +335,39 @@ namespace UpdateControls.Correspondence
             return CreateFactFromMemento(id, memento);
         }
 
+        private async Task<FactMemento> AddToFactTreeInternalAsync(FactTreeMemento messageBody, FactID factId, int peerId)
+        {
+            if (!messageBody.Contains(factId))
+            {
+                CorrespondenceFact fact = await GetFactByIDInternalAsync(factId);
+                if (fact != null)
+                {
+                    FactID? remoteId = await _storageStrategy.GetRemoteIdAsync(factId, peerId);
+                    if (remoteId.HasValue)
+                    {
+                        messageBody.Add(new IdentifiedFactRemote(factId, remoteId.Value));
+                    }
+                    else
+                    {
+                        FactMemento factMemento = CreateMementoFromFact(fact);
+                        foreach (PredecessorMemento predecessor in factMemento.Predecessors)
+                            await AddToFactTreeInternalAsync(messageBody, predecessor.ID, peerId);
+                        messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
+
+                        return factMemento;
+                    }
+                }
+                return null;
+            }
+            else
+            {
+                IdentifiedFactBase identifiedFact = messageBody.Get(factId);
+                if (identifiedFact is IdentifiedFactMemento)
+                    return ((IdentifiedFactMemento)identifiedFact).Memento;
+                else
+                    return null;
+            }
+        }
         private CorrespondenceFact GetFactByIdAndMemento(FactID id, FactMemento memento)
         {
             // Check for null.

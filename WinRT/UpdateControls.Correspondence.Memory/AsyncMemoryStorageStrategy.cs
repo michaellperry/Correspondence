@@ -22,8 +22,6 @@ namespace UpdateControls.Correspondence.Memory
 
         private Queue<Task<List<IdentifiedFactMemento>>> _futureTasks = new Queue<Task<List<IdentifiedFactMemento>>>();
 
-        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
-
         private static Task Done = Task.WhenAll();
 
         public void Quiesce()
@@ -53,14 +51,11 @@ namespace UpdateControls.Correspondence.Memory
 
         public async Task<FactMemento> LoadAsync(FactID id)
         {
-            using (await _lock.EnterAsync())
-            {
-                FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
-                if (factRecord != null)
-                    return factRecord.IdentifiedFactMemento.Memento;
-                else
-                    throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
-            }
+            FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
+            if (factRecord != null)
+                return factRecord.IdentifiedFactMemento.Memento;
+            else
+                throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
         }
 
         public Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
@@ -118,18 +113,15 @@ namespace UpdateControls.Correspondence.Memory
 
         public async Task<FactID?> FindExistingFactAsync(FactMemento memento)
         {
-            using (await _lock.EnterAsync())
+            // See if the fact already exists.
+            FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
+            if (fact == null)
             {
-                // See if the fact already exists.
-                FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
-                if (fact == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return fact.IdentifiedFactMemento.Id;
-                }
+                return null;
+            }
+            else
+            {
+                return fact.IdentifiedFactMemento.Id;
             }
         }
 

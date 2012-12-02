@@ -58,6 +58,7 @@ namespace Multinotes.ViewModels
             {
                 return
                     from share in _individual.Shares
+                    where share.MessageBoard != null
                     orderby share.MessageBoard.Topic
                     select new MessageBoardViewModel(share);
             }

@@ -187,13 +187,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="UpdateControls, Version=2.2.1.7, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls, Version=2.2.1.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UpdateControls.2.2.1.7\lib\NetCore45\UpdateControls.dll</HintPath>
+      <HintPath>..\packages\UpdateControls.2.2.1.8\lib\NetCore45\UpdateControls.dll</HintPath>
     </Reference>
-    <Reference Include="UpdateControls.XAML, Version=2.2.1.7, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls.XAML, Version=2.2.1.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UpdateControls.2.2.1.7\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
+      <HintPath>..\packages\UpdateControls.2.2.1.8\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
