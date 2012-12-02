@@ -175,7 +175,7 @@ namespace UpdateControls.Correspondence
             {
                 FactID? id = await _storageStrategy.GetIDAsync(factName);
                 if (id.HasValue)
-                    return await GetFactByIDAsync(id.Value);
+                    return await GetFactByIDInternalAsync(id.Value);
                 else
                     return null;
             }
@@ -241,7 +241,7 @@ namespace UpdateControls.Correspondence
             {
                 if (!messageBody.Contains(factId))
                 {
-                    CorrespondenceFact fact = await GetFactByIDAsync(factId);
+                    CorrespondenceFact fact = await GetFactByIDInternalAsync(factId);
                     if (fact != null)
                     {
                         FactID? remoteId = await _storageStrategy.GetRemoteIdAsync(factId, peerId);
@@ -322,20 +322,9 @@ namespace UpdateControls.Correspondence
 
         public async Task<CorrespondenceFact> GetFactByIDAsync(FactID id)
         {
-            // Check for null.
-            if (id.key == 0)
-                return null;
-
             using (await _lock.EnterAsync())
             {
-                // See if the object is already loaded.
-                CorrespondenceFact obj;
-                if (_factByID.TryGetValue(id, out obj))
-                    return obj;
-
-                // If not, load it from storage.
-                FactMemento memento = await _storageStrategy.LoadAsync(id);
-                return CreateFactFromMemento(id, memento);
+                return await GetFactByIDInternalAsync(id);
             }
         }
 
@@ -357,6 +346,22 @@ namespace UpdateControls.Correspondence
                     .Where(m => m != null)
                     .ToList();
             }
+        }
+
+        private async Task<CorrespondenceFact> GetFactByIDInternalAsync(FactID id)
+        {
+            // Check for null.
+            if (id.key == 0)
+                return null;
+
+            // See if the object is already loaded.
+            CorrespondenceFact obj;
+            if (_factByID.TryGetValue(id, out obj))
+                return obj;
+
+            // If not, load it from storage.
+            FactMemento memento = await _storageStrategy.LoadAsync(id);
+            return CreateFactFromMemento(id, memento);
         }
 
         private CorrespondenceFact GetFactByIdAndMemento(FactID id, FactMemento memento)
