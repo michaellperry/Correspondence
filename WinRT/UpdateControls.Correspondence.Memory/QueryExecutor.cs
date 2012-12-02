@@ -76,16 +76,13 @@ namespace UpdateControls.Correspondence.Memory
 
         private void HandleCondition(Condition condition)
         {
-            if (condition != null)
+            foreach (var clause in condition.Clauses)
             {
-                foreach (var clause in condition.Clauses)
-                {
-                    VisitSimple(clause.IsEmpty, clause.SubQuery);
-                }
+                HandleClause(clause.IsEmpty, clause.SubQuery);
             }
         }
 
-        public void VisitSimple(bool isEmpty, QueryDefinition subQuery)
+        private void HandleClause(bool isEmpty, QueryDefinition subQuery)
         {
             if (isEmpty)
                 _match = _match.Where(f => !ExecuteQuery(subQuery, f.Id, null).Any());

@@ -19,14 +19,14 @@ namespace UpdateControls.Correspondence.Strategy
         Task<SaveResult> SaveAsync(FactMemento memento, int peerId);
         Task<FactID?> FindExistingFactAsync(FactMemento memento);
         Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options);
-        Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId);
+        Task<List<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId);
 
         // Messages.
         Task<TimestampID> LoadOutgoingTimestampAsync(int peerId);
         Task SaveOutgoingTimestampAsync(int peerId, TimestampID timestamp);
         Task<TimestampID> LoadIncomingTimestampAsync(int peerId, FactID pivotId);
         Task SaveIncomingTimestampAsync(int peerId, FactID pivotId, TimestampID timestamp);
-        Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp);
+        Task<List<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp);
 
         // Networking.
         Task<int> SavePeerAsync(string protocolName, string peerName);

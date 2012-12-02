@@ -139,11 +139,12 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
+        public Task<List<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
         {
             return Task.FromResult(QueryForFactsAsync(queryDefinition, startingId, null)
                 .Result
-                .Select(im => im.Id));
+                .Select(im => im.Id)
+                .ToList());
         }
 
         public Task<int> SavePeerAsync(string protocolName, string peerName)
@@ -193,7 +194,7 @@ namespace UpdateControls.Correspondence.Memory
             return Done;
         }
 
-        public async Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
+        public async Task<List<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
         {
             using (await _lock.EnterAsync())
             {

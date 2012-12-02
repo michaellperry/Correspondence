@@ -156,14 +156,32 @@ namespace UpdateControls.Correspondence.FileStream
             throw new NotImplementedException();
         }
 
-        public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public async Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            throw new NotImplementedException();
+            using (HistoricalTree factTree = await OpenFactTreeAsync())
+            {
+                QueryExecutor queryExecutor = new QueryExecutor(factTree, GetRoleIdAsync);
+                List<long> factIds = await queryExecutor
+                    .ExecuteQuery(queryDefinition, startingId.key, options);
+                List<IdentifiedFactMemento> facts = new List<IdentifiedFactMemento>();
+                foreach (var factId in factIds)
+                {
+                    FactMemento fact = await LoadFactFromTreeAsync(factTree, factId);
+                    facts.Add(new IdentifiedFactMemento(new FactID { key = factId }, fact));
+                }
+                return facts;
+            }
         }
 
-        public async Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
+        public async Task<List<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
         {
-            throw new NotImplementedException();
+            using (HistoricalTree factTree = await OpenFactTreeAsync())
+            {
+                QueryExecutor queryExecutor = new QueryExecutor(factTree, GetRoleIdAsync);
+                List<long> factIds = await queryExecutor
+                    .ExecuteQuery(queryDefinition, startingId.key, null);
+                return factIds.Select(key => new FactID{ key = key }).ToList();
+            }
         }
 
         public async Task<TimestampID> LoadOutgoingTimestampAsync(int peerId)
@@ -230,7 +248,7 @@ namespace UpdateControls.Correspondence.FileStream
             }
         }
 
-        public async Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
+        public async Task<List<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
         {
             await _messageTable.LoadAsync();
             return _messageTable.Records
@@ -269,7 +287,7 @@ namespace UpdateControls.Correspondence.FileStream
 
         public Task<FactID?> GetRemoteIdAsync(FactID localFactId, int peerId)
         {
-            return null;
+            return Task.FromResult<FactID?>(null);
         }
 
         public Task SaveShareAsync(int peerId, FactID remoteFactId, FactID localFactId)

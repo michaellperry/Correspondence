@@ -145,13 +145,14 @@ namespace UpdateControls.Correspondence.Memory
             return task;
         }
 
-        public Task<IEnumerable<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
+        public Task<List<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
         {
             return Task.FromResult(new QueryExecutor(
                 _factTable.Select(f => f.IdentifiedFactMemento))
                 .ExecuteQuery(queryDefinition, startingId, null)
                 .Reverse()
-                .Select(im => im.Id));
+                .Select(im => im.Id)
+                .ToList());
         }
 
         public Task<int> SavePeerAsync(string protocolName, string peerName)
@@ -201,9 +202,9 @@ namespace UpdateControls.Correspondence.Memory
             return Done;
         }
 
-        public Task<IEnumerable<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
+        public Task<List<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
         {
-            return Task.FromResult<IEnumerable<MessageMemento>>(_messageTable
+            return Task.FromResult(_messageTable
                 .Where(message =>
                     message.Message.FactId.key > timestamp.Key &&
                     !_factTable.Any(fact =>
