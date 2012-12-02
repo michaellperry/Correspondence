@@ -309,7 +309,7 @@ namespace UpdateControls.Correspondence.FileStream
         {
             await _factTypeTable.LoadAsync();
             var record = _factTypeTable.Records
-                .FirstOrDefault(r => r.FactType == factType);
+                .FirstOrDefault(r => Object.Equals(r.FactType, factType));
             if (record == null)
             {
                 record = new FactTypeRecord
@@ -338,7 +338,7 @@ namespace UpdateControls.Correspondence.FileStream
         {
             await _roleTable.LoadAsync();
             var record = _roleTable.Records
-                .FirstOrDefault(r => r.Role == role);
+                .FirstOrDefault(r => Object.Equals(r.Role, role));
             if (record == null)
             {
                 record = new RoleRecord

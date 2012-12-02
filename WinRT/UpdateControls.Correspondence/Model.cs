@@ -171,92 +171,104 @@ namespace UpdateControls.Correspondence
 
         public async Task<CorrespondenceFact> LoadFactAsync(string factName)
         {
-            FactID? id = await _storageStrategy.GetIDAsync(factName);
-            if (id.HasValue)
-                return await GetFactByIDAsync(id.Value);
-            else
-                return null;
+            using (await _lock.EnterAsync())
+            {
+                FactID? id = await _storageStrategy.GetIDAsync(factName);
+                if (id.HasValue)
+                    return await GetFactByIDAsync(id.Value);
+                else
+                    return null;
+            }
         }
 
         public async Task SetFactAsync(string factName, CorrespondenceFact obj)
         {
-            await _storageStrategy.SetIDAsync(factName, obj.ID);
+            using (await _lock.EnterAsync())
+            {
+                await _storageStrategy.SetIDAsync(factName, obj.ID);
+            }
         }
 
         public async Task<GetResultMemento> GetMessageBodiesAsync(TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
         {
-            FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
-            IEnumerable<MessageMemento> recentMessages = await _storageStrategy.LoadRecentMessagesForServerAsync(peerId, timestamp);
-            foreach (MessageMemento message in recentMessages)
+            using (await _lock.EnterAsync())
             {
-                if (message.FactId.key > timestamp.Key)
-                    timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
-                FactMemento newFact = await AddToFactTreeAsync(result, message.FactId, peerId);
-
-                FactMetadata factMetadata;
-                if (newFact != null && _metadataByFactType.TryGetValue(newFact.FactType, out factMetadata))
+                FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
+                IEnumerable<MessageMemento> recentMessages = await _storageStrategy.LoadRecentMessagesForServerAsync(peerId, timestamp);
+                foreach (MessageMemento message in recentMessages)
                 {
-                    IEnumerable<CorrespondenceFactType> convertableTypes = factMetadata.ConvertableTypes;
-                    foreach (CorrespondenceFactType convertableType in convertableTypes)
+                    if (message.FactId.key > timestamp.Key)
+                        timestamp = new TimestampID(ClientDatabaseId, message.FactId.key);
+                    FactMemento newFact = await AddToFactTreeAsync(result, message.FactId, peerId);
+
+                    FactMetadata factMetadata;
+                    if (newFact != null && _metadataByFactType.TryGetValue(newFact.FactType, out factMetadata))
                     {
-                        List<Unpublisher> unpublishers;
-                        if (_unpublishersByType.TryGetValue(convertableType, out unpublishers))
+                        IEnumerable<CorrespondenceFactType> convertableTypes = factMetadata.ConvertableTypes;
+                        foreach (CorrespondenceFactType convertableType in convertableTypes)
                         {
-                            foreach (Unpublisher unpublisher in unpublishers)
+                            List<Unpublisher> unpublishers;
+                            if (_unpublishersByType.TryGetValue(convertableType, out unpublishers))
                             {
-                                IEnumerable<FactID> messageIds = await _storageStrategy.QueryForIdsAsync(unpublisher.MessageFacts, message.FactId);
-                                foreach (FactID messageId in messageIds)
+                                foreach (Unpublisher unpublisher in unpublishers)
                                 {
-                                    ConditionEvaluator conditionEvaluator = new ConditionEvaluator(_storageStrategy);
-                                    bool published = await conditionEvaluator.EvaluateAsync(messageId, unpublisher.PublishCondition);
-                                    if (!published)
+                                    IEnumerable<FactID> messageIds = await _storageStrategy.QueryForIdsAsync(unpublisher.MessageFacts, message.FactId);
+                                    foreach (FactID messageId in messageIds)
                                     {
-                                        await AddToFactTreeAsync(result, messageId, peerId);
-                                        UnpublishMemento unpublishMemento = new UnpublishMemento(messageId, unpublisher.Role);
-                                        if (!unpublishedMessages.Contains(unpublishMemento))
-                                            unpublishedMessages.Add(unpublishMemento);
+                                        ConditionEvaluator conditionEvaluator = new ConditionEvaluator(_storageStrategy);
+                                        bool published = await conditionEvaluator.EvaluateAsync(messageId, unpublisher.PublishCondition);
+                                        if (!published)
+                                        {
+                                            await AddToFactTreeAsync(result, messageId, peerId);
+                                            UnpublishMemento unpublishMemento = new UnpublishMemento(messageId, unpublisher.Role);
+                                            if (!unpublishedMessages.Contains(unpublishMemento))
+                                                unpublishedMessages.Add(unpublishMemento);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+                return new GetResultMemento(result, timestamp);
             }
-            return new GetResultMemento(result, timestamp);
         }
 
 
         public async Task<FactMemento> AddToFactTreeAsync(FactTreeMemento messageBody, FactID factId, int peerId)
         {
-            if (!messageBody.Contains(factId))
+            using (await _lock.EnterAsync())
             {
-                CorrespondenceFact fact = await GetFactByIDAsync(factId);
-                if (fact != null)
+                if (!messageBody.Contains(factId))
                 {
-                    FactID? remoteId = await _storageStrategy.GetRemoteIdAsync(factId, peerId);
-                    if (remoteId.HasValue)
+                    CorrespondenceFact fact = await GetFactByIDAsync(factId);
+                    if (fact != null)
                     {
-                        messageBody.Add(new IdentifiedFactRemote(factId, remoteId.Value));
-                    }
-                    else
-                    {
-                        FactMemento factMemento = CreateMementoFromFact(fact);
-                        foreach (PredecessorMemento predecessor in factMemento.Predecessors)
-                            await AddToFactTreeAsync(messageBody, predecessor.ID, peerId);
-                        messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
+                        FactID? remoteId = await _storageStrategy.GetRemoteIdAsync(factId, peerId);
+                        if (remoteId.HasValue)
+                        {
+                            messageBody.Add(new IdentifiedFactRemote(factId, remoteId.Value));
+                        }
+                        else
+                        {
+                            FactMemento factMemento = CreateMementoFromFact(fact);
+                            foreach (PredecessorMemento predecessor in factMemento.Predecessors)
+                                await AddToFactTreeAsync(messageBody, predecessor.ID, peerId);
+                            messageBody.Add(new IdentifiedFactMemento(factId, factMemento));
 
-                        return factMemento;
+                            return factMemento;
+                        }
                     }
-                }
-                return null;
-            }
-            else
-            {
-                IdentifiedFactBase identifiedFact = messageBody.Get(factId);
-                if (identifiedFact is IdentifiedFactMemento)
-                    return ((IdentifiedFactMemento)identifiedFact).Memento;
-                else
                     return null;
+                }
+                else
+                {
+                    IdentifiedFactBase identifiedFact = messageBody.Get(factId);
+                    if (identifiedFact is IdentifiedFactMemento)
+                        return ((IdentifiedFactMemento)identifiedFact).Memento;
+                    else
+                        return null;
+                }
             }
         }
 
@@ -329,14 +341,17 @@ namespace UpdateControls.Correspondence
 
         public async Task<Guid> GetClientDatabaseGuidAsync()
         {
-            return await _storageStrategy.GetClientGuidAsync();
+            using (await _lock.EnterAsync())
+            {
+                return await _storageStrategy.GetClientGuidAsync();
+            }
         }
 
         internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            List<IdentifiedFactMemento> facts = await _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
             using (await _lock.EnterAsync())
             {
+                List<IdentifiedFactMemento> facts = await _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
                 return facts
                     .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
                     .Where(m => m != null)

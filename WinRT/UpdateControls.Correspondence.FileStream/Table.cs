@@ -37,9 +37,10 @@ namespace UpdateControls.Correspondence.FileStream
             {
                 await Task.Run(delegate
                 {
+                    long length = stream.Length;
                     using (BinaryReader reader = new BinaryReader(stream))
                     {
-                        while (reader.PeekChar() != -1)
+                        while (stream.Position < length)
                         {
                             TRecord record = _read(reader);
                             records.Add(record);
