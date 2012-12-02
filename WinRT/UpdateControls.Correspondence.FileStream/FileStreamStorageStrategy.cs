@@ -73,68 +73,82 @@ namespace UpdateControls.Correspondence.FileStream
             }
         }
 
-        public Task<FactMemento> LoadAsync(FactID id)
+        public async Task<FactMemento> LoadAsync(FactID id)
         {
-            throw new NotImplementedException();
+            using (HistoricalTree factTree = await OpenFactTreeAsync())
+            {
+                return await LoadFactFromTreeAsync(factTree, id.key);
+            }
         }
 
         public async Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
         {
-            List<long> candidateFactIds = await WithIndexAsync(index =>
-                index.FindFacts(memento.GetHashCode()).ToList());
-
-            // See if the fact already exists.
-            foreach (long candidate in candidateFactIds)
+            using (var index = await OpenIndexAsync())
             {
-                FactID candidateId = new FactID() { key = candidate };
-                FactMemento candidateFact = await LoadAsync(candidateId);
-                if (candidateFact.Equals(memento))
+                List<long> candidateFactIds = await Task.Run(() =>
+                    index.FindFacts(memento.GetHashCode()).ToList());
+
+                // See if the fact already exists.
+                foreach (long candidate in candidateFactIds)
                 {
-                    return new SaveResult
+                    FactID candidateId = new FactID() { key = candidate };
+                    FactMemento candidateFact = await LoadAsync(candidateId);
+                    if (candidateFact.Equals(memento))
                     {
-                        Id = candidateId,
-                        WasSaved = false
-                    };
+                        return new SaveResult
+                        {
+                            Id = candidateId,
+                            WasSaved = false
+                        };
+                    }
                 }
+
+                // It doesn't, so create it.
+                int factTypeId = await GetFactTypeIdAsync(memento.FactType);
+                HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
+                foreach (PredecessorMemento predecessor in memento.Predecessors)
+                {
+                    RoleMemento role = predecessor.Role;
+                    int roleId = await GetRoleIdAsync(role);
+                    historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
+                }
+                FactID newFactID;
+                using (var factTree = await OpenFactTreeAsync())
+                {
+                    long newFactIDKey = await Task.Run(delegate()
+                    {
+                        long id = factTree.Save(historicalTreeFact);
+                        index.AddFact(memento.GetHashCode(), id);
+                        return id;
+                    });
+                    newFactID = new FactID() { key = newFactIDKey };
+                }
+
+                // Store a message for each pivot.
+                IEnumerable<MessageMemento> directMessages = memento.Predecessors
+                    .Where(predecessor => predecessor.IsPivot)
+                    .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
+
+                // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
+                List<FactID> nonPivots = memento.Predecessors
+                    .Where(predecessor => !predecessor.IsPivot)
+                    .Select(predecessor => predecessor.ID)
+                    .ToList();
+                List<FactID> predecessorsPivots = await GetPivotsOfFactsAsync(nonPivots);
+                IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
+                    .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
+
+                List<MessageMemento> allMessages = directMessages
+                    .Union(indirectMessages)
+                    .ToList();
+                await AddMessagesAsync(allMessages, peerId);
+
+                return new SaveResult
+                {
+                    Id = newFactID,
+                    WasSaved = true
+                };
             }
-
-            // It doesn't, so create it.
-            int factTypeId = await GetFactTypeIdAsync(memento.FactType);
-            HistoricalTreeFact historicalTreeFact = new HistoricalTreeFact(factTypeId, memento.Data);
-            foreach (PredecessorMemento predecessor in memento.Predecessors)
-            {
-                RoleMemento role = predecessor.Role;
-                int roleId = await GetRoleIdAsync(role);
-                historicalTreeFact.AddPredecessor(roleId, predecessor.ID.key);
-            }
-            long newFactIDKey = await WithFactTreeAsync(factTree => factTree.Save(historicalTreeFact));
-            await WithIndexAsync(index => index.AddFact(memento.GetHashCode(), newFactIDKey));
-            FactID newFactID = new FactID() { key = newFactIDKey };
-
-            // Store a message for each pivot.
-            IEnumerable<MessageMemento> directMessages = memento.Predecessors
-                .Where(predecessor => predecessor.IsPivot)
-                .Select(predecessor => new MessageMemento(predecessor.ID, newFactID));
-
-            // Store messages for each non-pivot. This fact belongs to all predecessors' pivots.
-            List<FactID> nonPivots = memento.Predecessors
-                .Where(predecessor => !predecessor.IsPivot)
-                .Select(predecessor => predecessor.ID)
-                .ToList();
-            List<FactID> predecessorsPivots = await GetPivotsOfFactsAsync(nonPivots);
-            IEnumerable<MessageMemento> indirectMessages = predecessorsPivots
-                .Select(predecessorPivot => new MessageMemento(predecessorPivot, newFactID));
-
-            List<MessageMemento> allMessages = directMessages
-                .Union(indirectMessages)
-                .ToList();
-            await AddMessagesAsync(allMessages, peerId);
-
-            return new SaveResult
-            {
-                Id = newFactID,
-                WasSaved = true
-            };
         }
 
         public Task<FactID?> FindExistingFactAsync(FactMemento memento)
@@ -291,6 +305,17 @@ namespace UpdateControls.Correspondence.FileStream
             return record.Id;
         }
 
+        private async Task<CorrespondenceFactType> GetFactTypeAsync(int factTypeId)
+        {
+            await _factTypeTable.LoadAsync();
+            var record = _factTypeTable.Records
+                .FirstOrDefault(r => r.Id == factTypeId);
+            if (record == null)
+                throw new CorrespondenceException(String.Format("Fact tree contains type {0}, which is not defined.", factTypeId));
+            
+            return record.FactType;
+        }
+
         private async Task<int> GetRoleIdAsync(RoleMemento role)
         {
             await _roleTable.LoadAsync();
@@ -309,24 +334,29 @@ namespace UpdateControls.Correspondence.FileStream
             return record.Id;
         }
 
-        private async Task<T> WithFactTreeAsync<T>(Func<HistoricalTree, T> callback)
+        private async Task<RoleMemento> GetRoleAsync(int roleId)
+        {
+            await _roleTable.LoadAsync();
+            var record = _roleTable.Records
+                .FirstOrDefault(r => r.Id == roleId);
+            if (record == null)
+                throw new CorrespondenceException(String.Format("Fact tree contains role {0}, which is not defined.", roleId));
+
+            return record.Role;
+        }
+
+        private async Task<HistoricalTree> OpenFactTreeAsync()
         {
             var correspondenceFolder = await ApplicationData.Current.LocalFolder
                 .CreateFolderAsync("Correspondence", CreationCollisionOption.OpenIfExists);
             var tableFile = await correspondenceFolder
                 .CreateFileAsync("FactTree.bin", CreationCollisionOption.OpenIfExists);
 
-            Stream indexStream = await tableFile.OpenStreamForWriteAsync();
-            return await Task.Run(delegate
-            {
-                using (HistoricalTree index = new HistoricalTree(indexStream))
-                {
-                    return callback(index);
-                }
-            });
+            Stream stream = await tableFile.OpenStreamForWriteAsync();
+            return new HistoricalTree(stream);
         }
 
-        private async Task<T> WithIndexAsync<T>(Func<RedBlackTree, T> callback)
+        private async Task<RedBlackTree> OpenIndexAsync()
         {
             var correspondenceFolder = await ApplicationData.Current.LocalFolder
                 .CreateFolderAsync("Correspondence", CreationCollisionOption.OpenIfExists);
@@ -334,18 +364,23 @@ namespace UpdateControls.Correspondence.FileStream
                 .CreateFileAsync("Index.bin", CreationCollisionOption.OpenIfExists);
 
             Stream indexStream = await tableFile.OpenStreamForWriteAsync();
-            return await Task.Run(delegate
-            {
-                using (RedBlackTree index = new RedBlackTree(indexStream))
-                {
-                    return callback(index);
-                }
-            });
+            return new RedBlackTree(indexStream);
         }
 
-        private Task WithIndexAsync(Action<RedBlackTree> callback)
+        private async Task<FactMemento> LoadFactFromTreeAsync(HistoricalTree factTree, long key)
         {
-            return WithIndexAsync<int>(index => { callback(index); return 0; });
+            HistoricalTreeFact factNode = await Task.Run(() => factTree.Load(key));
+            CorrespondenceFactType factType = await GetFactTypeAsync(factNode.FactTypeId);
+            FactMemento factMemento = new FactMemento(factType) { Data = factNode.Data };
+            foreach (HistoricalTreePredecessor predecessorNode in factNode.Predecessors)
+            {
+                RoleMemento role = await GetRoleAsync(predecessorNode.RoleId);
+                factMemento.AddPredecessor(
+                    role,
+                    new FactID { key = predecessorNode.PredecessorFactId },
+                    role.IsPivot);
+            }
+            return factMemento;
         }
 
         private async Task<List<FactID>> GetPivotsOfFactsAsync(List<FactID> factIds)
