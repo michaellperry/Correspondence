@@ -68,7 +68,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 Player player = await _alan.ChallengeAsync(_flynn);
 
                 // Ensure that we have loaded the players.
-                var players = _alan.ActivePlayers.Ensure();
+                var players = await _alan.ActivePlayers.EnsureAsync();
                 Assert.IsTrue(players.Any(), "The collection is still empty.");
                 Assert.IsTrue(players.Contains(player));
             }
@@ -123,7 +123,7 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void EnsuredPropertyIsConsistent()
+        public async Task EnsuredPropertyIsConsistent()
         {
             QuiescePeriodically();
 
@@ -132,7 +132,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 _flynn.FavoriteColor = "Blue";
 
                 // Ensure that the value is loaded.
-                Assert.AreEqual("Blue", _flynn.FavoriteColor.Ensure().Value);
+                Assert.AreEqual("Blue", (await _flynn.FavoriteColor.EnsureAsync()).Value);
             }
             finally
             {

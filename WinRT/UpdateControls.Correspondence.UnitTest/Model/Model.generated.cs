@@ -291,11 +291,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _favoriteColor.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				var current = _favoriteColor.Ensure().ToList();
-				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
-				{
-					Community.AddFactAsync(new User__favoriteColor(this, _favoriteColor, value.Value));
-				}
+                Action setter = async delegate()
+                {
+                    var current = (await _favoriteColor.EnsureAsync()).ToList();
+                    if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+                    {
+                        await Community.AddFactAsync(new User__favoriteColor(this, _favoriteColor, value.Value));
+                    }
+                };
+                setter();
 			}
         }
 
@@ -304,11 +308,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _betterFavoriteColor.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				var current = _betterFavoriteColor.Ensure().ToList();
-				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+				Action setter = async delegate()
 				{
-					Community.AddFactAsync(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));
-				}
+					var current = (await _betterFavoriteColor.EnsureAsync()).ToList();
+					if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+					{
+						await Community.AddFactAsync(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));
+					}
+				};
+				setter();
 			}
         }
     }

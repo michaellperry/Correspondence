@@ -262,11 +262,15 @@ namespace <#=targetNamespace.Name#>
             get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				var current = _<#=result.Query.Name#>.Ensure().ToList();
-				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
-				{
-					Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
-				}
+                Action setter = async delegate()
+                {
+                    var current = (await _<#=result.Query.Name#>.EnsureAsync()).ToList();
+                    if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+                    {
+                        await Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+                    }
+                };
+                setter();
 			}
         }
 <#}#>
@@ -277,11 +281,15 @@ namespace <#=targetNamespace.Name#>
             get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				var current = _<#=result.Query.Name#>.Ensure().ToList();
-				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+				Action setter = async delegate()
 				{
-					Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
-				}
+					var current = (await _<#=result.Query.Name#>.EnsureAsync()).ToList();
+					if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+					{
+						await Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+					}
+				};
+				setter();
 			}
         }
 <#}#>

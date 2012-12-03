@@ -50,18 +50,23 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public IEnumerable<TResultType> Ensure()
+        public Task<IEnumerable<TResultType>> EnsureAsync()
         {
             lock (this)
             {
                 _indResults.OnGet();
                 LoadResults();
+                if (_state == State.Loaded)
+                    return Task.FromResult<IEnumerable<TResultType>>(_results);
             }
-            _loaded.WaitOne();
-            lock (this)
+            return Task.Run<IEnumerable<TResultType>>(() =>
             {
-                return _results;
-            }
+                _loaded.WaitOne();
+                lock (this)
+                {
+                    return _results;
+                }
+            });
         }
 
         public TransientDisputable<TResultType, TValue> AsTransientDisputable<TValue>(Func<TResultType, TValue> selector)
@@ -226,9 +231,10 @@ namespace UpdateControls.Correspondence
             get { return _result.Select(_selector); }
         }
 
-        public Disputable<TValue> Ensure()
+        public async Task<Disputable<TValue>> EnsureAsync()
         {
-            return _result.Ensure().Select(_selector).AsDisputable();
+            IEnumerable<TFact> facts = await _result.EnsureAsync();
+            return facts.Select(_selector).AsDisputable();
         }
 
         public static implicit operator TValue(TransientDisputable<TFact, TValue> disputable)
