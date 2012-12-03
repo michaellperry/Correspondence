@@ -60,7 +60,7 @@ namespace Multinotes.ViewModels
                     from share in _individual.Shares
                     where share.MessageBoard != null
                     orderby share.MessageBoard.Topic
-                    select new MessageBoardViewModel(share);
+                    select new MessageBoardViewModel(share, _selection);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Multinotes.ViewModels
             {
                 return _selection.SelectedShare == null
                     ? null
-                    : new MessageBoardViewModel(_selection.SelectedShare);
+                    : new MessageBoardViewModel(_selection.SelectedShare, _selection);
             }
             set
             {
@@ -84,28 +84,6 @@ namespace Multinotes.ViewModels
         {
             get { return _selection.Topic; }
             set { _selection.Topic = value; }
-        }
-
-        public string Text
-        {
-            get { return _selection.Text; }
-            set { _selection.Text = value; }
-        }
-
-        public ICommand SendMessage
-        {
-            get
-            {
-                return MakeCommand
-                    .When(() =>
-                        _selection.SelectedShare != null &&
-                        !String.IsNullOrEmpty(_selection.Text))
-                    .Do(delegate
-                    {
-                        _selection.SelectedShare.MessageBoard.SendMessageAsync(_selection.Text);
-                        _selection.Text = null;
-                    });
-            }
         }
 
         public ICommand JoinGroup

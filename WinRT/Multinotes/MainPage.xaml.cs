@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.ViewManagement;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -24,6 +25,29 @@ namespace Multinotes
         public MainPage()
         {
             this.InitializeComponent();
+
+            this.SizeChanged += MainPage_SizeChanged;
+        }
+
+        void MainPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            switch (ApplicationView.Value)
+            {
+                case ApplicationViewState.Filled:
+                    VisualStateManager.GoToState(this, "Filled", false);
+                    break;
+                case ApplicationViewState.FullScreenLandscape:
+                    VisualStateManager.GoToState(this, "FullScreenLandscape", false);
+                    break;
+                case ApplicationViewState.Snapped:
+                    VisualStateManager.GoToState(this, "Snapped", false);
+                    break;
+                case ApplicationViewState.FullScreenPortrait:
+                    VisualStateManager.GoToState(this, "FullScreenPortrait", false);
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>

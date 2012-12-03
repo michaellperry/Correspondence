@@ -110,11 +110,6 @@ namespace UpdateControls.Correspondence.UnitTest
 
                 // It's still blank.
                 Assert.AreEqual(null, _flynn.FavoriteColor.Value);
-
-                _memory.Quiesce();
-
-                // Now it's set.
-                Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);
             }
             finally
             {

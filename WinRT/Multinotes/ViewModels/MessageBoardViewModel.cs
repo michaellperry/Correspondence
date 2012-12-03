@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using Multinotes.Model;
+using Multinotes.Models;
+using UpdateControls.XAML;
 
 namespace Multinotes.ViewModels
 {
     public class MessageBoardViewModel
     {
         private readonly Share _share;
-
-        public MessageBoardViewModel(Share share)
+        private readonly MessageBoardSelectionModel _selection;
+        
+        public MessageBoardViewModel(Share share, MessageBoardSelectionModel selection)
         {
             _share = share;
+            _selection = selection;
         }
 
         internal Share Share
@@ -31,6 +36,28 @@ namespace Multinotes.ViewModels
                 return
                     from message in _share.MessageBoard.Messages
                     select new MessageViewModel(message);
+            }
+        }
+
+        public string Text
+        {
+            get { return _selection.Text; }
+            set { _selection.Text = value; }
+        }
+
+        public ICommand SendMessage
+        {
+            get
+            {
+                return MakeCommand
+                    .When(() =>
+                        _selection.SelectedShare != null &&
+                        !String.IsNullOrEmpty(_selection.Text))
+                    .Do(delegate
+                    {
+                        _selection.SelectedShare.MessageBoard.SendMessageAsync(_selection.Text);
+                        _selection.Text = null;
+                    });
             }
         }
 
