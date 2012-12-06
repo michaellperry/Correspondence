@@ -56,11 +56,11 @@
   <ItemGroup>
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Interop" />
-    <Reference Include="Microsoft.Silverlight.Testing">
-      <HintPath>..\..\packages\silverlight.unittest.wp7.3.0.31115.2022\lib\Silverlight 3.0\Microsoft.Silverlight.Testing.dll</HintPath>
+    <Reference Include="Microsoft.Silverlight.Testing, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\silverlight.unittest.wp7.3.0.40609.1000\lib\sl4-wp71\Microsoft.Silverlight.Testing.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
-      <HintPath>..\..\packages\silverlight.unittest.wp7.3.0.31115.2022\lib\Silverlight 3.0\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight, Version=2.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\silverlight.unittest.wp7.3.0.40609.1000\lib\sl4-wp71\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -72,12 +72,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MainWindowExtensions.cs" />
     <Compile Include="QueryTest.cs" />
     <Compile Include="SaveAndLoadTest.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTest.cs" />
     <Compile Include="WhereIsEmptyCondition.cs" />
     <Compile Include="WhereIsNotEmptyCondition.cs" />
   </ItemGroup>
@@ -104,6 +106,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SplashScreenImage.jpg" />
+    <Content Include="Test_Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence %28WP7%29\UpdateControls.Correspondence %28WP7%29.csproj">

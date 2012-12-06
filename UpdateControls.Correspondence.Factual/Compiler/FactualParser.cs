@@ -14,8 +14,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             : base(
                 Lexer(input),
                 Rule(),
-                "Add a 'namespace' declaration.",
-                "Declare a fact."
+                "Add a 'namespace' declaration."
             )
         {
         }
@@ -276,7 +275,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             // factual_file -> namespace_declaration fact*
             var rule = Many(namespaceRule, factRule, (namespaceRoot, fact) => namespaceRoot.AddFact(fact));
-            return rule;
+            return Sequence(
+                rule,
+                Terminal(Symbol.EndOfFile), "Declare a fact.",
+                (n, eof) => n);
         }
 
         private static Query CreateQuery(DataType type, Token<Symbol> nameToken)

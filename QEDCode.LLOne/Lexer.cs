@@ -26,11 +26,6 @@ namespace QEDCode.LLOne
             _endOfFile = endOfFile;
         }
 
-        public TSymbol EndOfFile
-        {
-            get { return _endOfFile; }
-        }
-
         public Token<TSymbol> NextToken()
         {
             int nextCharacter = _input.Peek();

@@ -65,9 +65,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="UpdateControls, Version=2.2.1.4, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls, Version=2.2.1.5, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\updatecontrols.2.2.1.4\lib\sl5\UpdateControls.dll</HintPath>
+      <HintPath>..\..\packages\UpdateControls.2.2.1.8\lib\sl5\UpdateControls.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

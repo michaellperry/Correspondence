@@ -14,13 +14,18 @@ namespace QEDCode.LLOne
 
         public Token<TSymbol> Lookahead
         {
-            get { return _lookahead; }
+            get
+            {
+                if (_lookahead == null)
+                    _lookahead = _lexer.NextToken();
+                return _lookahead;
+            }
         }
 
         public Token<TSymbol> Consume()
         {
-            Token<TSymbol> lastToken = _lookahead;
-            _lookahead = _lexer.NextToken();
+            Token<TSymbol> lastToken = Lookahead;
+            _lookahead = null;
             return lastToken;
         }
 

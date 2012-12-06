@@ -11,16 +11,14 @@ namespace QEDCode.LLOne
         private TokenStream<TSymbol> _tokenStream;
         private Rule<TSymbol, T> _root;
         private string _errorStart;
-        private string _errorEnd;
         private List<ParserError> _errors = new List<ParserError>();
 
-        protected Parser(Lexer<TSymbol> lexer, Rule<TSymbol, T> root, string errorStart, string errorEnd)
+        protected Parser(Lexer<TSymbol> lexer, Rule<TSymbol, T> root, string errorStart)
         {
             _lexer = lexer;
             _tokenStream = new TokenStream<TSymbol>(lexer);
             _root = root;
             _errorStart = errorStart;
-            _errorEnd = errorEnd;
         }
 
         protected static Rule<TSymbol, Token<TSymbol>> Terminal(TSymbol expectedSymbol)
@@ -87,15 +85,10 @@ namespace QEDCode.LLOne
         {
             try
             {
-                _tokenStream.Consume();
-
                 if (!_root.Start(_tokenStream.Lookahead.Symbol))
                     throw new ParserException(_errorStart, _tokenStream.Lookahead.LineNumber);
 
                 T rootNode = _root.Match(_tokenStream);
-
-                if (!_tokenStream.Lookahead.Symbol.Equals(_lexer.EndOfFile))
-                    throw new ParserException(_errorEnd, _tokenStream.Lookahead.LineNumber);
 
                 return rootNode;
             }
