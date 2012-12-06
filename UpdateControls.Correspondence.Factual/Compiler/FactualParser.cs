@@ -19,7 +19,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
         }
 
-        private static Lexer<Symbol> Lexer(System.IO.TextReader input)
+        public static Lexer<Symbol> Lexer(System.IO.TextReader input)
         {
             return new Lexer<Symbol>(input, Symbol.Identifier, Symbol.EndOfFile)
                 .AddSymbol("namespace", Symbol.Namespace)
@@ -49,6 +49,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("key", Symbol.Key)
                 .AddSymbol("query", Symbol.Query)
                 .AddSymbol("mutable", Symbol.Mutable)
+                .AddSymbol("exit", Symbol.Exit)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -59,7 +60,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("=", Symbol.Equal);
         }
 
-        private static Rule<Symbol, Namespace> Rule()
+        public static Rule<Symbol, Namespace> GetNamespaceRule()
         {
             // dotted_identifier -> identifier ("." identifier)*
             // strength_declaration_opt -> ("strength" identifier ";")?
@@ -80,7 +81,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Semicolon), "Terminate the namespace declaration with a semicolon.",
                 Optional(strengthDeclaration, string.Empty), "Defect.",
                 (namespaceToken, identifier, ignored, strengthIdentifier) => new Namespace(identifier.ToString(), namespaceToken.LineNumber, strengthIdentifier));
+            return namespaceRule;
+        }
 
+        public static Rule<Symbol, Fact> GetFactRule()
+        {
             // path -> (identifier | "this") ("." identifier)*
             var pathRule =
                 Many(
@@ -194,7 +199,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 (modifierToken, type, nameToken, semicolon) => CreateField(modifierToken, type, nameToken.Value, false, null));
             var publishFieldRule = Sequence(
                 Terminal(Symbol.Publish),
-                Optional(Terminal(Symbol.To) |  Terminal(Symbol.From), null), "Defect.",
+                Optional(Terminal(Symbol.To) | Terminal(Symbol.From), null), "Defect.",
                 typeRule, "Provide a field type.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Optional(publishConditionRule, new Condition()), "Defect.",
@@ -272,6 +277,13 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Optional(querySectionRule, EmptySection), "Defect.",
                 Terminal(Symbol.CloseBracket), "Specify a \"key\", \"mutable\", or \"query\" section.",
                 (fact, keySection, mutableSection, querySection, closeBracket) => querySection.AddTo(mutableSection.AddTo(keySection.AddTo(fact))));
+            return factRule;
+        }
+
+        private static Rule<Symbol, Namespace> Rule()
+        {
+            var namespaceRule = GetNamespaceRule();
+            var factRule = GetFactRule();
 
             // factual_file -> namespace_declaration fact*
             var rule = Many(namespaceRule, factRule, (namespaceRoot, fact) => namespaceRoot.AddFact(fact));

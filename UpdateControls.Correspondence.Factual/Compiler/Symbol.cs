@@ -40,6 +40,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Strength,
         Key,
         Query,
-        Mutable
+        Mutable,
+        Exit
     }
 }
