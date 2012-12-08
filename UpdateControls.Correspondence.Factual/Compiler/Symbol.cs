@@ -41,6 +41,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Key,
         Query,
         Mutable,
-        Exit
+        Exit,
+        Comma,
+        OpenParentheses,
+        CloseParentheses
     }
 }

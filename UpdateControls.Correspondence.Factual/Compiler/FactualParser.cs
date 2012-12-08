@@ -57,7 +57,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("?", Symbol.Question)
                 .AddSymbol("*", Symbol.Asterisk)
                 .AddSymbol(":", Symbol.Colon)
-                .AddSymbol("=", Symbol.Equal);
+                .AddSymbol("=", Symbol.Equal)
+                .AddSymbol(",", Symbol.Comma)
+                .AddSymbol("(", Symbol.OpenParentheses)
+                .AddSymbol(")", Symbol.CloseParentheses);
         }
 
         public static Rule<Symbol, Namespace> GetNamespaceRule()

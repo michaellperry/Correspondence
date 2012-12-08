@@ -78,6 +78,7 @@
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rule.cs" />
+    <Compile Include="Rules\ForwardRule.cs" />
     <Compile Include="Rules\RuleError.cs" />
     <Compile Include="Rules\RuleSequence7.cs" />
     <Compile Include="Rules\RuleMany.cs" />
