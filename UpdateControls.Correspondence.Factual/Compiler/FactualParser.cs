@@ -21,7 +21,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         public static Lexer<Symbol> Lexer(System.IO.TextReader input)
         {
-            return new Lexer<Symbol>(input, Symbol.Identifier, Symbol.EndOfFile)
+            return new Lexer<Symbol>(input, Symbol.Identifier, Symbol.QuotedString, Symbol.Number, Symbol.EndOfFile)
                 .AddSymbol("namespace", Symbol.Namespace)
                 .AddSymbol("strength", Symbol.Strength)
                 .AddSymbol("fact", Symbol.Fact)

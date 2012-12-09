@@ -44,6 +44,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Exit,
         Comma,
         OpenParentheses,
-        CloseParentheses
+        CloseParentheses,
+        QuotedString,
+        Number
     }
 }
