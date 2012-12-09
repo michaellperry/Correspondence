@@ -89,20 +89,6 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         public static Rule<Symbol, Fact> GetFactRule()
         {
-            // path -> (identifier | "this") ("." identifier)*
-            var pathRule =
-                Many(
-                    Reduce(Terminal(Symbol.Identifier), t => new Path(false, t.Value)) |
-                    Reduce(Terminal(Symbol.This), t => new Path(true, null)),
-                    Sequence(
-                        Terminal(Symbol.Dot),
-                        Terminal(Symbol.Identifier),
-                        "Provide a predecessor after the dot.",
-                        (dot, identifier) => identifier
-                    ),
-                    (path, segment) => path.AddSegment(segment.Value)
-                );
-
             // type -> (native_type | identifier) ("?" | "*")?
             // native_type -> "int" | "float" | "char" | "string" | "date" | "time" | "byte"
             var nativeTypeNameRule =
@@ -130,35 +116,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Reduce(nativeTypeRule, t => (DataType)t) |
                 Reduce(factTypeRule, t => (DataType)t);
 
-            // clause -> "not"? identifier "." identifier
-            // condition -> "where" clause ("and" clause)*
-            var clauseRule = Sequence(
-                Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive),
-                Terminal(Symbol.Identifier), "Provide the name of a set.",
-                Terminal(Symbol.Dot), "Use a dot to reference a predicate.",
-                Terminal(Symbol.Identifier), "Provide the name of a predicate.",
-                (not, set, dot, predicate) => new Clause(set.LineNumber, not, set.Value, predicate.Value));
-            var conditionRule = Many(
-                Sequence(
-                    Terminal(Symbol.Where),
-                    clauseRule, "Give a predicate to use as a condition.",
-                    (whereToken, clause) => new Condition().AddClause(clause)),
-                Sequence(
-                    Terminal(Symbol.And),
-                    clauseRule, "Provide another clause.",
-                    (and, clause) => clause),
-                (condition, clause) => condition.AddClause(clause));
-
-            // set -> identifier identifier ":" path "=" path condition?
-            var setRule = Sequence(
-                Terminal(Symbol.Identifier),
-                Terminal(Symbol.Identifier), "Provide a name for the set.",
-                Terminal(Symbol.Colon), "Use a colon to separate the set name from its definition.",
-                pathRule, "Declare a relative path or \"this\".",
-                Terminal(Symbol.Equal), "Separate paths with an equal sign.",
-                pathRule, "Declare a relative path or \"this\".",
-                Optional(conditionRule, new Condition()), "Defect.",
-                (factNameToken, setNameToken, colonToken, leftPath, equalToken, rightPath, condition) => new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, condition, factNameToken.LineNumber));
+            var setRule = GetSetRule();
 
             // predicate -> "bool" identifier "{" "not"? "exists" set* "}"
             var predicateRule = Sequence(
@@ -281,6 +239,54 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "Specify a \"key\", \"mutable\", or \"query\" section.",
                 (fact, keySection, mutableSection, querySection, closeBracket) => querySection.AddTo(mutableSection.AddTo(keySection.AddTo(fact))));
             return factRule;
+        }
+
+        public static Rule<Symbol, Set> GetSetRule()
+        {
+            // path -> (identifier | "this") ("." identifier)*
+            var pathRule =
+                Many(
+                    Reduce(Terminal(Symbol.Identifier), t => new Path(false, t.Value)) |
+                    Reduce(Terminal(Symbol.This), t => new Path(true, null)),
+                    Sequence(
+                        Terminal(Symbol.Dot),
+                        Terminal(Symbol.Identifier),
+                        "Provide a predecessor after the dot.",
+                        (dot, identifier) => identifier
+                    ),
+                    (path, segment) => path.AddSegment(segment.Value)
+                );
+
+            // clause -> "not"? identifier "." identifier
+            // condition -> "where" clause ("and" clause)*
+            var clauseRule = Sequence(
+                Optional(Reduce(Terminal(Symbol.Not), t => ConditionModifier.Negative), ConditionModifier.Positive),
+                Terminal(Symbol.Identifier), "Provide the name of a set.",
+                Terminal(Symbol.Dot), "Use a dot to reference a predicate.",
+                Terminal(Symbol.Identifier), "Provide the name of a predicate.",
+                (not, set, dot, predicate) => new Clause(set.LineNumber, not, set.Value, predicate.Value));
+            var conditionRule = Many(
+                Sequence(
+                    Terminal(Symbol.Where),
+                    clauseRule, "Give a predicate to use as a condition.",
+                    (whereToken, clause) => new Condition().AddClause(clause)),
+                Sequence(
+                    Terminal(Symbol.And),
+                    clauseRule, "Provide another clause.",
+                    (and, clause) => clause),
+                (condition, clause) => condition.AddClause(clause));
+
+            // set -> identifier identifier ":" path "=" path condition?
+            var setRule = Sequence(
+                Terminal(Symbol.Identifier),
+                Terminal(Symbol.Identifier), "Provide a name for the set.",
+                Terminal(Symbol.Colon), "Use a colon to separate the set name from its definition.",
+                pathRule, "Declare a relative path or \"this\".",
+                Terminal(Symbol.Equal), "Separate paths with an equal sign.",
+                pathRule, "Declare a relative path or \"this\".",
+                Optional(conditionRule, new Condition()), "Defect.",
+                (factNameToken, setNameToken, colonToken, leftPath, equalToken, rightPath, condition) => new Set(setNameToken.Value, factNameToken.Value, leftPath, rightPath, condition, factNameToken.LineNumber));
+            return setRule;
         }
 
         private static Rule<Symbol, Namespace> Rule()
