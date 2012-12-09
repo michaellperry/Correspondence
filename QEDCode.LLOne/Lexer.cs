@@ -13,16 +13,20 @@ namespace QEDCode.LLOne
 
         private TextReader _input;
         private TSymbol _identifier;
+        private TSymbol _quotedString;
+        private TSymbol _number;
         private TSymbol _endOfFile;
         private Dictionary<string, TSymbol> _keywords = new Dictionary<string, TSymbol>();
         private Dictionary<string, TSymbol> _punctuation = new Dictionary<string, TSymbol>();
 
         private int _lineNumber = 1;
 
-        public Lexer(TextReader input, TSymbol identifier, TSymbol endOfFile)
+        public Lexer(TextReader input, TSymbol identifier, TSymbol quotedString, TSymbol number, TSymbol endOfFile)
         {
             _input = input;
             _identifier = identifier;
+            _quotedString = quotedString;
+            _number = number;
             _endOfFile = endOfFile;
         }
 
@@ -60,6 +64,33 @@ namespace QEDCode.LLOne
                     return new Token<TSymbol>(keywordSymbol, identifier.ToString(), _lineNumber);
                 else
                     return new Token<TSymbol>(_identifier, identifier.ToString(), _lineNumber);
+            }
+
+            if ('0' <= nextCharacter && nextCharacter <= '9')
+            {
+                StringBuilder number = new StringBuilder();
+                number.Append((char)_input.Read());
+                nextCharacter = _input.Peek();
+                while ('0' <= nextCharacter && nextCharacter <= '9')
+                {
+                    number.Append((char)_input.Read());
+                    nextCharacter = _input.Peek();
+                }
+                return new Token<TSymbol>(_number, number.ToString(), _lineNumber);
+            }
+
+            if (nextCharacter == '\"')
+            {
+                _input.Read();
+                StringBuilder quotedString = new StringBuilder();
+                nextCharacter = _input.Peek();
+                while (nextCharacter != '\"')
+                {
+                    quotedString.Append((char)_input.Read());
+                    nextCharacter = _input.Peek();
+                }
+                _input.Read();
+                return new Token<TSymbol>(_quotedString, quotedString.ToString(), _lineNumber);
             }
 
             string punctuationText = ((char)_input.Read()).ToString();
