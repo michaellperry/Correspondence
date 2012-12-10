@@ -20,17 +20,6 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         }
 
         [TestMethod]
-        public void KeySectionIsRequired()
-        {
-            string code =
-                "namespace Reversi.GameModel;\r\n" +
-                "                            \r\n" +
-                "fact GameQueue {}           \r\n";
-            ParserError result = ParseToError(code);
-            Assert.AreEqual("Key section is required.", result.Message);
-        }
-
-        [TestMethod]
         public void WhenFactHasField_FieldIsRecognized()
         {
             string code =

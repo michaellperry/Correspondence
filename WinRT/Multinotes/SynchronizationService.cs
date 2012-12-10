@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
-using Multinotes.Model;
+using Multinotes2.Model;
 using UpdateControls.Correspondence.Memory;
 using System.Net.NetworkInformation;
 using UpdateControls.Fields;
@@ -37,8 +37,6 @@ namespace Multinotes
             {
                 individual = await _community.AddFactAsync(new Individual(Guid.NewGuid().ToString()));
                 await _community.SetFactAsync(ThisIndividual, individual);
-                await individual.JoinMessageBoardAsync("Video Games");
-                await individual.JoinMessageBoardAsync("Tulsa TechFest 2012");
             }
             _individual.Value = individual;
             configurationProvider.Individual = individual;

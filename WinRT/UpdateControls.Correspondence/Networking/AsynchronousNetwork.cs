@@ -18,8 +18,6 @@ namespace UpdateControls.Correspondence.Networking
 
 		private Dependent _depPushSubscriptions;
 
-        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
-
         public AsynchronousNetwork(ISubscriptionProvider subscriptionProvider, Model model, IStorageStrategy storageStrategy)
         {
             _subscriptionProvider = subscriptionProvider;
@@ -35,26 +33,23 @@ namespace UpdateControls.Correspondence.Networking
 
 		public async void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
 		{
-            using (await _lock.EnterAsync())
+            int peerId = await _storageStrategy.SavePeerAsync(
+                asynchronousCommunicationStrategy.ProtocolName,
+                asynchronousCommunicationStrategy.PeerName);
+            asynchronousCommunicationStrategy.MessageReceived += messageBody =>
             {
-                int peerId = await _storageStrategy.SavePeerAsync(
-                    asynchronousCommunicationStrategy.ProtocolName,
-                    asynchronousCommunicationStrategy.PeerName);
-                asynchronousCommunicationStrategy.MessageReceived += messageBody =>
-                {
-                    _model.ReceiveMessage(messageBody, peerId);
-                    // Trigger a receive on normal channels. This updates the
-                    // timestamp and pulls down any messages that were too long
-                    // for the push buffer.
-                    BeginReceiving();
-                };
-                _serverProxies.Add(new AsynchronousServerProxy(
-                    _subscriptionProvider,
-                    _model,
-                    _storageStrategy,
-                    asynchronousCommunicationStrategy,
-                    peerId));
-            }
+                _model.ReceiveMessage(messageBody, peerId);
+                // Trigger a receive on normal channels. This updates the
+                // timestamp and pulls down any messages that were too long
+                // for the push buffer.
+                BeginReceiving();
+            };
+            _serverProxies.Add(new AsynchronousServerProxy(
+                _subscriptionProvider,
+                _model,
+                _storageStrategy,
+                asynchronousCommunicationStrategy,
+                peerId));
 		}
 
         public bool Synchronizing

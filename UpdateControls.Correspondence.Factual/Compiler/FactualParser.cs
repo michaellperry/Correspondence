@@ -50,6 +50,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("query", Symbol.Query)
                 .AddSymbol("mutable", Symbol.Mutable)
                 .AddSymbol("exit", Symbol.Exit)
+                .AddSymbol("connect", Symbol.Connect)
+                .AddSymbol("subscribe", Symbol.Subscribe)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -225,7 +227,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
 
-            // fact -> "fact" identifier "{" key_section mutable_section? query_section? "}"
+            // fact -> "fact" identifier "{" key_section? mutable_section? query_section? "}"
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
@@ -233,7 +235,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
             var factRule = Sequence(
                 factHeader,
-                keySectionRule, "Key section is required.",
+                Optional(keySectionRule, EmptySection), "Defect.",
                 Optional(mutableSectionRule, EmptySection), "Defect.",
                 Optional(querySectionRule, EmptySection), "Defect.",
                 Terminal(Symbol.CloseBracket), "Specify a \"key\", \"mutable\", or \"query\" section.",

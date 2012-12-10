@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using Multinotes.Model;
+using Multinotes2.Model;
 using Multinotes.Models;
 using UpdateControls.XAML;
 

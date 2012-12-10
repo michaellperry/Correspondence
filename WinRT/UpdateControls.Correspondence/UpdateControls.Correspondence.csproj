@@ -150,6 +150,7 @@
     <Compile Include="Networking\AsynchronousNetwork.cs" />
     <Compile Include="Networking\AsynchronousServerProxy.cs" />
     <Compile Include="Networking\ISubscriptionProvider.cs" />
+    <Compile Include="Networking\MessagesToSend.cs" />
     <Compile Include="Networking\Network.cs" />
     <Compile Include="Networking\PushSubscriptionProxy.cs" />
     <Compile Include="Networking\SynchronizeResult.cs" />

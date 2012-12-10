@@ -10,6 +10,13 @@ namespace UpdateControls.Correspondence.Networking
 {
 	internal class AsynchronousServerProxy
 	{
+        private enum SendState
+        {
+            Idle,
+            Sending,
+            SendRequested
+        }
+
         private enum ReceiveState
         {
             NotReceiving,
@@ -19,21 +26,19 @@ namespace UpdateControls.Correspondence.Networking
 
 		private const long ClientDatabaseId = 0;
 
-        private IAsynchronousCommunicationStrategy _communicationStrategy;
-        private int _peerId;
+        private readonly IAsynchronousCommunicationStrategy _communicationStrategy;
+        private readonly int _peerId;
 
-        private ISubscriptionProvider _subscriptionProvider;
-		private Model _model;
-		private IStorageStrategy _storageStrategy;
+        private readonly ISubscriptionProvider _subscriptionProvider;
+        private readonly Model _model;
+        private readonly IStorageStrategy _storageStrategy;
 
-        private Independent<bool> _sending = new Independent<bool>();
+        private Independent<SendState> _sendState = new Independent<SendState>();
         private Independent<ReceiveState> _receiveState = new Independent<ReceiveState>();
         private Independent<Exception> _lastException = new Independent<Exception>();
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
 		private Dependent _depPushSubscriptions;
-
-        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
 
         public AsynchronousServerProxy(
             ISubscriptionProvider subscriptionProvider, 
@@ -70,7 +75,8 @@ namespace UpdateControls.Correspondence.Networking
                     return
                         _receiveState.Value == ReceiveState.Receiving ||
                         _receiveState.Value == ReceiveState.Invalidated ||
-                        _sending.Value == true;
+                        _sendState.Value == SendState.Sending ||
+                        _sendState.Value == SendState.SendRequested;
                 }
             }
         }
@@ -90,40 +96,75 @@ namespace UpdateControls.Correspondence.Networking
         {
             lock (this)
             {
-                if (_sending)
+                if (_sendState.Value == SendState.Idle)
+                    _sendState.Value = SendState.Sending;
+                else
+                {
+                    _sendState.Value = SendState.SendRequested;
                     return;
+                }
             }
             Send();
         }
 
         private async void Send()
         {
-            using (await _lock.EnterAsync())
+            try
             {
                 TimestampID timestamp = await _storageStrategy.LoadOutgoingTimestampAsync(_peerId);
-                List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
-                var result = await _model.GetMessageBodiesAsync(timestamp, _peerId, unpublishedMessages);
-                timestamp = result.Timestamp;
-                FactTreeMemento messageBodies = result.FactTree;
-                bool anyMessages = messageBodies != null && messageBodies.Facts.Any();
-                if (anyMessages)
+                MessagesToSend messagesToSend;
+                while ((messagesToSend = await GetMessagesToSendAsync(timestamp)) != null)
                 {
-                    try
-                    {
-                        await _communicationStrategy.PostAsync(
-                            messageBodies,
-                            await _model.GetClientDatabaseGuidAsync(),
-                            unpublishedMessages);
-                        await _storageStrategy.SaveOutgoingTimestampAsync(_peerId, timestamp);
-                        Send();
-                    }
-                    catch (Exception e)
-                    {
-                        OnSendError(e);
-                    }
+                    await _communicationStrategy.PostAsync(
+                        messagesToSend.MessageBodies,
+                        await _model.GetClientDatabaseGuidAsync(),
+                        messagesToSend.UnpublishedMessages);
+                    timestamp = messagesToSend.Timestamp;
+                    await _storageStrategy.SaveOutgoingTimestampAsync(_peerId, timestamp);
+                }
+            }
+            catch (Exception e)
+            {
+                OnSendError(e);
+            }
+        }
+
+        private async Task<MessagesToSend> GetMessagesToSendAsync(TimestampID timestamp)
+        {
+            while (true)
+            {
+                // I'm about to check for messages, so if you've requested
+                // a send, you'll be taken care of.
+                lock (this)
+                {
+                    if (_sendState.Value == SendState.SendRequested)
+                        _sendState.Value = SendState.Sending;
                 }
 
-                _sending.Value = anyMessages;
+                // Check for messages.
+                List<UnpublishMemento> unpublishedMessages = new List<UnpublishMemento>();
+                GetResultMemento result = await _model.GetMessageBodiesAsync(timestamp, _peerId, unpublishedMessages);
+                FactTreeMemento messageBodies = result.FactTree;
+
+                // If we have any, post them.
+                bool anyMessages = messageBodies != null && messageBodies.Facts.Any();
+                if (anyMessages)
+                    return new MessagesToSend
+                    {
+                        Timestamp = result.Timestamp,
+                        MessageBodies = messageBodies,
+                        UnpublishedMessages = unpublishedMessages
+                    };
+
+                // If not, go idle unless another send was requested.
+                lock (this)
+                {
+                    if (_sendState.Value == SendState.Sending)
+                    {
+                        _sendState.Value = SendState.Idle;
+                        return null;
+                    }
+                }
             }
         }
 
@@ -156,52 +197,55 @@ namespace UpdateControls.Correspondence.Networking
 
         private async void Receive()
         {
-            using (await _lock.EnterAsync())
+            FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+            List<FactID> pivotIds = new List<FactID>();
+            lock (this)
             {
-                FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-                List<FactID> pivotIds = new List<FactID>();
                 _depPushSubscriptions.OnGet();
-                await GetPivotsAsync(pivotTree, pivotIds, _peerId);
+            }
+            await GetPivotsAsync(pivotTree, pivotIds, _peerId);
 
-                bool anyPivots = pivotIds.Any();
-                if (anyPivots)
+            bool anyPivots = pivotIds.Any();
+            if (anyPivots)
+            {
+                List<PivotMemento> pivots = new List<PivotMemento>();
+                foreach (FactID pivotId in pivotIds)
                 {
-                    List<PivotMemento> pivots = new List<PivotMemento>();
-                    foreach (FactID pivotId in pivotIds)
-                    {
-                        TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(_peerId, pivotId);
-                        pivots.Add(new PivotMemento(pivotId, timestamp));
-                    }
-                    try
-                    {
-                        GetManyResultMemento result = await _communicationStrategy.GetManyAsync(
-                            pivotTree,
-                            pivots,
-                            await _model.GetClientDatabaseGuidAsync());
+                    TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(_peerId, pivotId);
+                    pivots.Add(new PivotMemento(pivotId, timestamp));
+                }
+                try
+                {
+                    GetManyResultMemento result = await _communicationStrategy.GetManyAsync(
+                        pivotTree,
+                        pivots,
+                        await _model.GetClientDatabaseGuidAsync());
 
-                        bool receivedFacts = result.MessageBody.Facts.Any();
-                        if (receivedFacts)
+                    bool receivedFacts = result.MessageBody.Facts.Any();
+                    if (receivedFacts)
+                    {
+                        _model.ReceiveMessage(result.MessageBody, _peerId);
+                        foreach (PivotMemento pivot in result.NewTimestamps)
                         {
-                            _model.ReceiveMessage(result.MessageBody, _peerId);
-                            foreach (PivotMemento pivot in result.NewTimestamps)
-                            {
-                                await _storageStrategy.SaveIncomingTimestampAsync(_peerId, pivot.PivotId, pivot.Timestamp);
-                            }
-                        }
-                        if (receivedFacts || _communicationStrategy.IsLongPolling)
-                            Receive();
-                        else
-                        {
-                            if (EndReceiving())
-                                Receive();
+                            await _storageStrategy.SaveIncomingTimestampAsync(_peerId, pivot.PivotId, pivot.Timestamp);
                         }
                     }
-                    catch (Exception e)
+                    if (receivedFacts || _communicationStrategy.IsLongPolling)
+                        Receive();
+                    else
                     {
-                        OnReceiveError(e);
+                        if (EndReceiving())
+                            Receive();
                     }
                 }
+                catch (Exception e)
+                {
+                    OnReceiveError(e);
+                }
+            }
 
+            lock (this)
+            {
                 if (_receiveState.Value == ReceiveState.Receiving && !anyPivots)
                     _receiveState.Value = ReceiveState.NotReceiving;
             }
@@ -279,7 +323,7 @@ namespace UpdateControls.Correspondence.Networking
         {
             lock (this)
             {
-                _sending.Value = false;
+                _sendState.Value = SendState.Idle;
                 _lastException.Value = exception;
             }
         }

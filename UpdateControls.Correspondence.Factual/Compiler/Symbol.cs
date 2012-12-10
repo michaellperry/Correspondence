@@ -46,6 +46,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         OpenParentheses,
         CloseParentheses,
         QuotedString,
-        Number
+        Number,
+        Connect,
+        Subscribe
     }
 }

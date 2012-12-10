@@ -1,7 +1,7 @@
 using System.Linq;
 using UpdateControls.Fields;
 using UpdateControls.Correspondence.BinaryHTTPClient;
-using Multinotes.Model;
+using Multinotes2.Model;
 
 namespace Multinotes
 {

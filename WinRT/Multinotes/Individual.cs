@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UpdateControls.Correspondence;
 
-namespace Multinotes.Model
+namespace Multinotes2.Model
 {
     public partial class Individual
     {

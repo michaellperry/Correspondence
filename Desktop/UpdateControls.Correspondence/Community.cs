@@ -134,7 +134,7 @@ namespace UpdateControls.Correspondence
             remove { _model.FactAdded -= value; }
         }
 
-        public event Action FactReceived
+        public event Action<FactID> FactReceived
         {
             add { _model.FactReceived += value; }
             remove { _model.FactReceived -= value; }
@@ -180,7 +180,7 @@ namespace UpdateControls.Correspondence
             get { return _fieldSerializerByType; }
         }
 
-		internal CorrespondenceFact GetFactByID( FactID id )
+		public CorrespondenceFact GetFactByID( FactID id )
 		{
             return _model.GetFactByID(id);
 		}

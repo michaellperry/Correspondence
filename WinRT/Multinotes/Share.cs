@@ -2,7 +2,7 @@
 using System.Net;
 using System.Windows;
 
-namespace Multinotes.Model
+namespace Multinotes2.Model
 {
     public partial class Share
     {
