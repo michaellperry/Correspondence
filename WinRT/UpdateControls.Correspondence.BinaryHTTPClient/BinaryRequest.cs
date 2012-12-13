@@ -71,40 +71,6 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             }
         }
     }
-    public class SubscribeRequest : BinaryRequest
-    {
-        public static byte Token = 3;
-
-        public FactTreeMemento PivotTree { get; set; }
-        public long PivotId { get; set; }
-        public string DeviceUri { get; set; }
-        public string ClientGuid { get; set; }
-
-        protected override void WriteInternal(BinaryWriter requestWriter)
-        {
-            BinaryHelper.WriteByte(Token, requestWriter);
-            new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
-            BinaryHelper.WriteLong(PivotId, requestWriter);
-            BinaryHelper.WriteString(DeviceUri, requestWriter);
-            BinaryHelper.WriteString(ClientGuid, requestWriter);
-        }
-    }
-    public class UnsubscribeRequest : BinaryRequest
-    {
-        public static byte Token = 4;
-
-        public FactTreeMemento PivotTree { get; set; }
-        public long PivotId { get; set; }
-        public string DeviceUri { get; set; }
-
-        protected override void WriteInternal(BinaryWriter requestWriter)
-        {
-            BinaryHelper.WriteByte(Token, requestWriter);
-            new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
-            BinaryHelper.WriteLong(PivotId, requestWriter);
-            BinaryHelper.WriteString(DeviceUri, requestWriter);
-        }
-    }
     public class InterruptRequest : BinaryRequest
     {
         public static byte Token = 5;
@@ -135,6 +101,40 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             BinaryHelper.WriteString(ClientGuid, requestWriter);
             BinaryHelper.WriteString(Text1, requestWriter);
             BinaryHelper.WriteString(Text2, requestWriter);
+        }
+    }
+    public class WindowsSubscribeRequest : BinaryRequest
+    {
+        public static byte Token = 7;
+
+        public FactTreeMemento PivotTree { get; set; }
+        public long PivotId { get; set; }
+        public string DeviceUri { get; set; }
+        public string ClientGuid { get; set; }
+
+        protected override void WriteInternal(BinaryWriter requestWriter)
+        {
+            BinaryHelper.WriteByte(Token, requestWriter);
+            new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
+            BinaryHelper.WriteLong(PivotId, requestWriter);
+            BinaryHelper.WriteString(DeviceUri, requestWriter);
+            BinaryHelper.WriteString(ClientGuid, requestWriter);
+        }
+    }
+    public class WindowsUnsubscribeRequest : BinaryRequest
+    {
+        public static byte Token = 8;
+
+        public FactTreeMemento PivotTree { get; set; }
+        public long PivotId { get; set; }
+        public string DeviceUri { get; set; }
+
+        protected override void WriteInternal(BinaryWriter requestWriter)
+        {
+            BinaryHelper.WriteByte(Token, requestWriter);
+            new FactTreeSerlializer().SerlializeFactTree(PivotTree, requestWriter);
+            BinaryHelper.WriteLong(PivotId, requestWriter);
+            BinaryHelper.WriteString(DeviceUri, requestWriter);
         }
     }
 }

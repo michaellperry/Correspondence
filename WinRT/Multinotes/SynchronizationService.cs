@@ -10,6 +10,7 @@ using UpdateControls.Fields;
 using UpdateControls.Correspondence.FileStream;
 using System.IO;
 using UpdateControls.XAML.Wrapper;
+using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
 
 namespace Multinotes
 {
@@ -24,7 +25,9 @@ namespace Multinotes
         {
             HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             _community = new Community(new FileStreamStorageStrategy())
-                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
+                .AddAsynchronousCommunicationStrategy(
+                    new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider)
+                        .SetNotificationStrategy(new WindowsNotificationStrategy(configurationProvider)))
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => Individual)
                 .Subscribe(() => Individual == null

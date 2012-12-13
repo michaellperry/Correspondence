@@ -19,9 +19,10 @@ namespace UpdateControls.Correspondence.Networking
 
         private enum ReceiveState
         {
-            NotReceiving,
+            Idle,
             Receiving,
-            Invalidated
+            ReceiveRequested,
+            Polling
         }
 
 		private const long ClientDatabaseId = 0;
@@ -74,7 +75,7 @@ namespace UpdateControls.Correspondence.Networking
                 {
                     return
                         _receiveState.Value == ReceiveState.Receiving ||
-                        _receiveState.Value == ReceiveState.Invalidated ||
+                        _receiveState.Value == ReceiveState.ReceiveRequested ||
                         _sendState.Value == SendState.Sending ||
                         _sendState.Value == SendState.SendRequested;
                 }
@@ -170,52 +171,74 @@ namespace UpdateControls.Correspondence.Networking
 
         public void BeginReceiving()
         {
-            if (ShouldReceive())
-                Receive();
-        }
-
-        private bool ShouldReceive()
-        {
             lock (this)
             {
-                if (_receiveState.Value == ReceiveState.NotReceiving)
-                {
+                if (_receiveState.Value == ReceiveState.Idle)
                     _receiveState.Value = ReceiveState.Receiving;
-                    return true;
-                }
                 else if (_receiveState.Value == ReceiveState.Receiving)
                 {
-                    _receiveState.Value = ReceiveState.Invalidated;
-                    return false;
-                }
-                else //if (_receiveState.Value == ReceiveState.Invalidated)
-                {
-                    return false;
+                    if (!_communicationStrategy.IsLongPolling)
+                        _receiveState.Value = ReceiveState.ReceiveRequested;
+                    return;
                 }
             }
+
+            Receive();
         }
 
         private async void Receive()
         {
-            FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-            List<FactID> pivotIds = new List<FactID>();
-            lock (this)
+            try
             {
-                _depPushSubscriptions.OnGet();
-            }
-            await GetPivotsAsync(pivotTree, pivotIds, _peerId);
-
-            bool anyPivots = pivotIds.Any();
-            if (anyPivots)
-            {
-                List<PivotMemento> pivots = new List<PivotMemento>();
-                foreach (FactID pivotId in pivotIds)
+                GetManyResultMemento messagesToReceive;
+                while ((messagesToReceive = await GetMessagesToReceive()) != null)
                 {
-                    TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(_peerId, pivotId);
-                    pivots.Add(new PivotMemento(pivotId, timestamp));
+                    _model.ReceiveMessage(messagesToReceive.MessageBody, _peerId);
+                    foreach (PivotMemento pivot in messagesToReceive.NewTimestamps)
+                    {
+                        await _storageStrategy.SaveIncomingTimestampAsync(_peerId, pivot.PivotId, pivot.Timestamp);
+                    }
                 }
-                try
+            }
+            catch (Exception e)
+            {
+                OnReceiveError(e);
+            }
+        }
+
+        private async Task<GetManyResultMemento> GetMessagesToReceive()
+        {
+            while (true)
+            {
+                // I'm about to receive messages, so if you've requested
+                // a receive, you'll be taken care of.
+                lock (this)
                 {
+                    if (_receiveState.Value == ReceiveState.ReceiveRequested)
+                        _receiveState.Value = ReceiveState.Receiving;
+                }
+
+                // Get the subscriptions
+                FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+                List<FactID> pivotIds = new List<FactID>();
+                lock (this)
+                {
+                    _depPushSubscriptions.OnGet();
+                }
+                await GetPivotsAsync(pivotTree, pivotIds, _peerId);
+
+                bool anyPivots = pivotIds.Any();
+                if (anyPivots)
+                {
+                    // Get the incoming timestamps.
+                    List<PivotMemento> pivots = new List<PivotMemento>();
+                    foreach (FactID pivotId in pivotIds)
+                    {
+                        TimestampID timestamp = await _storageStrategy.LoadIncomingTimestampAsync(_peerId, pivotId);
+                        pivots.Add(new PivotMemento(pivotId, timestamp));
+                    }
+
+                    // Get the messages from the server.
                     GetManyResultMemento result = await _communicationStrategy.GetManyAsync(
                         pivotTree,
                         pivots,
@@ -223,47 +246,21 @@ namespace UpdateControls.Correspondence.Networking
 
                     bool receivedFacts = result.MessageBody.Facts.Any();
                     if (receivedFacts)
-                    {
-                        _model.ReceiveMessage(result.MessageBody, _peerId);
-                        foreach (PivotMemento pivot in result.NewTimestamps)
-                        {
-                            await _storageStrategy.SaveIncomingTimestampAsync(_peerId, pivot.PivotId, pivot.Timestamp);
-                        }
-                    }
-                    if (receivedFacts || _communicationStrategy.IsLongPolling)
-                        Receive();
-                    else
-                    {
-                        if (EndReceiving())
-                            Receive();
-                    }
-                }
-                catch (Exception e)
-                {
-                    OnReceiveError(e);
-                }
-            }
+                        return result;
 
-            lock (this)
-            {
-                if (_receiveState.Value == ReceiveState.Receiving && !anyPivots)
-                    _receiveState.Value = ReceiveState.NotReceiving;
-            }
-        }
-
-        private bool EndReceiving()
-        {
-            lock (this)
-            {
-                if (_receiveState.Value == ReceiveState.Invalidated)
-                {
-                    _receiveState.Value = ReceiveState.Receiving;
-                    return true;
+                    // No messages yet, but keep polling.
+                    if (_communicationStrategy.IsLongPolling)
+                        continue;
                 }
-                else
+
+                // Nothing received: go idle unless another receive was requested.
+                lock (this)
                 {
-                    _receiveState.Value = ReceiveState.NotReceiving;
-                    return false;
+                    if (_receiveState.Value == ReceiveState.Receiving)
+                    {
+                        _receiveState.Value = ReceiveState.Idle;
+                        return null;
+                    }
                 }
             }
         }
@@ -332,7 +329,7 @@ namespace UpdateControls.Correspondence.Networking
         {
             lock (this)
             {
-                _receiveState.Value = ReceiveState.NotReceiving;
+                _receiveState.Value = ReceiveState.Idle;
                 _lastException.Value = exception;
             }
         }

@@ -14,15 +14,36 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
     public partial class BinaryHTTPAsynchronousCommunicationStrategy
     {
-        public Task<IPushSubscription> SubscribeForPushAsync(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
+        private INotificationStrategy _notificationStrategy;
+
+        public BinaryHTTPAsynchronousCommunicationStrategy SetNotificationStrategy(INotificationStrategy notificationStrategy)
         {
-            // Push notification is not supported in the desktop version.
-            return Task.FromResult<IPushSubscription>(new NoOpPushSubscription());
+            _notificationStrategy = notificationStrategy;
+            _notificationStrategy.MessageReceived += OnMessageReceived;
+            return this;
+        }
+
+        partial void Initialize()
+        {
         }
 
         public bool IsLongPolling
         {
-            get { return _configuration.TimeoutSeconds > 0; }
+            get { return false; }
+        }
+
+        public Task<IPushSubscription> SubscribeForPushAsync(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
+        {
+            if (_notificationStrategy != null)
+                return Task.FromResult(_notificationStrategy.SubscribeForPush(pivotTree, pivotId, clientGuid));
+            else
+                return Task.FromResult((IPushSubscription)new NoOpPushSubscription());
+        }
+
+        private void OnMessageReceived(FactTreeMemento factTree)
+        {
+            if (MessageReceived != null)
+                MessageReceived(factTree);
         }
     }
 }

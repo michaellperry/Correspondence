@@ -119,6 +119,7 @@
     <Compile Include="FactTreeSerlializer.cs" />
     <Compile Include="HTTPConfiguration.cs" />
     <Compile Include="IHTTPConfigurationProvider.cs" />
+    <Compile Include="INotificationStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">

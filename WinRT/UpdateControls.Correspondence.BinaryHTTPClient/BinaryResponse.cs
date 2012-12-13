@@ -21,10 +21,10 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 return GetManyResponse.ReadInternal(responseReader);
             else if (token == PostResponse.Token)
                 return new PostResponse();
-            else if (token == SubscribeResponse.Token)
-                return new SubscribeResponse();
-            else if (token == UnsubscribeResponse.Token)
-                return new UnsubscribeResponse();
+            else if (token == WindowsSubscribeResponse.Token)
+                return new WindowsSubscribeResponse();
+            else if (token == WindowsUnsubscribeResponse.Token)
+                return new WindowsUnsubscribeResponse();
             else if (token == InterruptResponse.Token)
                 return new InterruptResponse();
             else
@@ -58,14 +58,6 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
     {
         public static byte Token = 2;
     }
-    public class SubscribeResponse : BinaryResponse
-    {
-        public static byte Token = 3;
-    }
-    public class UnsubscribeResponse : BinaryResponse
-    {
-        public static byte Token = 4;
-    }
     public class InterruptResponse : BinaryResponse
     {
         public static byte Token = 5;
@@ -73,5 +65,13 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
     public class NotifyResponse : BinaryResponse
     {
         public static byte Token = 6;
+    }
+    public class WindowsSubscribeResponse : BinaryResponse
+    {
+        public static byte Token = 7;
+    }
+    public class WindowsUnsubscribeResponse : BinaryResponse
+    {
+        public static byte Token = 8;
     }
 }
