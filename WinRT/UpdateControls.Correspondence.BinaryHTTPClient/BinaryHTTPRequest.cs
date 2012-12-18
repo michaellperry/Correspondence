@@ -14,11 +14,14 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
         {
             CancellationTokenSource tokenSource = new CancellationTokenSource();
             Task<BinaryResponse> sendTask = InternalSendAsync(configuration, request, tokenSource);
+            int timeoutSeconds = Math.Min(configuration.TimeoutSeconds, 30);
             Task<BinaryResponse> timeoutTask = Task
-                .Delay(configuration.TimeoutSeconds * 1500, tokenSource.Token)
+                .Delay(timeoutSeconds * 1500, tokenSource.Token)
                 .ContinueWith<BinaryResponse>(delegate
                 {
-                    throw new TimeoutException();
+                    if (!tokenSource.IsCancellationRequested)
+                        throw new TimeoutException();
+                    return null;
                 });
             var response = await Task.WhenAny<BinaryResponse>(sendTask, timeoutTask);
             tokenSource.Cancel();

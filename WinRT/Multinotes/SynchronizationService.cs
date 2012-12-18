@@ -11,6 +11,7 @@ using UpdateControls.Correspondence.FileStream;
 using System.IO;
 using UpdateControls.XAML.Wrapper;
 using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
+using Windows.UI.Xaml;
 
 namespace Multinotes
 {
@@ -23,17 +24,42 @@ namespace Multinotes
 
         public async void Initialize()
         {
-            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
-            _community = new Community(new FileStreamStorageStrategy())
-                .AddAsynchronousCommunicationStrategy(
-                    new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider)
-                        .SetNotificationStrategy(new WindowsNotificationStrategy(configurationProvider)))
-                .Register<CorrespondenceModel>()
+            /////////////////////////////////////////
+            // Local storage
+            var storage = new FileStreamStorageStrategy();
+            _community = new Community(storage);
+
+            /////////////////////////////////////////
+            // Communication
+            var configurationProvider = new HTTPConfigurationProvider();
+            var communication = new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider);
+            var notification = new WindowsNotificationStrategy(configurationProvider);
+            communication.SetNotificationStrategy(notification);
+            _community.AddAsynchronousCommunicationStrategy(communication);
+
+            /////////////////////////////////////////
+            // Model
+            _community.Register<CorrespondenceModel>();
+
+            /////////////////////////////////////////
+            // Subscription
+            _community
                 .Subscribe(() => Individual)
                 .Subscribe(() => Individual == null
                     ? null
                     : Individual.MessageBoards)
                 ;
+            /////////////////////////////////////////
+
+            // Synchronize periodically.
+            DispatcherTimer timer = new DispatcherTimer();
+            int timeoutSeconds = Math.Min(configurationProvider.Configuration.TimeoutSeconds, 30);
+            timer.Interval = TimeSpan.FromSeconds(5 * timeoutSeconds);
+            timer.Tick += delegate(object sender, object e)
+            {
+                Synchronize();
+            };
+            timer.Start();
 
             Individual individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
             if (individual == null)
@@ -60,6 +86,7 @@ namespace Multinotes
             // And synchronize on startup or resume.
             Synchronize();
         }
+
 
         public Community Community
         {
