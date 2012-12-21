@@ -12,6 +12,8 @@ using System.IO;
 using UpdateControls.XAML.Wrapper;
 using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
 using Windows.UI.Xaml;
+using System.Threading.Tasks;
+using Windows.Storage;
 
 namespace Multinotes
 {
@@ -112,6 +114,19 @@ namespace Multinotes
         public Exception LastException
         {
             get { return _community.LastException; }
+        }
+
+        private async Task LogExceptionAsync(Exception x)
+        {
+            var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
+                "debug.log", CreationCollisionOption.OpenIfExists);
+            using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
+            {
+                await Task.Run(delegate
+                {
+                    writer.WriteLine(x.ToString());
+                });
+            }
         }
     }
 }

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
-using System.IO;
 
 namespace UpdateControls.Correspondence.FileStream
 {
@@ -24,41 +22,50 @@ namespace UpdateControls.Correspondence.FileStream
 
         public async Task LoadAsync()
         {
-            if (_records != null)
-                return;
-
-            var correspondenceFolder = await ApplicationData.Current.LocalFolder
-                .CreateFolderAsync("Correspondence", CreationCollisionOption.OpenIfExists);
-            var tableFile = await correspondenceFolder
-                .CreateFileAsync(_fileName, CreationCollisionOption.OpenIfExists);
+            lock (this)
+            {
+                if (_records != null)
+                    return;
+            }
 
             List<TRecord> records = new List<TRecord>();
-            using (var stream = await tableFile.OpenStreamForReadAsync())
+
+            var stream = await OpenTableFileForReadAsync();
+            if (stream != null)
             {
-                await Task.Run(delegate
+                using (stream)
                 {
-                    long length = stream.Length;
-                    using (BinaryReader reader = new BinaryReader(stream))
+                    await Task.Run(delegate
                     {
-                        while (stream.Position < length)
+                        try
                         {
-                            TRecord record = _read(reader);
-                            records.Add(record);
+                            long length = stream.Length;
+                            using (BinaryReader reader = new BinaryReader(stream))
+                            {
+                                while (stream.Position < length)
+                                {
+                                    TRecord record = _read(reader);
+                                    records.Add(record);
+                                }
+                            }
                         }
-                    }
-                });
+                        catch (EndOfStreamException x)
+                        {
+                            // Done reading.
+                        }
+                    });
+                }
             }
-            _records = records;
+
+            lock (this)
+            {
+                _records = records;
+            }
         }
 
         public async Task AppendAsync(TRecord record)
         {
-            var correspondenceFolder = await ApplicationData.Current.LocalFolder
-                .GetFolderAsync("Correspondence");
-            var tableFile = await correspondenceFolder
-                .GetFileAsync(_fileName);
-
-            using (var stream = await tableFile.OpenStreamForWriteAsync())
+            using (var stream = await OpenTableFileForWriteAsync())
             {
                 await Task.Run(delegate
                 {
@@ -69,32 +76,118 @@ namespace UpdateControls.Correspondence.FileStream
                     }
                 });
             }
-            _records.Add(record);
+
+            lock (this)
+            {
+                // Perform a non-mutating operation to
+                // protect others using the collection.
+                _records = new List<TRecord>(_records);
+                _records.Add(record);
+            }
         }
 
-        public async Task SaveAsync()
+        public async Task ReplaceAsync(TRecord oldRecord, TRecord newRecord)
         {
-            var correspondenceFolder = await ApplicationData.Current.LocalFolder
-                .GetFolderAsync("Correspondence");
-            var tableFile = await correspondenceFolder
-                .CreateFileAsync(_fileName, CreationCollisionOption.ReplaceExisting);
+            if (oldRecord == null)
+                await AppendAsync(newRecord);
 
-            using (var stream = await tableFile.OpenStreamForWriteAsync())
+            List<TRecord> records;
+            lock (this)
+            {
+                // Perform a non-mutating operation to
+                // protect others using the collection.
+                records = new List<TRecord>(_records);
+                records.Remove(oldRecord);
+                records.Add(newRecord);
+            }
+
+            using (var stream = await OpenTableFileForWriteAsync())
             {
                 await Task.Run(delegate
                 {
                     using (BinaryWriter writer = new BinaryWriter(stream))
                     {
-                        foreach (var record in _records)
+                        foreach (var record in records)
                             _write(writer, record);
                     }
                 });
+            }
+
+            lock (this)
+            {
+                records = _records;
             }
         }
 
         public IEnumerable<TRecord> Records
         {
-            get { return _records; }
+            get
+            {
+                lock (this)
+                {
+                    return _records;
+                }
+            }
+        }
+
+        private Task<Stream> OpenTableFileForReadAsync()
+        {
+            return RetryAsync(async delegate
+            {
+                try
+                {
+                    var correspondenceFolder = await ApplicationData.Current.LocalFolder
+                        .GetFolderAsync("Correspondence");
+                    if (correspondenceFolder == null)
+                        return null;
+
+                    var tableFile = await correspondenceFolder.GetFileAsync(_fileName);
+                    if (tableFile == null)
+                        return null;
+
+                    var stream = await tableFile.OpenStreamForReadAsync();
+                    return stream;
+                }
+                catch (FileNotFoundException x)
+                {
+                    return null;
+                }
+            });
+        }
+
+        private Task<Stream> OpenTableFileForWriteAsync()
+        {
+            return RetryAsync(async delegate
+            {
+                var correspondenceFolder = await ApplicationData.Current.LocalFolder
+                    .CreateFolderAsync("Correspondence", CreationCollisionOption.OpenIfExists);
+                if (correspondenceFolder == null)
+                    return null;
+
+                var tableFile = await correspondenceFolder
+                    .CreateFileAsync(_fileName, CreationCollisionOption.OpenIfExists);
+                if (tableFile == null)
+                    return null;
+
+                var stream = await tableFile.OpenStreamForWriteAsync();
+                return stream;
+            });
+        }
+
+        private async Task<T> RetryAsync<T>(Func<Task<T>> function)
+        {
+            while (true)
+            {
+                try
+                {
+                    return await function();
+                }
+                catch (IOException x)
+                {
+                    // TODO: Tell the application to log this.
+                }
+                await Task.Delay(100);
+            }
         }
     }
 }

@@ -57,20 +57,13 @@ namespace UpdateControls.Correspondence.FileStream
             await _savedFactTable.LoadAsync();
             var record = _savedFactTable.Records
                 .FirstOrDefault(r => r.Name == factName);
-            if (record == null)
-            {
-                record = new SavedFactRecord
+            await _savedFactTable.ReplaceAsync(
+                record,
+                new SavedFactRecord
                 {
                     Name = factName,
                     Id = id
-                };
-                await _savedFactTable.AppendAsync(record);
-            }
-            else
-            {
-                record.Id = id;
-                await _savedFactTable.SaveAsync();
-            }
+                });
         }
 
         public async Task<FactMemento> LoadAsync(FactID id)
@@ -200,20 +193,13 @@ namespace UpdateControls.Correspondence.FileStream
             await _outgoingTimestampTable.LoadAsync();
             var record = _outgoingTimestampTable.Records
                 .FirstOrDefault(r => r.PeerId == peerId);
-            if (record == null)
-            {
-                record = new OutgoingTimestampRecord
+            await _outgoingTimestampTable.ReplaceAsync(
+                record,
+                new OutgoingTimestampRecord
                 {
                     PeerId = peerId,
                     Timestamp = timestamp
-                };
-                await _outgoingTimestampTable.AppendAsync(record);
-            }
-            else
-            {
-                record.Timestamp = timestamp;
-                await _outgoingTimestampTable.SaveAsync();
-            }
+                });
         }
 
         public async Task<TimestampID> LoadIncomingTimestampAsync(int peerId, FactID pivotId)
@@ -232,20 +218,13 @@ namespace UpdateControls.Correspondence.FileStream
             await _incomingTimestampTable.LoadAsync();
             var record = _incomingTimestampTable.Records
                 .FirstOrDefault(r => r.Id.PeerId == peerId && r.Id.PivotId.key == pivotId.key);
-            if (record == null)
-            {
-                record = new IncomingTimestampRecord
+            await _incomingTimestampTable.ReplaceAsync(
+                record,
+                new IncomingTimestampRecord
                 {
                     Id = new PeerPivotIdentifier(peerId, pivotId),
                     Timestamp = timestamp
-                };
-                await _incomingTimestampTable.AppendAsync(record);
-            }
-            else
-            {
-                record.Timestamp = timestamp;
-                await _incomingTimestampTable.SaveAsync();
-            }
+                });
         }
 
         public async Task<List<MessageMemento>> LoadRecentMessagesForServerAsync(int peerId, TimestampID timestamp)
