@@ -24,36 +24,15 @@ namespace $rootnamespace$
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individualFlynn)
-                .Subscribe(() => _individualFlynn.MessageBoards)
 				;
             _communityAlan = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individualAlan)
-                .Subscribe(() => _individualAlan.MessageBoards)
                 ;
 
             _individualFlynn = _communityFlynn.AddFact(new Individual("flynn"));
             _individualAlan = _communityAlan.AddFact(new Individual("alan"));
-            _individualFlynn.JoinMessageBoard("The Grid");
-            _individualAlan.JoinMessageBoard("The Grid");
-        }
-
-        [TestMethod]
-        public void InitiallyNoMessages()
-        {
-            Assert.IsFalse(_individualAlan.MessageBoards.Single().Messages.Any());
-        }
-
-        [TestMethod]
-        public void FlynnSendsAMessage()
-        {
-            _individualFlynn.MessageBoards.Single().SendMessage("Reindeer flotilla");
-
-            Synchronize();
-
-            Message message = _individualAlan.MessageBoards.Single().Messages.Single();
-            Assert.AreEqual("Reindeer flotilla", message.Text);
         }
 
         private void Synchronize()

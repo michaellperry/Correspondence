@@ -13,7 +13,7 @@
     <language>en-US</language>
     <tags>nosql database wp7 synchronize</tags>
     <dependencies>
-      <dependency id="UpdateControls" version="2.2.1.1"/>
+      <dependency id="UpdateControls" version="2.2.2.0"/>
     </dependencies>
   </metadata>
 </package>

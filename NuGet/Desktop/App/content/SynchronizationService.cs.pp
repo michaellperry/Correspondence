@@ -67,15 +67,5 @@ namespace $rootnamespace$
         {
             get { return _individual; }
         }
-
-        public bool Synchronizing
-        {
-            get { return _community.Synchronizing; }
-        }
-
-        public Exception LastException
-        {
-            get { return _community.LastException; }
-        }
     }
 }

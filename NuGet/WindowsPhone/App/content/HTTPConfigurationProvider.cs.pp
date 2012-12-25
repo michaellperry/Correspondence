@@ -26,7 +26,7 @@ namespace $rootnamespace$
 
         public bool IsToastEnabled
         {
-            get { return Individual == null ? false : Individual.ToastNotificationEnabled; }
+            get { return false; }
         }
     }
 }

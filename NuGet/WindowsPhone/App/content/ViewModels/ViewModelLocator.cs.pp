@@ -9,26 +9,23 @@ namespace $rootnamespace$.ViewModels
     {
         private readonly SynchronizationService _synchronizationService;
 
-        private readonly MainViewModel _main;
-        private readonly SettingsViewModel _settings;
-
         public ViewModelLocator()
         {
             _synchronizationService = new SynchronizationService();
             if (!DesignerProperties.IsInDesignTool)
                 _synchronizationService.Initialize();
-            _main = new MainViewModel(_synchronizationService.Individual, _synchronizationService);
-            _settings = new SettingsViewModel(_synchronizationService.Individual);
         }
 
         public object Main
         {
-            get { return ForView.Wrap(_main); }
-        }
-
-        public object Settings
-        {
-            get { return ForView.Wrap(_settings); }
+            get
+            {
+                return ViewModel(() => _synchronizationService.Individual == null
+                    ? null :
+                    new MainViewModel(
+                        _synchronizationService.Community,
+                        _synchronizationService.Individual));
+            }
         }
     }
 }

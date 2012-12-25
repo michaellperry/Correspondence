@@ -69,8 +69,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{4F26812A-656F-46C5-AC58-EC984A4DDB42}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Model\Correspondence.Model.nuspec = NuGet\Model\Correspondence.Model.nuspec
-		NuGet\Model\content\Individual.cs.pp = NuGet\Model\content\Individual.cs.pp
-		NuGet\Model\content\MessageBoard.cs.pp = NuGet\Model\content\MessageBoard.cs.pp
 		NuGet\Model\content\Model.fact.pp = NuGet\Model\content\Model.fact.pp
 		NuGet\Model\content\Model.tt = NuGet\Model\content\Model.tt
 	EndProjectSection
@@ -91,8 +89,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{767F1B9D-2E6
 		NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec = NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec
 		NuGet\WindowsPhone\App\content\HTTPConfigurationProvider.cs.pp = NuGet\WindowsPhone\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\WindowsPhone\App\content\Readme.txt.pp = NuGet\WindowsPhone\App\content\Readme.txt.pp
-		NuGet\WindowsPhone\App\content\ViewModels\SettingsViewModel.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\SettingsViewModel.cs.pp
+		NuGet\WindowsPhone\App\content\Readme_Correspondence.txt.pp = NuGet\WindowsPhone\App\content\Readme_Correspondence.txt.pp
 		NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp = NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp
 		NuGet\WindowsPhone\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
@@ -122,7 +119,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1F9D8122-A89
 		NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec = NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec
 		NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\Silverlight\App\content\Readme.txt.pp = NuGet\Silverlight\App\content\Readme.txt.pp
+		NuGet\Silverlight\App\content\Readme_Correspondence.txt.pp = NuGet\Silverlight\App\content\Readme_Correspondence.txt.pp
 		NuGet\Silverlight\App\content\SynchronizationService.cs.pp = NuGet\Silverlight\App\content\SynchronizationService.cs.pp
 		NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
@@ -161,7 +158,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{981FB2D8-7E4
 		NuGet\Desktop\App\Correspondence.Desktop.App.nuspec = NuGet\Desktop\App\Correspondence.Desktop.App.nuspec
 		NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\Desktop\App\content\Readme.txt.pp = NuGet\Desktop\App\content\Readme.txt.pp
+		NuGet\Desktop\App\content\Readme_Correspondence.txt.pp = NuGet\Desktop\App\content\Readme_Correspondence.txt.pp
 		NuGet\Desktop\App\content\SynchronizationService.cs.pp = NuGet\Desktop\App\content\SynchronizationService.cs.pp
 		NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection

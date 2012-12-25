@@ -61,16 +61,6 @@ namespace $rootnamespace$
             _community.BeginReceiving();
         }
 
-        public bool Synchronizing
-        {
-            get { return _community.Synchronizing; }
-        }
-
-        public Exception LastException
-        {
-            get { return _community.LastException; }
-        }
-
         private static string GetAnonymousUserId()
         {
             string anid = UserExtendedProperties.GetValue("ANID") as string;
