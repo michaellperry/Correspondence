@@ -63,7 +63,15 @@ namespace $rootnamespace$
 
         private static string GetAnonymousUserId()
         {
-            string anid = UserExtendedProperties.GetValue("ANID") as string;
+            string anid = null;
+            try
+            {
+                anid = UserExtendedProperties.GetValue("ANID") as string;
+            }
+            catch (NotSupportedException ex)
+            {
+                anid = null;
+            }
             string anonymousUserId = String.IsNullOrEmpty(anid)
                 ? "test:user1"
                 : "liveid:" + ParseAnonymousId(anid);

@@ -37,7 +37,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
         {
             if (_configuration.APIKey == DefaultAPIKey)
             {
-                error(new ArgumentException("Please register for an API key at http://qedcode.com/correspondence"));
+                error(new ArgumentException("Please register for an API key at http://CorrespondenceCloud.com"));
                 return;
             }
 

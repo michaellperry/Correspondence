@@ -5,7 +5,7 @@ using UpdateControls.XAML;
 
 namespace $rootnamespace$.ViewModels
 {
-    public class ViewModelLocator
+    public class ViewModelLocator : ViewModelLocatorBase
     {
         private readonly SynchronizationService _synchronizationService;
 
