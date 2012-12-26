@@ -19,12 +19,14 @@ namespace $rootnamespace$
 
         public void Initialize()
         {
-            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
-            _community = new Community(IsolatedStorageStorageStrategy.Load())
-                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _individual)
-                ;
+            var storage = IsolatedStorageStorageStrategy.Load();
+            var http = new HTTPConfigurationProvider();
+            var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
+
+            _community = new Community(storage);
+            _community.AddAsynchronousCommunicationStrategy(communication);
+            _community.Register<CorrespondenceModel>();
+            _community.Subscribe(() => _individual);
 
             _individual = _community.LoadFact<Individual>(ThisIndividual);
             if (_individual == null)

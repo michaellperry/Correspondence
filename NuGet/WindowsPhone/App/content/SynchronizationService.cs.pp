@@ -17,16 +17,19 @@ namespace $rootnamespace$
 
         public void Initialize()
         {
-            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
-            _community = new Community(IsolatedStorageStorageStrategy.Load())
-                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider)
-	                .SetNotificationStrategy(new WindowsPhoneNotificationStrategy(configurationProvider)))
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _individual)
-                ;
+            var storage = IsolatedStorageStorageStrategy.Load();
+            var http = new HTTPConfigurationProvider();
+            var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
+            var notification = new WindowsPhoneNotificationStrategy(http);
+            communication.SetNotificationStrategy(notification);
+
+            _community = new Community(storage);
+            _community.AddAsynchronousCommunicationStrategy(communication);
+            _community.Register<CorrespondenceModel>();
+            _community.Subscribe(() => _individual);
 
             _individual = _community.AddFact(new Individual(GetAnonymousUserId()));
-            configurationProvider.Individual = _individual;
+            http.Individual = _individual;
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate

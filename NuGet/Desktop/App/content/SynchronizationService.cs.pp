@@ -21,13 +21,15 @@ namespace $rootnamespace$
 
         public void Initialize()
         {
-            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
             string correspondenceDatabase = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "CorrespondenceApp", "$rootnamespace$", "Correspondence.sdf");
-            _community = new Community(new SSCEStorageStrategy(correspondenceDatabase))
-                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _individual)
-                ;
+            var storage = new SSCEStorageStrategy(correspondenceDatabase);
+            var http = new HTTPConfigurationProvider();
+            var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
+
+            _community = new Community(storage);
+            _community.AddAsynchronousCommunicationStrategy(communication);
+            _community.Register<CorrespondenceModel>();
+            _community.Subscribe(() => _individual);
 
             _individual = _community.LoadFact<Individual>(ThisIndividual);
             if (_individual == null)
