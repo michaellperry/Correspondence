@@ -183,7 +183,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{49D99AE5-214
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Web\App\Correspondence.Web.App.nuspec = NuGet\Web\App\Correspondence.Web.App.nuspec
 		NuGet\Web\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Web\App\content\HTTPConfigurationProvider.cs.pp
-		NuGet\Web\App\content\Readme.txt.pp = NuGet\Web\App\content\Readme.txt.pp
+		NuGet\Web\App\content\Readme_Correspondence.txt.pp = NuGet\Web\App\content\Readme_Correspondence.txt.pp
 		NuGet\Web\App\content\SynchronizationService.cs.pp = NuGet\Web\App\content\SynchronizationService.cs.pp
 		NuGet\Web\App\content\web.config.transform = NuGet\Web\App\content\web.config.transform
 	EndProjectSection

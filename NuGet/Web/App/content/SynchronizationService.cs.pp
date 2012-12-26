@@ -16,26 +16,22 @@ namespace $rootnamespace$
     public class SynchronizationService
     {
         private Community _community;
-        private Domain _theDomain;
 
         public void Initialize()
         {
-            HTTPConfigurationProvider configurationProvider = new HTTPConfigurationProvider();
-
 			// TODO: Uncomment these lines to choose a database storage strategy.
             // string correspondenceConnectionString = ConfigurationManager.ConnectionStrings["Correspondence"].ConnectionString;
-			// var storageStrategy = new SQLStorageStrategy(correspondenceConnectionString).UpgradeDatabase();
+			// var storage = new SQLStorageStrategy(correspondenceConnectionString).UpgradeDatabase();
 
-            string path = Path.Combine(HostingEnvironment.MapPath("~/App_Data"), "Correspondence");
-			var storageStrategy = FileStreamStorageStrategy.Load(path);
+            string path = HostingEnvironment.MapPath("~/App_Data/Correspondence");
+			var storage = FileStreamStorageStrategy.Load(path);
+            var http = new HTTPConfigurationProvider();
+			var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
 
-            _community = new Community(storageStrategy)
-                .AddAsynchronousCommunicationStrategy(new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider))
-                .Register<CorrespondenceModel>()
-                .Subscribe(() => _theDomain)
-                ;
+            _community = new Community(storage);
+			_community.AddAsynchronousCommunicationStrategy(communication);
+			_community.Register<CorrespondenceModel>();
             _community.ClientApp = false;
-            _theDomain = _community.AddFact(new Domain());
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -61,21 +57,6 @@ namespace $rootnamespace$
         public Community Community
         {
             get { return _community; }
-        }
-
-        public Exception LastException
-        {
-            get { return _community.LastException; }
-        }
-
-        public Individual GetIndividual(string userName)
-        {
-            return _community.AddFact(new Individual(userName));
-        }
-
-        public MessageBoard GetMessageBoard(string topic)
-        {
-            return _community.AddFact(new MessageBoard(topic));
         }
     }
 }
