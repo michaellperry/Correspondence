@@ -117,10 +117,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{5E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1F9D8122-A895-4BB2-968B-AE50B06367CC}"
 	ProjectSection(SolutionItems) = preProject
+		NuGet\Silverlight\App\content\App.xaml.transform = NuGet\Silverlight\App\content\App.xaml.transform
 		NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec = NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec
 		NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp
+		NuGet\Silverlight\App\content\MainPage.xaml.transform = NuGet\Silverlight\App\content\MainPage.xaml.transform
 		NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\Silverlight\App\content\Readme_Correspondence.txt.pp = NuGet\Silverlight\App\content\Readme_Correspondence.txt.pp
 		NuGet\Silverlight\App\content\SynchronizationService.cs.pp = NuGet\Silverlight\App\content\SynchronizationService.cs.pp
 		NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
@@ -156,10 +157,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{A9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{981FB2D8-7E43-483E-A2FA-21C2B47272B3}"
 	ProjectSection(SolutionItems) = preProject
+		NuGet\Desktop\App\content\App.xaml.transform = NuGet\Desktop\App\content\App.xaml.transform
 		NuGet\Desktop\App\Correspondence.Desktop.App.nuspec = NuGet\Desktop\App\Correspondence.Desktop.App.nuspec
 		NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\Desktop\App\content\Readme_Correspondence.txt.pp = NuGet\Desktop\App\content\Readme_Correspondence.txt.pp
+		NuGet\Desktop\App\content\MainWindow.xaml.transform = NuGet\Desktop\App\content\MainWindow.xaml.transform
 		NuGet\Desktop\App\content\SynchronizationService.cs.pp = NuGet\Desktop\App\content\SynchronizationService.cs.pp
 		NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection

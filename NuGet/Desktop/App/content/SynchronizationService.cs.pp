@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
-using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.SSCE;
