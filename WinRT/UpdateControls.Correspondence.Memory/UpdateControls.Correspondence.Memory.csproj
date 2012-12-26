@@ -128,13 +128,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="UpdateControls, Version=2.2.1.8, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls, Version=2.2.2.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UpdateControls.2.2.1.8\lib\NetCore45\UpdateControls.dll</HintPath>
+      <HintPath>..\packages\UpdateControls.2.2.2.1\lib\windows8\UpdateControls.dll</HintPath>
     </Reference>
-    <Reference Include="UpdateControls.XAML, Version=2.2.1.8, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="UpdateControls.XAML, Version=2.2.2.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\UpdateControls.2.2.1.8\lib\NetCore45\UpdateControls.XAML.dll</HintPath>
+      <HintPath>..\packages\UpdateControls.2.2.2.1\lib\windows8\UpdateControls.XAML.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
@@ -142,6 +142,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)..\NuGet\WinRT\UnitTest\lib\windows8\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

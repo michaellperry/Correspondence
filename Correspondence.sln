@@ -235,6 +235,30 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{798F22
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinRT", "WinRT", "{9448E6AC-01ED-48E3-8CD1-ABCEA2058353}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{92B26FB5-FEAF-4436-A383-5BE5A0482262}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\WinRT\AllInOne\Correspondence.WinRT.AllInOne.nuspec = NuGet\WinRT\AllInOne\Correspondence.WinRT.AllInOne.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{FAB7FEA8-D7A8-4217-95E7-BFB292579B13}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\WinRT\App\content\App.xaml.transform = NuGet\WinRT\App\content\App.xaml.transform
+		NuGet\WinRT\App\Correspondence.WinRT.App.nuspec = NuGet\WinRT\App\Correspondence.WinRT.App.nuspec
+		NuGet\WinRT\App\content\HTTPConfigurationProvider.cs.pp = NuGet\WinRT\App\content\HTTPConfigurationProvider.cs.pp
+		NuGet\WinRT\App\content\MainPage.xaml.transform = NuGet\WinRT\App\content\MainPage.xaml.transform
+		NuGet\WinRT\App\content\ViewModels\MainViewModel.cs.pp = NuGet\WinRT\App\content\ViewModels\MainViewModel.cs.pp
+		NuGet\WinRT\App\content\SynchronizationService.cs.pp = NuGet\WinRT\App\content\SynchronizationService.cs.pp
+		NuGet\WinRT\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\WinRT\App\content\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{2B02357F-41A2-4D21-B915-6904DDD77E87}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\WinRT\UnitTest\Correspondence.WinRT.UnitTest.nuspec = NuGet\WinRT\UnitTest\Correspondence.WinRT.UnitTest.nuspec
+		NuGet\WinRT\UnitTest\content\ModelTest.cs.pp = NuGet\WinRT\UnitTest\content\ModelTest.cs.pp
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 48
@@ -657,6 +681,7 @@ Global
 		{96475E40-26FC-4419-AD3E-2289D4013AD4} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{9154FF18-27A1-4F10-B394-D65662DD1336} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{40B1960C-7433-4F35-9C51-B025CD3982D0} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{9448E6AC-01ED-48E3-8CD1-ABCEA2058353} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{182C379A-33E6-43DC-BF14-249146C73CDF} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
@@ -684,5 +709,8 @@ Global
 		{8DF95246-CAB4-4BF8-A8DB-FD168706798B} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{15D08BBA-292B-48F4-8517-2D5053317ADF} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
+		{92B26FB5-FEAF-4436-A383-5BE5A0482262} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
+		{FAB7FEA8-D7A8-4217-95E7-BFB292579B13} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
+		{2B02357F-41A2-4D21-B915-6904DDD77E87} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
 	EndGlobalSection
 EndGlobal

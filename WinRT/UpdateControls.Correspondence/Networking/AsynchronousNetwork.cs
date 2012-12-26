@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UpdateControls.Collections;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.XAML.Wrapper;
 using Windows.UI.Core;
@@ -14,7 +15,8 @@ namespace UpdateControls.Correspondence.Networking
 		private Model _model;
 		private IStorageStrategy _storageStrategy;
 
-        private List<AsynchronousServerProxy> _serverProxies = new List<AsynchronousServerProxy>();
+        private IndependentList<AsynchronousServerProxy> _serverProxies =
+            new IndependentList<AsynchronousServerProxy>();
 
 		private Dependent _depPushSubscriptions;
 
@@ -27,7 +29,7 @@ namespace UpdateControls.Correspondence.Networking
             _depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
             _depPushSubscriptions.Invalidated += delegate
             {
-                AffectedSet.CaptureDependent(this);
+                UpdateScheduler.ScheduleUpdate(this);
             };
         }
 
@@ -44,47 +46,68 @@ namespace UpdateControls.Correspondence.Networking
                 // for the push buffer.
                 BeginReceiving();
             };
-            _serverProxies.Add(new AsynchronousServerProxy(
-                _subscriptionProvider,
-                _model,
-                _storageStrategy,
-                asynchronousCommunicationStrategy,
-                peerId));
+            lock (this)
+            {
+                _serverProxies.Add(new AsynchronousServerProxy(
+                    _subscriptionProvider,
+                    _model,
+                    _storageStrategy,
+                    asynchronousCommunicationStrategy,
+                    peerId));
+            }
 		}
 
         public bool Synchronizing
         {
-            get { return _serverProxies.Any(serverProxy => serverProxy.Synchronizing); }
+            get
+            {
+                lock (this)
+                {
+                    return _serverProxies.Any(serverProxy => serverProxy.Synchronizing);
+                }
+            }
         }
 
         public Exception LastException
         {
             get
             {
-                return _serverProxies
-                    .Select(serverProxy => serverProxy.LastException)
-                    .FirstOrDefault(exception => exception != null);
+                lock (this)
+                {
+                    return _serverProxies
+                        .Select(serverProxy => serverProxy.LastException)
+                        .FirstOrDefault(exception => exception != null);
+                }
             }
         }
 
         public void BeginSending()
         {
-            _depPushSubscriptions.OnGet();
-            foreach (var serverProxy in _serverProxies)
-                serverProxy.BeginSending();
+            lock (this)
+            {
+                _depPushSubscriptions.OnGet();
+                foreach (var serverProxy in _serverProxies)
+                    serverProxy.BeginSending();
+            }
         }
 
         public void BeginReceiving()
         {
-            _depPushSubscriptions.OnGet();
-            foreach (var serverProxy in _serverProxies)
-                serverProxy.BeginReceiving();
+            lock (this)
+            {
+                _depPushSubscriptions.OnGet();
+                foreach (var serverProxy in _serverProxies)
+                    serverProxy.BeginReceiving();
+            }
         }
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
         {
-            foreach (var serverProxy in _serverProxies)
-                serverProxy.Notify(pivot, text1, text2);
+            lock (this)
+            {
+                foreach (var serverProxy in _serverProxies)
+                    serverProxy.Notify(pivot, text1, text2);
+            }
         }
 
         private void UpdatePushSubscriptions()
@@ -95,10 +118,13 @@ namespace UpdateControls.Correspondence.Networking
 
         public void UpdateNow()
         {
-            _depPushSubscriptions.OnGet();
+            lock (this)
+            {
+                _depPushSubscriptions.OnGet();
 
-            foreach (var serverProxy in _serverProxies)
-                serverProxy.AfterTriggerSubscriptionUpdate();
+                foreach (var serverProxy in _serverProxies)
+                    serverProxy.AfterTriggerSubscriptionUpdate();
+            }
         }
     }
 }

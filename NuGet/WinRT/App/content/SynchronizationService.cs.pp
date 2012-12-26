@@ -5,20 +5,18 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Multinotes2.Model;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
-using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
 using UpdateControls.Correspondence.FileStream;
 using UpdateControls.Fields;
 using Windows.Storage;
 using Windows.UI.Xaml;
 
-namespace Multinotes
+namespace $rootnamespace$
 {
     public class SynchronizationService
     {
-        private const string ThisIndividual = "Multinotes.Individual.1.this";
+        private const string ThisIndividual = "$rootnamespace$.Individual.this";
         private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
         private Community _community;
@@ -26,36 +24,18 @@ namespace Multinotes
 
         public async void Initialize()
         {
-            /////////////////////////////////////////
-            // Local storage
             var storage = new FileStreamStorageStrategy();
+            var http = new HTTPConfigurationProvider();
+            var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
+
             _community = new Community(storage);
-
-            /////////////////////////////////////////
-            // Communication
-            var configurationProvider = new HTTPConfigurationProvider();
-            var communication = new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider);
-            var notification = new WindowsNotificationStrategy(configurationProvider);
-            communication.SetNotificationStrategy(notification);
             _community.AddAsynchronousCommunicationStrategy(communication);
-
-            /////////////////////////////////////////
-            // Model
             _community.Register<CorrespondenceModel>();
-
-            /////////////////////////////////////////
-            // Subscription
-            _community
-                .Subscribe(() => Individual)
-                .Subscribe(() => Individual == null
-                    ? null
-                    : Individual.MessageBoards)
-                ;
-            /////////////////////////////////////////
+            _community.Subscribe(() => _individual.Value);
 
             // Synchronize periodically.
             DispatcherTimer timer = new DispatcherTimer();
-            int timeoutSeconds = Math.Min(configurationProvider.Configuration.TimeoutSeconds, 30);
+            int timeoutSeconds = Math.Min(http.Configuration.TimeoutSeconds, 30);
             timer.Interval = TimeSpan.FromSeconds(5 * timeoutSeconds);
             timer.Tick += delegate(object sender, object e)
             {
@@ -66,11 +46,15 @@ namespace Multinotes
             Individual individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
             if (individual == null)
             {
-                individual = await _community.AddFactAsync(new Individual(Guid.NewGuid().ToString()));
+                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
+                individual = await _community.AddFactAsync(new Individual(randomId));
                 await _community.SetFactAsync(ThisIndividual, individual);
             }
-            _individual.Value = individual;
-            configurationProvider.Individual = individual;
+            lock (this)
+            {
+                _individual.Value = individual;
+            }
+            http.Individual = individual;
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -89,7 +73,6 @@ namespace Multinotes
             Synchronize();
         }
 
-
         public Community Community
         {
             get { return _community; }
@@ -97,36 +80,19 @@ namespace Multinotes
 
         public Individual Individual
         {
-            get { return _individual; }
+            get
+            {
+                lock (this)
+                {
+                    return _individual;
+                }
+            }
         }
 
         public void Synchronize()
         {
             _community.BeginSending();
             _community.BeginReceiving();
-        }
-
-        public bool Synchronizing
-        {
-            get { return _community.Synchronizing; }
-        }
-
-        public Exception LastException
-        {
-            get { return _community.LastException; }
-        }
-
-        private async Task LogExceptionAsync(Exception x)
-        {
-            var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(
-                "debug.log", CreationCollisionOption.OpenIfExists);
-            using (var writer = new StreamWriter(await file.OpenStreamForWriteAsync()))
-            {
-                await Task.Run(delegate
-                {
-                    writer.WriteLine(x.ToString());
-                });
-            }
         }
     }
 }

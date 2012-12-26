@@ -12,3 +12,6 @@ nuget pack Desktop\AllInOne\Correspondence.Desktop.AllInOne.nuspec
 nuget pack Web\UnitTest\Correspondence.Web.UnitTest.nuspec
 nuget pack Web\App\Correspondence.Web.App.nuspec
 nuget pack Web\AllInOne\Correspondence.Web.AllInOne.nuspec
+nuget pack WinRT\UnitTest\Correspondence.WinRT.UnitTest.nuspec
+nuget pack WinRT\App\Correspondence.WinRT.App.nuspec
+nuget pack WinRT\AllInOne\Correspondence.WinRT.AllInOne.nuspec
