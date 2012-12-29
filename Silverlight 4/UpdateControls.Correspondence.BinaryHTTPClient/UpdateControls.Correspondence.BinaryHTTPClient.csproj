@@ -98,6 +98,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.BinaryHTTPClient\IHTTPConfigurationProvider.cs">
       <Link>IHTTPConfigurationProvider.cs</Link>
     </Compile>
+    <Compile Include="..\..\SolutionItems\AppVersionInfo.cs">
+      <Link>Properties\AppVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>

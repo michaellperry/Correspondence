@@ -284,6 +284,9 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\SolutionItems\CoreVersionInfo.cs">
+      <Link>Properties\CoreVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="..\..\WP7\UpdateControls.Correspondence %28WP7%29\Community.Platform.cs">
       <Link>Community.Platform.cs</Link>
     </Compile>

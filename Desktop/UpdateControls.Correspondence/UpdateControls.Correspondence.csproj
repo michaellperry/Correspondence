@@ -81,6 +81,9 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\SolutionItems\CoreVersionInfo.cs">
+      <Link>Properties\CoreVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Conditions\ConditionEvaluator.cs" />
     <Compile Include="Disputable.cs" />
     <Compile Include="FieldSerializer\BinaryHelper.cs" />

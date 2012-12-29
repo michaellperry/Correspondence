@@ -105,6 +105,12 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SolutionItems\CoreVersionInfo.cs">
+      <Link>Properties\CoreVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="AwaitableCriticalSection.cs" />
     <Compile Include="Community.cs" />
     <Compile Include="Community.Platform.cs" />

@@ -94,6 +94,9 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
       <Link>QueryExecutor.cs</Link>
     </Compile>
+    <Compile Include="..\..\SolutionItems\UnitTestVersionInfo.cs">
+      <Link>Properties\UnitTestVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

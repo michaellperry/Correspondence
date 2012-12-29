@@ -299,6 +299,9 @@
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\..\SolutionItems\CoreVersionInfo.cs">
+      <Link>Properties\CoreVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="Community.Platform.cs" />
     <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

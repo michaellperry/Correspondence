@@ -3,10 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4BED3008-81C4-44AE-841E-C971D41D72B3}"
 	ProjectSection(SolutionItems) = preProject
+		SolutionItems\AppVersionInfo.cs = SolutionItems\AppVersionInfo.cs
 		SolutionItems\CommonAssemblyInfo.cs = SolutionItems\CommonAssemblyInfo.cs
+		SolutionItems\CoreVersionInfo.cs = SolutionItems\CoreVersionInfo.cs
 		Correspondence.vsmdi = Correspondence.vsmdi
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
 		SolutionItems\Mallardsoft.snk = SolutionItems\Mallardsoft.snk
+		SolutionItems\UnitTestVersionInfo.cs = SolutionItems\UnitTestVersionInfo.cs
 		UpdateControls.Correspondence.Rebuild\UpdateControls.Correspondence.Rebuild.csproj = UpdateControls.Correspondence.Rebuild\UpdateControls.Correspondence.Rebuild.csproj
 	EndProjectSection
 EndProject
@@ -78,47 +81,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CB489F9B-C
 		NuGet\Core\Correspondence.nuspec = NuGet\Core\Correspondence.nuspec
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\WindowsPhone\App\content\App.xaml.transform = NuGet\WindowsPhone\App\content\App.xaml.transform
-		NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec = NuGet\WindowsPhone\App\Correspondence.WindowsPhone.App.nuspec
-		NuGet\WindowsPhone\App\content\HTTPConfigurationProvider.cs.pp = NuGet\WindowsPhone\App\content\HTTPConfigurationProvider.cs.pp
-		NuGet\WindowsPhone\App\content\MainPage.xaml.transform = NuGet\WindowsPhone\App\content\MainPage.xaml.transform
-		NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp = NuGet\WindowsPhone\App\content\SynchronizationService.cs.pp
-		NuGet\WindowsPhone\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\WindowsPhone\App\content\ViewModels\ViewModelLocator.cs.pp
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{182C379A-33E6-43DC-BF14-249146C73CDF}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\WindowsPhone\AllInOne\Correspondence.WindowsPhone.AllInOne.nuspec = NuGet\WindowsPhone\AllInOne\Correspondence.WindowsPhone.AllInOne.nuspec
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage", "Silverlight 4\UpdateControls.Correspondence.IsolatedStorage\UpdateControls.Correspondence.IsolatedStorage.csproj", "{7CE0E52C-7D5E-44A6-9CAF-30097CC30248}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "Silverlight 4\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{9E39AC23-7979-4B94-8D1E-A6938B2FED7A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.POXClient", "Silverlight 4\UpdateControls.Correspondence.POXClient\UpdateControls.Correspondence.POXClient.csproj", "{20A2A6EB-9030-4D34-BD91-0829D7180DCA}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{96475E40-26FC-4419-AD3E-2289D4013AD4}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows Phone", "Windows Phone", "{80C00D5E-131E-4742-B1A4-4F361C1F5B33}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{5E544625-E5E4-4C47-A2DD-8A6E42C074A8}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Silverlight\AllInOne\Correspondence.Silverlight.AllInOne.nuspec = NuGet\Silverlight\AllInOne\Correspondence.Silverlight.AllInOne.nuspec
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1F9D8122-A895-4BB2-968B-AE50B06367CC}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Silverlight\App\content\App.xaml.transform = NuGet\Silverlight\App\content\App.xaml.transform
-		NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec = NuGet\Silverlight\App\Correspondence.Silverlight.App.nuspec
-		NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Silverlight\App\content\HTTPConfigurationProvider.cs.pp
-		NuGet\Silverlight\App\content\MainPage.xaml.transform = NuGet\Silverlight\App\content\MainPage.xaml.transform
-		NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Silverlight\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\Silverlight\App\content\SynchronizationService.cs.pp = NuGet\Silverlight\App\content\SynchronizationService.cs.pp
-		NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "Desktop\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{B81104D2-6388-404A-87B9-16C5FC167431}"
 EndProject
@@ -135,24 +102,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "WP7\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{9544480E-B425-459C-9CA7-6F8B57F1A97F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SQL", "Desktop\UpdateControls.Correspondence.SQL\UpdateControls.Correspondence.SQL.csproj", "{F9D9A782-F06E-48B7-B869-BC8D7913C256}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{9154FF18-27A1-4F10-B394-D65662DD1336}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{A9F7A16D-593D-4172-ADE0-1FB5265D77A1}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Desktop\AllInOne\Correspondence.Desktop.AllInOne.nuspec = NuGet\Desktop\AllInOne\Correspondence.Desktop.AllInOne.nuspec
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{981FB2D8-7E43-483E-A2FA-21C2B47272B3}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Desktop\App\content\App.xaml.transform = NuGet\Desktop\App\content\App.xaml.transform
-		NuGet\Desktop\App\Correspondence.Desktop.App.nuspec = NuGet\Desktop\App\Correspondence.Desktop.App.nuspec
-		NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp = NuGet\Desktop\App\content\HTTPConfigurationProvider.cs.pp
-		NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp = NuGet\Desktop\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\Desktop\App\content\MainWindow.xaml.transform = NuGet\Desktop\App\content\MainWindow.xaml.transform
-		NuGet\Desktop\App\content\SynchronizationService.cs.pp = NuGet\Desktop\App\content\SynchronizationService.cs.pp
-		NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{40B1960C-7433-4F35-9C51-B025CD3982D0}"
 EndProject
@@ -211,24 +160,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{798F22
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WinRT", "WinRT", "{9448E6AC-01ED-48E3-8CD1-ABCEA2058353}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{92B26FB5-FEAF-4436-A383-5BE5A0482262}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\WinRT\AllInOne\Correspondence.WinRT.AllInOne.nuspec = NuGet\WinRT\AllInOne\Correspondence.WinRT.AllInOne.nuspec
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{FAB7FEA8-D7A8-4217-95E7-BFB292579B13}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\WinRT\App\content\App.xaml.transform = NuGet\WinRT\App\content\App.xaml.transform
-		NuGet\WinRT\App\Correspondence.WinRT.App.nuspec = NuGet\WinRT\App\Correspondence.WinRT.App.nuspec
-		NuGet\WinRT\App\content\HTTPConfigurationProvider.cs.pp = NuGet\WinRT\App\content\HTTPConfigurationProvider.cs.pp
-		NuGet\WinRT\App\content\MainPage.xaml.transform = NuGet\WinRT\App\content\MainPage.xaml.transform
-		NuGet\WinRT\App\content\ViewModels\MainViewModel.cs.pp = NuGet\WinRT\App\content\ViewModels\MainViewModel.cs.pp
-		NuGet\WinRT\App\content\SynchronizationService.cs.pp = NuGet\WinRT\App\content\SynchronizationService.cs.pp
-		NuGet\WinRT\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\WinRT\App\content\ViewModels\ViewModelLocator.cs.pp
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows8", "windows8", "{32AFADF4-DB27-46FA-90DF-40A8E94700E6}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Model\content\windows8\Model.fact.pp = NuGet\Model\content\windows8\Model.fact.pp
@@ -268,6 +199,76 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windowsphone8", "windowsphone8", "{5ECC90D0-E0E7-499E-86A7-C3CA3E1BAB17}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\UnitTest\content\windowsphone8\ModelTest.cs.pp = NuGet\UnitTest\content\windowsphone8\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{65A28EF6-3CEE-440C-B8F5-B508F8511F3F}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\Correspondence.App.nuspec = NuGet\App\Correspondence.App.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net40", "net40", "{98704F33-AAB1-44D4-BAFE-46173D9EB6F4}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\net40\App.xaml.transform = NuGet\App\content\net40\App.xaml.transform
+		NuGet\App\content\net40\HTTPConfigurationProvider.cs.pp = NuGet\App\content\net40\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\net40\ViewModels\MainViewModel.cs.pp = NuGet\App\content\net40\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\net40\MainWindow.xaml.transform = NuGet\App\content\net40\MainWindow.xaml.transform
+		NuGet\App\content\net40\SynchronizationService.cs.pp = NuGet\App\content\net40\SynchronizationService.cs.pp
+		NuGet\App\content\net40\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\net40\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl", "sl", "{27D8BE53-C47B-4B55-A12A-85E20FAF733A}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\sl\App.xaml.transform = NuGet\App\content\sl\App.xaml.transform
+		NuGet\App\content\sl\HTTPConfigurationProvider.cs.pp = NuGet\App\content\sl\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\sl\MainPage.xaml.transform = NuGet\App\content\sl\MainPage.xaml.transform
+		NuGet\App\content\sl\ViewModels\MainViewModel.cs.pp = NuGet\App\content\sl\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\sl\SynchronizationService.cs.pp = NuGet\App\content\sl\SynchronizationService.cs.pp
+		NuGet\App\content\sl\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\sl\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl3-wp", "sl3-wp", "{43DE74BB-09C2-402B-B104-F54CABD09C32}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\sl3-wp\App.xaml.transform = NuGet\App\content\sl3-wp\App.xaml.transform
+		NuGet\App\content\sl3-wp\HTTPConfigurationProvider.cs.pp = NuGet\App\content\sl3-wp\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\sl3-wp\MainPage.xaml.transform = NuGet\App\content\sl3-wp\MainPage.xaml.transform
+		NuGet\App\content\sl3-wp\ViewModels\MainViewModel.cs.pp = NuGet\App\content\sl3-wp\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\sl3-wp\SynchronizationService.cs.pp = NuGet\App\content\sl3-wp\SynchronizationService.cs.pp
+		NuGet\App\content\sl3-wp\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\sl3-wp\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl4-windowsphone71", "sl4-windowsphone71", "{6627DFCA-769C-469C-A80B-DE07AE0AF21D}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\sl4-windowsphone71\App.xaml.transform = NuGet\App\content\sl4-windowsphone71\App.xaml.transform
+		NuGet\App\content\sl4-windowsphone71\HTTPConfigurationProvider.cs.pp = NuGet\App\content\sl4-windowsphone71\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\sl4-windowsphone71\MainPage.xaml.transform = NuGet\App\content\sl4-windowsphone71\MainPage.xaml.transform
+		NuGet\App\content\sl4-windowsphone71\ViewModels\MainViewModel.cs.pp = NuGet\App\content\sl4-windowsphone71\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\sl4-windowsphone71\SynchronizationService.cs.pp = NuGet\App\content\sl4-windowsphone71\SynchronizationService.cs.pp
+		NuGet\App\content\sl4-windowsphone71\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\sl4-windowsphone71\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows8", "windows8", "{182457CA-774F-4C3D-93FC-2E8AFD983F24}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\windows8\App.xaml.transform = NuGet\App\content\windows8\App.xaml.transform
+		NuGet\App\content\windows8\HTTPConfigurationProvider.cs.pp = NuGet\App\content\windows8\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\windows8\MainPage.xaml.transform = NuGet\App\content\windows8\MainPage.xaml.transform
+		NuGet\App\content\windows8\ViewModels\MainViewModel.cs.pp = NuGet\App\content\windows8\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\windows8\SynchronizationService.cs.pp = NuGet\App\content\windows8\SynchronizationService.cs.pp
+		NuGet\App\content\windows8\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\windows8\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windowsphone8", "windowsphone8", "{38E0ADF9-76AF-425B-A473-531A2FB08D92}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\windowsphone8\App.xaml.transform = NuGet\App\content\windowsphone8\App.xaml.transform
+		NuGet\App\content\windowsphone8\HTTPConfigurationProvider.cs.pp = NuGet\App\content\windowsphone8\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\windowsphone8\MainPage.xaml.transform = NuGet\App\content\windowsphone8\MainPage.xaml.transform
+		NuGet\App\content\windowsphone8\ViewModels\MainViewModel.cs.pp = NuGet\App\content\windowsphone8\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\windowsphone8\SynchronizationService.cs.pp = NuGet\App\content\windowsphone8\SynchronizationService.cs.pp
+		NuGet\App\content\windowsphone8\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\windowsphone8\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{B3A11108-0B43-4467-AD4B-EB318147E6DD}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\AllInOne\Correspondence.AllInOne.nuspec = NuGet\AllInOne\Correspondence.AllInOne.nuspec
 	EndProjectSection
 EndProject
 Global
@@ -688,19 +689,11 @@ Global
 		{9544480E-B425-459C-9CA7-6F8B57F1A97F} = {B146C09F-B4E0-4740-AB5F-10FCA3AC4537}
 		{4F26812A-656F-46C5-AC58-EC984A4DDB42} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{CB489F9B-C65C-4443-B7F8-DA30818C1BAF} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
-		{80C00D5E-131E-4742-B1A4-4F361C1F5B33} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
-		{96475E40-26FC-4419-AD3E-2289D4013AD4} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
-		{9154FF18-27A1-4F10-B394-D65662DD1336} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{40B1960C-7433-4F35-9C51-B025CD3982D0} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
-		{9448E6AC-01ED-48E3-8CD1-ABCEA2058353} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{65A28EF6-3CEE-440C-B8F5-B508F8511F3F} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{B3A11108-0B43-4467-AD4B-EB318147E6DD} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{32AFADF4-DB27-46FA-90DF-40A8E94700E6} = {4F26812A-656F-46C5-AC58-EC984A4DDB42}
-		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
-		{182C379A-33E6-43DC-BF14-249146C73CDF} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
-		{5E544625-E5E4-4C47-A2DD-8A6E42C074A8} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
-		{1F9D8122-A895-4BB2-968B-AE50B06367CC} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
-		{A9F7A16D-593D-4172-ADE0-1FB5265D77A1} = {9154FF18-27A1-4F10-B394-D65662DD1336}
-		{981FB2D8-7E43-483E-A2FA-21C2B47272B3} = {9154FF18-27A1-4F10-B394-D65662DD1336}
 		{D08B1222-EE35-45D5-B57D-1DDCFDF14AA9} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
 		{49D99AE5-2149-4091-97DE-505BBCF8554C} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
 		{95494E4C-1505-41A3-89B5-36C55040CCC0} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
@@ -718,13 +711,17 @@ Global
 		{8DF95246-CAB4-4BF8-A8DB-FD168706798B} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{15D08BBA-292B-48F4-8517-2D5053317ADF} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
-		{92B26FB5-FEAF-4436-A383-5BE5A0482262} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
-		{FAB7FEA8-D7A8-4217-95E7-BFB292579B13} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
 		{FCD2BC60-8D3C-40C1-B82A-F3F263CCC91D} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
 		{75223BAB-1686-4874-85B2-1DF01C87CAA0} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
 		{C14094C6-F7AC-4D30-B56C-40FC35B3E9F4} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
 		{585C0BF9-B73F-4FAE-A0A6-9D43B83F2A16} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
 		{92BD3454-89B5-4D63-8BB3-4646B99344C1} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
 		{5ECC90D0-E0E7-499E-86A7-C3CA3E1BAB17} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
+		{98704F33-AAB1-44D4-BAFE-46173D9EB6F4} = {65A28EF6-3CEE-440C-B8F5-B508F8511F3F}
+		{27D8BE53-C47B-4B55-A12A-85E20FAF733A} = {65A28EF6-3CEE-440C-B8F5-B508F8511F3F}
+		{43DE74BB-09C2-402B-B104-F54CABD09C32} = {65A28EF6-3CEE-440C-B8F5-B508F8511F3F}
+		{6627DFCA-769C-469C-A80B-DE07AE0AF21D} = {65A28EF6-3CEE-440C-B8F5-B508F8511F3F}
+		{182457CA-774F-4C3D-93FC-2E8AFD983F24} = {65A28EF6-3CEE-440C-B8F5-B508F8511F3F}
+		{38E0ADF9-76AF-425B-A473-531A2FB08D92} = {65A28EF6-3CEE-440C-B8F5-B508F8511F3F}
 	EndGlobalSection
 EndGlobal
