@@ -78,12 +78,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{CB489F9B-C
 		NuGet\Core\Correspondence.nuspec = NuGet\Core\Correspondence.nuspec
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\WindowsPhone\UnitTest\Correspondence.WindowsPhone.UnitTest.nuspec = NuGet\WindowsPhone\UnitTest\Correspondence.WindowsPhone.UnitTest.nuspec
-		NuGet\WindowsPhone\UnitTest\content\ModelTest.cs.pp = NuGet\WindowsPhone\UnitTest\content\ModelTest.cs.pp
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\WindowsPhone\App\content\App.xaml.transform = NuGet\WindowsPhone\App\content\App.xaml.transform
@@ -126,12 +120,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{1F9D8122-A89
 		NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Silverlight\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{A1C3E34F-E21D-4CF1-95C9-23A098354BE1}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Silverlight\UnitTest\Correspondence.Silverlight.UnitTest.nuspec = NuGet\Silverlight\UnitTest\Correspondence.Silverlight.UnitTest.nuspec
-		NuGet\Silverlight\UnitTest\content\ModelTest.cs.pp = NuGet\Silverlight\UnitTest\content\ModelTest.cs.pp
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "Desktop\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{B81104D2-6388-404A-87B9-16C5FC167431}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "Silverlight 4\UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{CCA59C2E-9A36-42BB-AFDD-A5B764060496}"
@@ -166,12 +154,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{981FB2D8-7E4
 		NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\Desktop\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{AF631367-0A08-4024-984E-C4C8E53393C0}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Desktop\UnitTest\Correspondence.Desktop.UnitTest.nuspec = NuGet\Desktop\UnitTest\Correspondence.Desktop.UnitTest.nuspec
-		NuGet\Desktop\UnitTest\content\ModelTest.cs.pp = NuGet\Desktop\UnitTest\content\ModelTest.cs.pp
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{40B1960C-7433-4F35-9C51-B025CD3982D0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllInOne", "AllInOne", "{D08B1222-EE35-45D5-B57D-1DDCFDF14AA9}"
@@ -186,12 +168,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{49D99AE5-214
 		NuGet\Web\App\content\Readme_Correspondence.txt.pp = NuGet\Web\App\content\Readme_Correspondence.txt.pp
 		NuGet\Web\App\content\SynchronizationService.cs.pp = NuGet\Web\App\content\SynchronizationService.cs.pp
 		NuGet\Web\App\content\web.config.transform = NuGet\Web\App\content\web.config.transform
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{61740D33-5BCB-4988-A25B-31FE4255C796}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\Web\UnitTest\Correspondence.Web.UnitTest.nuspec = NuGet\Web\UnitTest\Correspondence.Web.UnitTest.nuspec
-		NuGet\Web\UnitTest\content\ModelTest.cs.pp = NuGet\Web\UnitTest\content\ModelTest.cs.pp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WP71", "WP71", "{45723F93-7415-4268-9E2A-1CCC17CC3E41}"
@@ -253,16 +229,45 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{FAB7FEA8-D7A
 		NuGet\WinRT\App\content\ViewModels\ViewModelLocator.cs.pp = NuGet\WinRT\App\content\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{2B02357F-41A2-4D21-B915-6904DDD77E87}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\WinRT\UnitTest\Correspondence.WinRT.UnitTest.nuspec = NuGet\WinRT\UnitTest\Correspondence.WinRT.UnitTest.nuspec
-		NuGet\WinRT\UnitTest\content\ModelTest.cs.pp = NuGet\WinRT\UnitTest\content\ModelTest.cs.pp
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows8", "windows8", "{32AFADF4-DB27-46FA-90DF-40A8E94700E6}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\Model\content\windows8\Model.fact.pp = NuGet\Model\content\windows8\Model.fact.pp
 		NuGet\Model\content\windows8\Model.tt = NuGet\Model\content\windows8\Model.tt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\Correspondence.UnitTest.nuspec = NuGet\UnitTest\Correspondence.UnitTest.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net40", "net40", "{FCD2BC60-8D3C-40C1-B82A-F3F263CCC91D}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\net40\ModelTest.cs.pp = NuGet\UnitTest\content\net40\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl", "sl", "{75223BAB-1686-4874-85B2-1DF01C87CAA0}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\sl\ModelTest.cs.pp = NuGet\UnitTest\content\sl\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl3-wp", "sl3-wp", "{C14094C6-F7AC-4D30-B56C-40FC35B3E9F4}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\sl3-wp\ModelTest.cs.pp = NuGet\UnitTest\content\sl3-wp\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl4-windowsphone71", "sl4-windowsphone71", "{585C0BF9-B73F-4FAE-A0A6-9D43B83F2A16}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\sl4-windowsphone71\ModelTest.cs.pp = NuGet\UnitTest\content\sl4-windowsphone71\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows8", "windows8", "{92BD3454-89B5-4D63-8BB3-4646B99344C1}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\windows8\ModelTest.cs.pp = NuGet\UnitTest\content\windows8\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windowsphone8", "windowsphone8", "{5ECC90D0-E0E7-499E-86A7-C3CA3E1BAB17}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\windowsphone8\ModelTest.cs.pp = NuGet\UnitTest\content\windowsphone8\ModelTest.cs.pp
 	EndProjectSection
 EndProject
 Global
@@ -688,19 +693,16 @@ Global
 		{9154FF18-27A1-4F10-B394-D65662DD1336} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{40B1960C-7433-4F35-9C51-B025CD3982D0} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{9448E6AC-01ED-48E3-8CD1-ABCEA2058353} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{32AFADF4-DB27-46FA-90DF-40A8E94700E6} = {4F26812A-656F-46C5-AC58-EC984A4DDB42}
 		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{182C379A-33E6-43DC-BF14-249146C73CDF} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
-		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{5E544625-E5E4-4C47-A2DD-8A6E42C074A8} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
 		{1F9D8122-A895-4BB2-968B-AE50B06367CC} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
-		{A1C3E34F-E21D-4CF1-95C9-23A098354BE1} = {96475E40-26FC-4419-AD3E-2289D4013AD4}
 		{A9F7A16D-593D-4172-ADE0-1FB5265D77A1} = {9154FF18-27A1-4F10-B394-D65662DD1336}
 		{981FB2D8-7E43-483E-A2FA-21C2B47272B3} = {9154FF18-27A1-4F10-B394-D65662DD1336}
-		{AF631367-0A08-4024-984E-C4C8E53393C0} = {9154FF18-27A1-4F10-B394-D65662DD1336}
 		{D08B1222-EE35-45D5-B57D-1DDCFDF14AA9} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
 		{49D99AE5-2149-4091-97DE-505BBCF8554C} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
-		{61740D33-5BCB-4988-A25B-31FE4255C796} = {40B1960C-7433-4F35-9C51-B025CD3982D0}
 		{95494E4C-1505-41A3-89B5-36C55040CCC0} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
 		{69C8132D-AC3F-4BD6-9A1E-012F7E6D6844} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
 		{1B2D81DD-FE1E-4B43-89E9-9B5B1A080366} = {45723F93-7415-4268-9E2A-1CCC17CC3E41}
@@ -718,6 +720,11 @@ Global
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7} = {7AC8C2F4-60EE-407E-8CAD-9CB3AD409375}
 		{92B26FB5-FEAF-4436-A383-5BE5A0482262} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
 		{FAB7FEA8-D7A8-4217-95E7-BFB292579B13} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
-		{2B02357F-41A2-4D21-B915-6904DDD77E87} = {9448E6AC-01ED-48E3-8CD1-ABCEA2058353}
+		{FCD2BC60-8D3C-40C1-B82A-F3F263CCC91D} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
+		{75223BAB-1686-4874-85B2-1DF01C87CAA0} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
+		{C14094C6-F7AC-4D30-B56C-40FC35B3E9F4} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
+		{585C0BF9-B73F-4FAE-A0A6-9D43B83F2A16} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
+		{92BD3454-89B5-4D63-8BB3-4646B99344C1} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
+		{5ECC90D0-E0E7-499E-86A7-C3CA3E1BAB17} = {14C8E936-AA3D-4AE1-A641-5EDFFBA7CB1C}
 	EndGlobalSection
 EndGlobal
