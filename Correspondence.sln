@@ -259,6 +259,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{2B
 		NuGet\WinRT\UnitTest\content\ModelTest.cs.pp = NuGet\WinRT\UnitTest\content\ModelTest.cs.pp
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "windows8", "windows8", "{32AFADF4-DB27-46FA-90DF-40A8E94700E6}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Model\content\windows8\Model.fact.pp = NuGet\Model\content\windows8\Model.fact.pp
+		NuGet\Model\content\windows8\Model.tt = NuGet\Model\content\windows8\Model.tt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 48
@@ -682,6 +688,7 @@ Global
 		{9154FF18-27A1-4F10-B394-D65662DD1336} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{40B1960C-7433-4F35-9C51-B025CD3982D0} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
 		{9448E6AC-01ED-48E3-8CD1-ABCEA2058353} = {849EB099-EC1C-497A-8F77-849A0A8FB3AF}
+		{32AFADF4-DB27-46FA-90DF-40A8E94700E6} = {4F26812A-656F-46C5-AC58-EC984A4DDB42}
 		{767F1B9D-2E69-4AD0-8729-D6C2ED5F9F60} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{182C379A-33E6-43DC-BF14-249146C73CDF} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
 		{8FEBD8C8-B516-40BB-92BF-6156DFA3F3E7} = {80C00D5E-131E-4742-B1A4-4F361C1F5B33}
