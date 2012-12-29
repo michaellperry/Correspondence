@@ -67,6 +67,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
     <Reference Include="System.Xml" />
+    <Reference Include="UpdateControls">
+      <HintPath>..\..\packages\updatecontrols.2.2.2.1\lib\sl4-windowsphone71\UpdateControls.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence.UnitTest\CaptureTest.cs">
