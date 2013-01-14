@@ -120,6 +120,18 @@ namespace Multinotes.ViewModels
             }
         }
 
+        public ICommand Refresh
+        {
+            get
+            {
+                return MakeCommand
+                    .Do(delegate
+                    {
+                        _synchronizationService.Synchronize();
+                    });
+            }
+        }
+
         public event Func<MessageBoard, bool> ConfirmLeaveBoard;
     }
 }

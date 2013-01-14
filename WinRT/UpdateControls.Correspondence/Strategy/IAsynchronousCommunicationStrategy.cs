@@ -17,5 +17,6 @@ namespace UpdateControls.Correspondence.Strategy
 
         event Action<FactTreeMemento> MessageReceived;
 		Task<IPushSubscription> SubscribeForPushAsync(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid);
+        Exception LastException { get; }
     }
 }

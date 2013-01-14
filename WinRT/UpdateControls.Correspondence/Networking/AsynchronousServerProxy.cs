@@ -37,7 +37,8 @@ namespace UpdateControls.Correspondence.Networking
 
         private Independent<SendState> _sendState = new Independent<SendState>();
         private Independent<ReceiveState> _receiveState = new Independent<ReceiveState>();
-        private Independent<Exception> _lastException = new Independent<Exception>();
+        private Independent<Exception> _lastSendException = new Independent<Exception>();
+        private Independent<Exception> _lastReceiveException = new Independent<Exception>();
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
 		private Dependent _depPushSubscriptions;
@@ -90,7 +91,7 @@ namespace UpdateControls.Correspondence.Networking
                 Exception lastException;
                 lock (this)
                 {
-                    lastException = _lastException;
+                    lastException = _lastSendException.Value ?? _lastReceiveException.Value;
                 }
                 if (lastException == null)
                     lastException = _communicationStrategy.LastException;
@@ -117,6 +118,11 @@ namespace UpdateControls.Correspondence.Networking
         {
             try
             {
+                lock (this)
+                {
+                    _lastSendException.Value = null;
+                }
+
                 TimestampID timestamp = await _storageStrategy.LoadOutgoingTimestampAsync(_peerId);
                 MessagesToSend messagesToSend;
                 while ((messagesToSend = await GetMessagesToSendAsync(timestamp)) != null)
@@ -195,6 +201,11 @@ namespace UpdateControls.Correspondence.Networking
         {
             try
             {
+                lock (this)
+                {
+                    _lastReceiveException.Value = null;
+                }
+
                 GetManyResultMemento messagesToReceive;
                 while ((messagesToReceive = await GetMessagesToReceiveAsync()) != null)
                 {
@@ -331,7 +342,7 @@ namespace UpdateControls.Correspondence.Networking
             lock (this)
             {
                 _sendState.Value = SendState.Idle;
-                _lastException.Value = exception;
+                _lastSendException.Value = exception;
             }
         }
 
@@ -340,7 +351,7 @@ namespace UpdateControls.Correspondence.Networking
             lock (this)
             {
                 _receiveState.Value = ReceiveState.Idle;
-                _lastException.Value = exception;
+                _lastReceiveException.Value = exception;
             }
         }
 
@@ -384,11 +395,18 @@ namespace UpdateControls.Correspondence.Networking
                 tokenSource.Cancel();
                 return t.Result;
             });
-            GetManyResultMemento[] results = await Task.WhenAll(
-                switchToPollingTask,
-                getManyAndThenCancel);
-            GetManyResultMemento result = results[0] ?? results[1];
-            return result;
+            try
+            {
+                GetManyResultMemento[] results = await Task.WhenAll(
+                    switchToPollingTask,
+                    getManyAndThenCancel);
+                GetManyResultMemento result = results[0] ?? results[1];
+                return result;
+            }
+            catch (AggregateException x)
+            {
+                throw x.InnerExceptions.First();
+            }
         }
 
         private void SetReceiveStatePolling()

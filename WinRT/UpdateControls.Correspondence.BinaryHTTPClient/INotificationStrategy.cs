@@ -8,5 +8,6 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
     {
         event Action<FactTreeMemento> MessageReceived;
         IPushSubscription SubscribeForPush(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid);
+        Exception LastException { get; }
     }
 }

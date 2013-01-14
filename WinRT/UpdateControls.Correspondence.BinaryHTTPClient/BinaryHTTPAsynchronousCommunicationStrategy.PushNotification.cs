@@ -40,6 +40,11 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
                 return Task.FromResult((IPushSubscription)new NoOpPushSubscription());
         }
 
+        public Exception LastException
+        {
+            get { return _notificationStrategy.LastException; }
+        }
+
         private void OnMessageReceived(FactTreeMemento factTree)
         {
             if (MessageReceived != null)

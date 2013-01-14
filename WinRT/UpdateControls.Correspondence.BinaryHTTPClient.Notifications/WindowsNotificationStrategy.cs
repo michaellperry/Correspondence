@@ -7,6 +7,7 @@ using UpdateControls.Correspondence.Strategy;
 using System.IO;
 using UpdateControls.Correspondence.FieldSerializer;
 using Windows.Networking.PushNotifications;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
 {
@@ -16,6 +17,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
 
         private Dictionary<FactID, WindowsPushSubscription> _subscriptionByFactId =
             new Dictionary<FactID, WindowsPushSubscription>();
+        private Independent<Exception> _lastException = new Independent<Exception>();
 
         private object _monitor = new object();
         private bool _requestPending = false;
@@ -51,15 +53,26 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
                 _requestPending = true;
             }
 
-            var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-            channel.PushNotificationReceived += PushNotificationReceived;
-            var uri = channel.Uri;
-            lock (_monitor)
+            try
             {
-                _requestPending = false;
-                foreach (var subscription in _subscriptionByFactId.Values)
+                var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                channel.PushNotificationReceived += PushNotificationReceived;
+                var uri = channel.Uri;
+                lock (_monitor)
                 {
-                    subscription.UpdateSubscription(uri);
+                    _requestPending = false;
+                    foreach (var subscription in _subscriptionByFactId.Values)
+                    {
+                        subscription.UpdateSubscription(uri);
+                    }
+                }
+            }
+            catch (Exception x)
+            {
+                lock (_monitor)
+                {
+                    _requestPending = false;
+                    _lastException.Value = x;
                 }
             }
         }
@@ -82,5 +95,16 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
         }
 
         public event Action<FactTreeMemento> MessageReceived;
+
+        public Exception LastException
+        {
+            get
+            {
+                lock (_monitor)
+                {
+                    return _lastException;
+                }
+            }
+        }
     }
 }

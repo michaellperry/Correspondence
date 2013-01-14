@@ -454,6 +454,9 @@
                     <Button Style="{StaticResource DeleteProjectAppBarButtonStyle}" Command="{Binding LeaveBoard}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button
+                        Style="{StaticResource RefreshAppBarButtonStyle}"
+                        Command="{Binding Refresh}" />
                 </StackPanel>
             </Grid>
         </AppBar>
