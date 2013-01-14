@@ -27,11 +27,13 @@ namespace Multinotes.ViewModels
             get
             {
                 return MakeCommand
-                    .When(() => !string.IsNullOrWhiteSpace(_selection.Topic))
                     .Do(delegate
                     {
-                        var share = _individual.JoinMessageBoardAsync(_selection.Topic);
-                        _selection.Topic = null;
+                        if (!string.IsNullOrWhiteSpace(_selection.Topic))
+                        {
+                            var share = _individual.JoinMessageBoardAsync(_selection.Topic);
+                            _selection.Topic = null;
+                        }
                     });
             }
         }

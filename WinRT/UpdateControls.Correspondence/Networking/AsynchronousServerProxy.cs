@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
@@ -86,10 +87,14 @@ namespace UpdateControls.Correspondence.Networking
         {
             get
             {
+                Exception lastException;
                 lock (this)
                 {
-                    return _lastException;
+                    lastException = _lastException;
                 }
+                if (lastException == null)
+                    lastException = _communicationStrategy.LastException;
+                return lastException;
             }
         }
 
@@ -191,8 +196,13 @@ namespace UpdateControls.Correspondence.Networking
             try
             {
                 GetManyResultMemento messagesToReceive;
-                while ((messagesToReceive = await GetMessagesToReceive()) != null)
+                while ((messagesToReceive = await GetMessagesToReceiveAsync()) != null)
                 {
+                    lock (this)
+                    {
+                        if (_receiveState.Value == ReceiveState.Polling)
+                            _receiveState.Value = ReceiveState.Receiving;
+                    }
                     _model.ReceiveMessage(messagesToReceive.MessageBody, _peerId);
                     foreach (PivotMemento pivot in messagesToReceive.NewTimestamps)
                     {
@@ -206,7 +216,7 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        private async Task<GetManyResultMemento> GetMessagesToReceive()
+        private async Task<GetManyResultMemento> GetMessagesToReceiveAsync()
         {
             while (true)
             {
@@ -239,11 +249,11 @@ namespace UpdateControls.Correspondence.Networking
                     }
 
                     // Get the messages from the server.
-                    GetManyResultMemento result = await _communicationStrategy.GetManyAsync(
+                    Task<GetManyResultMemento> getManyTask = _communicationStrategy.GetManyAsync(
                         pivotTree,
                         pivots,
                         await _model.GetClientDatabaseGuidAsync());
-
+                    GetManyResultMemento result = await ChangeStateAfterDelay(getManyTask);
                     bool receivedFacts = result.MessageBody.Facts.Any();
                     if (receivedFacts)
                         return result;
@@ -350,5 +360,44 @@ namespace UpdateControls.Correspondence.Networking
 
             BeginReceiving();
         }
-	}
+
+        private async Task<GetManyResultMemento> ChangeStateAfterDelay(Task<GetManyResultMemento> getManyTask)
+        {
+            // If there is no need to switch to the polling state,
+            // just execute the task.
+            if (!_communicationStrategy.IsLongPolling ||
+                _receiveState.Value != ReceiveState.Receiving)
+                return await getManyTask;
+
+            // After a couple seconds, switch to the polling state.
+            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            Task<GetManyResultMemento> switchToPollingTask = Task.Delay(2000)
+                .ContinueWith<GetManyResultMemento>(t =>
+                {
+                    if ((!tokenSource.IsCancellationRequested))
+                        SetReceiveStatePolling();
+                    return null;
+                });
+
+            Task<GetManyResultMemento> getManyAndThenCancel = getManyTask.ContinueWith(t =>
+            {
+                tokenSource.Cancel();
+                return t.Result;
+            });
+            GetManyResultMemento[] results = await Task.WhenAll(
+                switchToPollingTask,
+                getManyAndThenCancel);
+            GetManyResultMemento result = results[0] ?? results[1];
+            return result;
+        }
+
+        private void SetReceiveStatePolling()
+        {
+            lock (this)
+            {
+                if (_receiveState.Value == ReceiveState.Receiving)
+                    _receiveState.Value = ReceiveState.Polling;
+            }
+        }
+    }
 }

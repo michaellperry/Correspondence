@@ -50,13 +50,14 @@ namespace Multinotes.ViewModels
             get
             {
                 return MakeCommand
-                    .When(() =>
-                        _selection.SelectedShare != null &&
-                        !String.IsNullOrEmpty(_selection.Text))
                     .Do(delegate
                     {
-                        _selection.SelectedShare.MessageBoard.SendMessageAsync(_selection.Text);
-                        _selection.Text = null;
+                        if (_selection.SelectedShare != null &&
+                            !String.IsNullOrEmpty(_selection.Text))
+                        {
+                            _selection.SelectedShare.MessageBoard.SendMessageAsync(_selection.Text);
+                            _selection.Text = null;
+                        }
                     });
             }
         }

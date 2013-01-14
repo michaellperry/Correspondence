@@ -91,12 +91,14 @@ namespace Multinotes.ViewModels
             get
             {
                 return MakeCommand
-                    .When(() => !String.IsNullOrEmpty(_selection.Topic))
                     .Do(async delegate
                     {
-                        Share share = await _individual.JoinMessageBoardAsync(_selection.Topic);
-                        _selection.SelectedShare = share;
-                        _selection.Topic = null;
+                        if (!String.IsNullOrEmpty(_selection.Topic))
+                        {
+                            Share share = await _individual.JoinMessageBoardAsync(_selection.Topic);
+                            _selection.SelectedShare = share;
+                            _selection.Topic = null;
+                        }
                     });
             }
         }

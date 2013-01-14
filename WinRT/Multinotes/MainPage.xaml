@@ -403,17 +403,46 @@
             </Grid.RowDefinitions>
 			<TextBox Grid.Row="0" Margin="12" FontSize="26" Text="{Binding Topic, Mode=TwoWay}" Height="47" />
             <Button Grid.Row="1" Style="{StaticResource AddProjectAppBarButtonStyle}" Command="{Binding JoinGroup}" Margin="8,8,0,8"/>
+            <ProgressRing
+                Grid.Row="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Width="60"
+                Height="60"
+                Margin="0,0,12,0"
+                Foreground="White"
+                IsActive="{Binding Synchronizing}" />
             <ListBox ItemsSource="{Binding MessageBoards}" SelectedItem="{Binding SelectedMessageBoard, Mode=TwoWay}" ItemTemplate="{StaticResource ProjectHeaderTemplate}" BorderThickness="0" Background="{StaticResource DocumentBackgroundBrush}" Style="{StaticResource ProjectListBoxStyle}" Foreground="#FFEAEAEA" ItemContainerStyle="{StaticResource ProjectListBoxItemStyle}" Grid.Row="2"/>
         </Grid>
-        <Grid x:Name="MessagesGrid" DataContext="{Binding SelectedMessageBoard}" Background="{StaticResource ProjectBackgroundBrush}" Grid.Column="1">
+        <Grid x:Name="MessagesGrid" Background="{StaticResource ProjectBackgroundBrush}" Grid.Column="1">
         	<Grid.RowDefinitions>
         		<RowDefinition Height="Auto"/>
         		<RowDefinition Height="Auto"/>
         		<RowDefinition Height="637*"/>
         	</Grid.RowDefinitions>
-            <TextBox FontSize="26" Margin="12" Text="{Binding Text, Mode=TwoWay}" Height="47" />
-            <Button Grid.Row="1" Style="{StaticResource AddTaskAppBarButtonStyle}" Foreground="Black" Margin="8" Command="{Binding SendMessage, Mode=OneWay}"/>
-        	<ListBox Grid.Column="0" ItemsSource="{Binding Messages}" SelectedItem="{Binding SelectedMessage, Mode=TwoWay}" ItemTemplate="{StaticResource ActionHeaderTemplate}" BorderThickness="0" Background="{StaticResource ProjectBackgroundBrush}" Style="{StaticResource ActionListBoxStyle}" Foreground="{StaticResource ProjectForegroundBrush}" ItemContainerStyle="{StaticResource ActionListBoxItemStyle}" Grid.Row="2"/>
+            <TextBox
+                FontSize="26"
+                Margin="12"
+                Text="{Binding SelectedMessageBoard.Text, Mode=TwoWay}" Height="47" />
+            <Button
+                Grid.Row="1"
+                Style="{StaticResource AddTaskAppBarButtonStyle}"
+                Foreground="Black"
+                Margin="8"
+                Command="{Binding SelectedMessageBoard.SendMessage, Mode=OneWay}"/>
+            <TextBlock
+                Text="{Binding LastException}"
+                Grid.Row="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Width="580"
+                FontSize="28"
+                TextWrapping="Wrap"
+                Margin="0,0,12,0" />
+            <ListBox
+                Grid.Column="0"
+                ItemsSource="{Binding SelectedMessageBoard.Messages}"
+                SelectedItem="{Binding SelectedMessageBoard.SelectedMessage, Mode=TwoWay}" ItemTemplate="{StaticResource ActionHeaderTemplate}" BorderThickness="0" Background="{StaticResource ProjectBackgroundBrush}" Style="{StaticResource ActionListBoxStyle}" Foreground="{StaticResource ProjectForegroundBrush}" ItemContainerStyle="{StaticResource ActionListBoxItemStyle}" Grid.Row="2"/>
         </Grid>
         <FlipView x:Name="SnappedFlipView" HorizontalAlignment="Left" Opacity="0" VerticalAlignment="Top" Visibility="Collapsed" Grid.ColumnSpan="2" ItemsSource="{Binding MessageBoards}" SelectedItem="{Binding SelectedMessageBoard, Mode=TwoWay}" ItemTemplate="{StaticResource SnappedFlipViewItem}" Background="{StaticResource DocumentBackgroundBrush}">
         </FlipView>
