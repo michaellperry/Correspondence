@@ -1,102 +1,55 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.Storage.Streams;
-using BufferAlias = Windows.Storage.Streams.Buffer;
 
 namespace UpdateControls.Correspondence.Data
 {
     public abstract class StreamBasedDataStructure : IDisposable
     {
-        private IRandomAccessStream _randomAccessStream;
+        private byte[] _readBuffer = new byte[8];
+        protected Stream _stream;
 
-        public StreamBasedDataStructure(IRandomAccessStream randomAccessStream)
+        protected StreamBasedDataStructure(Stream stream)
         {
-            _randomAccessStream = randomAccessStream;
+            _stream = stream;
         }
 
         public void Dispose()
         {
-            _randomAccessStream.Dispose();
+            _stream.Dispose();
         }
 
-        protected bool Empty()
+        protected byte ReadByte()
         {
-            return _randomAccessStream.Size == 0;
+            return (byte)_stream.ReadByte();
         }
 
-        protected void SeekTo(long position)
+        protected void WriteByte(byte value)
         {
-            _randomAccessStream.Seek((ulong)position);
+            _stream.WriteByte(value);
         }
 
-        protected long SeekToEnd()
+        protected int ReadInt()
         {
-            ulong end = _randomAccessStream.Size;
-            _randomAccessStream.Seek(end);
-            return (long)end;
+            _stream.Read(_readBuffer, 0, 4);
+            return BitConverter.ToInt32(_readBuffer, 0);
         }
 
-        protected async Task<byte> ReadByte()
+        protected void WriteInt(int value)
         {
-            BufferAlias buffer = new BufferAlias(1); 
-            await _randomAccessStream.ReadAsync(buffer, 1, InputStreamOptions.Partial);
-            return buffer.GetByte(0);
+            byte[] writeBuffer = BitConverter.GetBytes(value);
+            _stream.Write(writeBuffer, 0, 4);
         }
 
-        protected async Task WriteByte(byte value)
+        protected long ReadLong()
         {
-            var buffer = new byte[] { value }.AsBuffer();
-            await _randomAccessStream.WriteAsync(buffer);
+            _stream.Read(_readBuffer, 0, 8);
+            return BitConverter.ToInt64(_readBuffer, 0);
         }
 
-        protected async Task<int> ReadInt()
+        protected void WriteLong(long value)
         {
-            BufferAlias buffer = new BufferAlias(4);
-            await _randomAccessStream.ReadAsync(buffer, 4, InputStreamOptions.Partial);
-            var array = buffer.ToArray();
-            return BitConverter.ToInt32(array, 0);
-        }
-
-        protected async Task WriteInt(int value)
-        {
-            byte[] array = BitConverter.GetBytes(value);
-            var buffer = array.AsBuffer();
-            await _randomAccessStream.WriteAsync(buffer);
-        }
-
-        protected async Task<long> ReadLong()
-        {
-            BufferAlias buffer = new BufferAlias(8);
-            await _randomAccessStream.ReadAsync(buffer, 8, InputStreamOptions.Partial);
-            var array = buffer.ToArray();
-            return BitConverter.ToInt64(array, 0);
-        }
-
-        protected async Task WriteLong(long value)
-        {
-            byte[] array = BitConverter.GetBytes(value);
-            var buffer = array.AsBuffer();
-            await _randomAccessStream.WriteAsync(buffer);
-        }
-
-        protected async Task ReadBytes(byte[] data)
-        {
-            BufferAlias buffer = new BufferAlias((uint)data.Length);
-            await _randomAccessStream.ReadAsync(buffer, (uint)data.Length, InputStreamOptions.Partial);
-            buffer.CopyTo(data);
-        }
-
-        protected async Task WriteBytes(byte[] data)
-        {
-            var buffer = data.AsBuffer();
-            await _randomAccessStream.WriteAsync(buffer);
-        }
-
-        protected async Task Flush()
-        {
-            await _randomAccessStream.FlushAsync();
+            byte[] writeBuffer = BitConverter.GetBytes(value);
+            _stream.Write(writeBuffer, 0, 8);
         }
     }
 }

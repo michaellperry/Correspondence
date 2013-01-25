@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using Windows.Storage.Streams;
 
 namespace UpdateControls.Correspondence.Data
 {
@@ -31,35 +29,35 @@ namespace UpdateControls.Correspondence.Data
             public bool LeftChild;
         }
 
-        public RedBlackTree(IRandomAccessStream randomAccessStream) :
-            base(randomAccessStream)
+        public RedBlackTree(Stream stream) :
+            base(stream)
         {
+            _stream = stream;
         }
 
-        public async Task<List<long>> FindFacts(int hashCode)
+        public IEnumerable<long> FindFacts(int hashCode)
         {
-            List<long> factIds = new List<long>();
-            if (!Empty())
+            if (_stream.Length > 0)
             {
-                SeekTo(0);
-                long current = await ReadLong();
+                _stream.Seek(0, SeekOrigin.Begin);
+                long current = ReadLong();
                 Node node;
 
                 // Search for the beginning of the hash code.
                 do
                 {
-                    node = await ReadNode(current);
+                    node = ReadNode(current);
                     if (hashCode == node.HashCode)
                     {
                         // Walk through all nodes with this hash code.
-                        factIds.Add(node.FactId);
+                        yield return node.FactId;
                         current = node.Right;
                         while (current != 0)
                         {
-                            node = await ReadNode(current);
+                            node = ReadNode(current);
                             if (hashCode == node.HashCode)
                             {
-                                factIds.Add(node.FactId);
+                                yield return node.FactId;
                                 current = node.Right;
                             }
                             else
@@ -77,32 +75,31 @@ namespace UpdateControls.Correspondence.Data
                 }
                 while (current != 0);
             }
-            return factIds;
         }
 
-        public async Task AddFact(int hashCode, long factId)
+		public void AddFact(int hashCode, long factId)
 		{
-            if (Empty())
+			if (_stream.Length == 0)
 			{
-                await WriteLong(sizeof(long));
-                await WriteNode(NodeColor.Black, hashCode, factId);
+				WriteLong(sizeof(long));
+				WriteNode(NodeColor.Black, hashCode, factId);
 			}
 			else
 			{
 				// Find the inseration point.
-				SeekTo(0);
+				_stream.Seek(0, SeekOrigin.Begin);
 
 				Stack<NodeReference> stack = new Stack<NodeReference>();
 				Node node;
 				long parent = 0;
-                long child = await ReadLong();
+				long child = ReadLong();
 				long sibling = 0;
 				bool leftChild = true;
 
 				do
 				{
 					parent = child;
-                    node = await ReadNode(parent);
+					node = ReadNode(parent);
 					stack.Push(new NodeReference
 					{
 						Position = parent,
@@ -126,14 +123,14 @@ namespace UpdateControls.Correspondence.Data
 				while (child != 0);
 
 				// Insert a new node.
-                long position = await WriteNode(NodeColor.Red, hashCode, factId);
+				long position = WriteNode(NodeColor.Red, hashCode, factId);
 				int offset;
 				if (leftChild)
 					offset = sizeof(byte) + sizeof(int);
 				else
 					offset = sizeof(byte) + sizeof(int) + sizeof(long);
-				SeekTo(parent + offset);
-                await WriteLong(position);
+				_stream.Seek(parent + offset, SeekOrigin.Begin);
+				WriteLong(position);
 
 				long left = 0;
 				long right = 0;
@@ -147,18 +144,18 @@ namespace UpdateControls.Correspondence.Data
 					if (parentReference.Color == NodeColor.Black)
 						break;
 
-                    Node uncleNode = await ReadNode(parentReference.Sibling);
+					Node uncleNode = ReadNode(parentReference.Sibling);
 					if (uncleNode.Color == NodeColor.Red)
 					{
 						// Both the parent and uncle are red, so change both to black and the grandparent to red.
-						SeekTo(parentReference.Position);
-                        await WriteByte((byte)NodeColor.Black);
-						SeekTo(parentReference.Sibling);
-                        await WriteByte((byte)NodeColor.Black);
+						_stream.Seek(parentReference.Position, SeekOrigin.Begin);
+						WriteByte((byte)NodeColor.Black);
+						_stream.Seek(parentReference.Sibling, SeekOrigin.Begin);
+						WriteByte((byte)NodeColor.Black);
 						if (stack.Count != 0)
 						{
-							SeekTo(grandparentReference.Position);
-                            await WriteByte((byte)NodeColor.Red);
+							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Red);
 						}
 					}
 					else
@@ -167,71 +164,72 @@ namespace UpdateControls.Correspondence.Data
 						long newRoot;
 						if (!leftChild && parentReference.LeftChild)
 						{
-							SeekTo(position);
-                            await WriteByte((byte)NodeColor.Black);
-							SeekTo(position + sizeof(byte) + sizeof(int));
-                            await WriteLong(parentReference.Position);
-                            await WriteLong(grandparentReference.Position);
-							SeekTo(parentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long));
-                            await WriteLong(left);
-							SeekTo(grandparentReference.Position);
-                            await WriteByte((byte)NodeColor.Red);
-							SeekTo(grandparentReference.Position + sizeof(byte) + sizeof(int));
-                            await WriteLong(right);
+							_stream.Seek(position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Black);
+							_stream.Seek(position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
+							WriteLong(parentReference.Position);
+							WriteLong(grandparentReference.Position);
+							_stream.Seek(parentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long), SeekOrigin.Begin);
+							WriteLong(left);
+							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Red);
+							_stream.Seek(grandparentReference.Position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
+							WriteLong(right);
 							newRoot = position;
 						}
 						else if (leftChild && !parentReference.LeftChild)
 						{
-							SeekTo(position);
-                            await WriteByte((byte)NodeColor.Black);
-							SeekTo(position + sizeof(byte) + sizeof(int));
-                            await WriteLong(grandparentReference.Position);
-                            await WriteLong(parentReference.Position);
-							SeekTo(parentReference.Position + sizeof(byte) + sizeof(int));
-                            await WriteLong(right);
-							SeekTo(grandparentReference.Position);
-                            await WriteByte((byte)NodeColor.Red);
-							SeekTo(grandparentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long));
-                            await WriteLong(left);
+							_stream.Seek(position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Black);
+							_stream.Seek(position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
+							WriteLong(grandparentReference.Position);
+							WriteLong(parentReference.Position);
+							_stream.Seek(parentReference.Position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
+							WriteLong(right);
+							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Red);
+							_stream.Seek(grandparentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long), SeekOrigin.Begin);
+							WriteLong(left);
 							newRoot = position;
 						}
 						else if (!leftChild && !parentReference.LeftChild)
 						{
-							SeekTo(parentReference.Position);
-                            await WriteByte((byte)NodeColor.Black);
-							SeekTo(parentReference.Position + sizeof(byte) + sizeof(int));
-                            await WriteLong(grandparentReference.Position);
-							SeekTo(grandparentReference.Position);
-                            await WriteByte((byte)NodeColor.Red);
-							SeekTo(grandparentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long));
-                            await WriteLong(sibling);
+							_stream.Seek(parentReference.Position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Black);
+							_stream.Seek(parentReference.Position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
+							WriteLong(grandparentReference.Position);
+							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Red);
+							_stream.Seek(grandparentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long), SeekOrigin.Begin);
+							WriteLong(sibling);
 							newRoot = parentReference.Position;
 						}
 						else //if (leftChild && parentReference.LeftChild)
 						{
-							SeekTo(parentReference.Position);
-                            await WriteByte((byte)NodeColor.Black);
-							SeekTo(parentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long));
-                            await WriteLong(grandparentReference.Position);
-							SeekTo(grandparentReference.Position);
-                            await WriteByte((byte)NodeColor.Red);
-							SeekTo(grandparentReference.Position + sizeof(byte) + sizeof(int));
-                            await WriteLong(sibling);
+							_stream.Seek(parentReference.Position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Black);
+							_stream.Seek(parentReference.Position + sizeof(byte) + sizeof(int) + sizeof(long), SeekOrigin.Begin);
+							WriteLong(grandparentReference.Position);
+							_stream.Seek(grandparentReference.Position, SeekOrigin.Begin);
+							WriteByte((byte)NodeColor.Red);
+							_stream.Seek(grandparentReference.Position + sizeof(byte) + sizeof(int), SeekOrigin.Begin);
+							WriteLong(sibling);
 							newRoot = parentReference.Position;
 						}
 
 						// Parent becomes the root.
 						if (stack.Count == 0)
-							SeekTo(0);
+							_stream.Seek(0, SeekOrigin.Begin);
 						else
 						{
 							NodeReference greatGrandParentReference = stack.Peek();
-							SeekTo(
+							_stream.Seek(
 								greatGrandParentReference.Position +
 								sizeof(byte) + sizeof(int) +
-								(grandparentReference.LeftChild ? 0 : sizeof(long)));
+								(grandparentReference.LeftChild ? 0 : sizeof(long)),
+								SeekOrigin.Begin);
 						}
-                        await WriteLong(newRoot);
+						WriteLong(newRoot);
 						break;
 					}
 					if (parentReference.LeftChild)
@@ -251,56 +249,58 @@ namespace UpdateControls.Correspondence.Data
 			}
 		}
 
-        //public async Task CheckInvariant(int expectedCount)
-        //{
-        //    if (!Empty())
-        //    {
-        //        SeekTo(0);
-        //        long root = await ReadLong();
-        //        Node node = await ReadNode(root);
-        //        if (node.Color != NodeColor.Black)
-        //            throw new InvariantException("Invariant violated: The root node is black.");
-        //        int count = 1;
-        //        await CheckInvariantNode(node.Color, node.Left, ref count, node.HashCode, true);
-        //        await CheckInvariantNode(node.Color, node.Right, ref count, node.HashCode, false);
-        //        if (expectedCount != count)
-        //            throw new InvariantException(String.Format("Expected count {0}. Actual {1}.", expectedCount, count));
-        //    }
-        //    else if (expectedCount != 0)
-        //        throw new InvariantException(String.Format("Expected count {0}. Actual 0.", expectedCount));
-        //}
-
-        //private async Task<int> CheckInvariantNode(NodeColor parentColor, long position, ref int count, int parentHashCode, bool leftChild)
-        //{
-        //    if (position == 0)
-        //        return 0;
-
-        //    ++count;
-        //    Node node = await ReadNode(position);
-        //    if (parentColor == NodeColor.Red && node.Color != NodeColor.Black)
-        //        throw new InvariantException("Invariant violated: both children of every red node are black.");
-
-        //    if (leftChild && node.HashCode >= parentHashCode)
-        //        throw new InvariantException("Invariant violated: left hash code is less than parent hash code.");
-        //    if (!leftChild && node.HashCode < parentHashCode)
-        //        throw new InvariantException("Invariant violated: right hash code is greater than or equal to parent hash code.");
-
-        //    int leftCount = await CheckInvariantNode(node.Color, node.Left, ref count, node.HashCode, true);
-        //    int rightCount = await CheckInvariantNode(node.Color, node.Right, ref count, node.HashCode, false);
-
-        //    if (leftCount != rightCount)
-        //        throw new InvariantException("Invariant violated: Every simple path from a given node to any of its descendant leaves contains the same number of black nodes.");
-        //    return leftCount + (node.Color == NodeColor.Black ? 1 : 0);
-        //}
-
-        private async Task<Node> ReadNode(long position)
+        public void CheckInvariant(int expectedCount)
         {
-            SeekTo(position);
-            byte color = await ReadByte();
-            int hashCode = await ReadInt();
-            long left = await ReadLong();
-            long right = await ReadLong();
-            long factId = await ReadLong();
+			if (_stream.Length > 0)
+			{
+				_stream.Seek(0, SeekOrigin.Begin);
+				long root = ReadLong();
+				Node node = ReadNode(root);
+				if (node.Color != NodeColor.Black)
+					throw new InvariantException("Invariant violated: The root node is black.");
+
+				int count = 1;
+				CheckInvariantNode(node.Color, node.Left, ref count, node.HashCode, true);
+				CheckInvariantNode(node.Color, node.Right, ref count, node.HashCode, false);
+
+				if (expectedCount != count)
+					throw new InvariantException(String.Format("Expected count {0}. Actual {1}.", expectedCount, count));
+			}
+			else if (expectedCount != 0)
+				throw new InvariantException(String.Format("Expected count {0}. Actual 0.", expectedCount));
+        }
+
+        private int CheckInvariantNode(NodeColor parentColor, long position, ref int count, int parentHashCode, bool leftChild)
+        {
+            if (position == 0)
+				return 0;
+
+			++count;
+            Node node = ReadNode(position);
+            if (parentColor == NodeColor.Red && node.Color != NodeColor.Black)
+                throw new InvariantException("Invariant violated: both children of every red node are black.");
+
+			if (leftChild && node.HashCode >= parentHashCode)
+				throw new InvariantException("Invariant violated: left hash code is less than parent hash code.");
+			if (!leftChild && node.HashCode < parentHashCode)
+				throw new InvariantException("Invariant violated: right hash code is greater than or equal to parent hash code.");
+
+            int leftCount = CheckInvariantNode(node.Color, node.Left, ref count, node.HashCode, true);
+			int rightCount = CheckInvariantNode(node.Color, node.Right, ref count, node.HashCode, false);
+
+            if (leftCount != rightCount)
+                throw new InvariantException("Invariant violated: Every simple path from a given node to any of its descendant leaves contains the same number of black nodes.");
+            return leftCount + (node.Color == NodeColor.Black ? 1 : 0);
+        }
+
+        private Node ReadNode(long position)
+        {
+            _stream.Seek(position, SeekOrigin.Begin);
+            byte color = ReadByte();
+            int hashCode = ReadInt();
+            long left = ReadLong();
+            long right = ReadLong();
+            long factId = ReadLong();
 
             return new Node
             {
@@ -312,15 +312,15 @@ namespace UpdateControls.Correspondence.Data
             };
         }
 
-        private async Task<long> WriteNode(NodeColor nodeColor, int hashCode, long factId)
+        private long WriteNode(NodeColor nodeColor, int hashCode, long factId)
         {
-            long position = SeekToEnd();
-            await WriteByte((byte)nodeColor);
-            await WriteInt(hashCode);
-            await WriteLong(0);
-            await WriteLong(0);
-            await WriteLong(factId);
+            long position = _stream.Seek(0, SeekOrigin.End);
+            WriteByte((byte)nodeColor);
+            WriteInt(hashCode);
+            WriteLong(0);
+            WriteLong(0);
+            WriteLong(factId);
             return position;
         }
-    }
+	}
 }

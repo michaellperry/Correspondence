@@ -78,8 +78,8 @@ namespace UpdateControls.Correspondence.FileStream
         {
             using (var index = await OpenIndexAsync())
             {
-                List<long> candidateFactIds = await
-                    index.FindFacts(memento.GetHashCode());
+                List<long> candidateFactIds = await Task.Run(() =>
+                    index.FindFacts(memento.GetHashCode()).ToList());
 
                 // See if the fact already exists.
                 foreach (long candidate in candidateFactIds)
@@ -108,8 +108,12 @@ namespace UpdateControls.Correspondence.FileStream
                 FactID newFactID;
                 using (var factTree = await OpenFactTreeAsync())
                 {
-                    long newFactIDKey = await factTree.Save(historicalTreeFact);
-                    await index.AddFact(memento.GetHashCode(), newFactIDKey);
+                    long newFactIDKey = await Task.Run(delegate()
+                    {
+                        long id = factTree.Save(historicalTreeFact);
+                        index.AddFact(memento.GetHashCode(), id);
+                        return id;
+                    });
                     newFactID = new FactID() { key = newFactIDKey };
                 }
 
@@ -345,8 +349,8 @@ namespace UpdateControls.Correspondence.FileStream
             var tableFile = await correspondenceFolder
                 .CreateFileAsync("FactTree.bin", CreationCollisionOption.OpenIfExists);
 
-            var randomAccessStream = await tableFile.OpenAsync(FileAccessMode.ReadWrite);
-            return new HistoricalTree(randomAccessStream);
+            Stream stream = await tableFile.OpenStreamForWriteAsync();
+            return new HistoricalTree(stream);
         }
 
         private async Task<RedBlackTree> OpenIndexAsync()
@@ -356,8 +360,8 @@ namespace UpdateControls.Correspondence.FileStream
             var tableFile = await correspondenceFolder
                 .CreateFileAsync("Index.bin", CreationCollisionOption.OpenIfExists);
 
-            var randomAccessStream = await tableFile.OpenAsync(FileAccessMode.ReadWrite);
-            return new RedBlackTree(randomAccessStream);
+            Stream indexStream = await tableFile.OpenStreamForWriteAsync();
+            return new RedBlackTree(indexStream);
         }
 
         private async Task<FactMemento> LoadFactFromTreeAsync(HistoricalTree factTree, long key)
