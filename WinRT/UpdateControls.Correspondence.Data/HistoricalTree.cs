@@ -2,124 +2,126 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Windows.Storage.Streams;
 
 namespace UpdateControls.Correspondence.Data
 {
     public class HistoricalTree : StreamBasedDataStructure
     {
-        public HistoricalTree(Stream stream) :
-            base(stream)
+        public HistoricalTree(IRandomAccessStream randomAccessStream) :
+            base(randomAccessStream)
         {
         }
 
-        public long Save(HistoricalTreeFact fact)
+        public async Task<long> SaveAsync(HistoricalTreeFact fact)
         {
             // Read the head pointers of the predecessors.
             long[] nextPointers = new long[fact.Predecessors.Count()];
             int i = 0;
             foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
             {
-                _stream.Seek(predecessor.PredecessorFactId, SeekOrigin.Begin);
-                long head = ReadLong();
+                SeekTo(predecessor.PredecessorFactId);
+                long head = await ReadLongAsync();
                 nextPointers[i] = head;
                 ++i;
             }
 
             // Write the file header.
-            long position = _stream.Seek(0, SeekOrigin.End);
+            long position = SeekToEnd();
             if (position == 0)
             {
-                _stream.Write(new byte[] { 85, 79, 80, 65 }, 0, 4);
-                _stream.Flush();
+                await WriteBytesAsync(new byte[] { 85, 79, 80, 65 });
+                await FlushAsync();
                 position = 4;
             }
 
             // Write the new fact.
-            WriteLong(0L);
-            WriteInt(fact.Predecessors.Count());
+            await WriteLongAsync(0L);
+            await WriteIntAsync(fact.Predecessors.Count());
             i = 0;
             foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
             {
-                WriteInt(predecessor.RoleId);
-                WriteLong(predecessor.PredecessorFactId);
-                WriteLong(nextPointers[i]);
+                await WriteIntAsync(predecessor.RoleId);
+                await WriteLongAsync(predecessor.PredecessorFactId);
+                await WriteLongAsync(nextPointers[i]);
                 ++i;
             }
-            WriteInt(fact.FactTypeId);
-            WriteInt(fact.Data == null ? 0 : fact.Data.Length);
-            if (fact.Data != null)
-                _stream.Write(fact.Data, 0, fact.Data.Length);
-            _stream.Flush();
+            await WriteIntAsync(fact.FactTypeId);
+            await WriteIntAsync(fact.Data == null ? 0 : fact.Data.Length);
+            if (fact.Data != null && fact.Data.Length > 0)
+                await WriteBytesAsync(fact.Data);
+            await FlushAsync();
 
             foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
             {
-                _stream.Seek(predecessor.PredecessorFactId, SeekOrigin.Begin);
-                WriteLong(position);
-                _stream.Flush();
+                SeekTo(predecessor.PredecessorFactId);
+                await WriteLongAsync(position);
+                await FlushAsync();
             }
 
             return position;
         }
 
-        public HistoricalTreeFact Load(long factId)
+        public async Task<HistoricalTreeFact> LoadAsync(long factId)
         {
             // Skip the head pointer.
-            _stream.Seek(factId + 8, SeekOrigin.Begin);
+            SeekTo(factId + 8);
 
             // Load the predecessors.
-            int predecessorCount = ReadInt();
+            int predecessorCount = await ReadIntAsync();
             List<HistoricalTreePredecessor> predecessors = new List<HistoricalTreePredecessor>();
             for (int i = 0; i < predecessorCount; i++)
             {
-                int roleId = ReadInt();
-                long predecessorFactId = ReadLong();
-                long next = ReadLong();
+                int roleId = await ReadIntAsync();
+                long predecessorFactId = await ReadLongAsync();
+                long next = await ReadLongAsync();
                 predecessors.Add(new HistoricalTreePredecessor(roleId, predecessorFactId));
             }
 
             // Load the fact type and data.
-            int factTypeId = ReadInt();
-            int dataLength = ReadInt();
+            int factTypeId = await ReadIntAsync();
+            int dataLength = await ReadIntAsync();
             byte[] data = new byte[dataLength];
-            _stream.Read(data, 0, dataLength);
-
+            await ReadBytesAsync(data);
             return new HistoricalTreeFact(factTypeId, data)
                 .SetPredecessors(predecessors);
         }
 
-        public List<long> GetPredecessorsInRole(long factId, int roleId)
+        public async Task<List<long>> GetPredecessorsInRoleAsync(long factId, int roleId)
         {
-            _stream.Seek(factId + 8, SeekOrigin.Begin);
+            SeekTo(factId + 8);
 
-            int predecessorCount = ReadInt();
+            int predecessorCount = await ReadIntAsync();
             List<long> predecessors = new List<long>();
             for (int i = 0; i < predecessorCount; i++)
             {
-                int predecessorRoleId = ReadInt();
-                long predecessorFactId = ReadLong();
-                long next = ReadLong();
+                int predecessorRoleId = await ReadIntAsync();
+                long predecessorFactId = await ReadLongAsync();
+                long next = await ReadLongAsync();
                 if (predecessorRoleId == roleId)
                     predecessors.Add(predecessorFactId);
             }
             return predecessors;
         }
 
-        public IEnumerable<long> GetSuccessorsInRole(long factId, int roleId)
+        public async Task<List<long>> GetSuccessorsInRoleAsync(long factId, int roleId)
         {
-            _stream.Seek(factId, SeekOrigin.Begin);
+            List<long> successorFactIds = new List<long>();
+            SeekTo(factId);
 
-            long successorFactId = ReadLong();
+            long successorFactId = await ReadLongAsync();
             while (successorFactId != 0)
             {
-                _stream.Seek(successorFactId + sizeof(Int64), SeekOrigin.Begin);
-                int predecessorCount = ReadInt();
+                SeekTo(successorFactId + sizeof(Int64));
+                int predecessorCount = await ReadIntAsync();
                 int numberOfMatches = 0;
                 long nextFactId = 0;
                 for (int i = 0; i < predecessorCount; i++)
                 {
-                    int predecessorRoldId = ReadInt();
-                    long predecessorFactId = ReadLong();
-                    long next = ReadLong();
+                    int predecessorRoldId = await ReadIntAsync();
+                    long predecessorFactId = await ReadLongAsync();
+                    long next = await ReadLongAsync();
                     if (predecessorFactId == factId)
                     {
                         if (predecessorRoldId == roleId)
@@ -128,13 +130,14 @@ namespace UpdateControls.Correspondence.Data
                     }
                 }
                 for (int i = 0; i < numberOfMatches; i++)
-                    yield return successorFactId;
+                    successorFactIds.Add(successorFactId);
 
                 // After I yield, I don't know where the stream pointer
                 // is anymore, since the coroutine could reenter. But
                 // that's OK, since the next thing I do is seek.
                 successorFactId = nextFactId;
             }
+            return successorFactIds;
         }
     }
 }

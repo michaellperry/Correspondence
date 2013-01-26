@@ -32,19 +32,23 @@ namespace UpdateControls.Correspondence.FileStream
                 int roleId = await _getRoleId(join.Role);
                 if (join.Successor)
                 {
-                    match = await Task.Run(() =>
-                        match.SelectMany(predecessor =>
-                            _factTree.GetSuccessorsInRole(predecessor, roleId))
-                        .ToList()
-                    );
+                    List<long> successors = new List<long>();
+                    foreach (var predecessor in match)
+                    {
+                        successors.AddRange(await
+                            _factTree.GetSuccessorsInRoleAsync(predecessor, roleId));
+                    }
+                    match = successors;
                 }
                 else
                 {
-                    match = await Task.Run(() =>
-                        match.SelectMany(successor =>
-                            _factTree.GetPredecessorsInRole(successor, roleId))
-                        .ToList()
-                    );
+                    List<long> predecessors = new List<long>();
+                    foreach (var successor in match)
+                    {
+                        predecessors.AddRange(await
+                            _factTree.GetPredecessorsInRoleAsync(successor, roleId));
+                    }
+                    match = predecessors;
                 }
 
                 // Include the condition, if specified.
