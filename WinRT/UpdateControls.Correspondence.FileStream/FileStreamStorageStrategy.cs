@@ -30,6 +30,10 @@ namespace UpdateControls.Correspondence.FileStream
         private Table<RoleRecord> _roleTable = new Table<RoleRecord>(
             "RoleTable.bin", RoleRecord.Read, RoleRecord.Write);
 
+        private StorageFolder _correspondenceFolder;
+        private StorageFile _indexBin;
+        private StorageFile _factTreeBin;
+
         public async Task<Guid> GetClientGuidAsync()
         {
             await _clientGuidTable.LoadAsync();
@@ -344,10 +348,7 @@ namespace UpdateControls.Correspondence.FileStream
 
         private async Task<HistoricalTree> OpenFactTreeAsync()
         {
-            var correspondenceFolder = await ApplicationData.Current.LocalFolder
-                .CreateFolderAsync("Correspondence", CreationCollisionOption.OpenIfExists);
-            var tableFile = await correspondenceFolder
-                .CreateFileAsync("FactTree.bin", CreationCollisionOption.OpenIfExists);
+            var tableFile = await GetFactTreeBinAsync();
 
             Stream stream = await tableFile.OpenStreamForWriteAsync();
             return new HistoricalTree(stream);
@@ -355,11 +356,7 @@ namespace UpdateControls.Correspondence.FileStream
 
         private async Task<RedBlackTree> OpenIndexAsync()
         {
-            var correspondenceFolder = await ApplicationData.Current.LocalFolder
-                .CreateFolderAsync("Correspondence", CreationCollisionOption.OpenIfExists);
-            var tableFile = await correspondenceFolder
-                .CreateFileAsync("Index.bin", CreationCollisionOption.OpenIfExists);
-
+            StorageFile tableFile = await GetIndexBinAsync();
             Stream indexStream = await tableFile.OpenStreamForWriteAsync();
             return new RedBlackTree(indexStream);
         }
@@ -401,6 +398,38 @@ namespace UpdateControls.Correspondence.FileStream
                     SourcePeerId = peerId
                 });
             }
+        }
+
+        private async Task<StorageFile> GetIndexBinAsync()
+        {
+            if (_indexBin == null)
+                _indexBin = await GetFileAsync("Index.bin");
+            return _indexBin;
+        }
+
+        private async Task<StorageFile> GetFactTreeBinAsync()
+        {
+            if (_factTreeBin == null)
+                _factTreeBin = await GetFileAsync("FactTree.bin");
+            return _factTreeBin;
+        }
+
+        private async Task<StorageFolder> GetCorrespondenceFolderAsync()
+        {
+            if (_correspondenceFolder == null)
+            {
+                _correspondenceFolder = await ApplicationData.Current.LocalFolder
+                    .CreateFolderAsync("Correspondence", CreationCollisionOption.OpenIfExists);
+            }
+            return _correspondenceFolder;
+        }
+
+        private async Task<StorageFile> GetFileAsync(string fileName)
+        {
+            StorageFolder correspondenceFolder = await GetCorrespondenceFolderAsync();
+            var tableFile = await correspondenceFolder
+                .CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
+            return tableFile;
         }
     }
 }

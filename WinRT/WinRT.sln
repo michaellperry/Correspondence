@@ -26,9 +26,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.Notification", "UpdateControls.Correspondence.BinaryHTTPClient.Notifications\UpdateControls.Correspondence.BinaryHTTPClient.Notification.csproj", "{5FA51928-965B-42A8-9107-9EF2F08239ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.PerformanceTest", "UpdateControls.Correspondence.PerformanceTest\UpdateControls.Correspondence.PerformanceTest.csproj", "{DE434555-BC42-4E26-B301-FF8F9A494230}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Performance", "UpdateControls.Correspondence.Performance\UpdateControls.Correspondence.Performance.csproj", "{01837523-D92E-4C6D-AD89-DFA807793744}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs10
 		SccLocalPath0 = .
@@ -59,6 +63,12 @@ Global
 		SccProjectUniqueName9 = UpdateControls.Correspondence.BinaryHTTPClient.Notifications\\UpdateControls.Correspondence.BinaryHTTPClient.Notification.csproj
 		SccProjectName9 = UpdateControls.Correspondence.BinaryHTTPClient.Notifications
 		SccLocalPath9 = UpdateControls.Correspondence.BinaryHTTPClient.Notifications
+		SccProjectUniqueName10 = UpdateControls.Correspondence.PerformanceTest\\UpdateControls.Correspondence.PerformanceTest.csproj
+		SccProjectName10 = UpdateControls.Correspondence.PerformanceTest
+		SccLocalPath10 = UpdateControls.Correspondence.PerformanceTest
+		SccProjectUniqueName11 = UpdateControls.Correspondence.Performance\\UpdateControls.Correspondence.Performance.csproj
+		SccProjectName11 = UpdateControls.Correspondence.Performance
+		SccLocalPath11 = UpdateControls.Correspondence.Performance
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -229,8 +239,59 @@ Global
 		{5FA51928-965B-42A8-9107-9EF2F08239ED}.Release|x64.Build.0 = Release|x64
 		{5FA51928-965B-42A8-9107-9EF2F08239ED}.Release|x86.ActiveCfg = Release|x86
 		{5FA51928-965B-42A8-9107-9EF2F08239ED}.Release|x86.Build.0 = Release|x86
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|ARM.ActiveCfg = Debug|ARM
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|ARM.Build.0 = Debug|ARM
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|ARM.Deploy.0 = Debug|ARM
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|x64.ActiveCfg = Debug|x64
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|x64.Build.0 = Debug|x64
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|x64.Deploy.0 = Debug|x64
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|x86.ActiveCfg = Debug|x86
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|x86.Build.0 = Debug|x86
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Debug|x86.Deploy.0 = Debug|x86
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|ARM.ActiveCfg = Release|ARM
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|ARM.Build.0 = Release|ARM
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|ARM.Deploy.0 = Release|ARM
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|x64.ActiveCfg = Release|x64
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|x64.Build.0 = Release|x64
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|x64.Deploy.0 = Release|x64
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|x86.ActiveCfg = Release|x86
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|x86.Build.0 = Release|x86
+		{DE434555-BC42-4E26-B301-FF8F9A494230}.Release|x86.Deploy.0 = Release|x86
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|ARM.ActiveCfg = Debug|ARM
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|ARM.Build.0 = Debug|ARM
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|ARM.Deploy.0 = Debug|ARM
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|x64.ActiveCfg = Debug|x64
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|x64.Build.0 = Debug|x64
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|x64.Deploy.0 = Debug|x64
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|x86.ActiveCfg = Debug|x86
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|x86.Build.0 = Debug|x86
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Debug|x86.Deploy.0 = Debug|x86
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|ARM.ActiveCfg = Release|ARM
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|ARM.Build.0 = Release|ARM
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|ARM.Deploy.0 = Release|ARM
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|x64.ActiveCfg = Release|x64
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|x64.Build.0 = Release|x64
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|x64.Deploy.0 = Release|x64
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|x86.ActiveCfg = Release|x86
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|x86.Build.0 = Release|x86
+		{01837523-D92E-4C6D-AD89-DFA807793744}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
