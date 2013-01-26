@@ -82,8 +82,12 @@ namespace UpdateControls.Correspondence.Data
             // Load the fact type and data.
             int factTypeId = await ReadIntAsync();
             int dataLength = await ReadIntAsync();
-            byte[] data = new byte[dataLength];
-            await ReadBytesAsync(data);
+            byte[] data = null;
+            if (dataLength > 0)
+            {
+                data = new byte[dataLength];
+                await ReadBytesAsync(data);
+            }
             return new HistoricalTreeFact(factTypeId, data)
                 .SetPredecessors(predecessors);
         }

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence.App</id>
-    <version>1.4.1.6</version>
+    <version>1.4.1.7</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>Correspondence collaboration application. Sets up file storage and HTTP synchronization.</description>
