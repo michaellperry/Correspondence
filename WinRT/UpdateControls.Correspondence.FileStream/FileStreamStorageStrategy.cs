@@ -355,7 +355,7 @@ namespace UpdateControls.Correspondence.FileStream
             var tableFile = await GetIndexBinAsync();
 
             var randomAccessStream = await tableFile.OpenAsync(FileAccessMode.ReadWrite);
-            return new RedBlackTree(randomAccessStream);
+            return new RedBlackTree(randomAccessStream, new Dictionary<long, RedBlackTree.Node>());
         }
 
         private async Task<FactMemento> LoadFactFromTreeAsync(HistoricalTree factTree, long key)

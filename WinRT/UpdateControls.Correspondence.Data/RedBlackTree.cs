@@ -7,13 +7,13 @@ namespace UpdateControls.Correspondence.Data
 {
     public class RedBlackTree : StreamBasedDataStructure
     {
-        private enum NodeColor : byte
+        public enum NodeColor : byte
         {
             Black = 0,
             Red = 1
         }
 
-        private class Node
+        public class Node
         {
             public NodeColor Color;
             public int HashCode;
@@ -30,9 +30,12 @@ namespace UpdateControls.Correspondence.Data
             public bool LeftChild;
         }
 
-        public RedBlackTree(IRandomAccessStream randomAccessStream) :
+        private Dictionary<long, Node> _nodeCache;
+
+        public RedBlackTree(IRandomAccessStream randomAccessStream, Dictionary<long, Node> nodeCache) :
             base(randomAccessStream)
         {
+            _nodeCache = nodeCache;
         }
 
         public async Task<List<long>> FindFactsAsync(int hashCode)
@@ -350,23 +353,30 @@ namespace UpdateControls.Correspondence.Data
 
         private async Task<Node> ReadNodeAsync(long position)
         {
-            SeekTo(position);
-            var nodeData = new byte[1 + 4 + 8 + 8 + 8];
-            await ReadBytesAsync(nodeData);
-            byte color = nodeData[0];
-            int hashCode = BitConverter.ToInt32(nodeData, 1);
-            long left = BitConverter.ToInt64(nodeData, 1 + 4);
-            long right = BitConverter.ToInt64(nodeData, 1 + 4 + 8);
-            long factId = BitConverter.ToInt64(nodeData, 1 + 4 + 8 + 8);
+            Node node = null;
 
-            return new Node
+            if (!_nodeCache.TryGetValue(position, out node))
             {
-                Color = (NodeColor)color,
-                HashCode = hashCode,
-                Left = left,
-                Right = right,
-                FactId = factId
-            };
+                SeekTo(position);
+                var nodeData = new byte[1 + 4 + 8 + 8 + 8];
+                await ReadBytesAsync(nodeData);
+                byte color = nodeData[0];
+                int hashCode = BitConverter.ToInt32(nodeData, 1);
+                long left = BitConverter.ToInt64(nodeData, 1 + 4);
+                long right = BitConverter.ToInt64(nodeData, 1 + 4 + 8);
+                long factId = BitConverter.ToInt64(nodeData, 1 + 4 + 8 + 8);
+
+                node = new Node
+                {
+                    Color = (NodeColor)color,
+                    HashCode = hashCode,
+                    Left = left,
+                    Right = right,
+                    FactId = factId
+                };
+                _nodeCache.Add(position, node);
+            }
+            return node;
         }
 
         private async Task WriteNodeAsync(long position, RedBlackTree.Node node)
@@ -405,14 +415,16 @@ namespace UpdateControls.Correspondence.Data
         private async Task<long> AppendNodeAsync(NodeColor nodeColor, int hashCode, long factId)
         {
             long position = (long)GetSize();
-            await WriteNodeAsync(position, new Node
+            Node node = new Node
             {
                 Color = nodeColor,
                 HashCode = hashCode,
                 Left = 0,
                 Right = 0,
                 FactId = factId
-            });
+            };
+            await WriteNodeAsync(position, node);
+            _nodeCache.Add(position, node);
             return position;
         }
     }
