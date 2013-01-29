@@ -21,6 +21,11 @@ namespace UpdateControls.Correspondence.Data
             _randomAccessStream.Dispose();
         }
 
+        public ulong GetSize()
+        {
+            return _randomAccessStream.Size;
+        }
+
         protected bool Empty()
         {
             return _randomAccessStream.Size == 0;
