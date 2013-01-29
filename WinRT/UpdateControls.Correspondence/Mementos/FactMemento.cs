@@ -79,14 +79,20 @@ namespace UpdateControls.Correspondence.Mementos
                     return false;
             }
             else if (that._data == null || that._data.Length == 0)
-                return false;
-
-            if (this._data.Length != that._data.Length)
-                return false;
-            for (int index = 0; index < this._data.Length; ++index)
             {
-                if (this._data[index] != that._data[index])
-                    return false;
+                return false;
+            }
+            else if (this._data.Length != that._data.Length)
+            {
+                return false;
+            }
+            else
+            {
+                for (int index = 0; index < this._data.Length; ++index)
+                {
+                    if (this._data[index] != that._data[index])
+                        return false;
+                }
             }
 
 			return true;
