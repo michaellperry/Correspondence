@@ -32,32 +32,36 @@ namespace UpdateControls.Correspondence.Data
             if (position == 0)
             {
                 await WriteBytesAsync(new byte[] { 85, 79, 80, 65 });
-                await FlushAsync();
                 position = 4;
             }
 
             // Write the new fact.
-            await WriteLongAsync(0L);
-            await WriteIntAsync(fact.Predecessors.Count());
-            i = 0;
-            foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
+            MemoryStream memory = new MemoryStream();
+            using (BinaryWriter writer = new BinaryWriter(memory))
             {
-                await WriteIntAsync(predecessor.RoleId);
-                await WriteLongAsync(predecessor.PredecessorFactId);
-                await WriteLongAsync(nextPointers[i]);
-                ++i;
+                writer.Write(0L);
+                writer.Write(fact.Predecessors.Count());
+                i = 0;
+                foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
+                {
+                    writer.Write(predecessor.RoleId);
+                    writer.Write(predecessor.PredecessorFactId);
+                    writer.Write(nextPointers[i]);
+                    ++i;
+                }
+                writer.Write(fact.FactTypeId);
+                writer.Write(fact.Data == null ? 0 : fact.Data.Length);
+                if (fact.Data != null && fact.Data.Length > 0)
+                    writer.Write(fact.Data);
+                writer.Flush();
+
+                await WriteBytesAsync(memory.ToArray());
             }
-            await WriteIntAsync(fact.FactTypeId);
-            await WriteIntAsync(fact.Data == null ? 0 : fact.Data.Length);
-            if (fact.Data != null && fact.Data.Length > 0)
-                await WriteBytesAsync(fact.Data);
-            await FlushAsync();
 
             foreach (HistoricalTreePredecessor predecessor in fact.Predecessors)
             {
                 SeekTo(predecessor.PredecessorFactId);
                 await WriteLongAsync(position);
-                await FlushAsync();
             }
 
             return position;

@@ -34,6 +34,8 @@ namespace UpdateControls.Correspondence.FileStream
         private StorageFile _indexBin;
         private StorageFile _factTreeBin;
 
+        private Dictionary<long, RedBlackTree.Node> _nodeCache = new Dictionary<long, RedBlackTree.Node>();
+
         public async Task<Guid> GetClientGuidAsync()
         {
             await _clientGuidTable.LoadAsync();
@@ -355,7 +357,7 @@ namespace UpdateControls.Correspondence.FileStream
             var tableFile = await GetIndexBinAsync();
 
             var randomAccessStream = await tableFile.OpenAsync(FileAccessMode.ReadWrite);
-            return new RedBlackTree(randomAccessStream, new Dictionary<long, RedBlackTree.Node>());
+            return new RedBlackTree(randomAccessStream, _nodeCache);
         }
 
         private async Task<FactMemento> LoadFactFromTreeAsync(HistoricalTree factTree, long key)
