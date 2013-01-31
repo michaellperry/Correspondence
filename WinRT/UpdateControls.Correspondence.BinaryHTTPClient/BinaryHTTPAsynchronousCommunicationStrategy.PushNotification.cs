@@ -42,7 +42,13 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public Exception LastException
         {
-            get { return _notificationStrategy.LastException; }
+            get
+            {
+                if (_notificationStrategy == null)
+                    return null;
+
+                return _notificationStrategy.LastException;
+            }
         }
 
         private void OnMessageReceived(FactTreeMemento factTree)
