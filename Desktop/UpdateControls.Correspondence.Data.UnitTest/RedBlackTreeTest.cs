@@ -16,7 +16,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
         public void Initialize()
         {
             MemoryStream memoryStream = new MemoryStream();
-            _redBlackTree = new RedBlackTree(memoryStream);
+            _redBlackTree = new RedBlackTree(memoryStream, new RedBlackTree.NodeCache());
         }
 
         [TestMethod]
@@ -25,7 +25,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             int hashCode = 234;
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode);
             Assert.IsFalse(factIds.Any(), "There should be no facts in the tree.");
-			_redBlackTree.CheckInvariant(0);
+			_redBlackTree.CheckInvariant();
         }
 
         [TestMethod]
@@ -38,7 +38,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode);
             Assert.AreEqual(1, factIds.Count());
             Assert.AreEqual(factId, factIds.Single());
-			_redBlackTree.CheckInvariant(1);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode-1);
             Assert.AreEqual(0, factIds.Count());
-			_redBlackTree.CheckInvariant(1);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode + 1);
             Assert.AreEqual(0, factIds.Count());
-			_redBlackTree.CheckInvariant(1);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             IEnumerable<long> factIds2 = _redBlackTree.FindFacts(hashCode2);
             Assert.AreEqual(1, factIds2.Count());
             Assert.AreEqual(factId2, factIds2.Single());
-			_redBlackTree.CheckInvariant(2);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode1 - 1);
             Assert.AreEqual(0, factIds.Count());
-			_redBlackTree.CheckInvariant(2);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode1 + 1);
             Assert.AreEqual(0, factIds.Count());
-			_redBlackTree.CheckInvariant(2);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -126,7 +126,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 
             IEnumerable<long> factIds = _redBlackTree.FindFacts(hashCode1 + 1);
             Assert.AreEqual(0, factIds.Count());
-			_redBlackTree.CheckInvariant(2);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -142,7 +142,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             Assert.AreEqual(2, factIds.Count);
             Assert.IsTrue(factIds.Contains(factId1));
             Assert.IsTrue(factIds.Contains(factId2));
-			_redBlackTree.CheckInvariant(2);
+			_redBlackTree.CheckInvariant();
 		}
 
         [TestMethod]
@@ -151,7 +151,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             for (int i = 0; i < 16; i++)
             {
 				WriteNode(i);
-				_redBlackTree.CheckInvariant(i + 1);
+				_redBlackTree.CheckInvariant();
 			}
 
 			for (int i = 0; i < 16; i++)
@@ -166,7 +166,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
             for (int i = 15; i >= 0; i--)
             {
 				WriteNode(i);
-				_redBlackTree.CheckInvariant(16 - i);
+				_redBlackTree.CheckInvariant();
 			}
 
 			for (int i = 0; i < 16; i++)
@@ -181,9 +181,9 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 			for (int i = 0; i < 16; i++)
 			{
 				WriteNode(i);
-				_redBlackTree.CheckInvariant(2 * i + 1);
+				_redBlackTree.CheckInvariant();
 				WriteNode(31 - i);
-				_redBlackTree.CheckInvariant(2 * i + 2);
+				_redBlackTree.CheckInvariant();
 			}
 
 			for (int i = 0; i < 32; i++)
@@ -198,9 +198,9 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 			for (int i = 15; i >= 0; i--)
 			{
 				WriteNode(i);
-				_redBlackTree.CheckInvariant(31 - 2 * i);
+				_redBlackTree.CheckInvariant();
 				WriteNode(31 - i);
-				_redBlackTree.CheckInvariant(32 - 2 * i);
+				_redBlackTree.CheckInvariant();
 			}
 
 			for (int i = 0; i < 32; i++)
@@ -215,9 +215,9 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 			for (int i = 0; i < 16; i++)
 			{
 				WriteNode(i);
-				_redBlackTree.CheckInvariant(2 * i + 1);
+				_redBlackTree.CheckInvariant();
 				WriteNode(i + 16);
-				_redBlackTree.CheckInvariant(2 * i + 2);
+				_redBlackTree.CheckInvariant();
 			}
 
 			for (int i = 0; i < 32; i++)
@@ -232,9 +232,9 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 			for (int i = 15; i >= 0; i--)
 			{
 				WriteNode(i);
-				_redBlackTree.CheckInvariant(31 - 2 * i);
+				_redBlackTree.CheckInvariant();
 				WriteNode(i + 16);
-				_redBlackTree.CheckInvariant(32 - 2 * i);
+				_redBlackTree.CheckInvariant();
 			}
 
 			for (int i = 0; i < 32; i++)
@@ -250,7 +250,7 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 			for (int i = 0; i < 2000; i++)
 			{
 				WriteNode(rand.Next());
-				_redBlackTree.CheckInvariant(i + 1);
+				_redBlackTree.CheckInvariant();
 			}
 		}
 

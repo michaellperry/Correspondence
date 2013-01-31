@@ -34,7 +34,7 @@ namespace UpdateControls.Correspondence.FileStream
         private StorageFile _indexBin;
         private StorageFile _factTreeBin;
 
-        private Dictionary<long, RedBlackTree.Node> _nodeCache = new Dictionary<long, RedBlackTree.Node>();
+        private RedBlackTree.NodeCache _nodeCache = new RedBlackTree.NodeCache();
 
         public async Task<Guid> GetClientGuidAsync()
         {

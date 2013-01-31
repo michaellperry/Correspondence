@@ -30,9 +30,15 @@ namespace UpdateControls.Correspondence.Data
             public bool LeftChild;
         }
 
-        private Dictionary<long, Node> _nodeCache;
+        public class NodeCache
+        {
+            public long Root;
+            public Dictionary<long, Node> NodeByPosition = new Dictionary<long, Node>();
+        }
 
-        public RedBlackTree(IRandomAccessStream randomAccessStream, Dictionary<long, Node> nodeCache) :
+        private NodeCache _nodeCache;
+
+        public RedBlackTree(IRandomAccessStream randomAccessStream, NodeCache nodeCache) :
             base(randomAccessStream)
         {
             _nodeCache = nodeCache;
@@ -43,8 +49,7 @@ namespace UpdateControls.Correspondence.Data
             List<long> factIds = new List<long>();
             if (!Empty())
             {
-                SeekTo(0);
-                long current = await ReadLongAsync();
+                long current = await ReadRootAsync();
                 Node node;
 
                 // Search for the beginning of the hash code.
@@ -86,18 +91,16 @@ namespace UpdateControls.Correspondence.Data
         {
             if (Empty())
             {
-                await WriteLongAsync(sizeof(long));
+                await WriteRootAsync(sizeof(long));
                 await AppendNodeAsync(NodeColor.Black, hashCode, factId);
             }
             else
             {
                 // Find the inseration point.
-                SeekTo(0);
-
                 Stack<NodeReference> stack = new Stack<NodeReference>();
                 Node node;
                 long parent = 0;
-                long child = await ReadLongAsync();
+                long child = await ReadRootAsync();
                 long sibling = 0;
                 bool leftChild = true;
 
@@ -129,7 +132,7 @@ namespace UpdateControls.Correspondence.Data
 
                 // Insert a new node.
                 long position = await AppendNodeAsync(NodeColor.Red, hashCode, factId);
-                await UpdateNodeAt(parent, n =>
+                await UpdateNodeAtAsync(parent, n =>
                 {
                     if (leftChild)
                         n.Left = position;
@@ -153,7 +156,7 @@ namespace UpdateControls.Correspondence.Data
                     if (uncleNode.Color == NodeColor.Red)
                     {
                         // Both the parent and uncle are red, so change both to black and the grandparent to red.
-                        await UpdateNodeAt(parentReference.Position, n =>
+                        await UpdateNodeAtAsync(parentReference.Position, n =>
                         {
                             n.Color = NodeColor.Black;
                         });
@@ -163,7 +166,7 @@ namespace UpdateControls.Correspondence.Data
 
                         if (stack.Count != 0)
                         {
-                            await UpdateNodeAt(grandparentReference.Position, n =>
+                            await UpdateNodeAtAsync(grandparentReference.Position, n =>
                             {
                                 n.Color = NodeColor.Red;
                             });
@@ -175,19 +178,19 @@ namespace UpdateControls.Correspondence.Data
                         long newRoot;
                         if (!leftChild && parentReference.LeftChild)
                         {
-                            await UpdateNodeAt(position, n =>
+                            await UpdateNodeAtAsync(position, n =>
                             {
                                 n.Color = NodeColor.Black;
                                 n.Left = parentReference.Position;
                                 n.Right = grandparentReference.Position;
                             });
 
-                            await UpdateNodeAt(parentReference.Position, n =>
+                            await UpdateNodeAtAsync(parentReference.Position, n =>
                             {
                                 n.Right = left;
                             });
 
-                            await UpdateNodeAt(grandparentReference.Position, n =>
+                            await UpdateNodeAtAsync(grandparentReference.Position, n =>
                             {
                                 n.Color = NodeColor.Red;
                                 n.Left = right;
@@ -197,19 +200,19 @@ namespace UpdateControls.Correspondence.Data
                         }
                         else if (leftChild && !parentReference.LeftChild)
                         {
-                            await UpdateNodeAt(position, n =>
+                            await UpdateNodeAtAsync(position, n =>
                             {
                                 n.Color = NodeColor.Black;
                                 n.Left = grandparentReference.Position;
                                 n.Right = parentReference.Position;
                             });
 
-                            await UpdateNodeAt(parentReference.Position, n =>
+                            await UpdateNodeAtAsync(parentReference.Position, n =>
                             {
                                 n.Left = right;
                             });
 
-                            await UpdateNodeAt(grandparentReference.Position, n =>
+                            await UpdateNodeAtAsync(grandparentReference.Position, n =>
                             {
                                 n.Color = NodeColor.Red;
                                 n.Right = left;
@@ -219,13 +222,13 @@ namespace UpdateControls.Correspondence.Data
                         }
                         else if (!leftChild && !parentReference.LeftChild)
                         {
-                            await UpdateNodeAt(parentReference.Position, n =>
+                            await UpdateNodeAtAsync(parentReference.Position, n =>
                             {
                                 n.Color = NodeColor.Black;
                                 n.Left = grandparentReference.Position;
                             });
 
-                            await UpdateNodeAt(grandparentReference.Position, n =>
+                            await UpdateNodeAtAsync(grandparentReference.Position, n =>
                             {
                                 n.Color = NodeColor.Red;
                                 n.Right = sibling;
@@ -235,13 +238,13 @@ namespace UpdateControls.Correspondence.Data
                         }
                         else //if (leftChild && parentReference.LeftChild)
                         {
-                            await UpdateNodeAt(parentReference.Position, n =>
+                            await UpdateNodeAtAsync(parentReference.Position, n =>
                             {
                                 n.Color = NodeColor.Black;
                                 n.Right = grandparentReference.Position;
                             });
 
-                            await UpdateNodeAt(grandparentReference.Position, n =>
+                            await UpdateNodeAtAsync(grandparentReference.Position, n =>
                             {
                                 n.Color = NodeColor.Red;
                                 n.Left = sibling;
@@ -253,13 +256,12 @@ namespace UpdateControls.Correspondence.Data
                         // Parent becomes the root.
                         if (stack.Count == 0)
                         {
-                            SeekTo(0);
-                            await WriteLongAsync(newRoot);
+                            await WriteRootAsync(newRoot);
                         }
                         else
                         {
                             NodeReference greatGrandParentReference = stack.Peek();
-                            await UpdateNodeAt(greatGrandParentReference.Position, n =>
+                            await UpdateNodeAtAsync(greatGrandParentReference.Position, n =>
                             {
                                 if (grandparentReference.LeftChild)
                                     n.Left = newRoot;
@@ -285,7 +287,7 @@ namespace UpdateControls.Correspondence.Data
                 }
             }
 
-            //await CheckInvariant();
+            await CheckInvariant();
         }
 
         private struct CheckInvariantNodeResult
@@ -344,7 +346,7 @@ namespace UpdateControls.Correspondence.Data
             };
         }
 
-        private async Task UpdateNodeAt(long position, Action<Node> update)
+        private async Task UpdateNodeAtAsync(long position, Action<Node> update)
         {
             Node node = await ReadNodeAsync(position);
             update(node);
@@ -355,7 +357,7 @@ namespace UpdateControls.Correspondence.Data
         {
             Node node = null;
 
-            if (!_nodeCache.TryGetValue(position, out node))
+            if (!_nodeCache.NodeByPosition.TryGetValue(position, out node))
             {
                 SeekTo(position);
                 var nodeData = new byte[1 + 4 + 8 + 8 + 8];
@@ -374,7 +376,7 @@ namespace UpdateControls.Correspondence.Data
                     Right = right,
                     FactId = factId
                 };
-                _nodeCache.Add(position, node);
+                _nodeCache.NodeByPosition.Add(position, node);
             }
             return node;
         }
@@ -424,8 +426,25 @@ namespace UpdateControls.Correspondence.Data
                 FactId = factId
             };
             await WriteNodeAsync(position, node);
-            _nodeCache.Add(position, node);
+            _nodeCache.NodeByPosition.Add(position, node);
             return position;
+        }
+
+        private async Task<long> ReadRootAsync()
+        {
+            if (_nodeCache.Root == 0)
+            {
+                SeekTo(0);
+                _nodeCache.Root = await ReadLongAsync();
+            }
+            return _nodeCache.Root;
+        }
+
+        private async Task WriteRootAsync(long root)
+        {
+            SeekTo(0);
+            await WriteLongAsync(root);
+            _nodeCache.Root = root;
         }
     }
 }

@@ -28,6 +28,8 @@ namespace UpdateControls.Correspondence.IsolatedStorage
         private IncomingTimestampStore _incomingTimestampStore;
         private SavedFactStore _savedFactStore;
 
+        private RedBlackTree.NodeCache _nodeCache = new RedBlackTree.NodeCache();
+
         private IsolatedStorageStorageStrategy(IsolatedStorageFile store)
         {
             _store = store;
@@ -308,13 +310,13 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             return _factTree;
         }
 
-        private static RedBlackTree OpenIndex(IsolatedStorageFile store)
+        private RedBlackTree OpenIndex(IsolatedStorageFile store)
         {
             Stream indexStream = store.OpenFile(
                 IndexFileName,
                 FileMode.OpenOrCreate,
                 FileAccess.ReadWrite);
-            return new RedBlackTree(indexStream);
+            return new RedBlackTree(indexStream, _nodeCache);
         }
 
         private FactMemento LoadFactFromTree(HistoricalTree factTree, long key)

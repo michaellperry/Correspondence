@@ -25,6 +25,8 @@ namespace UpdateControls.Correspondence.FileStream
         private OutgoingTimestampStore _outgoingTimestampStore;
         private IncomingTimestampStore _incomingTimestampStore;
 
+        private RedBlackTree.NodeCache _nodeCache = new RedBlackTree.NodeCache();
+
         private FileStreamStorageStrategy(string filePath)
         {
             _filePath = filePath;
@@ -273,7 +275,7 @@ namespace UpdateControls.Correspondence.FileStream
                 indexFileName,
                 FileMode.OpenOrCreate,
                 FileAccess.ReadWrite);
-            return new RedBlackTree(indexStream);
+            return new RedBlackTree(indexStream, _nodeCache);
         }
 
         private FactMemento LoadFactFromTree(HistoricalTree factTree, long key)

@@ -18,6 +18,11 @@ namespace UpdateControls.Correspondence.Data
             _stream.Dispose();
         }
 
+        protected void SeekTo(long position)
+        {
+            _stream.Seek(position, SeekOrigin.Begin);
+        }
+
         protected byte ReadByte()
         {
             return (byte)_stream.ReadByte();
@@ -50,6 +55,21 @@ namespace UpdateControls.Correspondence.Data
         {
             byte[] writeBuffer = BitConverter.GetBytes(value);
             _stream.Write(writeBuffer, 0, 8);
+        }
+
+        protected void ReadBytes(byte[] data)
+        {
+            _stream.Read(data, 0, data.Length);
+        }
+
+        protected void WriteBytes(byte[] data)
+        {
+            _stream.Write(data, 0, data.Length);
+        }
+
+        protected long GetSize()
+        {
+            return _stream.Length;
         }
     }
 }
