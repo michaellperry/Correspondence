@@ -158,7 +158,7 @@ namespace UpdateControls.Correspondence.FileStream
                     if (Load(candidateId).Equals(memento))
                     {
                         id = candidateId;
-                        return false;
+                        return true;
                     }
                 }
                 id = new FactID();

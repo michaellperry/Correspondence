@@ -146,9 +146,26 @@ namespace UpdateControls.Correspondence.FileStream
             }
         }
 
-        public Task<FactID?> FindExistingFactAsync(FactMemento memento)
+        public async Task<FactID?> FindExistingFactAsync(FactMemento memento)
         {
-            throw new NotImplementedException();
+            using (var index = await OpenIndexAsync())
+            {
+                List<long> candidateFactIds = await
+                    index.FindFactsAsync(memento.GetHashCode());
+
+                // See if the fact already exists.
+                foreach (long candidate in candidateFactIds)
+                {
+                    FactID candidateId = new FactID() { key = candidate };
+                    FactMemento candidateFact = await LoadAsync(candidateId);
+                    if (candidateFact.Equals(memento))
+                    {
+                        return candidateId;
+                    }
+                }
+
+                return null;
+            }
         }
 
         public async Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)

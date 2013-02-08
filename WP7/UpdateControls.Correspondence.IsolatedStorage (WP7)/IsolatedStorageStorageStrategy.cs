@@ -167,7 +167,7 @@ namespace UpdateControls.Correspondence.IsolatedStorage
                         if (Load(candidateId).Equals(memento))
                         {
                             id = candidateId;
-                            return false;
+                            return true;
                         }
                     }
                     id = new FactID();
