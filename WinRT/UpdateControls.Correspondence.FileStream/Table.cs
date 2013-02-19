@@ -115,7 +115,7 @@ namespace UpdateControls.Correspondence.FileStream
 
             lock (this)
             {
-                records = _records;
+                _records = records;
             }
         }
 

@@ -11,6 +11,9 @@ namespace UpdateControls.Correspondence.Data
     {
         private IRandomAccessStream _randomAccessStream;
 
+        private BufferAlias _byteBuffer = new BufferAlias(1);
+        private BufferAlias _intBuffer = new BufferAlias(4);
+        private BufferAlias _longBuffer = new BufferAlias(8);
         public StreamBasedDataStructure(IRandomAccessStream randomAccessStream)
         {
             _randomAccessStream = randomAccessStream;
@@ -45,9 +48,8 @@ namespace UpdateControls.Correspondence.Data
 
         protected async Task<byte> ReadByteAsync()
         {
-            BufferAlias buffer = new BufferAlias(1); 
-            await _randomAccessStream.ReadAsync(buffer, 1, InputStreamOptions.Partial);
-            return buffer.GetByte(0);
+            await _randomAccessStream.ReadAsync(_byteBuffer, 1, InputStreamOptions.Partial);
+            return _byteBuffer.GetByte(0);
         }
 
         protected async Task WriteByteAsync(byte value)
@@ -58,9 +60,8 @@ namespace UpdateControls.Correspondence.Data
 
         protected async Task<int> ReadIntAsync()
         {
-            BufferAlias buffer = new BufferAlias(4);
-            await _randomAccessStream.ReadAsync(buffer, 4, InputStreamOptions.Partial);
-            var array = buffer.ToArray();
+            await _randomAccessStream.ReadAsync(_intBuffer, 4, InputStreamOptions.Partial);
+            var array = _intBuffer.ToArray();
             return BitConverter.ToInt32(array, 0);
         }
 
@@ -73,9 +74,8 @@ namespace UpdateControls.Correspondence.Data
 
         protected async Task<long> ReadLongAsync()
         {
-            BufferAlias buffer = new BufferAlias(8);
-            await _randomAccessStream.ReadAsync(buffer, 8, InputStreamOptions.Partial);
-            var array = buffer.ToArray();
+            await _randomAccessStream.ReadAsync(_longBuffer, 8, InputStreamOptions.Partial);
+            var array = _longBuffer.ToArray();
             return BitConverter.ToInt64(array, 0);
         }
 

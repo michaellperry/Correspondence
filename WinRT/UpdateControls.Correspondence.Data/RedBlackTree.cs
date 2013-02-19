@@ -37,6 +37,8 @@ namespace UpdateControls.Correspondence.Data
         }
 
         private NodeCache _nodeCache;
+        private byte[] _nodeData = new byte[1 + 4 + 8 + 8 + 8];
+        private Stack<NodeReference> _nodeStack = new Stack<NodeReference>();
 
         public RedBlackTree(IRandomAccessStream randomAccessStream, NodeCache nodeCache) :
             base(randomAccessStream)
@@ -97,7 +99,6 @@ namespace UpdateControls.Correspondence.Data
             else
             {
                 // Find the inseration point.
-                Stack<NodeReference> stack = new Stack<NodeReference>();
                 Node node;
                 long parent = 0;
                 long child = await ReadRootAsync();
@@ -108,7 +109,7 @@ namespace UpdateControls.Correspondence.Data
                 {
                     parent = child;
                     node = await ReadNodeAsync(parent);
-                    stack.Push(new NodeReference
+                    _nodeStack.Push(new NodeReference
                     {
                         Position = parent,
                         Color = node.Color,
@@ -144,10 +145,10 @@ namespace UpdateControls.Correspondence.Data
                 long right = 0;
 
                 // Change colors and rotate.
-                while (stack.Count >= 2)
+                while (_nodeStack.Count >= 2)
                 {
-                    NodeReference parentReference = stack.Pop();
-                    NodeReference grandparentReference = stack.Pop();
+                    NodeReference parentReference = _nodeStack.Pop();
+                    NodeReference grandparentReference = _nodeStack.Pop();
 
                     if (parentReference.Color == NodeColor.Black)
                         break;
@@ -164,7 +165,7 @@ namespace UpdateControls.Correspondence.Data
                         uncleNode.Color = NodeColor.Black;
                         await WriteNodeAsync(parentReference.Sibling, uncleNode);
 
-                        if (stack.Count != 0)
+                        if (_nodeStack.Count != 0)
                         {
                             await UpdateNodeAtAsync(grandparentReference.Position, n =>
                             {
@@ -254,13 +255,13 @@ namespace UpdateControls.Correspondence.Data
                         }
 
                         // Parent becomes the root.
-                        if (stack.Count == 0)
+                        if (_nodeStack.Count == 0)
                         {
                             await WriteRootAsync(newRoot);
                         }
                         else
                         {
-                            NodeReference greatGrandParentReference = stack.Peek();
+                            NodeReference greatGrandParentReference = _nodeStack.Peek();
                             await UpdateNodeAtAsync(greatGrandParentReference.Position, n =>
                             {
                                 if (grandparentReference.LeftChild)
@@ -286,8 +287,6 @@ namespace UpdateControls.Correspondence.Data
                     position = grandparentReference.Position;
                 }
             }
-
-            await CheckInvariant();
         }
 
         private struct CheckInvariantNodeResult
@@ -360,13 +359,12 @@ namespace UpdateControls.Correspondence.Data
             if (!_nodeCache.NodeByPosition.TryGetValue(position, out node))
             {
                 SeekTo(position);
-                var nodeData = new byte[1 + 4 + 8 + 8 + 8];
-                await ReadBytesAsync(nodeData);
-                byte color = nodeData[0];
-                int hashCode = BitConverter.ToInt32(nodeData, 1);
-                long left = BitConverter.ToInt64(nodeData, 1 + 4);
-                long right = BitConverter.ToInt64(nodeData, 1 + 4 + 8);
-                long factId = BitConverter.ToInt64(nodeData, 1 + 4 + 8 + 8);
+                await ReadBytesAsync(_nodeData);
+                byte color = _nodeData[0];
+                int hashCode = BitConverter.ToInt32(_nodeData, 1);
+                long left = BitConverter.ToInt64(_nodeData, 1 + 4);
+                long right = BitConverter.ToInt64(_nodeData, 1 + 4 + 8);
+                long factId = BitConverter.ToInt64(_nodeData, 1 + 4 + 8 + 8);
 
                 node = new Node
                 {
@@ -383,15 +381,14 @@ namespace UpdateControls.Correspondence.Data
 
         private async Task WriteNodeAsync(long position, RedBlackTree.Node node)
         {
-            var nodeData = new byte[1 + 4 + 8 + 8 + 8];
-            nodeData[0] = (byte)node.Color;
-            WriteInt(node.HashCode, nodeData, 1);
-            WriteLong(node.Left, nodeData, 1 + 4);
-            WriteLong(node.Right, nodeData, 1 + 4 + 8);
-            WriteLong(node.FactId, nodeData, 1 + 4 + 8 + 8);
+            _nodeData[0] = (byte)node.Color;
+            WriteInt(node.HashCode, _nodeData, 1);
+            WriteLong(node.Left, _nodeData, 1 + 4);
+            WriteLong(node.Right, _nodeData, 1 + 4 + 8);
+            WriteLong(node.FactId, _nodeData, 1 + 4 + 8 + 8);
 
             SeekTo(position);
-            await WriteBytesAsync(nodeData);
+            await WriteBytesAsync(_nodeData);
         }
 
         private void WriteInt(int value, Byte[] data, int start)

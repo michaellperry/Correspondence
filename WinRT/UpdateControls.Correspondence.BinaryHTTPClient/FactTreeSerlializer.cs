@@ -9,6 +9,12 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 {
     public class FactTreeSerlializer
     {
+        private const int MaxFactTypeCount = 1000;
+        private const int MaxRoleCount = 1000;
+        private const int MaxFactCount = 1000;
+        private const int MaxDataLength = 1024;
+        private const int MaxPredecessorCount = 100;
+
         private List<CorrespondenceFactType> _factTypes = new List<CorrespondenceFactType>();
         private List<RoleMemento> _roles = new List<RoleMemento>();
 
@@ -128,6 +134,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             FactTreeMemento factTreeMemento = new FactTreeMemento(databaseId);
 
             short factTypeCount = BinaryHelper.ReadShort(factReader);
+            if (factTypeCount > MaxFactTypeCount)
+                throw new CorrespondenceException("Maximum number of fact types exceeded.");
             for (short i = 0; i < factTypeCount; i++)
             {
                 string typeName = BinaryHelper.ReadString(factReader);
@@ -136,6 +144,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             }
 
             short roleCount = BinaryHelper.ReadShort(factReader);
+            if (roleCount > MaxRoleCount)
+                throw new CorrespondenceException("Maximum number of roles exceeded.");
             for (short i = 0; i < roleCount; i++)
             {
                 short factTypeId = BinaryHelper.ReadShort(factReader);
@@ -144,6 +154,8 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             }
 
             short factCount = BinaryHelper.ReadShort(factReader);
+            if (factCount > MaxFactCount)
+                throw new CorrespondenceException("Maximum number of facts exceeded.");
             for (short i = 0; i < factCount; i++)
             {
                 factTreeMemento.Add(DeserlializeFact(factReader));
@@ -172,8 +184,12 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
             CorrespondenceFactType factType = GetFactType(BinaryHelper.ReadShort(factReader));
             dataSize = BinaryHelper.ReadShort(factReader);
+            if (dataSize > MaxDataLength)
+                throw new CorrespondenceException("Maximum data length exceeded.");
             data = dataSize > 0 ? factReader.ReadBytes(dataSize) : new byte[0];
             predecessorCount = BinaryHelper.ReadShort(factReader);
+            if (predecessorCount > MaxPredecessorCount)
+                throw new CorrespondenceException("Maximum predecessor count exceeded.");
 
             FactMemento factMemento = new FactMemento(factType);
             factMemento.Data = data;
