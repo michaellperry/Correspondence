@@ -90,32 +90,34 @@ namespace UpdateControls.Correspondence.FileStream
         {
             if (oldRecord == null)
                 await AppendAsync(newRecord);
-
-            List<TRecord> records;
-            lock (this)
+            else
             {
-                // Perform a non-mutating operation to
-                // protect others using the collection.
-                records = new List<TRecord>(_records);
-                records.Remove(oldRecord);
-                records.Add(newRecord);
-            }
-
-            using (var stream = await OpenTableFileForWriteAsync())
-            {
-                await Task.Run(delegate
+                List<TRecord> records;
+                lock (this)
                 {
-                    using (BinaryWriter writer = new BinaryWriter(stream))
-                    {
-                        foreach (var record in records)
-                            _write(writer, record);
-                    }
-                });
-            }
+                    // Perform a non-mutating operation to
+                    // protect others using the collection.
+                    records = new List<TRecord>(_records);
+                    records.Remove(oldRecord);
+                    records.Add(newRecord);
+                }
 
-            lock (this)
-            {
-                _records = records;
+                using (var stream = await OpenTableFileForWriteAsync())
+                {
+                    await Task.Run(delegate
+                    {
+                        using (BinaryWriter writer = new BinaryWriter(stream))
+                        {
+                            foreach (var record in records)
+                                _write(writer, record);
+                        }
+                    });
+                }
+
+                lock (this)
+                {
+                    _records = records;
+                }
             }
         }
 
