@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Multinotes2.Model;
+using Multinotes.Model;
 
 namespace Multinotes.ViewModels
 {

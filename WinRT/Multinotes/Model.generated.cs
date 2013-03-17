@@ -8,19 +8,20 @@ using System.IO;
 
 /**
 / For use with http://graphviz.org/
-digraph "Multinotes2.Model"
+digraph "Multinotes.Model"
 {
     rankdir=BT
     Share -> Individual [color="red"]
     Share -> MessageBoard
     ShareDelete -> Share [color="red"]
     Message -> MessageBoard [color="red"]
+    Message -> Domain [color="red"]
     EnableToastNotification -> Individual
     DisableToastNotification -> EnableToastNotification [label="  *"]
 }
 **/
 
-namespace Multinotes2.Model
+namespace Multinotes.Model
 {
     public partial class Individual : CorrespondenceFact
     {
@@ -59,7 +60,7 @@ namespace Multinotes2.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes2.Model.Individual", 1);
+			"Multinotes.Model.Individual", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -193,7 +194,7 @@ namespace Multinotes2.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes2.Model.Share", 1);
+			"Multinotes.Model.Share", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -204,12 +205,12 @@ namespace Multinotes2.Model
         public static Role RoleIndividual = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"individual",
-			new CorrespondenceFactType("Multinotes2.Model.Individual", 1),
+			new CorrespondenceFactType("Multinotes.Model.Individual", 1),
 			true));
         public static Role RoleMessageBoard = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"messageBoard",
-			new CorrespondenceFactType("Multinotes2.Model.MessageBoard", 1),
+			new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
 			false));
 
         // Queries
@@ -315,7 +316,7 @@ namespace Multinotes2.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes2.Model.ShareDelete", 1);
+			"Multinotes.Model.ShareDelete", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -326,7 +327,7 @@ namespace Multinotes2.Model
         public static Role RoleShare = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"share",
-			new CorrespondenceFactType("Multinotes2.Model.Share", 1),
+			new CorrespondenceFactType("Multinotes.Model.Share", 1),
 			true));
 
         // Queries
@@ -412,7 +413,7 @@ namespace Multinotes2.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes2.Model.MessageBoard", 1);
+			"Multinotes.Model.MessageBoard", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -479,6 +480,88 @@ namespace Multinotes2.Model
 
     }
     
+    public partial class Domain : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Domain newFact = new Domain(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Domain fact = (Domain)obj;
+			}
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"Multinotes.Model.Domain", 1);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Roles
+
+        // Queries
+
+        // Predicates
+
+        // Predecessors
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Domain(
+            )
+        {
+            InitializeResults();
+        }
+
+        // Hydration constructor
+        private Domain(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+
+        // Field access
+
+        // Query result access
+
+        // Mutable property access
+
+    }
+    
     public partial class Message : CorrespondenceFact
     {
 		// Factory
@@ -518,7 +601,7 @@ namespace Multinotes2.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes2.Model.Message", 1);
+			"Multinotes.Model.Message", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -529,7 +612,12 @@ namespace Multinotes2.Model
         public static Role RoleMessageBoard = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"messageBoard",
-			new CorrespondenceFactType("Multinotes2.Model.MessageBoard", 1),
+			new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
+			true));
+        public static Role RoleDomain = new Role(new RoleMemento(
+			_correspondenceFactType,
+			"domain",
+			new CorrespondenceFactType("Multinotes.Model.Domain", 1),
 			true));
 
         // Queries
@@ -538,6 +626,7 @@ namespace Multinotes2.Model
 
         // Predecessors
         private PredecessorObj<MessageBoard> _messageBoard;
+        private PredecessorObj<Domain> _domain;
 
         // Unique
         private Guid _unique;
@@ -550,12 +639,14 @@ namespace Multinotes2.Model
         // Business constructor
         public Message(
             MessageBoard messageBoard
+            ,Domain domain
             ,string text
             )
         {
             _unique = Guid.NewGuid();
             InitializeResults();
             _messageBoard = new PredecessorObj<MessageBoard>(this, RoleMessageBoard, messageBoard);
+            _domain = new PredecessorObj<Domain>(this, RoleDomain, domain);
             _text = text;
         }
 
@@ -564,6 +655,7 @@ namespace Multinotes2.Model
         {
             InitializeResults();
             _messageBoard = new PredecessorObj<MessageBoard>(this, RoleMessageBoard, memento);
+            _domain = new PredecessorObj<Domain>(this, RoleDomain, memento);
         }
 
         // Result initializer
@@ -575,6 +667,10 @@ namespace Multinotes2.Model
         public MessageBoard MessageBoard
         {
             get { return _messageBoard.Fact; }
+        }
+        public Domain Domain
+        {
+            get { return _domain.Fact; }
         }
 
         // Field access
@@ -628,7 +724,7 @@ namespace Multinotes2.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes2.Model.EnableToastNotification", 1);
+			"Multinotes.Model.EnableToastNotification", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -639,7 +735,7 @@ namespace Multinotes2.Model
         public static Role RoleIndividual = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"individual",
-			new CorrespondenceFactType("Multinotes2.Model.Individual", 1),
+			new CorrespondenceFactType("Multinotes.Model.Individual", 1),
 			false));
 
         // Queries
@@ -737,7 +833,7 @@ namespace Multinotes2.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes2.Model.DisableToastNotification", 1);
+			"Multinotes.Model.DisableToastNotification", 1);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -748,7 +844,7 @@ namespace Multinotes2.Model
         public static Role RoleEnable = new Role(new RoleMemento(
 			_correspondenceFactType,
 			"enable",
-			new CorrespondenceFactType("Multinotes2.Model.EnableToastNotification", 1),
+			new CorrespondenceFactType("Multinotes.Model.EnableToastNotification", 1),
 			false));
 
         // Queries
@@ -837,6 +933,10 @@ namespace Multinotes2.Model
 			community.AddQuery(
 				MessageBoard._correspondenceFactType,
 				MessageBoard.QueryMessages.QueryDefinition);
+			community.AddType(
+				Domain._correspondenceFactType,
+				new Domain.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { Domain._correspondenceFactType }));
 			community.AddType(
 				Message._correspondenceFactType,
 				new Message.CorrespondenceFactFactory(fieldSerializerByType),

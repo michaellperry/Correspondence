@@ -192,6 +192,10 @@ namespace UpdateControls.Correspondence.Networking
                         _receiveState.Value = ReceiveState.ReceiveRequested;
                     return;
                 }
+                else if (_receiveState.Value == ReceiveState.Polling)
+                {
+                    return;
+                }
             }
 
             Receive();
@@ -365,11 +369,18 @@ namespace UpdateControls.Correspondence.Networking
 
         public async void AfterTriggerSubscriptionUpdate()
         {
-            if (_communicationStrategy.IsLongPolling)
-                await _communicationStrategy.InterruptAsync(
-                    await _model.GetClientDatabaseGuidAsync());
+            try
+            {
+                if (_communicationStrategy.IsLongPolling)
+                    await _communicationStrategy.InterruptAsync(
+                        await _model.GetClientDatabaseGuidAsync());
 
-            BeginReceiving();
+                BeginReceiving();
+            }
+            catch (Exception x)
+            {
+                OnReceiveError(x);
+            }
         }
 
         private async Task<GetManyResultMemento> ChangeStateAfterDelay(Task<GetManyResultMemento> getManyTask)

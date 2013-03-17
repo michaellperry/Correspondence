@@ -1,4 +1,4 @@
-namespace Multinotes2.Model;
+namespace Multinotes.Model;
 
 fact Individual {
 key:
@@ -50,10 +50,15 @@ query:
 	}
 }
 
+fact Domain {
+key:
+}
+
 fact Message {
 key:
 	unique;
 	publish MessageBoard messageBoard;
+	publish Domain domain;
 	string text;
 }
 

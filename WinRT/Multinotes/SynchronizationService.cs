@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Multinotes2.Model;
+using Multinotes.Model;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
@@ -35,8 +35,8 @@ namespace Multinotes
             // Communication
             var configurationProvider = new HTTPConfigurationProvider();
             var communication = new BinaryHTTPAsynchronousCommunicationStrategy(configurationProvider);
-            var notification = new WindowsNotificationStrategy(configurationProvider);
-            communication.SetNotificationStrategy(notification);
+            //var notification = new WindowsNotificationStrategy(configurationProvider);
+            //communication.SetNotificationStrategy(notification);
             _community.AddAsynchronousCommunicationStrategy(communication);
 
             /////////////////////////////////////////

@@ -1,12 +1,13 @@
 using System;
 
-namespace Multinotes2.Model
+namespace Multinotes.Model
 {
     public partial class MessageBoard
     {
         public async void SendMessageAsync(string text)
         {
-            await Community.AddFactAsync(new Message(this, text));
+            var domain = await Community.AddFactAsync(new Domain());
+            await Community.AddFactAsync(new Message(this, domain, text));
         }
     }
 }

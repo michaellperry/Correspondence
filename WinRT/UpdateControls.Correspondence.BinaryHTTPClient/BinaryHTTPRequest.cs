@@ -13,19 +13,9 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             BinaryRequest request)
         {
             CancellationTokenSource tokenSource = new CancellationTokenSource();
-            Task<BinaryResponse> sendTask = InternalSendAsync(configuration, request, tokenSource);
             int timeoutSeconds = Math.Min(configuration.TimeoutSeconds, 30);
-            Task<BinaryResponse> timeoutTask = Task
-                .Delay(timeoutSeconds * 1500, tokenSource.Token)
-                .ContinueWith<BinaryResponse>(delegate
-                {
-                    if (!tokenSource.IsCancellationRequested)
-                        throw new TimeoutException();
-                    return null;
-                });
-            var response = await Task.WhenAny<BinaryResponse>(sendTask, timeoutTask);
-            tokenSource.Cancel();
-            return await response;
+            tokenSource.CancelAfter(timeoutSeconds * 1500);
+            return await InternalSendAsync(configuration, request, tokenSource);
         }
 
         private static async Task<BinaryResponse> InternalSendAsync(
@@ -33,23 +23,21 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             BinaryRequest request,
             CancellationTokenSource tokenSource)
         {
-            var _request = request;
-
-            var _webRequest = WebRequest.Create(new Uri(configuration.Endpoint, UriKind.Absolute));
+            var webRequest = WebRequest.Create(new Uri(configuration.Endpoint, UriKind.Absolute));
             tokenSource.Token.Register(delegate
             {
-                _webRequest.Abort();
+                webRequest.Abort();
             });
 
-            _webRequest.Method = "POST";
-            _webRequest.ContentType = "application/octet-stream";
+            webRequest.Method = "POST";
+            webRequest.ContentType = "application/octet-stream";
 
-            Stream stream = await _webRequest.GetRequestStreamAsync();
+            Stream stream = await webRequest.GetRequestStreamAsync();
             using (BinaryWriter requestWriter = new BinaryWriter(stream))
             {
-                _request.Write(requestWriter);
+                request.Write(requestWriter);
             }
-            WebResponse webResponse = await _webRequest.GetResponseAsync();
+            WebResponse webResponse = await webRequest.GetResponseAsync();
             BinaryResponse response;
             using (BinaryReader responseReader = new BinaryReader(webResponse.GetResponseStream()))
             {
