@@ -52,6 +52,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("exit", Symbol.Exit)
                 .AddSymbol("connect", Symbol.Connect)
                 .AddSymbol("subscribe", Symbol.Subscribe)
+                .AddSymbol("purge", Symbol.Purge)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -182,6 +183,22 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A query must contain sets.",
                 (query, closeBracket) => (FactMember)query);
 
+            // purge_section -> "purge" "where" clause ("and" clause)* ";"
+            var purgeSectionRule = Sequence(
+                Many(
+                    Sequence(
+                        Terminal(Symbol.Purge),
+                        Terminal(Symbol.Where), "Purge must be followed by where.",
+                        publishClauseRule, "Give a predicate to use as a condition.",
+                        (purgeToken, whereToken, clause) => new Condition().AddClause(clause)),
+                    Sequence(
+                        Terminal(Symbol.And),
+                        publishClauseRule, "Provide another clause.",
+                        (and, clause) => clause),
+                    (condition, clause) => condition.AddClause(clause)),
+                Terminal(Symbol.Semicolon), "Terminate a purge condition with a semicolon.",
+                (condition, semicolonToken) => condition);
+
             // key_member -> modifier | field
             // key_section -> "key" ":" key_member*
             var principalModifierRule = Sequence(
@@ -227,7 +244,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
 
-            // fact -> "fact" identifier "{" key_section? mutable_section? query_section? "}"
+            // fact -> "fact" identifier "{" purge_section? key_section? mutable_section? query_section? "}"
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
@@ -235,11 +252,19 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
             var factRule = Sequence(
                 factHeader,
+                Optional(purgeSectionRule, (Condition)null), "Defect.",
                 Optional(keySectionRule, EmptySection), "Defect.",
                 Optional(mutableSectionRule, EmptySection), "Defect.",
                 Optional(querySectionRule, EmptySection), "Defect.",
-                Terminal(Symbol.CloseBracket), "Specify a \"key\", \"mutable\", or \"query\" section.",
-                (fact, keySection, mutableSection, querySection, closeBracket) => querySection.AddTo(mutableSection.AddTo(keySection.AddTo(fact))));
+                Terminal(Symbol.CloseBracket), "Specify a \"purge\", \"key\", \"mutable\", or \"query\" section.",
+                (fact, purgeCondition, keySection, mutableSection, querySection, closeBracket) =>
+                    {
+                        keySection.AddTo(fact);
+                        mutableSection.AddTo(fact);
+                        querySection.AddTo(fact);
+                        fact.PurgeCondition = purgeCondition;
+                        return fact;
+                    });
             return factRule;
         }
 

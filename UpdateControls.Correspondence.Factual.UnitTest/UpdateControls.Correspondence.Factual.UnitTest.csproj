@@ -82,6 +82,7 @@
     <Compile Include="ParserTests\PredicateTest.cs" />
     <Compile Include="ParserTests\PropertyTest.cs" />
     <Compile Include="ParserTests\PublishTest.cs" />
+    <Compile Include="ParserTests\PurgeTest.cs" />
     <Compile Include="ParserTests\QueryTest.cs" />
     <Compile Include="ParserTests\TestBase.cs" />
     <Compile Include="ParserTests\UniqueTest.cs" />

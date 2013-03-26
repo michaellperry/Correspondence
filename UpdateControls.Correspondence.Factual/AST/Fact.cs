@@ -40,6 +40,8 @@ namespace UpdateControls.Correspondence.Factual.AST
             set { _identity = value; }
         }
 
+        public Condition PurgeCondition { get; set; }
+
         public IEnumerable<FactMember> Members
         {
             get { return _members; }

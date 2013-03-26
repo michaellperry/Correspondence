@@ -48,6 +48,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         QuotedString,
         Number,
         Connect,
-        Subscribe
+        Subscribe,
+        Purge
     }
 }
