@@ -72,6 +72,7 @@
     <Compile Include="AnalyzerTests\FieldTest.cs" />
     <Compile Include="AnalyzerTests\PredecessorTest.cs" />
     <Compile Include="AnalyzerTests\PublishTest.cs" />
+    <Compile Include="AnalyzerTests\PurgeTest.cs" />
     <Compile Include="AnalyzerTests\QueryTest.cs" />
     <Compile Include="AnalyzerTests\TestBase.cs" />
     <Compile Include="ParserTests\CommentTest.cs" />

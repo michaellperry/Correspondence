@@ -327,32 +327,40 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             {
                 lastJoin = new Target.Join(Target.Direction.Predecessors, parentPredecessor.Fact.Name, parentPredecessor.Field.Name);
                 targetQuery.AddJoin(lastJoin);
+                ApplyCondition("this", sourceSet.LineNumber, parentPredecessor.Fact, lastJoin, parentPredecessor.Fact.PurgeCondition, inverse: true);
             }
             childPredecessors.Reverse();
             foreach (PredecessorInfo childPredecessor in childPredecessors)
             {
                 lastJoin = new Target.Join(Target.Direction.Successors, childPredecessor.Fact.Name, childPredecessor.Field.Name);
                 targetQuery.AddJoin(lastJoin);
+                ApplyCondition("this", sourceSet.LineNumber, childPredecessor.Fact, lastJoin, childPredecessor.Fact.PurgeCondition, inverse: true);
             }
 
-            if (sourceSet.Condition != null && sourceSet.Condition.Clauses.Any())
-            {
-                if (lastJoin == null)
-                    throw new CompilerException("The query must specify at least one join in order to have a condition.", sourceSet.LineNumber);
+            ApplyCondition(sourceSet.Name, sourceSet.LineNumber, setType, lastJoin, sourceSet.Condition, false);
+            return setType;
+        }
 
-                foreach (Source.Clause clause in sourceSet.Condition.Clauses)
+        private static void ApplyCondition(string sourceSetName, int lineNumber, Source.Fact setType, Target.Join join, Source.Condition sourceCondition, bool inverse)
+        {
+            if (sourceCondition != null && sourceCondition.Clauses.Any())
+            {
+                if (join == null)
+                    throw new CompilerException("The query must specify at least one join in order to have a condition.", lineNumber);
+
+                foreach (Source.Clause clause in sourceCondition.Clauses)
                 {
-                    if (clause.Name != sourceSet.Name)
-                        throw new CompilerException(string.Format("The condition must relate to {0}.", sourceSet.Name), clause.LineNumber);
+                    if (clause.Name != sourceSetName)
+                        throw new CompilerException(string.Format("The condition must relate to {0}.", sourceSetName), clause.LineNumber);
                     Source.FactMember member = setType.GetMemberByName(clause.PredicateName);
                     if (member == null)
-                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", sourceSet.FactName, clause.PredicateName), clause.LineNumber);
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", setType.Name, clause.PredicateName), clause.LineNumber);
                     Source.Predicate predicate = member as Source.Predicate;
                     if (predicate == null)
-                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", sourceSet.FactName, clause.PredicateName), clause.LineNumber);
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", setType.Name, clause.PredicateName), clause.LineNumber);
 
                     Source.ConditionModifier modifier = clause.Existence;
-                    if (predicate.Existence == Source.ConditionModifier.Negative)
+                    if (predicate.Existence == Source.ConditionModifier.Negative ^ inverse)
                     {
                         // Invert the modifier if the predicate itself is negative.
                         modifier = modifier == Source.ConditionModifier.Positive ?
@@ -360,16 +368,14 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                             Source.ConditionModifier.Positive;
                     }
 
-                    lastJoin.AddCondition(new Target.Condition(
+                    join.AddCondition(new Target.Condition(
                         modifier == Source.ConditionModifier.Positive ?
                             Target.ConditionModifier.Positive :
                             Target.ConditionModifier.Negative,
                         clause.PredicateName,
-                        sourceSet.FactName));
+                        setType.Name));
                 }
             }
-
-            return setType;
         }
 
         private List<PredecessorInfo> WalkSegments(ref Source.Fact fact, IEnumerable<string> segments, int lineNumber)
