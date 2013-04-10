@@ -39,7 +39,7 @@ namespace UpdateControls.Correspondence.UnitTest
             await community.SynchronizeAsync();
 
             Outcome outcome = game.Outcomes.Single();
-            Assert.IsFalse(outcome.Winner.IsLoaded);
+            Assert.IsTrue(outcome.Winner.IsNull);
         }
 
         [TestMethod]

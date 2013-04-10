@@ -17,6 +17,21 @@ namespace UpdateControls.Correspondence
 
         protected internal abstract CorrespondenceFactType GetCorrespondenceFactType();
 
+        private bool _isLoaded = true;
+        private bool _isNull = false;
+
+        public bool IsLoaded
+        {
+            get { return _isLoaded; }
+            protected set { _isLoaded = value; }
+        }
+
+        public bool IsNull
+        {
+            get { return _isNull; }
+            protected set { _isNull = value; }
+        }
+
         internal FactID ID
 		{
 			get { return _id; }

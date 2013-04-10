@@ -561,8 +561,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private User__favoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
-            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), memento, User__favoriteColor.GetUnloadedInstance(), User__favoriteColor.GetNullInstance());
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), memento, User__favoriteColor.GetUnloadedInstance, User__favoriteColor.GetNullInstance);
         }
 
         // Result initializer
@@ -749,9 +749,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private User__betterFavoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
-            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), memento, User__betterFavoriteColor.GetUnloadedInstance(), User__betterFavoriteColor.GetNullInstance());
-            _value = new PredecessorObj<Color>(this, GetRoleValue(), memento, Color.GetUnloadedInstance(), Color.GetNullInstance());
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), memento, User__betterFavoriteColor.GetUnloadedInstance, User__betterFavoriteColor.GetNullInstance);
+            _value = new PredecessorObj<Color>(this, GetRoleValue(), memento, Color.GetUnloadedInstance, Color.GetNullInstance);
         }
 
         // Result initializer
@@ -1050,8 +1050,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private LogOn(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
-            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), memento, Machine.GetUnloadedInstance(), Machine.GetNullInstance());
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), memento, Machine.GetUnloadedInstance, Machine.GetNullInstance);
         }
 
         // Result initializer
@@ -1191,7 +1191,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private LogOff(FactMemento memento)
         {
             InitializeResults();
-            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), memento, LogOn.GetUnloadedInstance(), LogOn.GetNullInstance());
+            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), memento, LogOn.GetUnloadedInstance, LogOn.GetNullInstance);
         }
 
         // Result initializer
@@ -1505,7 +1505,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Game(FactMemento memento)
         {
             InitializeResults();
-            _tournament = new PredecessorOpt<Tournament>(this, GetRoleTournament(), memento, Tournament.GetUnloadedInstance(), Tournament.GetNullInstance());
+            _tournament = new PredecessorOpt<Tournament>(this, GetRoleTournament(), memento, Tournament.GetUnloadedInstance, Tournament.GetNullInstance);
         }
 
         // Result initializer
@@ -1677,8 +1677,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private GameName(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance(), Game.GetNullInstance());
-            _prior = new PredecessorList<GameName>(this, GetRolePrior(), memento, GameName.GetUnloadedInstance(), GameName.GetNullInstance());
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
+            _prior = new PredecessorList<GameName>(this, GetRolePrior(), memento, GameName.GetUnloadedInstance, GameName.GetNullInstance);
         }
 
         // Result initializer
@@ -1882,8 +1882,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Player(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance(), Game.GetNullInstance());
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
         }
 
         // Result initializer
@@ -2040,7 +2040,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Move(FactMemento memento)
         {
             InitializeResults();
-            _player = new PredecessorObj<Player>(this, GetRolePlayer(), memento, Player.GetUnloadedInstance(), Player.GetNullInstance());
+            _player = new PredecessorObj<Player>(this, GetRolePlayer(), memento, Player.GetUnloadedInstance, Player.GetNullInstance);
         }
 
         // Result initializer
@@ -2198,8 +2198,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Outcome(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance(), Game.GetNullInstance());
-            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), memento, Player.GetUnloadedInstance(), Player.GetNullInstance());
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
+            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), memento, Player.GetUnloadedInstance, Player.GetNullInstance);
         }
 
         // Result initializer

@@ -45,8 +45,8 @@ namespace UpdateControls.Correspondence
 			CorrespondenceFact subject,
 			Role role,
             FactMemento memento,
-            TFact unloaded,
-            TFact nullInstance) :
+            Func<TFact> getUnloaded,
+            Func<TFact> getNullInstance) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;

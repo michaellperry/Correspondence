@@ -42,14 +42,14 @@ namespace UpdateControls.Correspondence
 			CorrespondenceFact subject,
 			Role role,
 			FactMemento memento,
-            TFact unloaded,
-            TFact nullInstance) :
+            Func<TFact> getUnloaded,
+            Func<TFact> getNullInstance) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;
-            _fact = new Independent<TFact>(unloaded);
+            _fact = new Independent<TFact>(getUnloaded());
             _loaded = new TaskCompletionSource<CorrespondenceFact>();
-            unloaded.SetLoadedTask(_loaded.Task);
+            _fact.Value.SetLoadedTask(_loaded.Task);
 
             if (memento != null)
             {

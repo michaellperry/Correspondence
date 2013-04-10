@@ -34,18 +34,22 @@ namespace UpdateControls.Correspondence
         public PredecessorOpt(
             CorrespondenceFact subject,
             Role role,
-            FactMemento memento) :
+            FactMemento memento,
+            Func<TFact> getNullInstance) :
             base(subject, false)
         {
             _role = role.RoleMemento;
 
-            List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
-            if (facts.Count > 1)
-                throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
-            if (facts.Count == 1)
-                _factId = facts[0];
-            else
-                _factId = new FactID();
+            if (memento != null)
+            {
+                List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
+                if (facts.Count > 1)
+                    throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
+                if (facts.Count == 1)
+                    _factId = facts[0];
+                else
+                    _factId = new FactID();
+            }
             subject.SetPredecessor(_role, this);
         }
 

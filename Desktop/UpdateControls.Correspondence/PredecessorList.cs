@@ -41,12 +41,16 @@ namespace UpdateControls.Correspondence
 		public PredecessorList(
 			CorrespondenceFact subject,
 			Role role,
-			FactMemento memento ) :
+            FactMemento memento,
+            Func<TFact> getNullInstance) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;
 
-            _factIds = memento.GetPredecessorIdsByRole(_role).ToList();
+            if (memento != null)
+            {
+                _factIds = memento.GetPredecessorIdsByRole(_role).ToList();
+            }
 			subject.SetPredecessor( _role, this );
 		}
 

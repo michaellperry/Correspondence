@@ -92,7 +92,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Message(FactMemento memento)
         {
             InitializeResults();
-            _sender = new PredecessorObj<Player>(this, RoleSender, memento);
+            _sender = new PredecessorObj<Player>(this, RoleSender, memento, Player.GetNullInstance);
         }
 
         // Result initializer

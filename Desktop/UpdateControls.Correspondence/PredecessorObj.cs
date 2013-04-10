@@ -38,17 +38,24 @@ namespace UpdateControls.Correspondence
 		public PredecessorObj(
 			CorrespondenceFact subject,
 			Role role,
-			FactMemento memento ) :
+			FactMemento memento,
+            Func<TFact> getNullInstance) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;
 
-            List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
-            if (facts.Count < 1)
-                throw new CorrespondenceException(string.Format("A fact was loaded with no predecessor in role {0}.", role));
-            if (facts.Count > 1)
-                throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
-            _factId = facts[0];
+            if (memento != null)
+            {
+                List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
+                if (facts.Count < 1)
+                    throw new CorrespondenceException(string.Format("A fact was loaded with no predecessor in role {0}.", role));
+                if (facts.Count > 1)
+                    throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
+                _factId = facts[0];
+
+                if (_factId.key == 0)
+                    _fact = getNullInstance();
+            }
             subject.SetPredecessor(_role, this);
 		}
 
