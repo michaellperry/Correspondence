@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
@@ -19,6 +20,7 @@ digraph "UpdateControls.Correspondence.UnitTest.Model"
     LogOn -> User
     LogOn -> Machine
     LogOff -> LogOn
+    Game -> Tournament [label="  ?"]
     GameName -> Game
     GameName -> GameName [label="  *"]
     Player -> User [color="red"]
@@ -75,17 +77,53 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Machine _unloadedInstance;
+        private static Machine _nullInstance;
+
+        public static Machine GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Machine((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Machine GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Machine((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Machine> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Machine)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
 
         // Queries
-        public static Query MakeQueryActiveLogOns()
+        private static Query _cacheQueryActiveLogOns;
+
+        public static Query GetQueryActiveLogOns()
 		{
-			return new Query()
-				.JoinSuccessors(LogOn.RoleMachine, Condition.WhereIsEmpty(LogOn.MakeQueryIsActive())
+            if (_cacheQueryActiveLogOns == null)
+            {
+			    _cacheQueryActiveLogOns = new Query()
+    				.JoinSuccessors(LogOn.GetRoleMachine(), Condition.WhereIsEmpty(LogOn.GetQueryIsActive())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryActiveLogOns;
 		}
-        public static Query QueryActiveLogOns = MakeQueryActiveLogOns();
 
         // Predicates
 
@@ -116,7 +154,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _activeLogOns = new Result<LogOn>(this, QueryActiveLogOns);
+            _activeLogOns = new Result<LogOn>(this, GetQueryActiveLogOns());
         }
 
         // Predecessor access
@@ -179,50 +217,106 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static User _unloadedInstance;
+        private static User _nullInstance;
+
+        public static User GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new User((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static User GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new User((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<User> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (User)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
 
         // Queries
-        public static Query MakeQueryFavoriteColor()
+        private static Query _cacheQueryFavoriteColor;
+
+        public static Query GetQueryFavoriteColor()
 		{
-			return new Query()
-				.JoinSuccessors(User__favoriteColor.RoleUser, Condition.WhereIsEmpty(User__favoriteColor.MakeQueryIsCurrent())
+            if (_cacheQueryFavoriteColor == null)
+            {
+			    _cacheQueryFavoriteColor = new Query()
+    				.JoinSuccessors(User__favoriteColor.GetRoleUser(), Condition.WhereIsEmpty(User__favoriteColor.GetQueryIsCurrent())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryFavoriteColor;
 		}
-        public static Query QueryFavoriteColor = MakeQueryFavoriteColor();
-        public static Query MakeQueryBetterFavoriteColor()
+        private static Query _cacheQueryBetterFavoriteColor;
+
+        public static Query GetQueryBetterFavoriteColor()
 		{
-			return new Query()
-				.JoinSuccessors(User__betterFavoriteColor.RoleUser, Condition.WhereIsEmpty(User__betterFavoriteColor.MakeQueryIsCurrent())
+            if (_cacheQueryBetterFavoriteColor == null)
+            {
+			    _cacheQueryBetterFavoriteColor = new Query()
+    				.JoinSuccessors(User__betterFavoriteColor.GetRoleUser(), Condition.WhereIsEmpty(User__betterFavoriteColor.GetQueryIsCurrent())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryBetterFavoriteColor;
 		}
-        public static Query QueryBetterFavoriteColor = MakeQueryBetterFavoriteColor();
-        public static Query MakeQueryActivePlayers()
+        private static Query _cacheQueryActivePlayers;
+
+        public static Query GetQueryActivePlayers()
 		{
-			return new Query()
-				.JoinSuccessors(Player.RoleUser, Condition.WhereIsEmpty(Player.MakeQueryIsActive())
+            if (_cacheQueryActivePlayers == null)
+            {
+			    _cacheQueryActivePlayers = new Query()
+    				.JoinSuccessors(Player.GetRoleUser(), Condition.WhereIsEmpty(Player.GetQueryIsActive())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryActivePlayers;
 		}
-        public static Query QueryActivePlayers = MakeQueryActivePlayers();
-        public static Query MakeQueryFinishedPlayers()
+        private static Query _cacheQueryFinishedPlayers;
+
+        public static Query GetQueryFinishedPlayers()
 		{
-			return new Query()
-				.JoinSuccessors(Player.RoleUser, Condition.WhereIsNotEmpty(Player.MakeQueryIsNotActive())
+            if (_cacheQueryFinishedPlayers == null)
+            {
+			    _cacheQueryFinishedPlayers = new Query()
+    				.JoinSuccessors(Player.GetRoleUser(), Condition.WhereIsNotEmpty(Player.GetQueryIsNotActive())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryFinishedPlayers;
 		}
-        public static Query QueryFinishedPlayers = MakeQueryFinishedPlayers();
-        public static Query MakeQueryFinishedGames()
+        private static Query _cacheQueryFinishedGames;
+
+        public static Query GetQueryFinishedGames()
 		{
-			return new Query()
-				.JoinSuccessors(Player.RoleUser)
-				.JoinPredecessors(Player.RoleGame, Condition.WhereIsNotEmpty(Game.MakeQueryIsFinished())
+            if (_cacheQueryFinishedGames == null)
+            {
+			    _cacheQueryFinishedGames = new Query()
+		    		.JoinSuccessors(Player.GetRoleUser())
+    				.JoinPredecessors(Player.GetRoleGame(), Condition.WhereIsNotEmpty(Game.GetQueryIsFinished())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryFinishedGames;
 		}
-        public static Query QueryFinishedGames = MakeQueryFinishedGames();
 
         // Predicates
 
@@ -256,11 +350,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _favoriteColor = new Result<User__favoriteColor>(this, QueryFavoriteColor);
-            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, QueryBetterFavoriteColor);
-            _activePlayers = new Result<Player>(this, QueryActivePlayers);
-            _finishedPlayers = new Result<Player>(this, QueryFinishedPlayers);
-            _finishedGames = new Result<Game>(this, QueryFinishedGames);
+            _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor());
+            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor());
+            _activePlayers = new Result<Player>(this, GetQueryActivePlayers());
+            _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers());
+            _finishedGames = new Result<Game>(this, GetQueryFinishedGames());
         }
 
         // Predecessor access
@@ -365,29 +459,81 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static User__favoriteColor _unloadedInstance;
+        private static User__favoriteColor _nullInstance;
+
+        public static User__favoriteColor GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new User__favoriteColor((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static User__favoriteColor GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new User__favoriteColor((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<User__favoriteColor> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (User__favoriteColor)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleUser = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"user",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			true));
-        public static Role RolePrior = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"prior",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User__favoriteColor", 1),
-			false));
+        private static Role _cacheRoleUser;
+        public static Role GetRoleUser()
+        {
+            if (_cacheRoleUser == null)
+            {
+                _cacheRoleUser = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "user",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        true));
+            }
+            return _cacheRoleUser;
+        }
+        private static Role _cacheRolePrior;
+        public static Role GetRolePrior()
+        {
+            if (_cacheRolePrior == null)
+            {
+                _cacheRolePrior = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "prior",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User__favoriteColor", 1),
+			        false));
+            }
+            return _cacheRolePrior;
+        }
 
         // Queries
-        public static Query MakeQueryIsCurrent()
+        private static Query _cacheQueryIsCurrent;
+
+        public static Query GetQueryIsCurrent()
 		{
-			return new Query()
-				.JoinSuccessors(User__favoriteColor.RolePrior)
-            ;
+            if (_cacheQueryIsCurrent == null)
+            {
+			    _cacheQueryIsCurrent = new Query()
+		    		.JoinSuccessors(User__favoriteColor.GetRolePrior())
+                ;
+            }
+            return _cacheQueryIsCurrent;
 		}
-        public static Query QueryIsCurrent = MakeQueryIsCurrent();
 
         // Predicates
-        public static Condition IsCurrent = Condition.WhereIsEmpty(QueryIsCurrent);
+        public static Condition IsCurrent = Condition.WhereIsEmpty(GetQueryIsCurrent());
 
         // Predecessors
         private PredecessorObj<User> _user;
@@ -406,8 +552,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             )
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, user);
-            _prior = new PredecessorList<User__favoriteColor>(this, RolePrior, prior);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
+            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), prior);
             _value = value;
         }
 
@@ -415,8 +561,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private User__favoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, memento);
-            _prior = new PredecessorList<User__favoriteColor>(this, RolePrior, memento);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
+            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), memento, User__favoriteColor.GetUnloadedInstance(), User__favoriteColor.GetNullInstance());
         }
 
         // Result initializer
@@ -429,7 +575,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _user.Fact; }
         }
-        public IEnumerable<User__favoriteColor> Prior
+        public PredecessorList<User__favoriteColor> Prior
         {
             get { return _prior; }
         }
@@ -488,34 +634,94 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static User__betterFavoriteColor _unloadedInstance;
+        private static User__betterFavoriteColor _nullInstance;
+
+        public static User__betterFavoriteColor GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new User__betterFavoriteColor((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static User__betterFavoriteColor GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new User__betterFavoriteColor((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<User__betterFavoriteColor> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (User__betterFavoriteColor)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleUser = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"user",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			true));
-        public static Role RolePrior = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"prior",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User__betterFavoriteColor", 1),
-			false));
-        public static Role RoleValue = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"value",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Color", 1),
-			false));
+        private static Role _cacheRoleUser;
+        public static Role GetRoleUser()
+        {
+            if (_cacheRoleUser == null)
+            {
+                _cacheRoleUser = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "user",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        true));
+            }
+            return _cacheRoleUser;
+        }
+        private static Role _cacheRolePrior;
+        public static Role GetRolePrior()
+        {
+            if (_cacheRolePrior == null)
+            {
+                _cacheRolePrior = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "prior",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User__betterFavoriteColor", 1),
+			        false));
+            }
+            return _cacheRolePrior;
+        }
+        private static Role _cacheRoleValue;
+        public static Role GetRoleValue()
+        {
+            if (_cacheRoleValue == null)
+            {
+                _cacheRoleValue = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "value",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Color", 1),
+			        false));
+            }
+            return _cacheRoleValue;
+        }
 
         // Queries
-        public static Query MakeQueryIsCurrent()
+        private static Query _cacheQueryIsCurrent;
+
+        public static Query GetQueryIsCurrent()
 		{
-			return new Query()
-				.JoinSuccessors(User__betterFavoriteColor.RolePrior)
-            ;
+            if (_cacheQueryIsCurrent == null)
+            {
+			    _cacheQueryIsCurrent = new Query()
+		    		.JoinSuccessors(User__betterFavoriteColor.GetRolePrior())
+                ;
+            }
+            return _cacheQueryIsCurrent;
 		}
-        public static Query QueryIsCurrent = MakeQueryIsCurrent();
 
         // Predicates
-        public static Condition IsCurrent = Condition.WhereIsEmpty(QueryIsCurrent);
+        public static Condition IsCurrent = Condition.WhereIsEmpty(GetQueryIsCurrent());
 
         // Predecessors
         private PredecessorObj<User> _user;
@@ -534,18 +740,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             )
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, user);
-            _prior = new PredecessorList<User__betterFavoriteColor>(this, RolePrior, prior);
-            _value = new PredecessorObj<Color>(this, RoleValue, value);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
+            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), prior);
+            _value = new PredecessorObj<Color>(this, GetRoleValue(), value);
         }
 
         // Hydration constructor
         private User__betterFavoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, memento);
-            _prior = new PredecessorList<User__betterFavoriteColor>(this, RolePrior, memento);
-            _value = new PredecessorObj<Color>(this, RoleValue, memento);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
+            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), memento, User__betterFavoriteColor.GetUnloadedInstance(), User__betterFavoriteColor.GetNullInstance());
+            _value = new PredecessorObj<Color>(this, GetRoleValue(), memento, Color.GetUnloadedInstance(), Color.GetNullInstance());
         }
 
         // Result initializer
@@ -558,7 +764,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _user.Fact; }
         }
-        public IEnumerable<User__betterFavoriteColor> Prior
+        public PredecessorList<User__betterFavoriteColor> Prior
         {
             get { return _prior; }
         }
@@ -618,6 +824,37 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		{
 			return _correspondenceFactType;
 		}
+
+        // Null and unloaded instances
+        private static Color _unloadedInstance;
+        private static Color _nullInstance;
+
+        public static Color GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Color((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Color GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Color((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Color> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Color)t.Result);
+            else
+                return Task.FromResult(this);
+        }
 
         // Roles
 
@@ -710,29 +947,81 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static LogOn _unloadedInstance;
+        private static LogOn _nullInstance;
+
+        public static LogOn GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new LogOn((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static LogOn GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new LogOn((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<LogOn> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (LogOn)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleUser = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"user",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			false));
-        public static Role RoleMachine = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"machine",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1),
-			false));
+        private static Role _cacheRoleUser;
+        public static Role GetRoleUser()
+        {
+            if (_cacheRoleUser == null)
+            {
+                _cacheRoleUser = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "user",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        false));
+            }
+            return _cacheRoleUser;
+        }
+        private static Role _cacheRoleMachine;
+        public static Role GetRoleMachine()
+        {
+            if (_cacheRoleMachine == null)
+            {
+                _cacheRoleMachine = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "machine",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1),
+			        false));
+            }
+            return _cacheRoleMachine;
+        }
 
         // Queries
-        public static Query MakeQueryIsActive()
+        private static Query _cacheQueryIsActive;
+
+        public static Query GetQueryIsActive()
 		{
-			return new Query()
-				.JoinSuccessors(LogOff.RoleLogOn)
-            ;
+            if (_cacheQueryIsActive == null)
+            {
+			    _cacheQueryIsActive = new Query()
+		    		.JoinSuccessors(LogOff.GetRoleLogOn())
+                ;
+            }
+            return _cacheQueryIsActive;
 		}
-        public static Query QueryIsActive = MakeQueryIsActive();
 
         // Predicates
-        public static Condition IsActive = Condition.WhereIsEmpty(QueryIsActive);
+        public static Condition IsActive = Condition.WhereIsEmpty(GetQueryIsActive());
 
         // Predecessors
         private PredecessorObj<User> _user;
@@ -753,16 +1042,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             _unique = Guid.NewGuid();
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, user);
-            _machine = new PredecessorObj<Machine>(this, RoleMachine, machine);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
+            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), machine);
         }
 
         // Hydration constructor
         private LogOn(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, memento);
-            _machine = new PredecessorObj<Machine>(this, RoleMachine, memento);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
+            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), memento, Machine.GetUnloadedInstance(), Machine.GetNullInstance());
         }
 
         // Result initializer
@@ -832,12 +1121,51 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static LogOff _unloadedInstance;
+        private static LogOff _nullInstance;
+
+        public static LogOff GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new LogOff((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static LogOff GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new LogOff((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<LogOff> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (LogOff)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleLogOn = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"logOn",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
-			false));
+        private static Role _cacheRoleLogOn;
+        public static Role GetRoleLogOn()
+        {
+            if (_cacheRoleLogOn == null)
+            {
+                _cacheRoleLogOn = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "logOn",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
+			        false));
+            }
+            return _cacheRoleLogOn;
+        }
 
         // Queries
 
@@ -856,14 +1184,14 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             )
         {
             InitializeResults();
-            _logOn = new PredecessorObj<LogOn>(this, RoleLogOn, logOn);
+            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), logOn);
         }
 
         // Hydration constructor
         private LogOff(FactMemento memento)
         {
             InitializeResults();
-            _logOn = new PredecessorObj<LogOn>(this, RoleLogOn, memento);
+            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), memento, LogOn.GetUnloadedInstance(), LogOn.GetNullInstance());
         }
 
         // Result initializer
@@ -878,6 +1206,127 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         }
 
         // Field access
+
+        // Query result access
+
+        // Mutable property access
+
+    }
+    
+    public partial class Tournament : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				Tournament newFact = new Tournament(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._unique = (Guid)_fieldSerializerByType[typeof(Guid)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				Tournament fact = (Tournament)obj;
+				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
+			}
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"UpdateControls.Correspondence.UnitTest.Model.Tournament", 1);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Null and unloaded instances
+        private static Tournament _unloadedInstance;
+        private static Tournament _nullInstance;
+
+        public static Tournament GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Tournament((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Tournament GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Tournament((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Tournament> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Tournament)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
+        // Roles
+
+        // Queries
+
+        // Predicates
+
+        // Predecessors
+
+        // Unique
+        private Guid _unique;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public Tournament(
+            )
+        {
+            _unique = Guid.NewGuid();
+            InitializeResults();
+        }
+
+        // Hydration constructor
+        private Tournament(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+
+        // Field access
+		public Guid Unique { get { return _unique; } }
+
 
         // Query result access
 
@@ -929,43 +1378,108 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Game _unloadedInstance;
+        private static Game _nullInstance;
+
+        public static Game GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Game((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Game GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Game((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Game> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Game)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
+        private static Role _cacheRoleTournament;
+        public static Role GetRoleTournament()
+        {
+            if (_cacheRoleTournament == null)
+            {
+                _cacheRoleTournament = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "tournament",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Tournament", 1),
+			        false));
+            }
+            return _cacheRoleTournament;
+        }
 
         // Queries
-        public static Query MakeQueryPlayers()
+        private static Query _cacheQueryPlayers;
+
+        public static Query GetQueryPlayers()
 		{
-			return new Query()
-				.JoinSuccessors(Player.RoleGame)
-            ;
+            if (_cacheQueryPlayers == null)
+            {
+			    _cacheQueryPlayers = new Query()
+		    		.JoinSuccessors(Player.GetRoleGame())
+                ;
+            }
+            return _cacheQueryPlayers;
 		}
-        public static Query QueryPlayers = MakeQueryPlayers();
-        public static Query MakeQueryMoves()
+        private static Query _cacheQueryMoves;
+
+        public static Query GetQueryMoves()
 		{
-			return new Query()
-				.JoinSuccessors(Player.RoleGame)
-				.JoinSuccessors(Move.RolePlayer)
-            ;
+            if (_cacheQueryMoves == null)
+            {
+			    _cacheQueryMoves = new Query()
+		    		.JoinSuccessors(Player.GetRoleGame())
+		    		.JoinSuccessors(Move.GetRolePlayer())
+                ;
+            }
+            return _cacheQueryMoves;
 		}
-        public static Query QueryMoves = MakeQueryMoves();
-        public static Query MakeQueryOutcomes()
+        private static Query _cacheQueryOutcomes;
+
+        public static Query GetQueryOutcomes()
 		{
-			return new Query()
-				.JoinSuccessors(Outcome.RoleGame)
-            ;
+            if (_cacheQueryOutcomes == null)
+            {
+			    _cacheQueryOutcomes = new Query()
+		    		.JoinSuccessors(Outcome.GetRoleGame())
+                ;
+            }
+            return _cacheQueryOutcomes;
 		}
-        public static Query QueryOutcomes = MakeQueryOutcomes();
-        public static Query MakeQueryIsFinished()
+        private static Query _cacheQueryIsFinished;
+
+        public static Query GetQueryIsFinished()
 		{
-			return new Query()
-				.JoinSuccessors(Outcome.RoleGame)
-            ;
+            if (_cacheQueryIsFinished == null)
+            {
+			    _cacheQueryIsFinished = new Query()
+		    		.JoinSuccessors(Outcome.GetRoleGame())
+                ;
+            }
+            return _cacheQueryIsFinished;
 		}
-        public static Query QueryIsFinished = MakeQueryIsFinished();
 
         // Predicates
-        public static Condition IsFinished = Condition.WhereIsNotEmpty(QueryIsFinished);
+        public static Condition IsFinished = Condition.WhereIsNotEmpty(GetQueryIsFinished());
 
         // Predecessors
+        private PredecessorOpt<Tournament> _tournament;
 
         // Unique
         private Guid _unique;
@@ -979,27 +1493,34 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         // Business constructor
         public Game(
+            Tournament tournament
             )
         {
             _unique = Guid.NewGuid();
             InitializeResults();
+            _tournament = new PredecessorOpt<Tournament>(this, GetRoleTournament(), tournament);
         }
 
         // Hydration constructor
         private Game(FactMemento memento)
         {
             InitializeResults();
+            _tournament = new PredecessorOpt<Tournament>(this, GetRoleTournament(), memento, Tournament.GetUnloadedInstance(), Tournament.GetNullInstance());
         }
 
         // Result initializer
         private void InitializeResults()
         {
-            _players = new Result<Player>(this, QueryPlayers);
-            _moves = new Result<Move>(this, QueryMoves);
-            _outcomes = new Result<Outcome>(this, QueryOutcomes);
+            _players = new Result<Player>(this, GetQueryPlayers());
+            _moves = new Result<Move>(this, GetQueryMoves());
+            _outcomes = new Result<Outcome>(this, GetQueryOutcomes());
         }
 
         // Predecessor access
+        public Tournament Tournament
+        {
+            get { return _tournament.Fact; }
+        }
 
         // Field access
 		public Guid Unique { get { return _unique; } }
@@ -1067,17 +1588,64 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static GameName _unloadedInstance;
+        private static GameName _nullInstance;
+
+        public static GameName GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new GameName((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static GameName GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new GameName((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<GameName> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (GameName)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleGame = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"game",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
-			false));
-        public static Role RolePrior = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"prior",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
-			false));
+        private static Role _cacheRoleGame;
+        public static Role GetRoleGame()
+        {
+            if (_cacheRoleGame == null)
+            {
+                _cacheRoleGame = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "game",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+			        false));
+            }
+            return _cacheRoleGame;
+        }
+        private static Role _cacheRolePrior;
+        public static Role GetRolePrior()
+        {
+            if (_cacheRolePrior == null)
+            {
+                _cacheRolePrior = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "prior",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
+			        false));
+            }
+            return _cacheRolePrior;
+        }
 
         // Queries
 
@@ -1100,8 +1668,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             )
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, RoleGame, game);
-            _prior = new PredecessorList<GameName>(this, RolePrior, prior);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), game);
+            _prior = new PredecessorList<GameName>(this, GetRolePrior(), prior);
             _name = name;
         }
 
@@ -1109,8 +1677,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private GameName(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, RoleGame, memento);
-            _prior = new PredecessorList<GameName>(this, RolePrior, memento);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance(), Game.GetNullInstance());
+            _prior = new PredecessorList<GameName>(this, GetRolePrior(), memento, GameName.GetUnloadedInstance(), GameName.GetNullInstance());
         }
 
         // Result initializer
@@ -1123,7 +1691,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return _game.Fact; }
         }
-        public IEnumerable<GameName> Prior
+        public PredecessorList<GameName> Prior
         {
             get { return _prior; }
         }
@@ -1184,46 +1752,108 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Player _unloadedInstance;
+        private static Player _nullInstance;
+
+        public static Player GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Player((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Player GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Player((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Player> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Player)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleUser = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"user",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
-			true));
-        public static Role RoleGame = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"game",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
-			true));
+        private static Role _cacheRoleUser;
+        public static Role GetRoleUser()
+        {
+            if (_cacheRoleUser == null)
+            {
+                _cacheRoleUser = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "user",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        true));
+            }
+            return _cacheRoleUser;
+        }
+        private static Role _cacheRoleGame;
+        public static Role GetRoleGame()
+        {
+            if (_cacheRoleGame == null)
+            {
+                _cacheRoleGame = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "game",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+			        true));
+            }
+            return _cacheRoleGame;
+        }
 
         // Queries
-        public static Query MakeQueryMoves()
+        private static Query _cacheQueryMoves;
+
+        public static Query GetQueryMoves()
 		{
-			return new Query()
-				.JoinSuccessors(Move.RolePlayer)
-            ;
+            if (_cacheQueryMoves == null)
+            {
+			    _cacheQueryMoves = new Query()
+		    		.JoinSuccessors(Move.GetRolePlayer())
+                ;
+            }
+            return _cacheQueryMoves;
 		}
-        public static Query QueryMoves = MakeQueryMoves();
-        public static Query MakeQueryIsActive()
+        private static Query _cacheQueryIsActive;
+
+        public static Query GetQueryIsActive()
 		{
-			return new Query()
-				.JoinPredecessors(Player.RoleGame)
-				.JoinSuccessors(Outcome.RoleGame)
-            ;
+            if (_cacheQueryIsActive == null)
+            {
+			    _cacheQueryIsActive = new Query()
+		    		.JoinPredecessors(Player.GetRoleGame())
+		    		.JoinSuccessors(Outcome.GetRoleGame())
+                ;
+            }
+            return _cacheQueryIsActive;
 		}
-        public static Query QueryIsActive = MakeQueryIsActive();
-        public static Query MakeQueryIsNotActive()
+        private static Query _cacheQueryIsNotActive;
+
+        public static Query GetQueryIsNotActive()
 		{
-			return new Query()
-				.JoinPredecessors(Player.RoleGame)
-				.JoinSuccessors(Outcome.RoleGame)
-            ;
+            if (_cacheQueryIsNotActive == null)
+            {
+			    _cacheQueryIsNotActive = new Query()
+		    		.JoinPredecessors(Player.GetRoleGame())
+		    		.JoinSuccessors(Outcome.GetRoleGame())
+                ;
+            }
+            return _cacheQueryIsNotActive;
 		}
-        public static Query QueryIsNotActive = MakeQueryIsNotActive();
 
         // Predicates
-        public static Condition IsActive = Condition.WhereIsEmpty(QueryIsActive);
-        public static Condition IsNotActive = Condition.WhereIsNotEmpty(QueryIsNotActive);
+        public static Condition IsActive = Condition.WhereIsEmpty(GetQueryIsActive());
+        public static Condition IsNotActive = Condition.WhereIsNotEmpty(GetQueryIsNotActive());
 
         // Predecessors
         private PredecessorObj<User> _user;
@@ -1243,8 +1873,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             )
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, user);
-            _game = new PredecessorObj<Game>(this, RoleGame, game);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), game);
             _index = index;
         }
 
@@ -1252,14 +1882,14 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Player(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, RoleUser, memento);
-            _game = new PredecessorObj<Game>(this, RoleGame, memento);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance(), User.GetNullInstance());
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance(), Game.GetNullInstance());
         }
 
         // Result initializer
         private void InitializeResults()
         {
-            _moves = new Result<Move>(this, QueryMoves);
+            _moves = new Result<Move>(this, GetQueryMoves());
         }
 
         // Predecessor access
@@ -1334,12 +1964,51 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Move _unloadedInstance;
+        private static Move _nullInstance;
+
+        public static Move GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Move((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Move GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Move((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Move> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Move)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RolePlayer = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"player",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
-			false));
+        private static Role _cacheRolePlayer;
+        public static Role GetRolePlayer()
+        {
+            if (_cacheRolePlayer == null)
+            {
+                _cacheRolePlayer = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "player",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+			        false));
+            }
+            return _cacheRolePlayer;
+        }
 
         // Queries
 
@@ -1362,7 +2031,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             )
         {
             InitializeResults();
-            _player = new PredecessorObj<Player>(this, RolePlayer, player);
+            _player = new PredecessorObj<Player>(this, GetRolePlayer(), player);
             _index = index;
             _square = square;
         }
@@ -1371,7 +2040,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Move(FactMemento memento)
         {
             InitializeResults();
-            _player = new PredecessorObj<Player>(this, RolePlayer, memento);
+            _player = new PredecessorObj<Player>(this, GetRolePlayer(), memento, Player.GetUnloadedInstance(), Player.GetNullInstance());
         }
 
         // Result initializer
@@ -1443,17 +2112,64 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Outcome _unloadedInstance;
+        private static Outcome _nullInstance;
+
+        public static Outcome GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Outcome((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Outcome GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Outcome((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Outcome> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Outcome)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleGame = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"game",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
-			true));
-        public static Role RoleWinner = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"winner",
-			new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
-			false));
+        private static Role _cacheRoleGame;
+        public static Role GetRoleGame()
+        {
+            if (_cacheRoleGame == null)
+            {
+                _cacheRoleGame = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "game",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+			        true));
+            }
+            return _cacheRoleGame;
+        }
+        private static Role _cacheRoleWinner;
+        public static Role GetRoleWinner()
+        {
+            if (_cacheRoleWinner == null)
+            {
+                _cacheRoleWinner = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "winner",
+			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+			        false));
+            }
+            return _cacheRoleWinner;
+        }
 
         // Queries
 
@@ -1474,16 +2190,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             )
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, RoleGame, game);
-            _winner = new PredecessorOpt<Player>(this, RoleWinner, winner);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), game);
+            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), winner);
         }
 
         // Hydration constructor
         private Outcome(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, RoleGame, memento);
-            _winner = new PredecessorOpt<Player>(this, RoleWinner, memento);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance(), Game.GetNullInstance());
+            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), memento, Player.GetUnloadedInstance(), Player.GetNullInstance());
         }
 
         // Result initializer
@@ -1520,40 +2236,40 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				new FactMetadata(new List<CorrespondenceFactType> { Machine._correspondenceFactType }));
 			community.AddQuery(
 				Machine._correspondenceFactType,
-				Machine.QueryActiveLogOns.QueryDefinition);
+				Machine.GetQueryActiveLogOns().QueryDefinition);
 			community.AddType(
 				User._correspondenceFactType,
 				new User.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { User._correspondenceFactType }));
 			community.AddQuery(
 				User._correspondenceFactType,
-				User.QueryFavoriteColor.QueryDefinition);
+				User.GetQueryFavoriteColor().QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
-				User.QueryBetterFavoriteColor.QueryDefinition);
+				User.GetQueryBetterFavoriteColor().QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
-				User.QueryActivePlayers.QueryDefinition);
+				User.GetQueryActivePlayers().QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
-				User.QueryFinishedPlayers.QueryDefinition);
+				User.GetQueryFinishedPlayers().QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
-				User.QueryFinishedGames.QueryDefinition);
+				User.GetQueryFinishedGames().QueryDefinition);
 			community.AddType(
 				User__favoriteColor._correspondenceFactType,
 				new User__favoriteColor.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { User__favoriteColor._correspondenceFactType }));
 			community.AddQuery(
 				User__favoriteColor._correspondenceFactType,
-				User__favoriteColor.QueryIsCurrent.QueryDefinition);
+				User__favoriteColor.GetQueryIsCurrent().QueryDefinition);
 			community.AddType(
 				User__betterFavoriteColor._correspondenceFactType,
 				new User__betterFavoriteColor.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { User__betterFavoriteColor._correspondenceFactType }));
 			community.AddQuery(
 				User__betterFavoriteColor._correspondenceFactType,
-				User__betterFavoriteColor.QueryIsCurrent.QueryDefinition);
+				User__betterFavoriteColor.GetQueryIsCurrent().QueryDefinition);
 			community.AddType(
 				Color._correspondenceFactType,
 				new Color.CorrespondenceFactFactory(fieldSerializerByType),
@@ -1564,27 +2280,31 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				new FactMetadata(new List<CorrespondenceFactType> { LogOn._correspondenceFactType }));
 			community.AddQuery(
 				LogOn._correspondenceFactType,
-				LogOn.QueryIsActive.QueryDefinition);
+				LogOn.GetQueryIsActive().QueryDefinition);
 			community.AddType(
 				LogOff._correspondenceFactType,
 				new LogOff.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { LogOff._correspondenceFactType }));
+			community.AddType(
+				Tournament._correspondenceFactType,
+				new Tournament.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { Tournament._correspondenceFactType }));
 			community.AddType(
 				Game._correspondenceFactType,
 				new Game.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Game._correspondenceFactType }));
 			community.AddQuery(
 				Game._correspondenceFactType,
-				Game.QueryPlayers.QueryDefinition);
+				Game.GetQueryPlayers().QueryDefinition);
 			community.AddQuery(
 				Game._correspondenceFactType,
-				Game.QueryMoves.QueryDefinition);
+				Game.GetQueryMoves().QueryDefinition);
 			community.AddQuery(
 				Game._correspondenceFactType,
-				Game.QueryOutcomes.QueryDefinition);
+				Game.GetQueryOutcomes().QueryDefinition);
 			community.AddQuery(
 				Game._correspondenceFactType,
-				Game.QueryIsFinished.QueryDefinition);
+				Game.GetQueryIsFinished().QueryDefinition);
 			community.AddType(
 				GameName._correspondenceFactType,
 				new GameName.CorrespondenceFactFactory(fieldSerializerByType),
@@ -1595,20 +2315,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				new FactMetadata(new List<CorrespondenceFactType> { Player._correspondenceFactType }));
 			community.AddQuery(
 				Player._correspondenceFactType,
-				Player.QueryMoves.QueryDefinition);
+				Player.GetQueryMoves().QueryDefinition);
 			community.AddQuery(
 				Player._correspondenceFactType,
-				Player.QueryIsActive.QueryDefinition);
+				Player.GetQueryIsActive().QueryDefinition);
 			community.AddQuery(
 				Player._correspondenceFactType,
-				Player.QueryIsNotActive.QueryDefinition);
+				Player.GetQueryIsNotActive().QueryDefinition);
 			community.AddUnpublisher(
-				Player.RoleUser,
-				Condition.WhereIsEmpty(Player.QueryIsActive)
+				Player.GetRoleUser(),
+				Condition.WhereIsEmpty(Player.GetQueryIsActive())
 				);
 			community.AddUnpublisher(
-				Player.RoleGame,
-				Condition.WhereIsEmpty(Player.QueryIsActive)
+				Player.GetRoleGame(),
+				Condition.WhereIsEmpty(Player.GetQueryIsActive())
 				);
 			community.AddType(
 				Move._correspondenceFactType,

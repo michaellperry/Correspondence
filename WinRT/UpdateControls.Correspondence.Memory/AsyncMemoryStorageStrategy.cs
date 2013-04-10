@@ -20,7 +20,7 @@ namespace UpdateControls.Correspondence.Memory
 
         private Guid _clientGuid = Guid.NewGuid();
 
-        private Queue<Task<List<IdentifiedFactMemento>>> _futureTasks = new Queue<Task<List<IdentifiedFactMemento>>>();
+        private Queue<Task> _futureTasks = new Queue<Task>();
 
         private static Task Done = Task.WhenAll();
 
@@ -49,13 +49,18 @@ namespace UpdateControls.Correspondence.Memory
             return Done;
         }
 
-        public async Task<FactMemento> LoadAsync(FactID id)
+        public Task<FactMemento> LoadAsync(FactID id)
         {
-            FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
-            if (factRecord != null)
-                return factRecord.IdentifiedFactMemento.Memento;
-            else
-                throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
+            Task<FactMemento> task = Task.Run(delegate
+            {
+                FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
+                if (factRecord != null)
+                    return factRecord.IdentifiedFactMemento.Memento;
+                else
+                    throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
+            });
+            _futureTasks.Enqueue(task);
+            return task;
         }
 
         public Task<SaveResult> SaveAsync(FactMemento memento, int peerId)

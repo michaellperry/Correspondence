@@ -10,10 +10,11 @@ namespace UpdateControls.Correspondence
     public class PredecessorOpt<TFact> : PredecessorBase
         where TFact : CorrespondenceFact
     {
-		private RoleMemento _role;
+        private RoleMemento _role;
         private FactID _factId;
 		private Independent<TFact> _fact;
         private Community _community;
+        private TaskCompletionSource<CorrespondenceFact> _loaded;
 
 		public PredecessorOpt(
 			CorrespondenceFact subject,
@@ -36,19 +37,33 @@ namespace UpdateControls.Correspondence
         public PredecessorOpt(
             CorrespondenceFact subject,
             Role role,
-            FactMemento memento) :
+            FactMemento memento,
+            TFact unloaded,
+            TFact nullInstance) :
             base(subject, false)
         {
             _role = role.RoleMemento;
-            _fact = new Independent<TFact>();
+            _fact = new Independent<TFact>(unloaded);
+            _loaded = new TaskCompletionSource<CorrespondenceFact>();
+            unloaded.SetLoadedTask(_loaded.Task);
 
-            List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
-            if (facts.Count > 1)
-                throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
-            if (facts.Count == 1)
-                _factId = facts[0];
-            else
-                _factId = new FactID();
+            if (memento != null)
+            {
+                List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
+                if (facts.Count > 1)
+                    throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
+                if (facts.Count == 1)
+                    _factId = facts[0];
+                else
+                    _factId = new FactID();
+
+                if (_factId.key == 0)
+                {
+                    _fact.Value = nullInstance;
+                    _loaded.SetResult(nullInstance);
+                    _loaded = null;
+                }
+            }
             subject.SetPredecessor(_role, this);
         }
 
@@ -87,6 +102,11 @@ namespace UpdateControls.Correspondence
                 lock (this)
                 {
                     _fact.Value = fact;
+                    if (_loaded != null)
+                    {
+                        _loaded.SetResult(fact);
+                        _loaded = null;
+                    }
                 }
             }
         }

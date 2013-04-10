@@ -49,7 +49,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
             User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
-            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game(null));
             Player playerOnePlayer = await _playerOneCommuniy.AddFactAsync(new Player(playerOneUser, game, 0));
             Outcome outcome = await _playerOneCommuniy.AddFactAsync(new Outcome(game, null));
         }
@@ -59,7 +59,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
             User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
-            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game(null));
             GameName gameName = await _playerOneCommuniy.AddFactAsync(new GameName(game, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
         }
 
@@ -68,7 +68,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
             User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
-            Game game = new Game();
+            Game game = new Game(null);
             try
             {
                 Player playerOnePlayer = await _playerOneCommuniy.AddFactAsync(new Player(playerOneUser, game, 0));
@@ -85,7 +85,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
             User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
-            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game(null));
             GameName gameName = new GameName(game, new List<GameName>(), "Fischer Spasky 1971, Game 3");
             try
             {
@@ -103,10 +103,10 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
             User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
-            Game playerOneGame = await _playerOneCommuniy.AddFactAsync(new Game());
+            Game playerOneGame = await _playerOneCommuniy.AddFactAsync(new Game(null));
 			GameName gameName = await _playerOneCommuniy.AddFactAsync(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
 			
-			Game playerTwoGame = await _playerTwoCommuniy.AddFactAsync(new Game());
+			Game playerTwoGame = await _playerTwoCommuniy.AddFactAsync(new Game(null));
 			try
             {
                 GameName secondGame = await _playerTwoCommuniy.AddFactAsync(new GameName(playerTwoGame, new List<GameName>() { gameName }, "Fischer Spasky 1971, Game 3"));
@@ -123,10 +123,10 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
             User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
-            Game playerOneGame = await _playerOneCommuniy.AddFactAsync(new Game());
+            Game playerOneGame = await _playerOneCommuniy.AddFactAsync(new Game(null));
             GameName gameName = await _playerOneCommuniy.AddFactAsync(new GameName(playerOneGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
 
-            Game playerTwoGame = await _playerTwoCommuniy.AddFactAsync(new Game());
+            Game playerTwoGame = await _playerTwoCommuniy.AddFactAsync(new Game(null));
             GameName secondName = await _playerTwoCommuniy.AddFactAsync(new GameName(playerTwoGame, new List<GameName>(), "Fischer Spasky 1971, Game 3"));
 			try
             {
@@ -144,7 +144,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Machine playerOneMachine = await _playerOneCommuniy.AddFactAsync(new Machine());
             User playerOneUser = await _playerOneCommuniy.AddFactAsync(new User("one"));
-            Game game = await _playerOneCommuniy.AddFactAsync(new Game());
+            Game game = await _playerOneCommuniy.AddFactAsync(new Game(null));
             Player playerOnePlayer = new Player(playerOneUser, game, 0);
             try
             {

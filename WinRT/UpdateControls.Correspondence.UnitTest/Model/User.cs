@@ -15,7 +15,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public async Task<Player> ChallengeAsync(User other)
         {
-            Game game = await Community.AddFactAsync(new Game());
+            Game game = await Community.AddFactAsync(new Game(null));
             Player player = await Community.AddFactAsync(new Player(this, game, 0));
             await Community.AddFactAsync(new Player(other, game, 1));
 

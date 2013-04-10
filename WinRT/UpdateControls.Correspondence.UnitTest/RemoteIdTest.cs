@@ -33,19 +33,19 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(communication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
-            game = await community.AddFactAsync(new Game());
+            game = await community.AddFactAsync(new Game(null));
             await storage.SaveShareAsync(1, new FactID { key = 42 }, new FactID { key = 1 });
 
             await community.SynchronizeAsync();
 
             Outcome outcome = game.Outcomes.Single();
-            Assert.IsNull(outcome.Winner);
+            Assert.IsFalse(outcome.Winner.IsLoaded);
         }
 
         [TestMethod]
         public async Task WillCallGetWithARemoteFactID()
         {
-            Game sourceGame = new Game();
+            Game sourceGame = new Game(null);
             Game game = null;
             var storage = new MemoryStorageStrategy();
             var communication = new MockCommunicationStrategy()

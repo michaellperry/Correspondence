@@ -15,6 +15,7 @@ namespace UpdateControls.Correspondence
         private List<FactID> _factIds;
 		private Independent<List<TFact>> _facts;
         private Community _community;
+        private TaskCompletionSource<PredecessorList<TFact>> _loaded;
 
 		public PredecessorList(
 			CorrespondenceFact subject,
@@ -43,15 +44,32 @@ namespace UpdateControls.Correspondence
 		public PredecessorList(
 			CorrespondenceFact subject,
 			Role role,
-			FactMemento memento ) :
+            FactMemento memento,
+            TFact unloaded,
+            TFact nullInstance) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;
             _facts = new Independent<List<TFact>>(new List<TFact>());
+            _loaded = new TaskCompletionSource<PredecessorList<TFact>>();
 
-            _factIds = memento.GetPredecessorIdsByRole(_role).ToList();
-			subject.SetPredecessor( _role, this );
-		}
+            if (memento != null)
+            {
+                _factIds = memento.GetPredecessorIdsByRole(_role).ToList();
+            }
+            subject.SetPredecessor(_role, this);
+        }
+
+        public Task<PredecessorList<TFact>> EnsureAsync()
+        {
+            lock (this)
+            {
+                if (_loaded != null)
+                    return _loaded.Task;
+                else
+                    return Task.FromResult(this);
+            }
+        }
 
         internal override Community Community
         {
@@ -101,6 +119,11 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 _facts.Value = facts;
+                if (_loaded != null)
+                {
+                    _loaded.SetResult(this);
+                    _loaded = null;
+                }
             }
         }
     }

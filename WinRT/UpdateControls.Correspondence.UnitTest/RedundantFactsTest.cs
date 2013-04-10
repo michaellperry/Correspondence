@@ -73,7 +73,7 @@ namespace UpdateControls.Correspondence.UnitTest
 
 		private async Task<Game> CreateGameAsync()
 		{
-			return await _community.AddFactAsync(new Game());
+			return await _community.AddFactAsync(new Game(null));
 		}
 
 		private async Task<User> CreateUserAsync(string userName)

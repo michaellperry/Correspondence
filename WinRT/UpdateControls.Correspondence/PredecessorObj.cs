@@ -16,6 +16,7 @@ namespace UpdateControls.Correspondence
         private FactID _factId;
 		private Independent<TFact> _fact;
         private Community _community;
+        private TaskCompletionSource<CorrespondenceFact> _loaded;
 
 		public PredecessorObj(
 			CorrespondenceFact subject,
@@ -40,20 +41,27 @@ namespace UpdateControls.Correspondence
 		public PredecessorObj(
 			CorrespondenceFact subject,
 			Role role,
-			FactMemento memento ) :
+			FactMemento memento,
+            TFact unloaded,
+            TFact nullInstance) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;
-            _fact = new Independent<TFact>();
+            _fact = new Independent<TFact>(unloaded);
+            _loaded = new TaskCompletionSource<CorrespondenceFact>();
+            unloaded.SetLoadedTask(_loaded.Task);
 
-            List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
-            if (facts.Count < 1)
-                throw new CorrespondenceException(string.Format("A fact was loaded with no predecessor in role {0}.", role));
-            if (facts.Count > 1)
-                throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
-            _factId = facts[0];
+            if (memento != null)
+            {
+                List<FactID> facts = memento.GetPredecessorIdsByRole(_role).ToList();
+                if (facts.Count < 1)
+                    throw new CorrespondenceException(string.Format("A fact was loaded with no predecessor in role {0}.", role));
+                if (facts.Count > 1)
+                    throw new CorrespondenceException(string.Format("A fact was loaded with more than one predecessor in role {0}.", role));
+                _factId = facts[0];
+            }
             subject.SetPredecessor(_role, this);
-		}
+        }
 
         internal override Community Community
         {
@@ -84,6 +92,11 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 _fact.Value = fact;
+                if (_loaded != null)
+                {
+                    _loaded.SetResult(fact);
+                    _loaded = null;
+                }
             }
         }
 	}

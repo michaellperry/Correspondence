@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UpdateControls.Correspondence.Mementos;
 using System;
 using UpdateControls.Correspondence.Queries;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence
 {
@@ -16,6 +17,28 @@ namespace UpdateControls.Correspondence
 		private Community _community;
 
         protected internal abstract CorrespondenceFactType GetCorrespondenceFactType();
+
+        private bool _isLoaded = true;
+        private bool _isNull = false;
+
+        protected Task<CorrespondenceFact> _loadedTask;
+
+        internal void SetLoadedTask(Task<CorrespondenceFact> loadedTask)
+        {
+            _loadedTask = loadedTask;
+        }
+
+        public bool IsLoaded
+        {
+            get { return _isLoaded; }
+            protected set { _isLoaded = value; }
+        }
+
+        public bool IsNull
+        {
+            get { return _isNull; }
+            protected set { _isNull = value; }
+        }
 
         internal FactID ID
 		{

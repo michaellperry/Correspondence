@@ -118,6 +118,7 @@
     <Compile Include="AsyncChallengeTest.cs" />
     <Compile Include="CaptureTest.cs" />
     <Compile Include="ChallengeTest.cs" />
+    <Compile Include="AsyncNonNullTest.cs" />
     <Compile Include="FieldSerializerTest.cs" />
     <Compile Include="MockCommunicationStrategy.cs" />
     <Compile Include="Model\Game.cs" />

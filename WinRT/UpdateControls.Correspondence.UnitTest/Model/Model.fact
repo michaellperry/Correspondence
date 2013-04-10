@@ -59,9 +59,15 @@ key:
 	LogOn logOn;
 }
 
+fact Tournament {
+key:
+    unique;
+}
+
 fact Game {
 key:
 	unique;
+    Tournament? tournament;
 
 query:
 	Player* players {
