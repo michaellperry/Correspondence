@@ -38,11 +38,13 @@ namespace UpdateControls.Correspondence
 		public PredecessorObj(
 			CorrespondenceFact subject,
 			Role role,
-			FactMemento memento,
+            FactMemento memento,
+            Func<TFact> getUnloadedInstance,
             Func<TFact> getNullInstance) :
             base(subject, false)
 		{
 			_role = role.RoleMemento;
+            _fact = getUnloadedInstance();
 
             if (memento != null)
             {

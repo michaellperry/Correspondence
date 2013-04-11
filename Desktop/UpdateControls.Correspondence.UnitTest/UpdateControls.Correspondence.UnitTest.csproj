@@ -76,6 +76,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncNonNullTest.cs" />
+    <Compile Include="AsyncTest.cs" />
     <Compile Include="CaptureTest.cs" />
     <Compile Include="ChallengeTest.cs" />
     <Compile Include="AsyncChallengeTest.cs" />

@@ -35,10 +35,12 @@ namespace UpdateControls.Correspondence
             CorrespondenceFact subject,
             Role role,
             FactMemento memento,
+            Func<TFact> getUnloadedInstance,
             Func<TFact> getNullInstance) :
             base(subject, false)
         {
             _role = role.RoleMemento;
+            _fact = getUnloadedInstance();
 
             if (memento != null)
             {
@@ -49,6 +51,11 @@ namespace UpdateControls.Correspondence
                     _factId = facts[0];
                 else
                     _factId = new FactID();
+
+                if (_factId.key == 0)
+                {
+                    _fact = getNullInstance();
+                }
             }
             subject.SetPredecessor(_role, this);
         }

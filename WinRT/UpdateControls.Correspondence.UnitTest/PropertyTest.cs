@@ -108,7 +108,8 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Color color = _alan.BetterFavoriteColor;
 
-            Assert.IsNull(color);
+            Assert.IsNotNull(color);
+            Assert.IsTrue(color.IsNull);
         }
 
         [TestMethod]

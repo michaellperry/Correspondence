@@ -29,7 +29,7 @@ namespace UpdateControls.Correspondence
 
         protected async void OnGet()
         {
-            if (_state == State.Unloaded)
+            if (_state == State.Unloaded && _subject.InternalCommunity != null)
             {
                 _state = State.Loading;
                 // Cache the predecessor.

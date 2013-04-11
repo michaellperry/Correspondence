@@ -38,7 +38,8 @@ namespace UpdateControls.Correspondence.UnitTest
             community.Synchronize();
 
             Outcome outcome = game.Outcomes.Single();
-            Assert.IsNull(outcome.Winner);
+            Assert.IsNotNull(outcome.Winner);
+            Assert.IsTrue(outcome.Winner.IsNull);
         }
 
         [TestMethod]

@@ -23,7 +23,7 @@ namespace UpdateControls.Correspondence
 
         protected void OnGet()
         {
-            if (!_cached)
+            if (!_cached && _subject.InternalCommunity != null)
             {
                 // Cache the predecessor.
                 _cached = true;

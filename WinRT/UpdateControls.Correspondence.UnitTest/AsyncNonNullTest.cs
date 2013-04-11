@@ -80,6 +80,24 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
+        public void PropertiesNotYetLoadedAreNotLoadedObjects()
+        {
+            Color favoriteColor = _alan.BetterFavoriteColor;
+
+            Assert.IsNotNull(favoriteColor);
+            Assert.IsFalse(favoriteColor.IsLoaded);
+        }
+
+        [TestMethod]
+        public async Task NullPropertiesAreNullObjects()
+        {
+            Color favoriteColor = await _alan.BetterFavoriteColor.EnsureAsync();
+
+            Assert.IsNotNull(favoriteColor);
+            Assert.IsTrue(favoriteColor.IsNull);
+        }
+
+        [TestMethod]
         public async Task PredecessorIsEventuallyLoaded()
         {
             Player player = await GetAlansPlayer();
@@ -100,6 +118,8 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             Player player = await GetAlansPlayer();
             var tournament = player.Game.Tournament;
+            _memory.Quiesce();
+            tournament = player.Game.Tournament;
             _memory.Quiesce();
             tournament = player.Game.Tournament;
 

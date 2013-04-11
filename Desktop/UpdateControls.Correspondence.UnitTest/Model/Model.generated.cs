@@ -75,8 +75,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static Machine _unloadedInstance;
         private static Machine _nullInstance;
+
+        public static Machine GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Machine((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static Machine GetNullInstance()
         {
@@ -133,7 +143,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _activeLogOns = new Result<LogOn>(this, GetQueryActiveLogOns());
+            _activeLogOns = new Result<LogOn>(this, GetQueryActiveLogOns(), LogOn.GetUnloadedInstance, LogOn.GetNullInstance);
         }
 
         // Predecessor access
@@ -196,8 +206,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static User _unloadedInstance;
         private static User _nullInstance;
+
+        public static User GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new User((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static User GetNullInstance()
         {
@@ -310,11 +330,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor());
-            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor());
-            _activePlayers = new Result<Player>(this, GetQueryActivePlayers());
-            _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers());
-            _finishedGames = new Result<Game>(this, GetQueryFinishedGames());
+            _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor(), User__favoriteColor.GetUnloadedInstance, User__favoriteColor.GetNullInstance);
+            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor(), User__betterFavoriteColor.GetUnloadedInstance, User__betterFavoriteColor.GetNullInstance);
+            _activePlayers = new Result<Player>(this, GetQueryActivePlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
+            _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
+            _finishedGames = new Result<Game>(this, GetQueryFinishedGames(), Game.GetUnloadedInstance, Game.GetNullInstance);
         }
 
         // Predecessor access
@@ -411,8 +431,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static User__favoriteColor _unloadedInstance;
         private static User__favoriteColor _nullInstance;
+
+        public static User__favoriteColor GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new User__favoriteColor((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static User__favoriteColor GetNullInstance()
         {
@@ -494,8 +524,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private User__favoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetNullInstance);
-            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), memento, User__favoriteColor.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), memento, User__favoriteColor.GetUnloadedInstance, User__favoriteColor.GetNullInstance);
         }
 
         // Result initializer
@@ -506,13 +536,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public IEnumerable<User__favoriteColor> Prior
         {
             get { return _prior; }
         }
-     
+
         // Field access
         public string Value
         {
@@ -567,8 +597,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static User__betterFavoriteColor _unloadedInstance;
         private static User__betterFavoriteColor _nullInstance;
+
+        public static User__betterFavoriteColor GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new User__betterFavoriteColor((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static User__betterFavoriteColor GetNullInstance()
         {
@@ -663,9 +703,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private User__betterFavoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetNullInstance);
-            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), memento, User__betterFavoriteColor.GetNullInstance);
-            _value = new PredecessorObj<Color>(this, GetRoleValue(), memento, Color.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), memento, User__betterFavoriteColor.GetUnloadedInstance, User__betterFavoriteColor.GetNullInstance);
+            _value = new PredecessorObj<Color>(this, GetRoleValue(), memento, Color.GetUnloadedInstance, Color.GetNullInstance);
         }
 
         // Result initializer
@@ -676,15 +716,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public IEnumerable<User__betterFavoriteColor> Prior
         {
             get { return _prior; }
         }
-             public Color Value
+        public Color Value
         {
-            get { return _value.Fact; }
+            get { return IsNull ? Color.GetNullInstance() : _value.Fact; }
         }
 
         // Field access
@@ -739,8 +779,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static Color _unloadedInstance;
         private static Color _nullInstance;
+
+        public static Color GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Color((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static Color GetNullInstance()
         {
@@ -842,8 +892,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static LogOn _unloadedInstance;
         private static LogOn _nullInstance;
+
+        public static LogOn GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new LogOn((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static LogOn GetNullInstance()
         {
@@ -926,8 +986,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private LogOn(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetNullInstance);
-            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), memento, Machine.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), memento, Machine.GetUnloadedInstance, Machine.GetNullInstance);
         }
 
         // Result initializer
@@ -938,11 +998,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public Machine Machine
         {
-            get { return _machine.Fact; }
+            get { return IsNull ? Machine.GetNullInstance() : _machine.Fact; }
         }
 
         // Field access
@@ -997,8 +1057,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static LogOff _unloadedInstance;
         private static LogOff _nullInstance;
+
+        public static LogOff GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new LogOff((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static LogOff GetNullInstance()
         {
@@ -1048,7 +1118,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private LogOff(FactMemento memento)
         {
             InitializeResults();
-            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), memento, LogOn.GetNullInstance);
+            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), memento, LogOn.GetUnloadedInstance, LogOn.GetNullInstance);
         }
 
         // Result initializer
@@ -1059,7 +1129,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public LogOn LogOn
         {
-            get { return _logOn.Fact; }
+            get { return IsNull ? LogOn.GetNullInstance() : _logOn.Fact; }
         }
 
         // Field access
@@ -1114,8 +1184,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static Game _unloadedInstance;
         private static Game _nullInstance;
+
+        public static Game GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Game((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static Game GetNullInstance()
         {
@@ -1211,9 +1291,9 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _players = new Result<Player>(this, GetQueryPlayers());
-            _moves = new Result<Move>(this, GetQueryMoves());
-            _outcomes = new Result<Outcome>(this, GetQueryOutcomes());
+            _players = new Result<Player>(this, GetQueryPlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
+            _moves = new Result<Move>(this, GetQueryMoves(), Move.GetUnloadedInstance, Move.GetNullInstance);
+            _outcomes = new Result<Outcome>(this, GetQueryOutcomes(), Outcome.GetUnloadedInstance, Outcome.GetNullInstance);
         }
 
         // Predecessor access
@@ -1284,8 +1364,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static GameName _unloadedInstance;
         private static GameName _nullInstance;
+
+        public static GameName GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new GameName((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static GameName GetNullInstance()
         {
@@ -1354,8 +1444,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private GameName(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetNullInstance);
-            _prior = new PredecessorList<GameName>(this, GetRolePrior(), memento, GameName.GetNullInstance);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
+            _prior = new PredecessorList<GameName>(this, GetRolePrior(), memento, GameName.GetUnloadedInstance, GameName.GetNullInstance);
         }
 
         // Result initializer
@@ -1366,13 +1456,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public Game Game
         {
-            get { return _game.Fact; }
+            get { return IsNull ? Game.GetNullInstance() : _game.Fact; }
         }
         public IEnumerable<GameName> Prior
         {
             get { return _prior; }
         }
-     
+
         // Field access
         public string Name
         {
@@ -1429,8 +1519,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static Player _unloadedInstance;
         private static Player _nullInstance;
+
+        public static Player GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Player((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static Player GetNullInstance()
         {
@@ -1540,24 +1640,24 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Player(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetNullInstance);
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
         }
 
         // Result initializer
         private void InitializeResults()
         {
-            _moves = new Result<Move>(this, GetQueryMoves());
+            _moves = new Result<Move>(this, GetQueryMoves(), Move.GetUnloadedInstance, Move.GetNullInstance);
         }
 
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public Game Game
         {
-            get { return _game.Fact; }
+            get { return IsNull ? Game.GetNullInstance() : _game.Fact; }
         }
 
         // Field access
@@ -1622,8 +1722,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static Move _unloadedInstance;
         private static Move _nullInstance;
+
+        public static Move GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Move((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static Move GetNullInstance()
         {
@@ -1679,7 +1789,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Move(FactMemento memento)
         {
             InitializeResults();
-            _player = new PredecessorObj<Player>(this, GetRolePlayer(), memento, Player.GetNullInstance);
+            _player = new PredecessorObj<Player>(this, GetRolePlayer(), memento, Player.GetUnloadedInstance, Player.GetNullInstance);
         }
 
         // Result initializer
@@ -1690,7 +1800,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public Player Player
         {
-            get { return _player.Fact; }
+            get { return IsNull ? Player.GetNullInstance() : _player.Fact; }
         }
 
         // Field access
@@ -1751,8 +1861,18 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static Outcome _unloadedInstance;
         private static Outcome _nullInstance;
+
+        public static Outcome GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Outcome((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static Outcome GetNullInstance()
         {
@@ -1818,8 +1938,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         private Outcome(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetNullInstance);
-            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), memento, Player.GetNullInstance);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
+            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), memento, Player.GetUnloadedInstance, Player.GetNullInstance);
         }
 
         // Result initializer
@@ -1830,11 +1950,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public Game Game
         {
-            get { return _game.Fact; }
+            get { return IsNull ? Game.GetNullInstance() : _game.Fact; }
         }
         public Player Winner
         {
-            get { return _winner.Fact; }
+            get { return IsNull ? Player.GetNullInstance() : _winner.Fact; }
         }
 
         // Field access

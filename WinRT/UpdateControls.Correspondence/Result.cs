@@ -25,16 +25,20 @@ namespace UpdateControls.Correspondence
         private State _state = State.Unloaded;
         private ManualResetEvent _loaded = new ManualResetEvent(false);
         private Independent _indResults = new Independent();
+        private Func<TResultType> _getUnloadedInstance;
+        private Func<TResultType> _getNullInstance;
 
-        public Result(CorrespondenceFact startingPoint, Query query)
-            : this(startingPoint, query, null)
+        public Result(CorrespondenceFact startingPoint, Query query, Func<TResultType> getUnloadedInstance, Func<TResultType> getNullInstance)
+            : this(startingPoint, query, getUnloadedInstance, getNullInstance, null)
         {
         }
 
-        public Result(CorrespondenceFact startingPoint, Query query, QueryOptions options)
+        public Result(CorrespondenceFact startingPoint, Query query, Func<TResultType> getUnloadedInstance, Func<TResultType> getNullInstance, QueryOptions options)
         {
             _startingPoint = startingPoint;
             _query = query;
+            _getUnloadedInstance = getUnloadedInstance;
+            _getNullInstance = getNullInstance;
             _options = options;
 
             startingPoint.AddQueryResult(query.QueryDefinition, this);
@@ -50,28 +54,56 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public Task<IEnumerable<TResultType>> EnsureAsync()
+        public Task<Result<TResultType>> EnsureAsync()
         {
             lock (this)
             {
                 _indResults.OnGet();
                 LoadResults();
                 if (_state == State.Loaded)
-                    return Task.FromResult<IEnumerable<TResultType>>(_results);
+                    return Task.FromResult<Result<TResultType>>(this);
             }
-            return Task.Run<IEnumerable<TResultType>>(() =>
+            return Task.Run<Result<TResultType>>(() =>
             {
                 _loaded.WaitOne();
-                lock (this)
-                {
-                    return _results;
-                }
+                return this;
             });
         }
 
         public TransientDisputable<TResultType, TValue> AsTransientDisputable<TValue>(Func<TResultType, TValue> selector)
         {
             return new TransientDisputable<TResultType, TValue>(this, selector);
+        }
+
+        public TResultType Top()
+        {
+            lock (this)
+            {
+                _indResults.OnGet();
+                LoadResults();
+                if (_state == State.Loaded)
+                    return _results.FirstOrDefault() ?? _getNullInstance();
+                else
+                    return _getUnloadedInstance();
+            }
+        }
+
+        public bool IsLoaded
+        {
+            get
+            {
+                lock (this)
+                {
+                    _indResults.OnGet();
+                    LoadResults();
+                    return _state == State.Loaded;
+                }
+            }
+        }
+
+        public TResultType GetNullInstance()
+        {
+            return _getNullInstance();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -218,7 +250,7 @@ namespace UpdateControls.Correspondence
 
         public TValue Value
         {
-            get { return _result != null ? _result.Select(_selector).FirstOrDefault() : _value; }
+            get { return _result != null ? _selector(_result.Top()) : _value; }
         }
 
         public bool InConflict
@@ -234,7 +266,7 @@ namespace UpdateControls.Correspondence
         public async Task<Disputable<TValue>> EnsureAsync()
         {
             IEnumerable<TFact> facts = await _result.EnsureAsync();
-            return facts.Select(_selector).AsDisputable();
+            return facts.Select(_selector).AsDisputable(() => _selector(_result.GetNullInstance()));
         }
 
         public static implicit operator TValue(TransientDisputable<TFact, TValue> disputable)

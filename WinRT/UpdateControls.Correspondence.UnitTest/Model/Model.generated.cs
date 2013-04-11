@@ -154,7 +154,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _activeLogOns = new Result<LogOn>(this, GetQueryActiveLogOns());
+            _activeLogOns = new Result<LogOn>(this, GetQueryActiveLogOns(), LogOn.GetUnloadedInstance, LogOn.GetNullInstance);
         }
 
         // Predecessor access
@@ -350,11 +350,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor());
-            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor());
-            _activePlayers = new Result<Player>(this, GetQueryActivePlayers());
-            _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers());
-            _finishedGames = new Result<Game>(this, GetQueryFinishedGames());
+            _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor(), User__favoriteColor.GetUnloadedInstance, User__favoriteColor.GetNullInstance);
+            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor(), User__betterFavoriteColor.GetUnloadedInstance, User__betterFavoriteColor.GetNullInstance);
+            _activePlayers = new Result<Player>(this, GetQueryActivePlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
+            _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
+            _finishedGames = new Result<Game>(this, GetQueryFinishedGames(), Game.GetUnloadedInstance, Game.GetNullInstance);
         }
 
         // Predecessor access
@@ -573,13 +573,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public PredecessorList<User__favoriteColor> Prior
         {
             get { return _prior; }
         }
-     
+
         // Field access
         public string Value
         {
@@ -762,15 +762,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public PredecessorList<User__betterFavoriteColor> Prior
         {
             get { return _prior; }
         }
-             public Color Value
+        public Color Value
         {
-            get { return _value.Fact; }
+            get { return IsNull ? Color.GetNullInstance() : _value.Fact; }
         }
 
         // Field access
@@ -1062,11 +1062,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public Machine Machine
         {
-            get { return _machine.Fact; }
+            get { return IsNull ? Machine.GetNullInstance() : _machine.Fact; }
         }
 
         // Field access
@@ -1202,7 +1202,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public LogOn LogOn
         {
-            get { return _logOn.Fact; }
+            get { return IsNull ? LogOn.GetNullInstance() : _logOn.Fact; }
         }
 
         // Field access
@@ -1511,15 +1511,15 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _players = new Result<Player>(this, GetQueryPlayers());
-            _moves = new Result<Move>(this, GetQueryMoves());
-            _outcomes = new Result<Outcome>(this, GetQueryOutcomes());
+            _players = new Result<Player>(this, GetQueryPlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
+            _moves = new Result<Move>(this, GetQueryMoves(), Move.GetUnloadedInstance, Move.GetNullInstance);
+            _outcomes = new Result<Outcome>(this, GetQueryOutcomes(), Outcome.GetUnloadedInstance, Outcome.GetNullInstance);
         }
 
         // Predecessor access
         public Tournament Tournament
         {
-            get { return _tournament.Fact; }
+            get { return IsNull ? Tournament.GetNullInstance() : _tournament.Fact; }
         }
 
         // Field access
@@ -1689,13 +1689,13 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public Game Game
         {
-            get { return _game.Fact; }
+            get { return IsNull ? Game.GetNullInstance() : _game.Fact; }
         }
         public PredecessorList<GameName> Prior
         {
             get { return _prior; }
         }
-     
+
         // Field access
         public string Name
         {
@@ -1889,17 +1889,17 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _moves = new Result<Move>(this, GetQueryMoves());
+            _moves = new Result<Move>(this, GetQueryMoves(), Move.GetUnloadedInstance, Move.GetNullInstance);
         }
 
         // Predecessor access
         public User User
         {
-            get { return _user.Fact; }
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
         public Game Game
         {
-            get { return _game.Fact; }
+            get { return IsNull ? Game.GetNullInstance() : _game.Fact; }
         }
 
         // Field access
@@ -2051,7 +2051,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public Player Player
         {
-            get { return _player.Fact; }
+            get { return IsNull ? Player.GetNullInstance() : _player.Fact; }
         }
 
         // Field access
@@ -2210,11 +2210,11 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         // Predecessor access
         public Game Game
         {
-            get { return _game.Fact; }
+            get { return IsNull ? Game.GetNullInstance() : _game.Fact; }
         }
         public Player Winner
         {
-            get { return _winner.Fact; }
+            get { return IsNull ? Player.GetNullInstance() : _winner.Fact; }
         }
 
         // Field access

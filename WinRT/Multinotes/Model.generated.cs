@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
@@ -67,34 +68,80 @@ namespace Multinotes.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Individual _unloadedInstance;
+        private static Individual _nullInstance;
+
+        public static Individual GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Individual((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Individual GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Individual((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Individual> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Individual)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
 
         // Queries
-        public static Query MakeQueryMessageBoards()
+        private static Query _cacheQueryMessageBoards;
+
+        public static Query GetQueryMessageBoards()
 		{
-			return new Query()
-				.JoinSuccessors(Share.RoleIndividual, Condition.WhereIsEmpty(Share.MakeQueryIsDeleted())
+            if (_cacheQueryMessageBoards == null)
+            {
+			    _cacheQueryMessageBoards = new Query()
+    				.JoinSuccessors(Share.GetRoleIndividual(), Condition.WhereIsEmpty(Share.GetQueryIsDeleted())
 				)
-				.JoinPredecessors(Share.RoleMessageBoard)
-            ;
+		    		.JoinPredecessors(Share.GetRoleMessageBoard())
+                ;
+            }
+            return _cacheQueryMessageBoards;
 		}
-        public static Query QueryMessageBoards = MakeQueryMessageBoards();
-        public static Query MakeQueryShares()
+        private static Query _cacheQueryShares;
+
+        public static Query GetQueryShares()
 		{
-			return new Query()
-				.JoinSuccessors(Share.RoleIndividual, Condition.WhereIsEmpty(Share.MakeQueryIsDeleted())
+            if (_cacheQueryShares == null)
+            {
+			    _cacheQueryShares = new Query()
+    				.JoinSuccessors(Share.GetRoleIndividual(), Condition.WhereIsEmpty(Share.GetQueryIsDeleted())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryShares;
 		}
-        public static Query QueryShares = MakeQueryShares();
-        public static Query MakeQueryIsToastNotificationEnabled()
+        private static Query _cacheQueryIsToastNotificationEnabled;
+
+        public static Query GetQueryIsToastNotificationEnabled()
 		{
-			return new Query()
-				.JoinSuccessors(EnableToastNotification.RoleIndividual, Condition.WhereIsEmpty(EnableToastNotification.MakeQueryIsDisabled())
+            if (_cacheQueryIsToastNotificationEnabled == null)
+            {
+			    _cacheQueryIsToastNotificationEnabled = new Query()
+    				.JoinSuccessors(EnableToastNotification.GetRoleIndividual(), Condition.WhereIsEmpty(EnableToastNotification.GetQueryIsDisabled())
 				)
-            ;
+                ;
+            }
+            return _cacheQueryIsToastNotificationEnabled;
 		}
-        public static Query QueryIsToastNotificationEnabled = MakeQueryIsToastNotificationEnabled();
 
         // Predicates
 
@@ -126,9 +173,9 @@ namespace Multinotes.Model
         // Result initializer
         private void InitializeResults()
         {
-            _messageBoards = new Result<MessageBoard>(this, QueryMessageBoards);
-            _shares = new Result<Share>(this, QueryShares);
-            _isToastNotificationEnabled = new Result<EnableToastNotification>(this, QueryIsToastNotificationEnabled);
+            _messageBoards = new Result<MessageBoard>(this, GetQueryMessageBoards(), MessageBoard.GetNullInstance, MessageBoard.GetUnloadedInstance);
+            _shares = new Result<Share>(this, GetQueryShares(), Share.GetNullInstance, Share.GetUnloadedInstance);
+            _isToastNotificationEnabled = new Result<EnableToastNotification>(this, GetQueryIsToastNotificationEnabled(), EnableToastNotification.GetNullInstance, EnableToastNotification.GetUnloadedInstance);
         }
 
         // Predecessor access
@@ -201,29 +248,81 @@ namespace Multinotes.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Share _unloadedInstance;
+        private static Share _nullInstance;
+
+        public static Share GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Share((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Share GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Share((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Share> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Share)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleIndividual = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"individual",
-			new CorrespondenceFactType("Multinotes.Model.Individual", 1),
-			true));
-        public static Role RoleMessageBoard = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"messageBoard",
-			new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
-			false));
+        private static Role _cacheRoleIndividual;
+        public static Role GetRoleIndividual()
+        {
+            if (_cacheRoleIndividual == null)
+            {
+                _cacheRoleIndividual = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "individual",
+			        new CorrespondenceFactType("Multinotes.Model.Individual", 1),
+			        true));
+            }
+            return _cacheRoleIndividual;
+        }
+        private static Role _cacheRoleMessageBoard;
+        public static Role GetRoleMessageBoard()
+        {
+            if (_cacheRoleMessageBoard == null)
+            {
+                _cacheRoleMessageBoard = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "messageBoard",
+			        new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
+			        false));
+            }
+            return _cacheRoleMessageBoard;
+        }
 
         // Queries
-        public static Query MakeQueryIsDeleted()
+        private static Query _cacheQueryIsDeleted;
+
+        public static Query GetQueryIsDeleted()
 		{
-			return new Query()
-				.JoinSuccessors(ShareDelete.RoleShare)
-            ;
+            if (_cacheQueryIsDeleted == null)
+            {
+			    _cacheQueryIsDeleted = new Query()
+		    		.JoinSuccessors(ShareDelete.GetRoleShare())
+                ;
+            }
+            return _cacheQueryIsDeleted;
 		}
-        public static Query QueryIsDeleted = MakeQueryIsDeleted();
 
         // Predicates
-        public static Condition IsDeleted = Condition.WhereIsNotEmpty(QueryIsDeleted);
+        public static Condition IsDeleted = Condition.WhereIsNotEmpty(GetQueryIsDeleted());
 
         // Predecessors
         private PredecessorObj<Individual> _individual;
@@ -244,16 +343,16 @@ namespace Multinotes.Model
         {
             _unique = Guid.NewGuid();
             InitializeResults();
-            _individual = new PredecessorObj<Individual>(this, RoleIndividual, individual);
-            _messageBoard = new PredecessorObj<MessageBoard>(this, RoleMessageBoard, messageBoard);
+            _individual = new PredecessorObj<Individual>(this, GetRoleIndividual(), individual);
+            _messageBoard = new PredecessorObj<MessageBoard>(this, GetRoleMessageBoard(), messageBoard);
         }
 
         // Hydration constructor
         private Share(FactMemento memento)
         {
             InitializeResults();
-            _individual = new PredecessorObj<Individual>(this, RoleIndividual, memento);
-            _messageBoard = new PredecessorObj<MessageBoard>(this, RoleMessageBoard, memento);
+            _individual = new PredecessorObj<Individual>(this, GetRoleIndividual(), memento, Individual.GetUnloadedInstance, Individual.GetNullInstance);
+            _messageBoard = new PredecessorObj<MessageBoard>(this, GetRoleMessageBoard(), memento, MessageBoard.GetUnloadedInstance, MessageBoard.GetNullInstance);
         }
 
         // Result initializer
@@ -264,11 +363,11 @@ namespace Multinotes.Model
         // Predecessor access
         public Individual Individual
         {
-            get { return _individual.Fact; }
+            get { return IsNull ? Individual.GetNullInstance() : _individual.Fact; }
         }
         public MessageBoard MessageBoard
         {
-            get { return _messageBoard.Fact; }
+            get { return IsNull ? MessageBoard.GetNullInstance() : _messageBoard.Fact; }
         }
 
         // Field access
@@ -323,12 +422,51 @@ namespace Multinotes.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static ShareDelete _unloadedInstance;
+        private static ShareDelete _nullInstance;
+
+        public static ShareDelete GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new ShareDelete((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static ShareDelete GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new ShareDelete((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<ShareDelete> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (ShareDelete)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleShare = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"share",
-			new CorrespondenceFactType("Multinotes.Model.Share", 1),
-			true));
+        private static Role _cacheRoleShare;
+        public static Role GetRoleShare()
+        {
+            if (_cacheRoleShare == null)
+            {
+                _cacheRoleShare = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "share",
+			        new CorrespondenceFactType("Multinotes.Model.Share", 1),
+			        true));
+            }
+            return _cacheRoleShare;
+        }
 
         // Queries
 
@@ -347,14 +485,14 @@ namespace Multinotes.Model
             )
         {
             InitializeResults();
-            _share = new PredecessorObj<Share>(this, RoleShare, share);
+            _share = new PredecessorObj<Share>(this, GetRoleShare(), share);
         }
 
         // Hydration constructor
         private ShareDelete(FactMemento memento)
         {
             InitializeResults();
-            _share = new PredecessorObj<Share>(this, RoleShare, memento);
+            _share = new PredecessorObj<Share>(this, GetRoleShare(), memento, Share.GetUnloadedInstance, Share.GetNullInstance);
         }
 
         // Result initializer
@@ -365,7 +503,7 @@ namespace Multinotes.Model
         // Predecessor access
         public Share Share
         {
-            get { return _share.Fact; }
+            get { return IsNull ? Share.GetNullInstance() : _share.Fact; }
         }
 
         // Field access
@@ -420,16 +558,52 @@ namespace Multinotes.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static MessageBoard _unloadedInstance;
+        private static MessageBoard _nullInstance;
+
+        public static MessageBoard GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new MessageBoard((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static MessageBoard GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new MessageBoard((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<MessageBoard> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (MessageBoard)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
 
         // Queries
-        public static Query MakeQueryMessages()
+        private static Query _cacheQueryMessages;
+
+        public static Query GetQueryMessages()
 		{
-			return new Query()
-				.JoinSuccessors(Message.RoleMessageBoard)
-            ;
+            if (_cacheQueryMessages == null)
+            {
+			    _cacheQueryMessages = new Query()
+		    		.JoinSuccessors(Message.GetRoleMessageBoard())
+                ;
+            }
+            return _cacheQueryMessages;
 		}
-        public static Query QueryMessages = MakeQueryMessages();
 
         // Predicates
 
@@ -459,7 +633,7 @@ namespace Multinotes.Model
         // Result initializer
         private void InitializeResults()
         {
-            _messages = new Result<Message>(this, QueryMessages);
+            _messages = new Result<Message>(this, GetQueryMessages(), Message.GetNullInstance, Message.GetUnloadedInstance);
         }
 
         // Predecessor access
@@ -521,6 +695,37 @@ namespace Multinotes.Model
 		{
 			return _correspondenceFactType;
 		}
+
+        // Null and unloaded instances
+        private static Domain _unloadedInstance;
+        private static Domain _nullInstance;
+
+        public static Domain GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Domain((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Domain GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Domain((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Domain> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Domain)t.Result);
+            else
+                return Task.FromResult(this);
+        }
 
         // Roles
 
@@ -608,17 +813,64 @@ namespace Multinotes.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static Message _unloadedInstance;
+        private static Message _nullInstance;
+
+        public static Message GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new Message((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static Message GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new Message((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<Message> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (Message)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleMessageBoard = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"messageBoard",
-			new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
-			true));
-        public static Role RoleDomain = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"domain",
-			new CorrespondenceFactType("Multinotes.Model.Domain", 1),
-			true));
+        private static Role _cacheRoleMessageBoard;
+        public static Role GetRoleMessageBoard()
+        {
+            if (_cacheRoleMessageBoard == null)
+            {
+                _cacheRoleMessageBoard = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "messageBoard",
+			        new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
+			        true));
+            }
+            return _cacheRoleMessageBoard;
+        }
+        private static Role _cacheRoleDomain;
+        public static Role GetRoleDomain()
+        {
+            if (_cacheRoleDomain == null)
+            {
+                _cacheRoleDomain = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "domain",
+			        new CorrespondenceFactType("Multinotes.Model.Domain", 1),
+			        true));
+            }
+            return _cacheRoleDomain;
+        }
 
         // Queries
 
@@ -645,8 +897,8 @@ namespace Multinotes.Model
         {
             _unique = Guid.NewGuid();
             InitializeResults();
-            _messageBoard = new PredecessorObj<MessageBoard>(this, RoleMessageBoard, messageBoard);
-            _domain = new PredecessorObj<Domain>(this, RoleDomain, domain);
+            _messageBoard = new PredecessorObj<MessageBoard>(this, GetRoleMessageBoard(), messageBoard);
+            _domain = new PredecessorObj<Domain>(this, GetRoleDomain(), domain);
             _text = text;
         }
 
@@ -654,8 +906,8 @@ namespace Multinotes.Model
         private Message(FactMemento memento)
         {
             InitializeResults();
-            _messageBoard = new PredecessorObj<MessageBoard>(this, RoleMessageBoard, memento);
-            _domain = new PredecessorObj<Domain>(this, RoleDomain, memento);
+            _messageBoard = new PredecessorObj<MessageBoard>(this, GetRoleMessageBoard(), memento, MessageBoard.GetUnloadedInstance, MessageBoard.GetNullInstance);
+            _domain = new PredecessorObj<Domain>(this, GetRoleDomain(), memento, Domain.GetUnloadedInstance, Domain.GetNullInstance);
         }
 
         // Result initializer
@@ -666,11 +918,11 @@ namespace Multinotes.Model
         // Predecessor access
         public MessageBoard MessageBoard
         {
-            get { return _messageBoard.Fact; }
+            get { return IsNull ? MessageBoard.GetNullInstance() : _messageBoard.Fact; }
         }
         public Domain Domain
         {
-            get { return _domain.Fact; }
+            get { return IsNull ? Domain.GetNullInstance() : _domain.Fact; }
         }
 
         // Field access
@@ -731,24 +983,68 @@ namespace Multinotes.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static EnableToastNotification _unloadedInstance;
+        private static EnableToastNotification _nullInstance;
+
+        public static EnableToastNotification GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new EnableToastNotification((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static EnableToastNotification GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new EnableToastNotification((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<EnableToastNotification> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (EnableToastNotification)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleIndividual = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"individual",
-			new CorrespondenceFactType("Multinotes.Model.Individual", 1),
-			false));
+        private static Role _cacheRoleIndividual;
+        public static Role GetRoleIndividual()
+        {
+            if (_cacheRoleIndividual == null)
+            {
+                _cacheRoleIndividual = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "individual",
+			        new CorrespondenceFactType("Multinotes.Model.Individual", 1),
+			        false));
+            }
+            return _cacheRoleIndividual;
+        }
 
         // Queries
-        public static Query MakeQueryIsDisabled()
+        private static Query _cacheQueryIsDisabled;
+
+        public static Query GetQueryIsDisabled()
 		{
-			return new Query()
-				.JoinSuccessors(DisableToastNotification.RoleEnable)
-            ;
+            if (_cacheQueryIsDisabled == null)
+            {
+			    _cacheQueryIsDisabled = new Query()
+		    		.JoinSuccessors(DisableToastNotification.GetRoleEnable())
+                ;
+            }
+            return _cacheQueryIsDisabled;
 		}
-        public static Query QueryIsDisabled = MakeQueryIsDisabled();
 
         // Predicates
-        public static Condition IsDisabled = Condition.WhereIsNotEmpty(QueryIsDisabled);
+        public static Condition IsDisabled = Condition.WhereIsNotEmpty(GetQueryIsDisabled());
 
         // Predecessors
         private PredecessorObj<Individual> _individual;
@@ -767,14 +1063,14 @@ namespace Multinotes.Model
         {
             _unique = Guid.NewGuid();
             InitializeResults();
-            _individual = new PredecessorObj<Individual>(this, RoleIndividual, individual);
+            _individual = new PredecessorObj<Individual>(this, GetRoleIndividual(), individual);
         }
 
         // Hydration constructor
         private EnableToastNotification(FactMemento memento)
         {
             InitializeResults();
-            _individual = new PredecessorObj<Individual>(this, RoleIndividual, memento);
+            _individual = new PredecessorObj<Individual>(this, GetRoleIndividual(), memento, Individual.GetUnloadedInstance, Individual.GetNullInstance);
         }
 
         // Result initializer
@@ -785,7 +1081,7 @@ namespace Multinotes.Model
         // Predecessor access
         public Individual Individual
         {
-            get { return _individual.Fact; }
+            get { return IsNull ? Individual.GetNullInstance() : _individual.Fact; }
         }
 
         // Field access
@@ -840,12 +1136,51 @@ namespace Multinotes.Model
 			return _correspondenceFactType;
 		}
 
+        // Null and unloaded instances
+        private static DisableToastNotification _unloadedInstance;
+        private static DisableToastNotification _nullInstance;
+
+        public static DisableToastNotification GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new DisableToastNotification((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
+
+        public static DisableToastNotification GetNullInstance()
+        {
+            if (_nullInstance == null)
+            {
+                _nullInstance = new DisableToastNotification((FactMemento)null) { IsNull = true };
+            }
+            return _nullInstance;
+        }
+
+        // Ensure
+        public Task<DisableToastNotification> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (DisableToastNotification)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
         // Roles
-        public static Role RoleEnable = new Role(new RoleMemento(
-			_correspondenceFactType,
-			"enable",
-			new CorrespondenceFactType("Multinotes.Model.EnableToastNotification", 1),
-			false));
+        private static Role _cacheRoleEnable;
+        public static Role GetRoleEnable()
+        {
+            if (_cacheRoleEnable == null)
+            {
+                _cacheRoleEnable = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "enable",
+			        new CorrespondenceFactType("Multinotes.Model.EnableToastNotification", 1),
+			        false));
+            }
+            return _cacheRoleEnable;
+        }
 
         // Queries
 
@@ -864,14 +1199,14 @@ namespace Multinotes.Model
             )
         {
             InitializeResults();
-            _enable = new PredecessorList<EnableToastNotification>(this, RoleEnable, enable);
+            _enable = new PredecessorList<EnableToastNotification>(this, GetRoleEnable(), enable);
         }
 
         // Hydration constructor
         private DisableToastNotification(FactMemento memento)
         {
             InitializeResults();
-            _enable = new PredecessorList<EnableToastNotification>(this, RoleEnable, memento);
+            _enable = new PredecessorList<EnableToastNotification>(this, GetRoleEnable(), memento, EnableToastNotification.GetUnloadedInstance, EnableToastNotification.GetNullInstance);
         }
 
         // Result initializer
@@ -880,11 +1215,11 @@ namespace Multinotes.Model
         }
 
         // Predecessor access
-        public IEnumerable<EnableToastNotification> Enable
+        public PredecessorList<EnableToastNotification> Enable
         {
             get { return _enable; }
         }
-     
+
         // Field access
 
         // Query result access
@@ -904,23 +1239,23 @@ namespace Multinotes.Model
 				new FactMetadata(new List<CorrespondenceFactType> { Individual._correspondenceFactType }));
 			community.AddQuery(
 				Individual._correspondenceFactType,
-				Individual.QueryMessageBoards.QueryDefinition);
+				Individual.GetQueryMessageBoards().QueryDefinition);
 			community.AddQuery(
 				Individual._correspondenceFactType,
-				Individual.QueryShares.QueryDefinition);
+				Individual.GetQueryShares().QueryDefinition);
 			community.AddQuery(
 				Individual._correspondenceFactType,
-				Individual.QueryIsToastNotificationEnabled.QueryDefinition);
+				Individual.GetQueryIsToastNotificationEnabled().QueryDefinition);
 			community.AddType(
 				Share._correspondenceFactType,
 				new Share.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Share._correspondenceFactType }));
 			community.AddQuery(
 				Share._correspondenceFactType,
-				Share.QueryIsDeleted.QueryDefinition);
+				Share.GetQueryIsDeleted().QueryDefinition);
 			community.AddUnpublisher(
-				Share.RoleIndividual,
-				Condition.WhereIsEmpty(Share.QueryIsDeleted)
+				Share.GetRoleIndividual(),
+				Condition.WhereIsEmpty(Share.GetQueryIsDeleted())
 				);
 			community.AddType(
 				ShareDelete._correspondenceFactType,
@@ -932,7 +1267,7 @@ namespace Multinotes.Model
 				new FactMetadata(new List<CorrespondenceFactType> { MessageBoard._correspondenceFactType }));
 			community.AddQuery(
 				MessageBoard._correspondenceFactType,
-				MessageBoard.QueryMessages.QueryDefinition);
+				MessageBoard.GetQueryMessages().QueryDefinition);
 			community.AddType(
 				Domain._correspondenceFactType,
 				new Domain.CorrespondenceFactFactory(fieldSerializerByType),
@@ -947,7 +1282,7 @@ namespace Multinotes.Model
 				new FactMetadata(new List<CorrespondenceFactType> { EnableToastNotification._correspondenceFactType }));
 			community.AddQuery(
 				EnableToastNotification._correspondenceFactType,
-				EnableToastNotification.QueryIsDisabled.QueryDefinition);
+				EnableToastNotification.GetQueryIsDisabled().QueryDefinition);
 			community.AddType(
 				DisableToastNotification._correspondenceFactType,
 				new DisableToastNotification.CorrespondenceFactFactory(fieldSerializerByType),

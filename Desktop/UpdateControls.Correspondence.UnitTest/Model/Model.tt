@@ -126,8 +126,18 @@ namespace <#=targetNamespace.Name#>
 			return _correspondenceFactType;
 		}
 
-        // Null instance
+        // Null and unloaded instances
+        private static <#=c.Name#> _unloadedInstance;
         private static <#=c.Name#> _nullInstance;
+
+        public static <#=c.Name#> GetUnloadedInstance()
+        {
+            if (_unloadedInstance == null)
+            {
+                _unloadedInstance = new <#=c.Name#>((FactMemento)null) { IsLoaded = false };
+            }
+            return _unloadedInstance;
+        }
 
         public static <#=c.Name#> GetNullInstance()
         {
@@ -234,7 +244,7 @@ namespace <#=targetNamespace.Name#>
         {
             InitializeResults();
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
-            _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, Get<#=RoleName(predecessor.Name)#>(), memento, <#=predecessor.FactType#>.GetNullInstance);
+            _<#=predecessor.Name#> = new <#=PredecessorClass(predecessor)#>(this, Get<#=RoleName(predecessor.Name)#>(), memento, <#=predecessor.FactType#>.GetUnloadedInstance, <#=predecessor.FactType#>.GetNullInstance);
 <#}#>
         }
 
@@ -242,7 +252,7 @@ namespace <#=targetNamespace.Name#>
         private void InitializeResults()
         {
 <# foreach (Result result in c.Results) { #>
-            _<#=result.Query.Name#> = new <#=ResultClass(result)#>(this, Get<#=QueryName(result.Query.Name)#>());
+            _<#=result.Query.Name#> = new <#=ResultClass(result)#>(this, Get<#=QueryName(result.Query.Name)#>(), <#=result.Type#>.GetUnloadedInstance, <#=result.Type#>.GetNullInstance);
 <#}#>
         }
 
@@ -253,10 +263,10 @@ namespace <#=targetNamespace.Name#>
         {
             get { return _<#=predecessor.Name#>; }
         }
-     <# } else { #>
+<# } else { #>
         public <#=predecessor.FactType#> <#=Capitalize(predecessor.Name)#>
         {
-            get { return _<#=predecessor.Name#>.Fact; }
+            get { return IsNull ? <#=predecessor.FactType#>.GetNullInstance() : _<#=predecessor.Name#>.Fact; }
         }
 <#}}#>
 

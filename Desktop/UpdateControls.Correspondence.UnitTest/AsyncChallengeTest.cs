@@ -11,17 +11,16 @@ using System.Threading;
 namespace UpdateControls.Correspondence.UnitTest
 {
     [TestClass]
-    public class AsyncChallengeTest
+    public class AsyncChallengeTest : AsyncTest
     {
         private Community _community;
-        private AsyncMemoryStorageStrategy _memory;
         private User _alan;
         private User _flynn;
 
         [TestInitialize]
         public void Initialize()
         {
-            _memory = new AsyncMemoryStorageStrategy();
+            InitializeAsyncTest();
             _community = new Community(_memory)
                 .Register<Model.CorrespondenceModel>();
 
@@ -163,28 +162,6 @@ namespace UpdateControls.Correspondence.UnitTest
 
             // And now we can see both.
             Assert.AreEqual(2, _alan.ActivePlayers.Count());
-        }
-
-        private bool _done = false;
-        private Thread _background;
-
-        private void QuiescePeriodically()
-        {
-            _background = new Thread(delegate(object o)
-            {
-                while (!_done)
-                {
-                    Thread.Sleep(100);
-                    _memory.Quiesce();
-                }
-            });
-            _background.Start();
-        }
-
-        private void Done()
-        {
-            _done = true;
-            _background.Join();
         }
     }
 }
