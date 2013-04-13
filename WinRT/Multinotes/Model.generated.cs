@@ -57,6 +57,16 @@ namespace Multinotes.Model
 				Individual fact = (Individual)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._anonymousId);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Individual.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Individual.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -69,25 +79,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static Individual _unloadedInstance;
-        private static Individual _nullInstance;
-
         public static Individual GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Individual((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Individual((FactMemento)null) { IsLoaded = false };
         }
 
         public static Individual GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Individual((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Individual((FactMemento)null) { IsNull = true };
         }
 
         // Ensure
@@ -237,6 +236,16 @@ namespace Multinotes.Model
 				Share fact = (Share)obj;
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Share.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Share.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -249,25 +258,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static Share _unloadedInstance;
-        private static Share _nullInstance;
-
         public static Share GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Share((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Share((FactMemento)null) { IsLoaded = false };
         }
 
         public static Share GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Share((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Share((FactMemento)null) { IsNull = true };
         }
 
         // Ensure
@@ -411,6 +409,16 @@ namespace Multinotes.Model
 			{
 				ShareDelete fact = (ShareDelete)obj;
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return ShareDelete.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return ShareDelete.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -423,25 +431,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static ShareDelete _unloadedInstance;
-        private static ShareDelete _nullInstance;
-
         public static ShareDelete GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new ShareDelete((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new ShareDelete((FactMemento)null) { IsLoaded = false };
         }
 
         public static ShareDelete GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new ShareDelete((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new ShareDelete((FactMemento)null) { IsNull = true };
         }
 
         // Ensure
@@ -547,6 +544,16 @@ namespace Multinotes.Model
 				MessageBoard fact = (MessageBoard)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._topic);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return MessageBoard.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return MessageBoard.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -559,25 +566,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static MessageBoard _unloadedInstance;
-        private static MessageBoard _nullInstance;
-
         public static MessageBoard GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new MessageBoard((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new MessageBoard((FactMemento)null) { IsLoaded = false };
         }
 
         public static MessageBoard GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new MessageBoard((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new MessageBoard((FactMemento)null) { IsNull = true };
         }
 
         // Ensure
@@ -685,6 +681,16 @@ namespace Multinotes.Model
 			{
 				Domain fact = (Domain)obj;
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Domain.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Domain.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -697,25 +703,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static Domain _unloadedInstance;
-        private static Domain _nullInstance;
-
         public static Domain GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Domain((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Domain((FactMemento)null) { IsLoaded = false };
         }
 
         public static Domain GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Domain((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Domain((FactMemento)null) { IsNull = true };
         }
 
         // Ensure
@@ -802,6 +797,16 @@ namespace Multinotes.Model
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._text);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Message.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Message.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -814,25 +819,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static Message _unloadedInstance;
-        private static Message _nullInstance;
-
         public static Message GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Message((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Message((FactMemento)null) { IsLoaded = false };
         }
 
         public static Message GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Message((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Message((FactMemento)null) { IsNull = true };
         }
 
         // Ensure
@@ -972,6 +966,16 @@ namespace Multinotes.Model
 				EnableToastNotification fact = (EnableToastNotification)obj;
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return EnableToastNotification.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return EnableToastNotification.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -984,25 +988,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static EnableToastNotification _unloadedInstance;
-        private static EnableToastNotification _nullInstance;
-
         public static EnableToastNotification GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new EnableToastNotification((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new EnableToastNotification((FactMemento)null) { IsLoaded = false };
         }
 
         public static EnableToastNotification GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new EnableToastNotification((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new EnableToastNotification((FactMemento)null) { IsNull = true };
         }
 
         // Ensure
@@ -1125,6 +1118,16 @@ namespace Multinotes.Model
 			{
 				DisableToastNotification fact = (DisableToastNotification)obj;
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return DisableToastNotification.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return DisableToastNotification.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -1137,25 +1140,14 @@ namespace Multinotes.Model
 		}
 
         // Null and unloaded instances
-        private static DisableToastNotification _unloadedInstance;
-        private static DisableToastNotification _nullInstance;
-
         public static DisableToastNotification GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new DisableToastNotification((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new DisableToastNotification((FactMemento)null) { IsLoaded = false };
         }
 
         public static DisableToastNotification GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new DisableToastNotification((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new DisableToastNotification((FactMemento)null) { IsNull = true };
         }
 
         // Ensure

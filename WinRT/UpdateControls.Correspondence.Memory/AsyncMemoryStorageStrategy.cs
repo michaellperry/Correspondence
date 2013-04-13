@@ -27,6 +27,7 @@ namespace UpdateControls.Correspondence.Memory
         public void Quiesce()
         {
             Task.WaitAll(_futureTasks.ToArray());
+            Task.Delay(100).Wait();
         }
 
         public Task<Guid> GetClientGuidAsync()
@@ -116,18 +117,23 @@ namespace UpdateControls.Correspondence.Memory
             return Task.FromResult(new SaveResult { WasSaved = wasSaved, Id = id });
         }
 
-        public async Task<FactID?> FindExistingFactAsync(FactMemento memento)
+        public Task<FactID?> FindExistingFactAsync(FactMemento memento)
         {
-            // See if the fact already exists.
-            FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
-            if (fact == null)
+            Task<FactID?> task = Task.Run<FactID?>(delegate
             {
-                return null;
-            }
-            else
-            {
-                return fact.IdentifiedFactMemento.Id;
-            }
+                // See if the fact already exists.
+                FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
+                if (fact == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return fact.IdentifiedFactMemento.Id;
+                }
+            });
+            _futureTasks.Enqueue(task);
+            return task;
         }
 
         public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)

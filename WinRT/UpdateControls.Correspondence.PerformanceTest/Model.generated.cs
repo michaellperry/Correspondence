@@ -73,7 +73,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Individual fact = (Individual)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._anonymousId);
@@ -177,7 +181,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				IndividualProfile fact = (IndividualProfile)obj;
 			}
@@ -286,7 +294,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Profile fact = (Profile)obj;
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
@@ -416,7 +428,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Profile__name fact = (Profile__name)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
@@ -541,7 +557,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Company fact = (Company)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._identifier);
@@ -645,7 +665,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Quarter fact = (Quarter)obj;
 				_fieldSerializerByType[typeof(DateTime)].WriteData(output, fact._startDate);
@@ -762,7 +786,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Category fact = (Category)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._identifier);
@@ -931,7 +959,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Category__description fact = (Category__description)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
@@ -1056,7 +1088,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Category__ordinal fact = (Category__ordinal)obj;
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._value);
@@ -1181,7 +1217,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				ActivityDefinition fact = (ActivityDefinition)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._identifier);
@@ -1363,7 +1403,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				ActivityDefinition__description fact = (ActivityDefinition__description)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
@@ -1488,7 +1532,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				ActivityDefinition__qualifier fact = (ActivityDefinition__qualifier)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
@@ -1613,7 +1661,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				ActivityDefinition__ordinal fact = (ActivityDefinition__ordinal)obj;
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._value);
@@ -1737,7 +1789,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				ActivityReward fact = (ActivityReward)obj;
 			}
@@ -1872,7 +1928,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				ActivityReward__points fact = (ActivityReward__points)obj;
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._value);
@@ -1996,7 +2056,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				ProfileQuarter fact = (ProfileQuarter)obj;
 			}
@@ -2105,7 +2169,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Activity fact = (Activity)obj;
 				_fieldSerializerByType[typeof(DateTime)].WriteData(output, fact._activityDate);
@@ -2274,7 +2342,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Activity__description fact = (Activity__description)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
@@ -2399,7 +2471,11 @@ namespace Incentives.Model
 				return newFact;
 			}
 
-			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+            public T GetUnloadedInstance()
+            {
+                throw new NotImplementedException();
+            }
+            public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
 			{
 				Activity__multiplier fact = (Activity__multiplier)obj;
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._value);

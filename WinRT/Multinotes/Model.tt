@@ -116,6 +116,16 @@ namespace <#=targetNamespace.Name#>
 				_fieldSerializerByType[typeof(<#=FieldType(field)#>)].WriteData(output, fact._<#=field.Name#>);
 <#}#>
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return <#=c.Name#>.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return <#=c.Name#>.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -128,25 +138,14 @@ namespace <#=targetNamespace.Name#>
 		}
 
         // Null and unloaded instances
-        private static <#=c.Name#> _unloadedInstance;
-        private static <#=c.Name#> _nullInstance;
-
         public static <#=c.Name#> GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new <#=c.Name#>((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new <#=c.Name#>((FactMemento)null) { IsLoaded = false };
         }
 
         public static <#=c.Name#> GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new <#=c.Name#>((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new <#=c.Name#>((FactMemento)null) { IsNull = true };
         }
 
         // Ensure

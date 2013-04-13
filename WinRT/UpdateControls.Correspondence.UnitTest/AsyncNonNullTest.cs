@@ -120,8 +120,6 @@ namespace UpdateControls.Correspondence.UnitTest
             var tournament = player.Game.Tournament;
             _memory.Quiesce();
             tournament = player.Game.Tournament;
-            _memory.Quiesce();
-            tournament = player.Game.Tournament;
 
             Assert.IsNotNull(tournament);
             Assert.IsTrue(tournament.IsLoaded);
@@ -147,6 +145,41 @@ namespace UpdateControls.Correspondence.UnitTest
             Assert.IsNotNull(game);
             Assert.IsTrue(game.IsLoaded);
             Assert.IsFalse(game.IsNull);
+        }
+
+        [TestMethod]
+        public void FindFactReturnsUnloadedObject()
+        {
+            User user = _community.FindFact(new User("dillenger7"));
+
+            Assert.IsFalse(user.IsLoaded);
+        }
+
+        [TestMethod]
+        public void FindFactEventuallyBecomesANullObject()
+        {
+            User user = _community.FindFact(new User("dillenger7"));
+            _memory.Quiesce();
+            user = _community.FindFact(new User("dillenger7"));
+
+            Assert.IsTrue(user.IsNull);
+        }
+
+        [TestMethod]
+        public async Task CanAwaitFindFact()
+        {
+            QuiescePeriodically();
+
+            try
+            {
+                User user = await _community.FindFact(new User("dillenger7")).EnsureAsync();
+                Assert.IsTrue(user.IsLoaded);
+                Assert.IsTrue(user.IsNull);
+            }
+            finally
+            {
+                Done();
+            }
         }
 
         private async Task<Player> GetAlansPlayer()

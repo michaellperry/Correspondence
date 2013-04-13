@@ -7,6 +7,7 @@ using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Conditions;
 using System.Threading.Tasks;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence
 {
@@ -30,6 +31,8 @@ namespace UpdateControls.Correspondence
 
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
 		private IDictionary<FactMemento, CorrespondenceFact> _factByMemento = new Dictionary<FactMemento, CorrespondenceFact>();
+
+        private IDictionary<FactMemento, Independent<CorrespondenceFact>> _findFactByMemento = new Dictionary<FactMemento, Independent<CorrespondenceFact>>();
 
         public event Action<CorrespondenceFact> FactAdded;
         public event Action FactReceived;
@@ -136,6 +139,7 @@ namespace UpdateControls.Correspondence
             return prototype;
         }
 
+        [Obsolete]
         public async Task<T> FindFactAsync<T>(T prototype)
                 where T : CorrespondenceFact
         {
@@ -166,6 +170,29 @@ namespace UpdateControls.Correspondence
                     // The object does not exist.
                     return null;
                 }
+            }
+        }
+
+        public T FindFact<T>(T prototype)
+            where T : CorrespondenceFact
+        {
+            lock (this)
+            {
+                ICorrespondenceFactFactory factory;
+                FactMemento memento = CreateMementoFromFact(prototype, out factory);
+
+                Independent<CorrespondenceFact> independent;
+                if (!_findFactByMemento.TryGetValue(memento, out independent))
+                {
+                    var completion = new TaskCompletionSource<CorrespondenceFact>();
+                    CorrespondenceFact fact = factory.GetUnloadedInstance();
+                    fact.SetLoadedTask(completion.Task);
+                    independent = new Independent<CorrespondenceFact>(fact);
+                    _findFactByMemento.Add(memento, independent);
+                    FindFactAndStore(memento, prototype, factory, independent, completion);
+                }
+
+                return (T)independent.Value;
             }
         }
 
@@ -424,11 +451,16 @@ namespace UpdateControls.Correspondence
 
         private FactMemento CreateMementoFromFact(CorrespondenceFact prototype)
         {
+            ICorrespondenceFactFactory factory;
+            return CreateMementoFromFact(prototype, out factory);
+        }
+
+        private FactMemento CreateMementoFromFact(CorrespondenceFact prototype, out ICorrespondenceFactFactory factory)
+        {
             // Get the type of the object.
             CorrespondenceFactType type = prototype.GetCorrespondenceFactType();
 
             // Find the factory for that type.
-            ICorrespondenceFactFactory factory;
             if (!_factoryByType.TryGetValue(type, out factory))
                 throw new CorrespondenceException(string.Format("Add the type {0} or the assembly that contains it to the community.", type));
 
@@ -498,6 +530,45 @@ namespace UpdateControls.Correspondence
                     FactReceived();
             }
             return id;
+        }
+
+        private async void FindFactAndStore(FactMemento memento, CorrespondenceFact prototype, ICorrespondenceFactFactory factory, Independent<CorrespondenceFact> independent, TaskCompletionSource<CorrespondenceFact> completion)
+        {
+            try
+            {
+                CorrespondenceFact fact;
+                using (await _lock.EnterAsync())
+                {
+                    // See if we already have the fact in memory.
+                    if (!_factByMemento.TryGetValue(memento, out fact))
+                    {
+                        // If the object is alredy in storage, load it.
+                        FactID? existingFactId = await _storageStrategy.FindExistingFactAsync(memento);
+                        if (existingFactId.HasValue)
+                        {
+                            prototype.ID = existingFactId.Value;
+                            prototype.SetCommunity(_community);
+                            _factByID.Add(prototype.ID, prototype);
+                            _factByMemento.Add(memento, prototype);
+                            fact = prototype;
+                        }
+                        else
+                        {
+                            // The object does not exist.
+                            fact = factory.GetNullInstance();
+                        }
+                    }
+                }
+                lock (this)
+                {
+                    independent.Value = fact;
+                }
+                completion.SetResult(fact);
+            }
+            catch (Exception x)
+            {
+                HandleException(x);
+            }
         }
 
         private void HandleException(Exception exception)
