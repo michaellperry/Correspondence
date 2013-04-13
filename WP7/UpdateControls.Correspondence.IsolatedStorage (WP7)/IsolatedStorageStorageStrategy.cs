@@ -8,6 +8,7 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 using System.Threading;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence.IsolatedStorage
 {
@@ -176,9 +177,9 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
-        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            var task = new PendingIdentifiedFactMementoTask();
+            var task = new Task<List<IdentifiedFactMemento>>();
             ThreadPool.QueueUserWorkItem(delegate
             {
                 var result = QueryForFacts(queryDefinition, startingId, options).ToList();

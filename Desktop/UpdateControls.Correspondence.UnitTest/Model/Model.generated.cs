@@ -64,6 +64,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				Machine fact = (Machine)obj;
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Machine.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Machine.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -76,25 +86,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static Machine _unloadedInstance;
-        private static Machine _nullInstance;
-
         public static Machine GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Machine((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Machine((FactMemento)null) { IsLoaded = false };
         }
 
         public static Machine GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Machine((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Machine((FactMemento)null) { IsNull = true };
+        }
+
+        public Machine Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -195,6 +199,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				User fact = (User)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._userName);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return User.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return User.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -207,25 +221,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static User _unloadedInstance;
-        private static User _nullInstance;
-
         public static User GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new User((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new User((FactMemento)null) { IsLoaded = false };
         }
 
         public static User GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new User((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new User((FactMemento)null) { IsNull = true };
+        }
+
+        public User Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -420,6 +428,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				User__favoriteColor fact = (User__favoriteColor)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._value);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return User__favoriteColor.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return User__favoriteColor.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -432,25 +450,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static User__favoriteColor _unloadedInstance;
-        private static User__favoriteColor _nullInstance;
-
         public static User__favoriteColor GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new User__favoriteColor((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new User__favoriteColor((FactMemento)null) { IsLoaded = false };
         }
 
         public static User__favoriteColor GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new User__favoriteColor((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new User__favoriteColor((FactMemento)null) { IsNull = true };
+        }
+
+        public User__favoriteColor Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -586,6 +598,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				User__betterFavoriteColor fact = (User__betterFavoriteColor)obj;
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return User__betterFavoriteColor.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return User__betterFavoriteColor.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -598,25 +620,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static User__betterFavoriteColor _unloadedInstance;
-        private static User__betterFavoriteColor _nullInstance;
-
         public static User__betterFavoriteColor GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new User__betterFavoriteColor((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new User__betterFavoriteColor((FactMemento)null) { IsLoaded = false };
         }
 
         public static User__betterFavoriteColor GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new User__betterFavoriteColor((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new User__betterFavoriteColor((FactMemento)null) { IsNull = true };
+        }
+
+        public User__betterFavoriteColor Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -768,6 +784,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				Color fact = (Color)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._name);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Color.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Color.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -780,25 +806,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static Color _unloadedInstance;
-        private static Color _nullInstance;
-
         public static Color GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Color((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Color((FactMemento)null) { IsLoaded = false };
         }
 
         public static Color GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Color((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Color((FactMemento)null) { IsNull = true };
+        }
+
+        public Color Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -881,6 +901,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				LogOn fact = (LogOn)obj;
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return LogOn.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return LogOn.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -893,25 +923,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static LogOn _unloadedInstance;
-        private static LogOn _nullInstance;
-
         public static LogOn GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new LogOn((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new LogOn((FactMemento)null) { IsLoaded = false };
         }
 
         public static LogOn GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new LogOn((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new LogOn((FactMemento)null) { IsNull = true };
+        }
+
+        public LogOn Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -1046,6 +1070,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				LogOff fact = (LogOff)obj;
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return LogOff.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return LogOff.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -1058,25 +1092,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static LogOff _unloadedInstance;
-        private static LogOff _nullInstance;
-
         public static LogOff GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new LogOff((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new LogOff((FactMemento)null) { IsLoaded = false };
         }
 
         public static LogOff GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new LogOff((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new LogOff((FactMemento)null) { IsNull = true };
+        }
+
+        public LogOff Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -1173,6 +1201,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				Game fact = (Game)obj;
 				_fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Game.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Game.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -1185,25 +1223,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static Game _unloadedInstance;
-        private static Game _nullInstance;
-
         public static Game GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Game((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Game((FactMemento)null) { IsLoaded = false };
         }
 
         public static Game GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Game((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Game((FactMemento)null) { IsNull = true };
+        }
+
+        public Game Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -1353,6 +1385,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				GameName fact = (GameName)obj;
 				_fieldSerializerByType[typeof(string)].WriteData(output, fact._name);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return GameName.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return GameName.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -1365,25 +1407,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static GameName _unloadedInstance;
-        private static GameName _nullInstance;
-
         public static GameName GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new GameName((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new GameName((FactMemento)null) { IsLoaded = false };
         }
 
         public static GameName GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new GameName((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new GameName((FactMemento)null) { IsNull = true };
+        }
+
+        public GameName Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -1508,6 +1544,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				Player fact = (Player)obj;
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._index);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Player.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Player.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -1520,25 +1566,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static Player _unloadedInstance;
-        private static Player _nullInstance;
-
         public static Player GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Player((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Player((FactMemento)null) { IsLoaded = false };
         }
 
         public static Player GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Player((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Player((FactMemento)null) { IsNull = true };
+        }
+
+        public Player Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -1711,6 +1751,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._index);
 				_fieldSerializerByType[typeof(int)].WriteData(output, fact._square);
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Move.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Move.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -1723,25 +1773,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static Move _unloadedInstance;
-        private static Move _nullInstance;
-
         public static Move GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Move((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Move((FactMemento)null) { IsLoaded = false };
         }
 
         public static Move GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Move((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Move((FactMemento)null) { IsNull = true };
+        }
+
+        public Move Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles
@@ -1850,6 +1894,16 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				Outcome fact = (Outcome)obj;
 			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Outcome.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Outcome.GetNullInstance();
+            }
 		}
 
 		// Type
@@ -1862,25 +1916,19 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 		}
 
         // Null and unloaded instances
-        private static Outcome _unloadedInstance;
-        private static Outcome _nullInstance;
-
         public static Outcome GetUnloadedInstance()
         {
-            if (_unloadedInstance == null)
-            {
-                _unloadedInstance = new Outcome((FactMemento)null) { IsLoaded = false };
-            }
-            return _unloadedInstance;
+            return new Outcome((FactMemento)null) { IsLoaded = false };
         }
 
         public static Outcome GetNullInstance()
         {
-            if (_nullInstance == null)
-            {
-                _nullInstance = new Outcome((FactMemento)null) { IsNull = true };
-            }
-            return _nullInstance;
+            return new Outcome((FactMemento)null) { IsNull = true };
+        }
+
+        public Outcome Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles

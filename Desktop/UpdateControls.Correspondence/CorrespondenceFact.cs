@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UpdateControls.Correspondence.Mementos;
 using System;
 using UpdateControls.Correspondence.Queries;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence
 {
@@ -19,6 +20,13 @@ namespace UpdateControls.Correspondence
 
         private bool _isLoaded = true;
         private bool _isNull = false;
+
+        protected Task<CorrespondenceFact> _loadedTask;
+
+        internal void SetLoadedTask(Task<CorrespondenceFact> loadedTask)
+        {
+            _loadedTask = loadedTask;
+        }
 
         public bool IsLoaded
         {
@@ -91,5 +99,5 @@ namespace UpdateControls.Correspondence
 				foreach (IQueryResult result in results)
 					result.Invalidate();
         }
-	}
+    }
 }

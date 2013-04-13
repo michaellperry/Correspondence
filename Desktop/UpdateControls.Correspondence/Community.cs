@@ -5,6 +5,7 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Networking;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence
 {
@@ -185,7 +186,7 @@ namespace UpdateControls.Correspondence
             return _model.GetFactByID(id);
 		}
 
-        internal QueryTask ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        internal Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             return _model.ExecuteQueryAsync(queryDefinition, startingId, options);
         }

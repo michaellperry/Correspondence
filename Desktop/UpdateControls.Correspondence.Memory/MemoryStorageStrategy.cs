@@ -4,6 +4,7 @@ using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence.Memory
 {
@@ -133,9 +134,9 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return CompletedIdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+            return Task<List<IdentifiedFactMemento>>.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
         }
 
         public IEnumerable<FactID> QueryForIds(QueryDefinition queryDefinition, FactID startingId)

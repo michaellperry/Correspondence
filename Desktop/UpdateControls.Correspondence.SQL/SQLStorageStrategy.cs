@@ -9,6 +9,7 @@ using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 using System.IO;
 using System.Reflection;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence.SQL
 {
@@ -292,9 +293,9 @@ namespace UpdateControls.Correspondence.SQL
             }
         }
 
-        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return CompletedIdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+            return Task<List<IdentifiedFactMemento>>.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
         }
 
         internal string AppendJoins(Session session, QueryDefinition queryDefinition, StringBuilder queryString, List<int> roleIds, StringBuilder conditions, int depth, string priorAlias)

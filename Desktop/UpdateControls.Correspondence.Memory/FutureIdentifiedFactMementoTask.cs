@@ -3,16 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UpdateControls.Correspondence.Mementos;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence.Memory
 {
-    public class FutureIdentifiedFactMementoTask : IdentifiedFactMementoTask
+    public interface IFuture
     {
-        private Func<List<IdentifiedFactMemento>> _action;
-        private List<IdentifiedFactMemento> _result;
-        private List<Action<IdentifiedFactMementoTask>> _continuations = new List<Action<IdentifiedFactMementoTask>>();
+        void CalculateResults();
+        void DeliverResults();
+    }
 
-        public FutureIdentifiedFactMementoTask(Func<List<IdentifiedFactMemento>> action)
+    public class Future<TResult> : IFuture
+    {
+        private Func<TResult> _action;
+        private TResult _result;
+        private List<Action<Future<TResult>>> _continuations = new List<Action<Future<TResult>>>();
+
+        public Future(Func<TResult> action)
         {
             _action = action;
         }
@@ -28,12 +35,7 @@ namespace UpdateControls.Correspondence.Memory
                 continuation(this);
         }
 
-        public override bool CompletedSynchronously
-        {
-            get { return false; }
-        }
-
-        public override List<IdentifiedFactMemento> Result
+        public TResult Result
         {
             get
             {
@@ -44,7 +46,7 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public override void AddContinuation(Action<IdentifiedFactMementoTask> continuation)
+        public void ContinueWith(Action<Future<TResult>> continuation)
         {
             _continuations.Add(continuation);
         }

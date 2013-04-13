@@ -542,7 +542,7 @@ namespace UpdateControls.Correspondence
                     // See if we already have the fact in memory.
                     if (!_factByMemento.TryGetValue(memento, out fact))
                     {
-                        // If the object is alredy in storage, load it.
+                        // If the object is already in storage, load it.
                         FactID? existingFactId = await _storageStrategy.FindExistingFactAsync(memento);
                         if (existingFactId.HasValue)
                         {

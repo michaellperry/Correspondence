@@ -4,6 +4,7 @@ using System.Linq;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence.Memory
 {
@@ -19,8 +20,8 @@ namespace UpdateControls.Correspondence.Memory
 
         private Guid _clientGuid = Guid.NewGuid();
 
-        private Queue<FutureIdentifiedFactMementoTask> _futureTasks = new Queue<FutureIdentifiedFactMementoTask>();
-        private Queue<FutureIdentifiedFactMementoTask> _calculatedTasks = new Queue<FutureIdentifiedFactMementoTask>();
+        private Queue<IFuture> _futureTasks = new Queue<IFuture>();
+        private Queue<IFuture> _calculatedTasks = new Queue<IFuture>();
 
         public void Quiesce()
         {
@@ -141,15 +142,17 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            FutureIdentifiedFactMementoTask task = new FutureIdentifiedFactMementoTask(() =>
+            Task<List<IdentifiedFactMemento>> task = new Task<List<IdentifiedFactMemento>>();
+            Future<List<IdentifiedFactMemento>> future = new Future<List<IdentifiedFactMemento>>(() =>
                 new QueryExecutor(_factTable
                     .Select(f => f.IdentifiedFactMemento))
                 .ExecuteQuery(queryDefinition, startingId, options)
                 .Reverse()
                 .ToList());
-            _futureTasks.Enqueue(task);
+            future.ContinueWith(t => task.Complete(t.Result));
+            _futureTasks.Enqueue(future);
             return task;
         }
 

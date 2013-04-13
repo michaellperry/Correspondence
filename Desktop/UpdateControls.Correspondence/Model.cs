@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UpdateControls.Correspondence.Conditions;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
-using UpdateControls.Correspondence.Conditions;
+using UpdateControls.Correspondence.Tasks;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence
 {
@@ -29,6 +31,8 @@ namespace UpdateControls.Correspondence
 
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
 		private IDictionary<FactMemento, CorrespondenceFact> _factByMemento = new Dictionary<FactMemento, CorrespondenceFact>();
+
+        private IDictionary<FactMemento, Independent<CorrespondenceFact>> _findFactByMemento = new Dictionary<FactMemento, Independent<CorrespondenceFact>>();
 
         public event Action<CorrespondenceFact> FactAdded;
         public event Action<FactID> FactReceived;
@@ -143,31 +147,21 @@ namespace UpdateControls.Correspondence
         {
             lock (this)
             {
-                if (prototype.InternalCommunity != null)
-                    throw new CorrespondenceException("A fact may only belong to one community");
+                ICorrespondenceFactFactory factory;
+                FactMemento memento = CreateMementoFromFact(prototype, out factory);
 
-                FactMemento memento = CreateMementoFromFact(prototype);
-
-                // See if we already have the fact in memory.
-                CorrespondenceFact fact;
-                if (_factByMemento.TryGetValue(memento, out fact))
-                    return (T)fact;
-
-                // If the object is alredy in storage, load it.
-                FactID id;
-                if (_storageStrategy.FindExistingFact(memento, out id))
+                Independent<CorrespondenceFact> independent;
+                if (!_findFactByMemento.TryGetValue(memento, out independent))
                 {
-                    prototype.ID = id;
-                    prototype.SetCommunity(_community);
-                    _factByID.Add(prototype.ID, prototype);
-                    _factByMemento.Add(memento, prototype);
-                    return prototype;
+                    var completion = new TaskCompletionSource<CorrespondenceFact>();
+                    CorrespondenceFact fact = factory.GetUnloadedInstance();
+                    fact.SetLoadedTask(completion.Task);
+                    independent = new Independent<CorrespondenceFact>(fact);
+                    _findFactByMemento.Add(memento, independent);
+                    FindFactAndStore(memento, prototype, factory, independent, completion);
                 }
-                else
-                {
-                    // The object does not exist.
-                    return null;
-                }
+
+                return (T)independent.Value;
             }
         }
 
@@ -346,15 +340,15 @@ namespace UpdateControls.Correspondence
             return true;
         }
 
-        internal QueryTask ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        internal Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            IdentifiedFactMementoTask task = _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
+            Task<List<IdentifiedFactMemento>> task = _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
             if (task.CompletedSynchronously)
             {
                 List<IdentifiedFactMemento> facts = task.Result;
                 lock (this)
                 {
-                    return QueryTask.FromResult(facts
+                    return Task<List<CorrespondenceFact>>.FromResult(facts
                         .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
                         .Where(m => m != null)
                         .ToList());
@@ -362,7 +356,7 @@ namespace UpdateControls.Correspondence
             }
             else
             {
-                return task.ContinueWith(delegate(IdentifiedFactMementoTask t)
+                return task.ContinueWith(delegate(Task<List<IdentifiedFactMemento>> t)
                 {
                     List<IdentifiedFactMemento> facts = task.Result;
                     lock (this)
@@ -432,11 +426,16 @@ namespace UpdateControls.Correspondence
 
         private FactMemento CreateMementoFromFact(CorrespondenceFact prototype)
         {
+            ICorrespondenceFactFactory factory;
+            return CreateMementoFromFact(prototype, out factory);
+        }
+
+        private FactMemento CreateMementoFromFact(CorrespondenceFact prototype, out ICorrespondenceFactFactory factory)
+        {
             // Get the type of the object.
             CorrespondenceFactType type = prototype.GetCorrespondenceFactType();
 
             // Find the factory for that type.
-            ICorrespondenceFactFactory factory;
             if (!_factoryByType.TryGetValue(type, out factory))
                 throw new CorrespondenceException(string.Format("Add the type {0} or the assembly that contains it to the community.", type));
 
@@ -505,6 +504,45 @@ namespace UpdateControls.Correspondence
                     FactReceived(id);
             }
             return id;
+        }
+
+        private void FindFactAndStore(FactMemento memento, CorrespondenceFact prototype, ICorrespondenceFactFactory factory, Independent<CorrespondenceFact> independent, TaskCompletionSource<CorrespondenceFact> completion)
+        {
+            try
+            {
+                CorrespondenceFact fact;
+                lock (this)
+                {
+                    // See if we already have the fact in memory.
+                    if (!_factByMemento.TryGetValue(memento, out fact))
+                    {
+                        // If the object is already in storage, load it.
+                        FactID id;
+                        if (_storageStrategy.FindExistingFact(memento, out id))
+                        {
+                            prototype.ID = id;
+                            prototype.SetCommunity(_community);
+                            _factByID.Add(prototype.ID, prototype);
+                            _factByMemento.Add(memento, prototype);
+                            fact = prototype;
+                        }
+                        else
+                        {
+                            // The object does not exist.
+                            fact = null;
+                        }
+                    }
+                }
+                lock (this)
+                {
+                    independent.Value = fact;
+                }
+                completion.SetResult(fact);
+            }
+            catch (Exception x)
+            {
+                HandleException(x);
+            }
         }
 
         private void HandleException(Exception exception)

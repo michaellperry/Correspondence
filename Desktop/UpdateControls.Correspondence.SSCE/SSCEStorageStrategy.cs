@@ -8,6 +8,7 @@ using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 using System.IO;
 using System.Reflection;
+using UpdateControls.Correspondence.Tasks;
 
 namespace UpdateControls.Correspondence.SSCE
 {
@@ -549,9 +550,9 @@ namespace UpdateControls.Correspondence.SSCE
             return id;
         }
 
-        public IdentifiedFactMementoTask QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            return CompletedIdentifiedFactMementoTask.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
+            return Task<List<IdentifiedFactMemento>>.FromResult(QueryForFacts(queryDefinition, startingId, options).ToList());
         }
 
         public void SaveShare(int peerId, FactID remoteFactId, FactID localFactId)

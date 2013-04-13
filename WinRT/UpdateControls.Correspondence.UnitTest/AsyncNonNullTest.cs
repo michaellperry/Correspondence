@@ -166,7 +166,7 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public async Task CanAwaitFindFact()
+        public async Task CanEnsureFindFact()
         {
             QuiescePeriodically();
 

@@ -43,6 +43,12 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _fieldSerializerByType[typeof(Guid)].WriteData(output, fact._unique);
                 _fieldSerializerByType[typeof(string)].WriteData(output, fact._text);
             }
+
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return Message.GetUnloadedInstance();
+            }
         }
 
         // Type
@@ -52,6 +58,22 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         protected override CorrespondenceFactType GetCorrespondenceFactType()
         {
             return _correspondenceFactType;
+        }
+
+        // Null and unloaded instances
+        public static Message GetUnloadedInstance()
+        {
+            return new Message((FactMemento)null) { IsLoaded = false };
+        }
+
+        public static Message GetNullInstance()
+        {
+            return new Message((FactMemento)null) { IsNull = true };
+        }
+
+        public Move Ensure()
+        {
+            throw new NotImplementedException();
         }
 
         // Roles

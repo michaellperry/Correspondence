@@ -92,7 +92,6 @@
     <Compile Include="Mementos\Crc32.cs" />
     <Compile Include="Mementos\GetResultMemento.cs" />
     <Compile Include="Mementos\IdentifiedFactBase.cs" />
-    <Compile Include="Mementos\IdentifiedFactMementoTask.cs" />
     <Compile Include="Mementos\IdentifiedFactRemote.cs" />
     <Compile Include="Mementos\PivotMemento.cs" />
     <Compile Include="Mementos\UnpublishMemento.cs" />
@@ -125,7 +124,6 @@
     <Compile Include="Networking\ISubscriptionProvider.cs" />
     <Compile Include="Queries\InvalidatedQuery.cs" />
     <Compile Include="Queries\Unpublisher.cs" />
-    <Compile Include="QueryTask.cs" />
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
     <Compile Include="Strategy\ICorrespondenceModel.cs" />
     <Compile Include="Strategy\IPushSubscription.cs" />
@@ -165,6 +163,8 @@
     <Compile Include="Condition.cs" />
     <Compile Include="Strategy\QueryOptions.cs" />
     <Compile Include="Networking\SynchronousNetwork.cs" />
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Tasks\TaskCompletionSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mallardsoft.snk" />
@@ -187,6 +187,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\NET4\"</PostBuildEvent>

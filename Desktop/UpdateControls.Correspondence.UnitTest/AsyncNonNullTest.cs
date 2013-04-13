@@ -65,5 +65,40 @@ namespace UpdateControls.Correspondence.UnitTest
                 Done();
             }
         }
+
+        [TestMethod]
+        public void FindFactReturnsUnloadedObject()
+        {
+            User user = _community.FindFact(new User("dillenger7"));
+
+            Assert.IsFalse(user.IsLoaded);
+        }
+
+        [TestMethod]
+        public void FindFactEventuallyBecomesANullObject()
+        {
+            User user = _community.FindFact(new User("dillenger7"));
+            _memory.Quiesce();
+            user = _community.FindFact(new User("dillenger7"));
+
+            Assert.IsTrue(user.IsNull);
+        }
+
+        [TestMethod]
+        public void CanEnsureFindFact()
+        {
+            QuiescePeriodically();
+
+            try
+            {
+                User user = _community.FindFact(new User("dillenger7")).Ensure();
+                Assert.IsTrue(user.IsLoaded);
+                Assert.IsTrue(user.IsNull);
+            }
+            finally
+            {
+                Done();
+            }
+        }
     }
 }

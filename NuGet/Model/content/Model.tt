@@ -147,6 +147,11 @@ namespace <#=targetNamespace.Name#>
             return new <#=c.Name#>((FactMemento)null) { IsNull = true };
         }
 
+        public <#=c.Name#> Ensure()
+        {
+            throw new NotImplementedException();
+        }
+
         // Roles
 <# foreach (Predecessor predecessor in c.Predecessors) { #>
         private static Role _cache<#=RoleName(predecessor.Name)#>;
