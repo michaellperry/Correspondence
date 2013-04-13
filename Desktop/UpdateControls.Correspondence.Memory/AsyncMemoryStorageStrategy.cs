@@ -126,20 +126,17 @@ namespace UpdateControls.Correspondence.Memory
             }
         }
 
-        public bool FindExistingFact(FactMemento memento, out FactID id)
+        public Task<FactID?> FindExistingFactAsync(FactMemento memento)
         {
-            // See if the fact already exists.
-            FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
-            if (fact == null)
-            {
-                id = new FactID();
-                return false;
-            }
-            else
-            {
-                id = fact.IdentifiedFactMemento.Id;
-                return true;
-            }
+            Task<FactID?> task = new Task<FactID?>();
+            Future<FactID?> future= new Future<FactID?>(() =>
+                _factTable
+                    .Where(o => o.IdentifiedFactMemento.Memento.Equals(memento))
+                    .Select(o => (FactID?)o.IdentifiedFactMemento.Id)
+                    .FirstOrDefault());
+            future.ContinueWith(t => task.Complete(t.Result));
+            _futureTasks.Enqueue(future);
+            return task;
         }
 
         public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)

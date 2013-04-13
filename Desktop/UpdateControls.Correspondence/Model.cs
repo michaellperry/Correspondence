@@ -517,32 +517,43 @@ namespace UpdateControls.Correspondence
                     if (!_factByMemento.TryGetValue(memento, out fact))
                     {
                         // If the object is already in storage, load it.
-                        FactID id;
-                        if (_storageStrategy.FindExistingFact(memento, out id))
-                        {
-                            prototype.ID = id;
-                            prototype.SetCommunity(_community);
-                            _factByID.Add(prototype.ID, prototype);
-                            _factByMemento.Add(memento, prototype);
-                            fact = prototype;
-                        }
-                        else
-                        {
-                            // The object does not exist.
-                            fact = null;
-                        }
+                        var task = _storageStrategy.FindExistingFactAsync(memento);
+                        task.ContinueWith(t => StoreFact(t, memento, prototype, factory, independent, completion));
+                    }
+                    else
+                    {
+                        independent.Value = fact;
                     }
                 }
-                lock (this)
-                {
-                    independent.Value = fact;
-                }
-                completion.SetResult(fact);
+                if (fact != null)
+                    completion.SetResult(fact);
             }
             catch (Exception x)
             {
                 HandleException(x);
             }
+        }
+
+        private void StoreFact(Task<FactID?> t, FactMemento memento, CorrespondenceFact prototype, ICorrespondenceFactFactory factory, Independent<CorrespondenceFact> independent, TaskCompletionSource<CorrespondenceFact> completion)
+        {
+            CorrespondenceFact fact;
+            lock (this)
+            {
+                if (t.Result.HasValue)
+                {
+                    prototype.ID = t.Result.Value;
+                    prototype.SetCommunity(_community);
+                    _factByID.Add(prototype.ID, prototype);
+                    _factByMemento.Add(memento, prototype);
+                    fact = prototype;
+                }
+                else
+                {
+                    fact = factory.GetNullInstance();
+                }
+                independent.Value = fact;
+            }
+            completion.SetResult(fact);
         }
 
         private void HandleException(Exception exception)

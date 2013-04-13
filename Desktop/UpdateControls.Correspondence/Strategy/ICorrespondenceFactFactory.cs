@@ -8,5 +8,6 @@ namespace UpdateControls.Correspondence.Strategy
         CorrespondenceFact CreateFact(FactMemento memento);
         void WriteFactData(CorrespondenceFact obj, BinaryWriter output);
         CorrespondenceFact GetUnloadedInstance();
+        CorrespondenceFact GetNullInstance();
     }
 }

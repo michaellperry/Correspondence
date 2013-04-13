@@ -267,6 +267,13 @@ namespace UpdateControls.Correspondence.SSCE
 			}
         }
 
+        public Task<FactID?> FindExistingFactAsync(FactMemento memento)
+        {
+            FactID id;
+            bool found = FindExistingFact(memento, out id);
+            return Task<FactID?>.FromResult(found ? (FactID?)id : null);
+        }
+
         public IEnumerable<IdentifiedFactMemento> QueryForFacts(QueryDefinition queryDefinition, FactID id, QueryOptions options)
         {
             using (var session = new Session(_connectionString))

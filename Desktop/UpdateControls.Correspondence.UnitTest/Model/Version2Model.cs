@@ -44,10 +44,14 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _fieldSerializerByType[typeof(string)].WriteData(output, fact._text);
             }
 
-
             public CorrespondenceFact GetUnloadedInstance()
             {
                 return Message.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return Message.GetNullInstance();
             }
         }
 

@@ -37,13 +37,7 @@ namespace UpdateControls.Correspondence.Memory
 
         public TResult Result
         {
-            get
-            {
-                if (_result == null)
-                    throw new InvalidOperationException("Checking the result before the task is done.");
-
-                return _result;
-            }
+            get { return _result; }
         }
 
         public void ContinueWith(Action<Future<TResult>> continuation)

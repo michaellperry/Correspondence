@@ -155,6 +155,13 @@ namespace UpdateControls.Correspondence.IsolatedStorage
             }
         }
 
+        public Task<FactID?> FindExistingFactAsync(FactMemento memento)
+        {
+            FactID id;
+            bool found = FindExistingFact(memento, out id);
+            return Task<FactID?>.FromResult(found ? (FactID?)id : null);
+        }
+
         public bool FindExistingFact(FactMemento memento, out FactID id)
         {
             lock (this)

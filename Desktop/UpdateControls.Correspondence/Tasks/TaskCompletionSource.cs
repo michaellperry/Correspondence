@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace UpdateControls.Correspondence.Tasks
 {
     public class TaskCompletionSource<T>
     {
-        public Task<T> Task { get; set; }
+        public Task<T> Task { get; private set; }
+
+        public TaskCompletionSource()
+        {
+            Task = new Task<T>();
+        }
 
         public void SetResult(T result)
         {
-            throw new NotImplementedException();
+            Task.Complete(result);
         }
     }
 }
