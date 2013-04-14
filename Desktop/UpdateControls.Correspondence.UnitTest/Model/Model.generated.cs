@@ -3,8 +3,10 @@ using System.Linq;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Tasks;
 using System;
 using System.IO;
+using System.Threading;
 
 /**
 / For use with http://graphviz.org/
@@ -98,7 +100,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public Machine Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                Machine fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (Machine)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -233,7 +248,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public User Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                User fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (User)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -462,7 +490,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public User__favoriteColor Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                User__favoriteColor fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (User__favoriteColor)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -632,7 +673,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public User__betterFavoriteColor Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                User__betterFavoriteColor fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (User__betterFavoriteColor)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -818,7 +872,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public Color Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                Color fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (Color)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -935,7 +1002,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public LogOn Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                LogOn fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (LogOn)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -1104,7 +1184,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public LogOff Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                LogOff fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (LogOff)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -1235,7 +1328,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public Game Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                Game fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (Game)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -1419,7 +1525,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public GameName Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                GameName fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (GameName)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -1578,7 +1697,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public Player Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                Player fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (Player)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -1785,7 +1917,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public Move Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                Move fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (Move)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
@@ -1928,7 +2073,20 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public Outcome Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                Outcome fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (Outcome)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles

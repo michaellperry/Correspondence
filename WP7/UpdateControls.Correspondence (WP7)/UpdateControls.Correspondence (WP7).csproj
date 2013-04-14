@@ -73,9 +73,6 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactBase.cs">
       <Link>Mementos\IdentifiedFactBase.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactMementoTask.cs">
-      <Link>Mementos\IdentifiedFactMementoTask.cs</Link>
-    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\IdentifiedFactRemote.cs">
       <Link>Mementos\IdentifiedFactRemote.cs</Link>
     </Compile>
@@ -91,14 +88,17 @@
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Queries\Unpublisher.cs">
       <Link>Queries\Unpublisher.cs</Link>
     </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\QueryTask.cs">
-      <Link>QueryTask.cs</Link>
-    </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ICorrespondenceModel.cs">
       <Link>Strategy\ICorrespondenceModel.cs</Link>
     </Compile>
     <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Strategy\ITransform.cs">
       <Link>Strategy\ITransform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\desktop\updatecontrols.correspondence\tasks\Task.cs">
+      <Link>Tasks\Task.cs</Link>
+    </Compile>
+    <Compile Include="..\..\desktop\updatecontrols.correspondence\tasks\TaskCompletionSource.cs">
+      <Link>Tasks\TaskCompletionSource.cs</Link>
     </Compile>
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>

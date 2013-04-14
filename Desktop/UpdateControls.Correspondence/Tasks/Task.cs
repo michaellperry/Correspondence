@@ -8,6 +8,7 @@ namespace UpdateControls.Correspondence.Tasks
     public class Task<TResult>
     {
         private bool _completedSynchronously;
+        private bool _completed;
         private TResult _result;
         private List<Action<Task<TResult>>> _continuations;
 
@@ -19,6 +20,7 @@ namespace UpdateControls.Correspondence.Tasks
         private Task(bool completedSynchronously, TResult result)
         {
             _completedSynchronously = completedSynchronously;
+            _completed = completedSynchronously;
             _result = result;
         }
 
@@ -29,7 +31,16 @@ namespace UpdateControls.Correspondence.Tasks
 
         public TResult Result
         {
-            get { return _result; }
+            get
+            {
+                lock (this)
+                {
+                    if (!_completed)
+                        throw new InvalidOperationException("Observing the result of a task before it is completed.");
+
+                    return _result;
+                }
+            }
         }
 
         public void ContinueWith(Action<Task<TResult>> continuation)
@@ -55,7 +66,7 @@ namespace UpdateControls.Correspondence.Tasks
         {
             lock (this)
             {
-                if (_result == null)
+                if (!_completed)
                 {
                     if (_continuations == null)
                         _continuations = new List<Action<Task<TResult>>>();
@@ -78,6 +89,7 @@ namespace UpdateControls.Correspondence.Tasks
             lock (this)
             {
                 _result = result;
+                _completed = true;
                 var continuations = _continuations;
                 _continuations = null;
                 return continuations;

@@ -43,8 +43,10 @@ using System.Linq;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Tasks;
 using System;
 using System.IO;
+using System.Threading;
 
 /**
 / For use with http://graphviz.org/
@@ -149,7 +151,20 @@ namespace <#=targetNamespace.Name#>
 
         public <#=c.Name#> Ensure()
         {
-            throw new NotImplementedException();
+            if (_loadedTask != null)
+            {
+                ManualResetEvent loaded = new ManualResetEvent(false);
+                <#=c.Name#> fact = null;
+                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
+                {
+                    fact = (<#=c.Name#>)t.Result;
+                    loaded.Set();
+                });
+                loaded.WaitOne();
+                return fact;
+            }
+            else
+                return this;
         }
 
         // Roles
