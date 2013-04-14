@@ -67,6 +67,8 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 OnGet();
+                if (_facts == null)
+                    return Enumerable.Empty<TFact>().GetEnumerator();
                 return _facts.GetEnumerator();
             }
         }
@@ -80,6 +82,8 @@ namespace UpdateControls.Correspondence
             lock (this)
             {
                 OnGet();
+                if (_facts == null)
+                    return Enumerable.Empty<TFact>().GetEnumerator();
                 return _facts.GetEnumerator();
             }
         }

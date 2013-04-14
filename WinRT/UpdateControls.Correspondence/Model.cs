@@ -31,8 +31,9 @@ namespace UpdateControls.Correspondence
 
         private IDictionary<FactID, CorrespondenceFact> _factByID = new Dictionary<FactID, CorrespondenceFact>();
 		private IDictionary<FactMemento, CorrespondenceFact> _factByMemento = new Dictionary<FactMemento, CorrespondenceFact>();
-
         private IDictionary<FactMemento, Independent<CorrespondenceFact>> _findFactByMemento = new Dictionary<FactMemento, Independent<CorrespondenceFact>>();
+
+        private Independent<Exception> _lastException = new Independent<Exception>();
 
         public event Action<CorrespondenceFact> FactAdded;
         public event Action FactReceived;
@@ -573,7 +574,12 @@ namespace UpdateControls.Correspondence
 
         private void HandleException(Exception exception)
         {
-            // TODO: Find some way of notifying the application developer without interrupting the process.
+            _lastException.Value = exception;
+        }
+
+        public Exception LastException
+        {
+            get { return _lastException; }
         }
     }
 }

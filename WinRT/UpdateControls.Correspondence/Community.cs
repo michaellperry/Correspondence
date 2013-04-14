@@ -165,7 +165,7 @@ namespace UpdateControls.Correspondence
 
         public Exception LastException
         {
-            get { return _network.LastException; }
+            get { return _network.LastException ?? _model.LastException; }
         }
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
