@@ -322,7 +322,7 @@ namespace <#=targetNamespace.Name#>
 <# foreach (ResultValueFact result in c.Results.OfType<ResultValueFact>()) { #>
         public TransientDisputable<<#=result.Type#>, <#=ResultTypeFact(result)#>> <#=Capitalize(result.Query.Name)#>
         {
-            get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => fact.Value); }
+            get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => (<#=ResultTypeFact(result)#>)fact.Value); }
 			set
 			{
 				Action setter = async delegate()

@@ -278,7 +278,7 @@ namespace <#=targetNamespace.Name#>
         // Predecessor access
 <# foreach (Predecessor predecessor in c.Predecessors) {
         if (predecessor.Cardinality == Cardinality.Many) { #>
-        public IEnumerable<<#=predecessor.FactType#>> <#=Capitalize(predecessor.Name)#>
+        public PredecessorList<<#=predecessor.FactType#>> <#=Capitalize(predecessor.Name)#>
         {
             get { return _<#=predecessor.Name#>; }
         }
@@ -328,7 +328,7 @@ namespace <#=targetNamespace.Name#>
 <# foreach (ResultValueFact result in c.Results.OfType<ResultValueFact>()) { #>
         public TransientDisputable<<#=result.Type#>, <#=ResultTypeFact(result)#>> <#=Capitalize(result.Query.Name)#>
         {
-            get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => fact.Value); }
+            get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => (<#=ResultTypeFact(result)#>)fact.Value); }
 			set
 			{
 				var current = _<#=result.Query.Name#>.Ensure().ToList();
