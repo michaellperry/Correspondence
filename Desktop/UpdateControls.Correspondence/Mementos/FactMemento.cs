@@ -55,7 +55,8 @@ namespace UpdateControls.Correspondence.Mementos
             int hash = _factType.GetHashCode();
             foreach (PredecessorMemento entry in _predecessors)
                 hash ^= entry.GetHashCode();
-            hash ^= Crc32.GetHashOfBytes(_data);
+            if (_data != null && _data.Length > 0)
+                hash ^= Crc32.GetHashOfBytes(_data);
 
             return hash;
         }
@@ -71,12 +72,27 @@ namespace UpdateControls.Correspondence.Mementos
 				return false;
             if ( !this._predecessors.SequenceEqual(that._predecessors) )
 				return false;
-            if (this._data.Length != that._data.Length)
-                return false;
-            for (int index = 0; index < this._data.Length; ++index)
+
+            if (this._data == null || this._data.Length == 0)
             {
-                if (this._data[index] != that._data[index])
+                if (that._data != null && that._data.Length != 0)
                     return false;
+            }
+            else if (that._data == null || that._data.Length == 0)
+            {
+                return false;
+            }
+            else if (this._data.Length != that._data.Length)
+            {
+                return false;
+            }
+            else
+            {
+                for (int index = 0; index < this._data.Length; ++index)
+                {
+                    if (this._data[index] != that._data[index])
+                        return false;
+                }
             }
 
 			return true;
