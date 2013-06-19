@@ -50,5 +50,14 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         {
             _publishConditions.Add(publishCondition);
         }
+
+        public int ComputeHash()
+        {
+            unchecked
+            {
+                return (Crc32.GetHashOfString(_name) * 3 + (int)_cardinality) * 2 +
+                    (_isPivot ? 1 : 0);
+            }
+        }
 	}
 }

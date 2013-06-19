@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Factual.Compiler;
 using Source = UpdateControls.Correspondence.Factual.AST;
 using Target = UpdateControls.Correspondence.Factual.Metadata;
+using UpdateControls.Correspondence.Factual.AST;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 {
@@ -17,7 +18,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestInitialize]
         public void Initialize()
         {
-            Source.Namespace root = new Source.Namespace("CRM.Model", 1, string.Empty)
+            Source.Namespace root = new Source.Namespace("CRM.Model", 1, new List<Header>(), string.Empty)
                 .AddFact(new Source.Fact("Customer", 3)
                     .AddMember(new Source.Property(5, "name", new Source.DataTypeNative(Source.NativeType.String, Source.Cardinality.One, 5), true))
                     .AddMember(new Source.Property(6, "employer", new Source.DataTypeFact("Company", Source.Cardinality.One, 6), false))

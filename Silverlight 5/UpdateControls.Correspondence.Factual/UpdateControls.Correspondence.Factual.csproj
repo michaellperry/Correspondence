@@ -65,6 +65,9 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Desktop\UpdateControls.Correspondence\Mementos\Crc32.cs">
+      <Link>Crc32.cs</Link>
+    </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence.Factual\AST\Cardinality.cs">
       <Link>AST\Cardinality.cs</Link>
     </Compile>
@@ -103,6 +106,9 @@
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence.Factual\AST\FieldSecurityModifier.cs">
       <Link>AST\FieldSecurityModifier.cs</Link>
+    </Compile>
+    <Compile Include="..\..\UpdateControls.Correspondence.Factual\AST\Header.cs">
+      <Link>AST\Header.cs</Link>
     </Compile>
     <Compile Include="..\..\UpdateControls.Correspondence.Factual\AST\Identifier.cs">
       <Link>AST\Identifier.cs</Link>

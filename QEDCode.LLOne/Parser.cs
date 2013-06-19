@@ -51,6 +51,11 @@ namespace QEDCode.LLOne
             return new RuleMany<TSymbol, TItem, TResult>(headerRule, itemRule, append);
         }
 
+        protected static Rule<TSymbol, TResult> Many<TItem, TResult>(TResult start, Rule<TSymbol, TItem> itemRule, Func<TResult, TItem, TResult> append)
+        {
+            return new RuleManyHeadless<TSymbol, TItem, TResult>(start, itemRule, append);
+        }
+
         protected static Rule<TSymbol, TResult> Sequence<T1, T2, TResult>(Rule<TSymbol, T1> rule1, Rule<TSymbol, T2> rule2, string error2, RuleSequence2<TSymbol, T1, T2, TResult>.Function reduce)
         {
             return new RuleSequence2<TSymbol, T1, T2, TResult>(rule1, rule2, error2, reduce);

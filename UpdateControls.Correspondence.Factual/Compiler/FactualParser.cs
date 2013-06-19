@@ -69,8 +69,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         public static Rule<Symbol, Namespace> GetNamespaceRule()
         {
             // dotted_identifier -> identifier ("." identifier)*
+            // header_declaration_list -> (identifier identifier ";")*
             // strength_declaration_opt -> ("strength" identifier ";")?
-            // namespace_declaration -> "namespace" dotted_identifier ";" strength_declaration_opt
+            // namespace_declaration -> "namespace" dotted_identifier ";" header_declaration_list strength_declaration_opt
             var dottedIdentifier = Separated(
                 Terminal(Symbol.Identifier),
                 Symbol.Dot,
@@ -81,12 +82,21 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Identifier), "Provide a strength identifier.",
                 Terminal(Symbol.Semicolon), "Terminate the strength declaration with a semicolon.",
                 (strengthToken, identifier, ignored) => identifier.Value);
+            var headerDeclarationList = Many(
+                new List<Header>(),
+                Sequence(
+                    Terminal(Symbol.Identifier),
+                    Terminal(Symbol.Identifier), "Provide a parameter to the header.",
+                    Terminal(Symbol.Semicolon), "Terminate a header with a semicolon.",
+                    (name, parameter, semi) => new Header(name.Value, parameter.Value)),
+                (headers, header) => { headers.Add(header); return headers; });
             var namespaceRule = Sequence(
                 Terminal(Symbol.Namespace),
                 dottedIdentifier, "Provide a dotted identifier for the namespace.",
                 Terminal(Symbol.Semicolon), "Terminate the namespace declaration with a semicolon.",
+                headerDeclarationList, "Defect.",
                 Optional(strengthDeclaration, string.Empty), "Defect.",
-                (namespaceToken, identifier, ignored, strengthIdentifier) => new Namespace(identifier.ToString(), namespaceToken.LineNumber, strengthIdentifier));
+                (namespaceToken, identifier, ignored, headers, strengthIdentifier) => new Namespace(identifier.ToString(), namespaceToken.LineNumber, headers, strengthIdentifier));
             return namespaceRule;
         }
 

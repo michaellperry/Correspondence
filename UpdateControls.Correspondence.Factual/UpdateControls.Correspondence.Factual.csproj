@@ -76,6 +76,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Desktop\UpdateControls.Correspondence\Mementos\Crc32.cs">
+      <Link>Crc32.cs</Link>
+    </Compile>
     <Compile Include="..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
@@ -90,6 +93,7 @@
     <Compile Include="AST\FactMember.cs" />
     <Compile Include="AST\Field.cs" />
     <Compile Include="AST\FieldSecurityModifier.cs" />
+    <Compile Include="AST\Header.cs" />
     <Compile Include="AST\Identifier.cs" />
     <Compile Include="AST\FactSection.cs" />
     <Compile Include="AST\NativeType.cs" />

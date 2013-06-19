@@ -29,5 +29,13 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         {
             get { return _nativeType; }
         }
+
+        public int ComputeHash()
+        {
+            unchecked
+            {
+                return (int)_nativeType * 3 + (int)_cardinality;
+            }
+        }
     }
 }

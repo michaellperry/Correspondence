@@ -77,6 +77,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
 
             factClass.HasPublicKey = fact.Principal;
+
+            if (_root.Version == "legacy")
+                factClass.Version = 1;
+            else
+                ComputeVersionOfFact(factClass);
         }
 
         private void AnalyzeMember(Target.Analyzed result, Source.Fact fact, Target.Class factClass, Source.FactMember member)
@@ -410,6 +415,19 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return fact;
         }
 
-        
+        private void ComputeVersionOfFact(Target.Class factClass)
+        {
+            unchecked
+            {
+                int hash = 0;
+                foreach (var predecessor in factClass.Predecessors)
+                    hash = hash * 37 + predecessor.ComputeHash();
+                foreach (var field in factClass.Fields)
+                    hash = hash * 37 + field.ComputeHash();
+                hash = hash * 2 + (factClass.Unique ? 1 : 0);
+                hash = hash * 2 + (factClass.HasPublicKey ? 1 : 0);
+                factClass.Version = hash;
+            }
+        }
     }
 }

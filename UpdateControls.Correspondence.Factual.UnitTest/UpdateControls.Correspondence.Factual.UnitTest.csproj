@@ -79,6 +79,7 @@
     <Compile Include="AnalyzerTests\PurgeTest.cs" />
     <Compile Include="AnalyzerTests\QueryTest.cs" />
     <Compile Include="AnalyzerTests\TestBase.cs" />
+    <Compile Include="AnalyzerTests\VersionTest.cs" />
     <Compile Include="ParserTests\CommentTest.cs" />
     <Compile Include="ParserTests\FactTest.cs" />
     <Compile Include="ParserTests\FieldTest.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="ParserTests\QueryTest.cs" />
     <Compile Include="ParserTests\TestBase.cs" />
     <Compile Include="ParserTests\UniqueTest.cs" />
+    <Compile Include="ParserTests\VersionTest.cs" />
     <Compile Include="ParserTests\WhereTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ParserTests\AsymmetricSecurityTest.cs" />

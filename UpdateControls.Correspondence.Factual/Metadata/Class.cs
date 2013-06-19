@@ -6,6 +6,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
     public class Class
     {
         private string _name;
+        private int _version;
         private bool _publicKey;
         private bool _unique;
         private List<Field> _fields = new List<Field>();
@@ -22,6 +23,12 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         public string Name
         {
             get { return _name; }
+        }
+
+        public int Version
+        {
+            get { return _version; }
+            set { _version = value; }
         }
 
         public bool Unique
