@@ -15,9 +15,9 @@ namespace UpdateControls.Correspondence.UnitTest
     [TestClass]
     public class RedundantFactsTest
     {
-		private static CorrespondenceFactType PlayerFactType = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1);
-		private static CorrespondenceFactType GameFactType = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1);
-		private static CorrespondenceFactType UserFactType = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1);
+        private static CorrespondenceFactType PlayerFactType = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", -1815448412);
+		private static CorrespondenceFactType GameFactType = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 2);
+		private static CorrespondenceFactType UserFactType = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 8);
 
         private MemoryCommunicationStrategy _memoryCommunicationStrategy;
         private RecordingCommunicationStrategy _recorder;

@@ -78,10 +78,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
             factClass.HasPublicKey = fact.Principal;
 
-            if (_root.Version == "legacy")
-                factClass.Version = 1;
-            else
-                ComputeVersionOfFact(factClass);
+            ComputeVersionOfFact(factClass);
         }
 
         private void AnalyzeMember(Target.Analyzed result, Source.Fact fact, Target.Class factClass, Source.FactMember member)
@@ -250,6 +247,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         dataTypeFact.FactName));
                 }
             }
+
+            ComputeVersionOfFact(childClass);
         }
 
         private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, int lineNumber, out Source.Fact resultType)
@@ -417,17 +416,20 @@ namespace UpdateControls.Correspondence.Factual.Compiler
 
         private void ComputeVersionOfFact(Target.Class factClass)
         {
-            unchecked
-            {
-                int hash = 0;
-                foreach (var predecessor in factClass.Predecessors)
-                    hash = hash * 37 + predecessor.ComputeHash();
-                foreach (var field in factClass.Fields)
-                    hash = hash * 37 + field.ComputeHash();
-                hash = hash * 2 + (factClass.Unique ? 1 : 0);
-                hash = hash * 2 + (factClass.HasPublicKey ? 1 : 0);
-                factClass.Version = hash;
-            }
+            if (_root.Version == "legacy")
+                factClass.Version = 1;
+            else
+                unchecked
+                {
+                    int hash = 0;
+                    foreach (var predecessor in factClass.Predecessors)
+                        hash = hash * 37 + predecessor.ComputeHash();
+                    foreach (var field in factClass.Fields)
+                        hash = hash * 37 + field.ComputeHash();
+                    hash = hash * 2 + (factClass.Unique ? 1 : 0);
+                    hash = hash * 2 + (factClass.HasPublicKey ? 1 : 0);
+                    factClass.Version = hash;
+                }
         }
     }
 }

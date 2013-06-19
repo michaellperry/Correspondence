@@ -80,7 +80,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.Machine", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.Machine", 2);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -228,7 +228,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.User", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.User", 8);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -411,7 +411,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public TransientDisputable<User__betterFavoriteColor, Color> BetterFavoriteColor
         {
-            get { return _betterFavoriteColor.AsTransientDisputable(fact => fact.Value); }
+            get { return _betterFavoriteColor.AsTransientDisputable(fact => (Color)fact.Value); }
 			set
 			{
 				var current = _betterFavoriteColor.Ensure().ToList();
@@ -470,7 +470,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.User__favoriteColor", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.User__favoriteColor", 1286312876);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -515,7 +515,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleUser = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "user",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        User._correspondenceFactType,
 			        true));
             }
             return _cacheRoleUser;
@@ -528,7 +528,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRolePrior = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "prior",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User__favoriteColor", 1),
+			        User__favoriteColor._correspondenceFactType,
 			        false));
             }
             return _cacheRolePrior;
@@ -591,7 +591,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
-        public IEnumerable<User__favoriteColor> Prior
+        public PredecessorList<User__favoriteColor> Prior
         {
             get { return _prior; }
         }
@@ -624,13 +624,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				User__betterFavoriteColor newFact = new User__betterFavoriteColor(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -653,7 +646,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.User__betterFavoriteColor", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.User__betterFavoriteColor", 266066068);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -698,7 +691,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleUser = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "user",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        User._correspondenceFactType,
 			        true));
             }
             return _cacheRoleUser;
@@ -711,7 +704,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRolePrior = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "prior",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User__betterFavoriteColor", 1),
+			        User__betterFavoriteColor._correspondenceFactType,
 			        false));
             }
             return _cacheRolePrior;
@@ -724,7 +717,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleValue = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "value",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Color", 1),
+			        Color._correspondenceFactType,
 			        false));
             }
             return _cacheRoleValue;
@@ -788,7 +781,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return IsNull ? User.GetNullInstance() : _user.Fact; }
         }
-        public IEnumerable<User__betterFavoriteColor> Prior
+        public PredecessorList<User__betterFavoriteColor> Prior
         {
             get { return _prior; }
         }
@@ -852,7 +845,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.Color", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.Color", 8);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -982,7 +975,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.LogOn", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.LogOn", 291259386);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1027,7 +1020,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleUser = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "user",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        User._correspondenceFactType,
 			        false));
             }
             return _cacheRoleUser;
@@ -1040,7 +1033,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleMachine = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "machine",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Machine", 1),
+			        Machine._correspondenceFactType,
 			        false));
             }
             return _cacheRoleMachine;
@@ -1135,13 +1128,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				LogOff newFact = new LogOff(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -1164,7 +1150,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.LogOff", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.LogOff", -334052112);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1209,7 +1195,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleLogOn = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "logOn",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.LogOn", 1),
+			        LogOn._correspondenceFactType,
 			        false));
             }
             return _cacheRoleLogOn;
@@ -1308,7 +1294,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.Game", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.Game", 2);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1505,7 +1491,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.GameName", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.GameName", 1716804944);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1550,7 +1536,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleGame = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "game",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+			        Game._correspondenceFactType,
 			        false));
             }
             return _cacheRoleGame;
@@ -1563,7 +1549,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRolePrior = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "prior",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.GameName", 1),
+			        GameName._correspondenceFactType,
 			        false));
             }
             return _cacheRolePrior;
@@ -1613,7 +1599,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             get { return IsNull ? Game.GetNullInstance() : _game.Fact; }
         }
-        public IEnumerable<GameName> Prior
+        public PredecessorList<GameName> Prior
         {
             get { return _prior; }
         }
@@ -1677,7 +1663,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.Player", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.Player", -1815448412);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1722,7 +1708,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleUser = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "user",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.User", 1),
+			        User._correspondenceFactType,
 			        true));
             }
             return _cacheRoleUser;
@@ -1735,7 +1721,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleGame = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "game",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+			        Game._correspondenceFactType,
 			        true));
             }
             return _cacheRoleGame;
@@ -1897,7 +1883,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.Move", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.Move", 99937088);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1942,7 +1928,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRolePlayer = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "player",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+			        Player._correspondenceFactType,
 			        false));
             }
             return _cacheRolePlayer;
@@ -2024,13 +2010,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				Outcome newFact = new Outcome(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -2053,7 +2032,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"UpdateControls.Correspondence.UnitTest.Model.Outcome", 1);
+			"UpdateControls.Correspondence.UnitTest.Model.Outcome", 887939540);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -2098,7 +2077,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleGame = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "game",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1),
+			        Game._correspondenceFactType,
 			        true));
             }
             return _cacheRoleGame;
@@ -2111,7 +2090,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
                 _cacheRoleWinner = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "winner",
-			        new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Player", 1),
+			        Player._correspondenceFactType,
 			        false));
             }
             return _cacheRoleWinner;

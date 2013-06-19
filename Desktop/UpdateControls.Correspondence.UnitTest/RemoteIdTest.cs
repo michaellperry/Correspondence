@@ -9,8 +9,8 @@ namespace UpdateControls.Correspondence.UnitTest
     [TestClass]
     public class RemoteIdTest
     {
-        private static CorrespondenceFactType TYPE_Game = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 1);
-        private static CorrespondenceFactType TYPE_Outcome = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 1);
+        private static CorrespondenceFactType TYPE_Game = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Game", 2);
+        private static CorrespondenceFactType TYPE_Outcome = new CorrespondenceFactType("UpdateControls.Correspondence.UnitTest.Model.Outcome", 887939540);
 
         [TestMethod]
         public void CanReceiveATreeWithARemoteId()
