@@ -71,7 +71,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.Individual", 1);
+			"Multinotes.Model.Individual", 8);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -172,9 +172,9 @@ namespace Multinotes.Model
         // Result initializer
         private void InitializeResults()
         {
-            _messageBoards = new Result<MessageBoard>(this, GetQueryMessageBoards(), MessageBoard.GetNullInstance, MessageBoard.GetUnloadedInstance);
-            _shares = new Result<Share>(this, GetQueryShares(), Share.GetNullInstance, Share.GetUnloadedInstance);
-            _isToastNotificationEnabled = new Result<EnableToastNotification>(this, GetQueryIsToastNotificationEnabled(), EnableToastNotification.GetNullInstance, EnableToastNotification.GetUnloadedInstance);
+            _messageBoards = new Result<MessageBoard>(this, GetQueryMessageBoards(), MessageBoard.GetUnloadedInstance, MessageBoard.GetNullInstance);
+            _shares = new Result<Share>(this, GetQueryShares(), Share.GetUnloadedInstance, Share.GetNullInstance);
+            _isToastNotificationEnabled = new Result<EnableToastNotification>(this, GetQueryIsToastNotificationEnabled(), EnableToastNotification.GetUnloadedInstance, EnableToastNotification.GetNullInstance);
         }
 
         // Predecessor access
@@ -250,7 +250,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.Share", 1);
+			"Multinotes.Model.Share", -2062489898);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -286,7 +286,7 @@ namespace Multinotes.Model
                 _cacheRoleIndividual = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "individual",
-			        new CorrespondenceFactType("Multinotes.Model.Individual", 1),
+			        Individual._correspondenceFactType,
 			        true));
             }
             return _cacheRoleIndividual;
@@ -299,7 +299,7 @@ namespace Multinotes.Model
                 _cacheRoleMessageBoard = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "messageBoard",
-			        new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
+			        MessageBoard._correspondenceFactType,
 			        false));
             }
             return _cacheRoleMessageBoard;
@@ -394,13 +394,6 @@ namespace Multinotes.Model
 			{
 				ShareDelete newFact = new ShareDelete(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -423,7 +416,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.ShareDelete", 1);
+			"Multinotes.Model.ShareDelete", 1755234436);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -459,7 +452,7 @@ namespace Multinotes.Model
                 _cacheRoleShare = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "share",
-			        new CorrespondenceFactType("Multinotes.Model.Share", 1),
+			        Share._correspondenceFactType,
 			        true));
             }
             return _cacheRoleShare;
@@ -558,7 +551,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.MessageBoard", 1);
+			"Multinotes.Model.MessageBoard", 8);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -629,7 +622,7 @@ namespace Multinotes.Model
         // Result initializer
         private void InitializeResults()
         {
-            _messages = new Result<Message>(this, GetQueryMessages(), Message.GetNullInstance, Message.GetUnloadedInstance);
+            _messages = new Result<Message>(this, GetQueryMessages(), Message.GetUnloadedInstance, Message.GetNullInstance);
         }
 
         // Predecessor access
@@ -666,13 +659,6 @@ namespace Multinotes.Model
 			{
 				Domain newFact = new Domain(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -695,7 +681,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.Domain", 1);
+			"Multinotes.Model.Domain", 0);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -811,7 +797,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.Message", 1);
+			"Multinotes.Model.Message", 270235746);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -847,7 +833,7 @@ namespace Multinotes.Model
                 _cacheRoleMessageBoard = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "messageBoard",
-			        new CorrespondenceFactType("Multinotes.Model.MessageBoard", 1),
+			        MessageBoard._correspondenceFactType,
 			        true));
             }
             return _cacheRoleMessageBoard;
@@ -860,7 +846,7 @@ namespace Multinotes.Model
                 _cacheRoleDomain = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "domain",
-			        new CorrespondenceFactType("Multinotes.Model.Domain", 1),
+			        Domain._correspondenceFactType,
 			        true));
             }
             return _cacheRoleDomain;
@@ -980,7 +966,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.EnableToastNotification", 1);
+			"Multinotes.Model.EnableToastNotification", -1243635142);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1016,7 +1002,7 @@ namespace Multinotes.Model
                 _cacheRoleIndividual = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "individual",
-			        new CorrespondenceFactType("Multinotes.Model.Individual", 1),
+			        Individual._correspondenceFactType,
 			        false));
             }
             return _cacheRoleIndividual;
@@ -1103,13 +1089,6 @@ namespace Multinotes.Model
 			{
 				DisableToastNotification newFact = new DisableToastNotification(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -1132,7 +1111,7 @@ namespace Multinotes.Model
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"Multinotes.Model.DisableToastNotification", 1);
+			"Multinotes.Model.DisableToastNotification", -686635848);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -1168,7 +1147,7 @@ namespace Multinotes.Model
                 _cacheRoleEnable = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "enable",
-			        new CorrespondenceFactType("Multinotes.Model.EnableToastNotification", 1),
+			        EnableToastNotification._correspondenceFactType,
 			        false));
             }
             return _cacheRoleEnable;

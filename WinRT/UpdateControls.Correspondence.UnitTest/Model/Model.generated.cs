@@ -397,7 +397,7 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 
         public TransientDisputable<User__betterFavoriteColor, Color> BetterFavoriteColor
         {
-            get { return _betterFavoriteColor.AsTransientDisputable(fact => fact.Value); }
+            get { return _betterFavoriteColor.AsTransientDisputable(fact => (Color)fact.Value); }
 			set
 			{
 				Action setter = async delegate()
@@ -605,13 +605,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				User__betterFavoriteColor newFact = new User__betterFavoriteColor(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -1089,13 +1082,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				LogOff newFact = new LogOff(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}
@@ -2074,13 +2060,6 @@ namespace UpdateControls.Correspondence.UnitTest.Model
 			{
 				Outcome newFact = new Outcome(memento);
 
-				// Create a memory stream from the memento data.
-				using (MemoryStream data = new MemoryStream(memento.Data))
-				{
-					using (BinaryReader output = new BinaryReader(data))
-					{
-					}
-				}
 
 				return newFact;
 			}

@@ -132,7 +132,7 @@ namespace <#=targetNamespace.Name#>
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"<#=targetNamespace.Name#>.<#=c.Name#>", 1);
+			"<#=targetNamespace.Name#>.<#=c.Name#>", <#=c.Version#>);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{
@@ -169,7 +169,7 @@ namespace <#=targetNamespace.Name#>
                 _cache<#=RoleName(predecessor.Name)#> = new Role(new RoleMemento(
 			        _correspondenceFactType,
 			        "<#=predecessor.Name#>",
-			        new CorrespondenceFactType("<#=targetNamespace.Name#>.<#=predecessor.FactType#>", 1),
+			        <#=predecessor.FactType#>._correspondenceFactType,
 			        <#=predecessor.IsPivot ? "true" : "false"#>));
             }
             return _cache<#=RoleName(predecessor.Name)#>;
@@ -263,7 +263,7 @@ namespace <#=targetNamespace.Name#>
         private void InitializeResults()
         {
 <# foreach (Result result in c.Results) { #>
-            _<#=result.Query.Name#> = new <#=ResultClass(result)#>(this, Get<#=QueryName(result.Query.Name)#>(), <#=result.Type#>.GetNullInstance, <#=result.Type#>.GetUnloadedInstance);
+            _<#=result.Query.Name#> = new <#=ResultClass(result)#>(this, Get<#=QueryName(result.Query.Name)#>(), <#=result.Type#>.GetUnloadedInstance, <#=result.Type#>.GetNullInstance);
 <#}#>
         }
 
