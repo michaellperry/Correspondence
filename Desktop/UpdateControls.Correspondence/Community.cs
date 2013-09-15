@@ -163,7 +163,7 @@ namespace UpdateControls.Correspondence
 
         public Exception LastException
         {
-            get { return _network.LastException; }
+            get { return _network.LastException ?? _model.LastException; }
         }
 
         public bool InvokeTransform(ITransform transform)

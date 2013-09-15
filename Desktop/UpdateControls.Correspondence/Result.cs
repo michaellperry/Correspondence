@@ -117,7 +117,7 @@ namespace UpdateControls.Correspondence
         private void LoadResults()
         {
             // If the results are not cached, load them.
-            if (_state == State.Unloaded)
+            if (_state == State.Unloaded && _startingPoint.IsLoaded)
             {
                 // Load the results from storage and cache them.
                 Task<List<CorrespondenceFact>> queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
