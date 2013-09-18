@@ -41,5 +41,16 @@ namespace UpdateControls.Correspondence.Data
         {
             get { return _predecessors; }
         }
+
+        public long Size
+        {
+            get
+            {
+                return 8 + 4 +
+                    _predecessors.Count * (4 + 8 + 8) +
+                    4 + 4 +
+                    (_data == null ? 0 : _data.Length);
+            }
+        }
     }
 }

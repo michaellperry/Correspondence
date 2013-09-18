@@ -247,5 +247,32 @@ namespace UpdateControls.Correspondence.Memory
             });
             return Done;
         }
+
+        // Debugging.
+        public List<CorrespondenceFactType> GetAllTypes()
+        {
+            return _factTable
+                .Select(f => f.IdentifiedFactMemento.Memento.FactType)
+                .Distinct()
+                .ToList();
+        }
+
+        public List<IdentifiedFactMemento> GetPageOfFactsForType(CorrespondenceFactType type, int page)
+        {
+            return _factTable
+                .Where(f => f.IdentifiedFactMemento.Memento.FactType.Equals(type))
+                .Select(f => f.IdentifiedFactMemento)
+                .Skip(page * 20)
+                .Take(20)
+                .ToList();
+        }
+
+        public List<IdentifiedFactMemento> GetAllSuccessors(FactID factId)
+        {
+            return _factTable
+                .Where(f => f.IdentifiedFactMemento.Memento.Predecessors.Any(p => p.ID.Equals(factId)))
+                .Select(f => f.IdentifiedFactMemento)
+                .ToList();
+        }
     }
 }

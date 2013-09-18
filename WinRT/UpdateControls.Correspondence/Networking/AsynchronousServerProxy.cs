@@ -292,14 +292,21 @@ namespace UpdateControls.Correspondence.Networking
 
         public async void Notify(CorrespondenceFact pivot, string text1, string text2)
         {
-            FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
-            await _model.AddToFactTreeAsync(pivotTree, pivot.ID, _peerId);
-            await _communicationStrategy.NotifyAsync(
-                pivotTree,
-                pivot.ID,
-                await _model.GetClientDatabaseGuidAsync(),
-                text1,
-                text2);
+            try
+            {
+                FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabaseId);
+                await _model.AddToFactTreeAsync(pivotTree, pivot.ID, _peerId);
+                await _communicationStrategy.NotifyAsync(
+                    pivotTree,
+                    pivot.ID,
+                    await _model.GetClientDatabaseGuidAsync(),
+                    text1,
+                    text2);
+            }
+            catch (Exception x)
+            {
+                _lastSendException.Value = x;
+            }
         }
 
         private void UpdatePushSubscriptions()

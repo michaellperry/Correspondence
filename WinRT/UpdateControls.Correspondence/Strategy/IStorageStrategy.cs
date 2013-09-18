@@ -33,5 +33,10 @@ namespace UpdateControls.Correspondence.Strategy
         Task<FactID> GetFactIDFromShareAsync(int peerId, FactID remoteFactId);
         Task<FactID?> GetRemoteIdAsync(FactID localFactId, int peerId);
         Task SaveShareAsync(int peerId, FactID remoteFactId, FactID localFactId);
+
+        // Debugging.
+        List<CorrespondenceFactType> GetAllTypes();
+        List<IdentifiedFactMemento> GetPageOfFactsForType(CorrespondenceFactType type, int page);
+        List<IdentifiedFactMemento> GetAllSuccessors(FactID factId);
     }
 }

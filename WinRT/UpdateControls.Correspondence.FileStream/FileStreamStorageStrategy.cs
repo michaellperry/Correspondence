@@ -8,6 +8,7 @@ using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 using System.Threading.Tasks;
 using Windows.Storage;
+using System.Diagnostics;
 
 namespace UpdateControls.Correspondence.FileStream
 {
@@ -446,6 +447,75 @@ namespace UpdateControls.Correspondence.FileStream
             var tableFile = await correspondenceFolder
                 .CreateFileAsync(fileName, CreationCollisionOption.OpenIfExists);
             return tableFile;
+        }
+
+        // Debugging.
+        public List<CorrespondenceFactType> GetAllTypes()
+        {
+            return Task.Run(async delegate
+            {
+                await _factTypeTable.LoadAsync();
+                return _factTypeTable
+                    .Records
+                    .Select(r => r.FactType)
+                    .ToList();
+            }).Result;
+        }
+
+        public List<IdentifiedFactMemento> GetPageOfFactsForType(CorrespondenceFactType type, int page)
+        {
+            return Task.Run(async delegate
+            {
+                List<IdentifiedFactMemento> results = new List<IdentifiedFactMemento>();
+                int factTypeId = await GetFactTypeIdAsync(type);
+                int skip = page * 20;
+                int take = 20;
+                using (HistoricalTree factTree = await OpenFactTreeAsync())
+                {
+                    long factId = 4;
+                    while (factId < (long)factTree.GetSize())
+                    {
+                        var record = await factTree.LoadAsync(factId);
+                        if (record.FactTypeId == factTypeId)
+                        {
+                            if (skip > 0)
+                                skip--;
+                            else
+                            {
+                                var fact = await LoadFactFromTreeAsync(factTree, factId);
+                                results.Add(new IdentifiedFactMemento(new FactID { key = factId }, fact));
+
+                                if (take > 0)
+                                    take--;
+                                else
+                                    break;
+                            }
+                        }
+                        factId += record.Size;
+                    }
+                }
+                return results;
+            }).Result;
+        }
+
+        public List<IdentifiedFactMemento> GetAllSuccessors(FactID factId)
+        {
+            return Task.Run(async delegate
+            {
+                List<IdentifiedFactMemento> result = new List<IdentifiedFactMemento>();
+                using (HistoricalTree factTree = await OpenFactTreeAsync())
+                {
+                    var successors = await factTree.GetSuccessorsInRoleAsync(factId.key, -1);
+                    foreach (var successor in successors)
+                    {
+                        var successorFact = await LoadFactFromTreeAsync(factTree, successor);
+                        result.Add(new IdentifiedFactMemento(
+                            new FactID { key = successor },
+                            successorFact));
+                    }
+                }
+                return result;
+            }).Result;
         }
     }
 }

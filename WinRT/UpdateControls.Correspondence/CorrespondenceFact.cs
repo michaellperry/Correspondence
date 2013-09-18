@@ -3,6 +3,8 @@ using UpdateControls.Correspondence.Mementos;
 using System;
 using UpdateControls.Correspondence.Queries;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using UpdateControls.Correspondence.Debug;
 
 namespace UpdateControls.Correspondence
 {
@@ -99,5 +101,12 @@ namespace UpdateControls.Correspondence
 				foreach (IQueryResult result in results)
 					result.Invalidate();
         }
-	}
+
+        [Obsolete("This property is only for debugging. Do not code against it.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public FactDescriptor BrowseTheDataStore
+        {
+            get { return _community.BrowseTheDataStoreFromThisPoint(this); }
+        }
+    }
 }

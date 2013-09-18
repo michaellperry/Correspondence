@@ -120,6 +120,10 @@
     <Compile Include="Conditions\Clause.cs" />
     <Compile Include="CorrespondenceException.cs" />
     <Compile Include="CorrespondenceFact.cs" />
+    <Compile Include="Debug\FactDescriptor.cs" />
+    <Compile Include="Debug\PageDescriptor.cs" />
+    <Compile Include="Debug\PredecessorDescriptor.cs" />
+    <Compile Include="Debug\TypeDescriptor.cs" />
     <Compile Include="Disputable.cs" />
     <Compile Include="FactMetadata.cs" />
     <Compile Include="FieldSerializer\BinaryHelper.cs" />

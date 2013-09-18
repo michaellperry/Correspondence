@@ -8,6 +8,7 @@ using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Conditions;
 using System.Threading.Tasks;
 using UpdateControls.Fields;
+using UpdateControls.Correspondence.Debug;
 
 namespace UpdateControls.Correspondence
 {
@@ -580,6 +581,45 @@ namespace UpdateControls.Correspondence
         public Exception LastException
         {
             get { return _lastException; }
+        }
+
+        public TypeDescriptor[] TypeDescriptors
+        {
+            get
+            {
+                return _storageStrategy.GetAllTypes()
+                    .Select(type => new TypeDescriptor(type, GetPageOfFactsForType))
+                    .ToArray();
+            }
+        }
+
+        internal List<FactDescriptor> GetPageOfFactsForType(CorrespondenceFactType type, int page)
+        {
+            return _storageStrategy.GetPageOfFactsForType(type, page)
+                .Select(fact => new FactDescriptor(fact.Id, fact.Memento, LoadFactById, LoadSuccessorsById))
+                .ToList();
+        }
+
+        internal FactDescriptor LoadFactDescriptorById(CorrespondenceFact fact)
+        {
+            return new FactDescriptor(
+                fact.ID,
+                this.CreateMementoFromFact(fact),
+                LoadFactById,
+                LoadSuccessorsById);
+        }
+
+        internal FactMemento LoadFactById(FactID factId)
+        {
+            return Task.Run(async delegate
+            {
+                return await _storageStrategy.LoadAsync(factId);
+            }).Result;
+        }
+
+        internal List<IdentifiedFactMemento> LoadSuccessorsById(FactID factId)
+        {
+            return _storageStrategy.GetAllSuccessors(factId);
         }
     }
 }

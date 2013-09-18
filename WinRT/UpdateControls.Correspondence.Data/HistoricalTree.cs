@@ -132,7 +132,7 @@ namespace UpdateControls.Correspondence.Data
                     long next = await ReadLongAsync();
                     if (predecessorFactId == factId)
                     {
-                        if (predecessorRoldId == roleId)
+                        if (predecessorRoldId == roleId || roleId == -1)
                             ++numberOfMatches;
                         nextFactId = next;
                     }

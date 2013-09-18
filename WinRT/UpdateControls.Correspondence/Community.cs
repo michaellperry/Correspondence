@@ -6,6 +6,8 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Networking;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.Debug;
+using System.ComponentModel;
 
 namespace UpdateControls.Correspondence
 {
@@ -186,6 +188,18 @@ namespace UpdateControls.Correspondence
         internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
             return await _model.ExecuteQueryAsync(queryDefinition, startingId, options);
+        }
+
+        [Obsolete("This property is only for debugging. Do not code against it.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public TypeDescriptor[] BrowseTheDataStore
+        {
+            get { return _model.TypeDescriptors; }
+        }
+
+        internal FactDescriptor BrowseTheDataStoreFromThisPoint(CorrespondenceFact fact)
+        {
+            return _model.LoadFactDescriptorById(fact);
         }
     }
 }
