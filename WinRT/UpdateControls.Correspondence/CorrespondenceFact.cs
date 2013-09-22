@@ -48,7 +48,7 @@ namespace UpdateControls.Correspondence
 			set { _id = value; }
 		}
 
-		protected ICommunity Community
+		public ICommunity Community
 		{
 			get { return _community; }
 		}
