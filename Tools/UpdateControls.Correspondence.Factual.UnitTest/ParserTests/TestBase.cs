@@ -20,7 +20,10 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         {
             Namespace result = parser.Parse();
             if (result == null)
-                Assert.Fail(parser.Errors.First().Message);
+            {
+                ParserError error = parser.Errors.First();
+                Assert.Fail(String.Format("{0}: {1}", error.LineNumber, error.Message));
+            }
             return result;
         }
 
