@@ -32,12 +32,12 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
             webRequest.Method = "POST";
             webRequest.ContentType = "application/octet-stream";
 
-            Stream stream = await webRequest.GetRequestStreamAsync();
+            Stream stream = await Task.Factory.FromAsync<Stream>(webRequest.BeginGetRequestStream, webRequest.EndGetRequestStream, null);
             using (BinaryWriter requestWriter = new BinaryWriter(stream))
             {
                 request.Write(requestWriter);
             }
-            WebResponse webResponse = await webRequest.GetResponseAsync();
+            WebResponse webResponse = await Task.Factory.FromAsync<WebResponse>(webRequest.BeginGetResponse, webRequest.EndGetResponse, null);
             BinaryResponse response;
             using (BinaryReader responseReader = new BinaryReader(webResponse.GetResponseStream()))
             {

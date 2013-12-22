@@ -104,6 +104,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\..\Portable\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj">
+      <Project>{04367bf4-1277-4674-b851-3606ab457039}</Project>
+      <Name>UpdateControls.Correspondence.BinaryHTTPClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Portable\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{8a77436e-f210-44cc-8005-b6f607d2845c}</Project>
       <Name>UpdateControls.Correspondence</Name>
