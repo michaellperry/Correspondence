@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{244823
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Portable\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{8A77436E-F210-44CC-8005-B6F607D2845C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Portable\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{49541974-2B82-493E-B17F-5EA54EFC87AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,11 +26,16 @@ Global
 		{8A77436E-F210-44CC-8005-B6F607D2845C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A77436E-F210-44CC-8005-B6F607D2845C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A77436E-F210-44CC-8005-B6F607D2845C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49541974-2B82-493E-B17F-5EA54EFC87AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49541974-2B82-493E-B17F-5EA54EFC87AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49541974-2B82-493E-B17F-5EA54EFC87AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49541974-2B82-493E-B17F-5EA54EFC87AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8A77436E-F210-44CC-8005-B6F607D2845C} = {89730772-EEEA-4D00-99C9-70F8270110B1}
+		{49541974-2B82-493E-B17F-5EA54EFC87AB} = {89730772-EEEA-4D00-99C9-70F8270110B1}
 	EndGlobalSection
 EndGlobal
