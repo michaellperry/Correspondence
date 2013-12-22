@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -34,20 +35,15 @@ namespace UpdateControls.Correspondence.UnitTest
             get { return "test"; }
         }
 
-        public GetResultMemento Get(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
-        {
-            _pivotTree = pivotTree;
-            return new GetResultMemento(_mockMessageBodies.Dequeue(), new TimestampID(0, 0));
-        }
-
         public void Post(FactTreeMemento messageBody, List<UnpublishMemento> unpublishedMessages)
         {
         }
 
 
-        public System.Threading.Tasks.Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
+        public async Task<GetResultMemento> GetAsync(FactTreeMemento pivotTree, FactID pivotId, TimestampID timestamp)
         {
-            throw new System.NotImplementedException();
+            _pivotTree = pivotTree;
+            return new GetResultMemento(_mockMessageBodies.Dequeue(), new TimestampID(0, 0));
         }
     }
 }

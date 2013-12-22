@@ -171,7 +171,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             var accepted = join.Conditions.ElementAt(0);
             Assert.AreEqual("isAccepted", accepted.Name);
             Assert.AreEqual(ConditionModifier.Negative, accepted.Modifier);
-            var canceled = join.Conditions.ElementAt(0);
+            var canceled = join.Conditions.ElementAt(1);
             Assert.AreEqual("isCanceled", canceled.Name);
             Assert.AreEqual(ConditionModifier.Negative, canceled.Modifier);
         }
@@ -224,8 +224,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Assert.AreEqual("frame", join.Name);
             var accepted = join.Conditions.ElementAt(0);
             Assert.AreEqual("isNotAccepted", accepted.Name);
-            Assert.AreEqual(ConditionModifier.Positive, accepted.Modifier);
-            var canceled = join.Conditions.ElementAt(0);
+            Assert.AreEqual(ConditionModifier.Negative, accepted.Modifier);
+            var canceled = join.Conditions.ElementAt(1);
             Assert.AreEqual("isCanceled", canceled.Name);
             Assert.AreEqual(ConditionModifier.Negative, canceled.Modifier);
         }

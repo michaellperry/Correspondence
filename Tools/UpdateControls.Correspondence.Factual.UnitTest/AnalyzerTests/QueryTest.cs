@@ -34,7 +34,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 .HasQueryNamed("gameRequests");
             var join = query.Joins.Single();
             Assert.AreEqual(Direction.Successors, join.Direction);
-            Assert.AreEqual("GameRequests", join.Type);
+            Assert.AreEqual("GameRequest", join.Type);
             Assert.AreEqual("gameQueue", join.Name);
         }
 
