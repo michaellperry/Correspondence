@@ -108,10 +108,6 @@
       <Project>{8a77436e-f210-44cc-8005-b6f607d2845c}</Project>
       <Name>UpdateControls.Correspondence</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj">
-      <Project>{98e6ef2c-817a-4962-8527-738ebc040919}</Project>
-      <Name>UpdateControls.Correspondence.BinaryHTTPClient</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
