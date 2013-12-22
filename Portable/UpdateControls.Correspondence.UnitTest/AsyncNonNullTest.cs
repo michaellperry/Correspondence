@@ -12,7 +12,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _alan;
         private User _flynn;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             InitializeAsyncTest();
@@ -32,8 +31,10 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void PropertiesNotYetLoadedAreNotLoadedObjects()
+        public async Task PropertiesNotYetLoadedAreNotLoadedObjects()
         {
+            await Initialize();
+
             QuiescePeriodically();
 
             try
@@ -52,6 +53,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task NullPropertiesAreNullObjects()
         {
+            await Initialize();
+
             QuiescePeriodically();
 
             try
@@ -68,16 +71,20 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void FindFactReturnsUnloadedObject()
+        public async Task FindFactReturnsUnloadedObject()
         {
+            await Initialize();
+
             User user = _community.FindFact(new User("dillenger7"));
 
             Assert.IsFalse(user.IsLoaded);
         }
 
         [TestMethod]
-        public void FindFactEventuallyBecomesANullObject()
+        public async Task FindFactEventuallyBecomesANullObject()
         {
+            await Initialize();
+
             User user = _community.FindFact(new User("dillenger7"));
             _memory.Quiesce();
             user = _community.FindFact(new User("dillenger7"));
@@ -88,6 +95,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task CanEnsureFindFact()
         {
+            await Initialize();
+
             QuiescePeriodically();
 
             try

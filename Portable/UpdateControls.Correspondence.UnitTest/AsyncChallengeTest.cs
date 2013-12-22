@@ -17,7 +17,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _alan;
         private User _flynn;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             InitializeAsyncTest();
@@ -29,14 +28,16 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void UserHasNoGames()
+        public async Task UserHasNoGames()
         {
+            await Initialize();
             Assert.AreEqual(0, _alan.ActivePlayers.Count());
         }
 
         [TestMethod]
         public async Task UserStartsAGame()
         {
+            await Initialize();
             Player player = await _alan.ChallengeAsync(_flynn);
 
             // Still empty.
@@ -51,6 +52,7 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task UserStartsAGame_Ensured()
         {
+            await Initialize();
             QuiescePeriodically();
 
             try
@@ -71,6 +73,7 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task OpponentSeesTheGame()
         {
+            await Initialize();
             Player player = await _alan.ChallengeAsync(_flynn);
 
             // Not yet.
@@ -83,8 +86,9 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void PropertyIsInconsistent()
+        public async Task PropertyIsInconsistent()
         {
+            await Initialize();
             QuiescePeriodically();
 
             try
@@ -97,7 +101,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 _memory.Quiesce();
 
                 // Now it's set.
-                Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);
+                Assert.AreEqual("Blue", (await _flynn.FavoriteColor.EnsureAsync()).Value);
             }
             finally
             {
@@ -108,6 +112,7 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task EnsuredPropertyIsConsistent()
         {
+            await Initialize();
             QuiescePeriodically();
 
             try

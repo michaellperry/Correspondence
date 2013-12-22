@@ -16,7 +16,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _alan;
         private User _flynn;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             _community = new Community(new MemoryStorageStrategy())
@@ -32,20 +31,23 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void GameIsActiveForAlan()
+        public async Task GameIsActiveForAlan()
         {
+            await Initialize();
             Assert.AreEqual(1, _alan.ActivePlayers.Count());
         }
 
         [TestMethod]
-        public void GameIsActiveForFlynn()
+        public async Task GameIsActiveForFlynn()
         {
+            await Initialize();
             Assert.AreEqual(1, _flynn.ActivePlayers.Count());
         }
 
         [TestMethod]
-        public void AfterAlanWinsGameIsNoLongerActiveForAlan()
+        public async Task AfterAlanWinsGameIsNoLongerActiveForAlan()
         {
+            await Initialize();
             Player alanPlayer = _alan.ActivePlayers.Single();
             alanPlayer.Game.DeclareWinner(alanPlayer);
 
@@ -53,8 +55,9 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void AfterAlanWinsGameIsNoLongerActiveForFlynn()
+        public async Task AfterAlanWinsGameIsNoLongerActiveForFlynn()
         {
+            await Initialize();
             Player alanPlayer = _alan.ActivePlayers.Single();
             alanPlayer.Game.DeclareWinner(alanPlayer);
 

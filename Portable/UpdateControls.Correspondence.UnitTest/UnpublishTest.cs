@@ -15,7 +15,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _flynn;
         private User _remoteAlan;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             MemoryCommunicationStrategy sharedCommunication = new MemoryCommunicationStrategy();
@@ -45,6 +44,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task PlayerIsPublished()
         {
+            await Initialize();
+
             await SynchronizeAsync();
             await SynchronizeRemoteAsync();
 
@@ -55,6 +56,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task WhenOutcomePostedAfterFetch_RemoteSeesOutcome()
         {
+            await Initialize();
+
             await SynchronizeAsync();
             await SynchronizeRemoteAsync();
             PostOutcome();
@@ -68,6 +71,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task WhenOutcomePostedBeforeFetch_PlayerIsUnpublished()
         {
+            await Initialize();
+
             await SynchronizeAsync();
             PostOutcome();
             await SynchronizeAsync();

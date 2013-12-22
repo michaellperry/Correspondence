@@ -16,7 +16,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _alan;
         private User _flynn;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             _community = new Community(new MemoryStorageStrategy())
@@ -27,14 +26,18 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void UserHasNoGames()
+        public async Task UserHasNoGames()
         {
+            await Initialize();
+
             Assert.AreEqual(0, _alan.ActivePlayers.Count());
         }
 
         [TestMethod]
         public async Task UserStartsAGame()
         {
+            await Initialize();
+
             Player player = await _alan.ChallengeAsync(_flynn);
 
             Assert.AreSame(player, _alan.ActivePlayers.Single());
@@ -43,6 +46,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task OpponentSeesTheGame()
         {
+            await Initialize();
+
             Player player = await _alan.ChallengeAsync(_flynn);
 
             Player otherPlayer = _flynn.ActivePlayers.Single();

@@ -16,7 +16,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private Player _playerAlan;
         private Player _playerFlynn;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             MemoryCommunicationStrategy sharedCommunication = new MemoryCommunicationStrategy();
@@ -39,14 +38,17 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void GameHasNoMoves()
+        public async Task GameHasNoMoves()
         {
+            await Initialize();
             Assert.AreEqual(0, _playerAlan.Game.Moves.Count());
         }
 
         [TestMethod]
-        public void FlynnMakesAMove()
+        public async Task FlynnMakesAMove()
         {
+            await Initialize();
+
             _playerAlan.MakeMove(0, 0);
 
             var move = _playerAlan.Game.Moves.Single();
@@ -57,6 +59,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task FlynnSeesAlansMove()
         {
+
+            await Initialize();
             _playerAlan.MakeMove(0, 0);
             await Synchronize();
 
@@ -67,8 +71,10 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void FlynnMakesAMoveInResponse()
+        public async Task FlynnMakesAMoveInResponse()
         {
+            await Initialize();
+
             _playerAlan.MakeMove(0, 0);
             _playerFlynn.MakeMove(1, 42);
 
@@ -80,6 +86,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task AlanSeesFlynnsResponse()
         {
+            await Initialize();
+
             _playerAlan.MakeMove(0, 0);
             await Synchronize();
             _playerFlynn.MakeMove(1, 42);

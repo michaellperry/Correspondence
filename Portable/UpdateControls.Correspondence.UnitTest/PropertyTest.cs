@@ -16,7 +16,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private User _otherAlan;
         private MemoryStorageStrategy _storageAlan;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             var sharedCommunication = new MemoryCommunicationStrategy();
@@ -35,16 +34,20 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void CanGetDefaultMutableProperty()
+        public async Task CanGetDefaultMutableProperty()
         {
+            await Initialize();
+
             string favoriteColor = _alan.FavoriteColor;
 
             Assert.AreEqual(default(string), favoriteColor);
         }
 
         [TestMethod]
-        public void CanSetMutableProperty()
+        public async Task CanSetMutableProperty()
         {
+            await Initialize();
+
             _alan.FavoriteColor = "Blue";
             string favoriteColor = _alan.FavoriteColor;
 
@@ -52,8 +55,10 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void CanChangeMutableProperty()
+        public async Task CanChangeMutableProperty()
         {
+            await Initialize();
+
             _alan.FavoriteColor = "Blue";
             _alan.FavoriteColor = "Red";
             string favoriteColor = _alan.FavoriteColor;
@@ -62,8 +67,10 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void PropertySetFromOneCommunityHasNoConflict()
+        public async Task PropertySetFromOneCommunityHasNoConflict()
         {
+            await Initialize();
+
             _alan.FavoriteColor = "Blue";
             _alan.FavoriteColor = "Red";
 
@@ -73,6 +80,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task PropertySetFromTwoCommunitiesHasConflict()
         {
+            await Initialize();
+
             _alan.FavoriteColor = "Blue";
             _otherAlan.FavoriteColor = "Red";
             await SynchronizeAsync();
@@ -83,6 +92,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task CanSeeCandidatesOfConflict()
         {
+            await Initialize();
+
             _alan.FavoriteColor = "Blue";
             _otherAlan.FavoriteColor = "Red";
             await SynchronizeAsync();
@@ -93,8 +104,10 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void RedundantSetOfSimplePropertyDoesNotCreateAFact()
+        public async Task RedundantSetOfSimplePropertyDoesNotCreateAFact()
         {
+            await Initialize();
+
             _alan.FavoriteColor = "Blue";
             int before = _storageAlan.LoadAllFacts().Count();
             _alan.FavoriteColor = "Blue";
@@ -104,8 +117,10 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void CanGetDefaultMutableFactProperty()
+        public async Task CanGetDefaultMutableFactProperty()
         {
+            await Initialize();
+
             Color color = _alan.BetterFavoriteColor;
 
             Assert.IsNotNull(color);
@@ -115,6 +130,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task CanSetMutableFactProperty()
         {
+            await Initialize();
+
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             Color color = _alan.BetterFavoriteColor;
 
@@ -124,6 +141,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task CanChangeMutableFactProperty()
         {
+            await Initialize();
+
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Red"));
             Color color = _alan.BetterFavoriteColor;
@@ -134,6 +153,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task RedundantSetOfFactPropertyDoesNotCreateAFact()
         {
+            await Initialize();
+
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             int before = _storageAlan.LoadAllFacts().Count();
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
@@ -145,6 +166,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task FactPropertySetFromOneCommunityHasNoConflict()
         {
+            await Initialize();
+
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Red"));
 
@@ -154,6 +177,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task FactPropertySetFromTwoCommunitiesHasConflict()
         {
+            await Initialize();
+
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             _otherAlan.BetterFavoriteColor = await _otherCommunity.AddFactAsync(new Color("Red"));
             await SynchronizeAsync();
@@ -164,6 +189,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task CanSeeCandidatesOfFactConflict()
         {
+            await Initialize();
+
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             _otherAlan.BetterFavoriteColor = await _otherCommunity.AddFactAsync(new Color("Red"));
             await SynchronizeAsync();

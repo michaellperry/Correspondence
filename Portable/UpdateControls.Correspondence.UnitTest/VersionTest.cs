@@ -20,7 +20,6 @@ namespace UpdateControls.Correspondence.UnitTest
         private Player _playerFlynn;
         private MemoryStorageStrategy _storageFlynn;
 
-        [TestInitialize]
         public async Task Initialize()
         {
             // Alan is on version 2. He can understand more facts that Flynn.
@@ -48,6 +47,7 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task AlanCanSendAMessage()
         {
+            await Initialize();
             int factCount = _storageFlynn.LoadAllFacts().Count();
 
             await _communityAlan.AddFactAsync(new Message(_playerAlan, "This system's got more bugs than a bait store."));

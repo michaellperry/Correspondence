@@ -27,7 +27,6 @@ namespace UpdateControls.Correspondence.UnitTest
 
 		private long _nextFactId = 1L;
 
-		[TestInitialize]
 		public async Task Initialize()
 		{
 			_memoryCommunicationStrategy = new MemoryCommunicationStrategy();
@@ -42,6 +41,8 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task WhenAFactIsPublishedToTwoPredecessors_ThenThatFactIsPostedOnce()
         {
+            await Initialize();
+
             Game game = await CreateGameAsync();
 			Player player = await game.CreatePlayerAsync(_michael);
             while (await _community.SynchronizeAsync()) ;
@@ -54,7 +55,9 @@ namespace UpdateControls.Correspondence.UnitTest
 		[TestMethod]
 		public async Task WhenAFactIsReceived_ThenThatFactIsNotPosted()
 		{
-			FactTreeMemento gameTreeMemento = new FactTreeMemento(0L);
+            await Initialize();
+
+            FactTreeMemento gameTreeMemento = new FactTreeMemento(0L);
 			IdentifiedFactMemento gameMemento = CreateGameMemento();
 			IdentifiedFactMemento userMemento = CreateUserMemento("michael");
 			IdentifiedFactMemento playerMemento = CreatePlayerMemento(gameMemento.Id, userMemento.Id, 1);
