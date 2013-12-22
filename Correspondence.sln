@@ -36,6 +36,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "WindowsPhone\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{434CDEA4-3658-4367-90C7-455CCEBEFD17}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{312B2630-A96F-40E4-A4FA-51254860A034}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "WPF\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,6 +182,16 @@ Global
 		{434CDEA4-3658-4367-90C7-455CCEBEFD17}.Release|x64.ActiveCfg = Release|Any CPU
 		{434CDEA4-3658-4367-90C7-455CCEBEFD17}.Release|x86.ActiveCfg = Release|x86
 		{434CDEA4-3658-4367-90C7-455CCEBEFD17}.Release|x86.Build.0 = Release|x86
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Release|ARM.ActiveCfg = Release|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Release|x64.ActiveCfg = Release|Any CPU
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,5 +207,6 @@ Global
 		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850} = {5D1B1070-E97F-4949-967A-C41EA1D06595}
 		{4A076F16-FE12-4B60-9563-46B9414B0802} = {5D1B1070-E97F-4949-967A-C41EA1D06595}
 		{434CDEA4-3658-4367-90C7-455CCEBEFD17} = {5D1B1070-E97F-4949-967A-C41EA1D06595}
+		{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD} = {312B2630-A96F-40E4-A4FA-51254860A034}
 	EndGlobalSection
 EndGlobal

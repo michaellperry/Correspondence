@@ -67,7 +67,7 @@ namespace UpdateControls.Correspondence.Data
             _stream.Write(data, 0, data.Length);
         }
 
-        protected long GetSize()
+        public long GetSize()
         {
             return _stream.Length;
         }
