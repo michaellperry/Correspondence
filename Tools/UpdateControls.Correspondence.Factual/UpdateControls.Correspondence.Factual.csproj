@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5DE5E950-C19C-4588-80EC-5C60A50D352C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UpdateControls.Correspondence.Factual</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence.Factual</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Mallardsoft.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AST\Cardinality.cs" />
+    <Compile Include="AST\Clause.cs" />
+    <Compile Include="AST\Condition.cs" />
+    <Compile Include="AST\DataTypeFact.cs" />
+    <Compile Include="AST\Fact.cs" />
+    <Compile Include="AST\DataMember.cs" />
+    <Compile Include="AST\DataType.cs" />
+    <Compile Include="AST\DataTypeNative.cs" />
+    <Compile Include="AST\FactMember.cs" />
+    <Compile Include="AST\Field.cs" />
+    <Compile Include="AST\FieldSecurityModifier.cs" />
+    <Compile Include="AST\Header.cs" />
+    <Compile Include="AST\Identifier.cs" />
+    <Compile Include="AST\FactSection.cs" />
+    <Compile Include="AST\NativeType.cs" />
+    <Compile Include="AST\Path.cs" />
+    <Compile Include="AST\Predicate.cs" />
+    <Compile Include="AST\ConditionModifier.cs" />
+    <Compile Include="AST\Property.cs" />
+    <Compile Include="AST\Query.cs" />
+    <Compile Include="AST\Set.cs" />
+    <Compile Include="Compiler\Analyzer.cs" />
+    <Compile Include="AST\Namespace.cs" />
+    <Compile Include="Compiler\CompilerException.cs" />
+    <Compile Include="Compiler\Error.cs" />
+    <Compile Include="Compiler\FactualParser.cs" />
+    <Compile Include="AST\NativeTypeAtLine.cs" />
+    <Compile Include="Compiler\PredecessorInfo.cs" />
+    <Compile Include="Compiler\StringExtensions.cs" />
+    <Compile Include="Crc32.cs" />
+    <Compile Include="FactualException.cs" />
+    <Compile Include="Metadata\Cardinality.cs" />
+    <Compile Include="Metadata\Class.cs" />
+    <Compile Include="Metadata\Condition.cs" />
+    <Compile Include="Metadata\ResultDirect.cs" />
+    <Compile Include="Metadata\ResultValue.cs" />
+    <Compile Include="Metadata\ResultValueFact.cs" />
+    <Compile Include="Metadata\ResultValueNative.cs" />
+    <Compile Include="Metadata\Predicate.cs" />
+    <Compile Include="Metadata\ConditionModifier.cs" />
+    <Compile Include="Metadata\Direction.cs" />
+    <Compile Include="Metadata\Join.cs" />
+    <Compile Include="Metadata\NativeType.cs" />
+    <Compile Include="Metadata\Field.cs" />
+    <Compile Include="Metadata\Analyzed.cs" />
+    <Compile Include="Metadata\Predecessor.cs" />
+    <Compile Include="Metadata\Query.cs" />
+    <Compile Include="Metadata\Result.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Compiler\Symbol.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QEDCode.LLOne\QEDCode.LLOne.csproj">
+      <Project>{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}</Project>
+      <Name>QEDCode.LLOne</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mallardsoft.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Model\tools\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

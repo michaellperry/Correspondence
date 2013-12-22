@@ -270,5 +270,10 @@ namespace UpdateControls.Correspondence.Memory
                 .Select(f => f.IdentifiedFactMemento)
                 .ToList();
         }
+
+        public IEnumerable<IdentifiedFactMemento> LoadAllFacts()
+        {
+            return _factTable.Select(r => r.IdentifiedFactMemento);
+        }
     }
 }

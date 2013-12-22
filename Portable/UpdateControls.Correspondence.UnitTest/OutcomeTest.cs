@@ -1,0 +1,64 @@
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using UpdateControls.Correspondence.Memory;
+using UpdateControls.Correspondence.UnitTest.Model;
+using System.Threading.Tasks;
+
+namespace UpdateControls.Correspondence.UnitTest
+{
+    [TestClass]
+    public class OutcomeTest
+    {
+        private Community _community;
+        private User _alan;
+        private User _flynn;
+
+        [TestInitialize]
+        public async Task Initialize()
+        {
+            _community = new Community(new MemoryStorageStrategy())
+                .Register<Model.CorrespondenceModel>();
+
+            _alan = await _community.AddFactAsync(new User("alan1"));
+            _flynn = await _community.AddFactAsync(new User("flynn1"));
+            Player playerAlan = await _alan.ChallengeAsync(_flynn);
+            Player playerFlynn = _flynn.ActivePlayers.Single();
+
+            playerAlan.MakeMove(0, 0);
+            playerFlynn.MakeMove(1, 42);
+        }
+
+        [TestMethod]
+        public void GameIsActiveForAlan()
+        {
+            Assert.AreEqual(1, _alan.ActivePlayers.Count());
+        }
+
+        [TestMethod]
+        public void GameIsActiveForFlynn()
+        {
+            Assert.AreEqual(1, _flynn.ActivePlayers.Count());
+        }
+
+        [TestMethod]
+        public void AfterAlanWinsGameIsNoLongerActiveForAlan()
+        {
+            Player alanPlayer = _alan.ActivePlayers.Single();
+            alanPlayer.Game.DeclareWinner(alanPlayer);
+
+            Assert.AreEqual(0, _alan.ActivePlayers.Count());
+        }
+
+        [TestMethod]
+        public void AfterAlanWinsGameIsNoLongerActiveForFlynn()
+        {
+            Player alanPlayer = _alan.ActivePlayers.Single();
+            alanPlayer.Game.DeclareWinner(alanPlayer);
+
+            Assert.AreEqual(0, _flynn.ActivePlayers.Count());
+        }
+    }
+}

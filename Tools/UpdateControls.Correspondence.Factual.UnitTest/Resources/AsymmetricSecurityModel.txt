@@ -1,0 +1,62 @@
+namespace SharedProjects.Model;
+strength us_1_1;
+
+fact Token {
+key:
+	string identifier;
+}
+
+fact Project {
+key:
+	unique;
+	lock;
+}
+
+fact Individual {
+key:
+	unique;
+	principal;
+
+query:
+	Accept* projectsAccepted {
+		Accept a : a.grant.request.individual = this
+			where not a.isDeleted
+	}
+}
+
+fact Request {
+key:
+	publish Individual individual;
+	publish Token token;
+
+	from individual;
+}
+
+fact Grant {
+key:
+	Request request;
+	Project project;
+
+	to request.individual;
+	unlock project;
+}
+
+fact Accept {
+key:
+	unique;
+	Grant grant;
+	
+	from grant.request.individual;
+
+query:
+	bool isDeleted {
+		exists AcceptDelete d : d.accept = this
+	}
+}
+
+fact AcceptDelete {
+key:
+	Accept accept;
+
+	from accept.grant.request.individual;
+}
