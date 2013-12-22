@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsPhone", "WindowsPhon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Portable\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{04367BF4-1277-4674-B851-3606AB457039}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.Notification", "WindowsPhone\UpdateControls.Correspondence.BinaryHTTPClient.Notification\UpdateControls.Correspondence.BinaryHTTPClient.Notification.csproj", "{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -118,6 +120,20 @@ Global
 		{04367BF4-1277-4674-B851-3606AB457039}.Release|ARM.ActiveCfg = Release|Any CPU
 		{04367BF4-1277-4674-B851-3606AB457039}.Release|x64.ActiveCfg = Release|Any CPU
 		{04367BF4-1277-4674-B851-3606AB457039}.Release|x86.ActiveCfg = Release|Any CPU
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Debug|ARM.ActiveCfg = Debug|ARM
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Debug|ARM.Build.0 = Debug|ARM
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Debug|x86.ActiveCfg = Debug|x86
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Debug|x86.Build.0 = Debug|x86
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Release|ARM.ActiveCfg = Release|ARM
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Release|ARM.Build.0 = Release|ARM
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Release|x64.ActiveCfg = Release|Any CPU
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Release|x86.ActiveCfg = Release|x86
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,5 +145,6 @@ Global
 		{31BAF759-C314-4040-AB96-A180CAFB2541} = {B8A7198E-C84D-41CA-AAFC-EBF0DC07CD4E}
 		{8D66C8B3-6C9B-4E19-8151-5A88888E83F4} = {B8A7198E-C84D-41CA-AAFC-EBF0DC07CD4E}
 		{B144693D-EB00-476A-B5BB-713A84F5021D} = {B8A7198E-C84D-41CA-AAFC-EBF0DC07CD4E}
+		{DDB03DD9-3EFE-425C-8364-8C68FD0FA850} = {5D1B1070-E97F-4949-967A-C41EA1D06595}
 	EndGlobalSection
 EndGlobal
