@@ -58,6 +58,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{4491851F-548
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SQL", "Web\UpdateControls.Correspondence.SQL\UpdateControls.Correspondence.SQL.csproj", "{F9D9A782-F06E-48B7-B869-BC8D7913C256}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{CD89FB49-3626-46C8-8E7A-497FB9C78AB8}"
+	ProjectSection(SolutionItems) = preProject
+		SolutionItems\AppVersionInfo.cs = SolutionItems\AppVersionInfo.cs
+		SolutionItems\CommonAssemblyInfo.cs = SolutionItems\CommonAssemblyInfo.cs
+		SolutionItems\CoreVersionInfo.cs = SolutionItems\CoreVersionInfo.cs
+		SolutionItems\Mallardsoft.snk = SolutionItems\Mallardsoft.snk
+		SolutionItems\UnitTestVersionInfo.cs = SolutionItems\UnitTestVersionInfo.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

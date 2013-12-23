@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System;
+using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
-using System;
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
@@ -9,6 +9,7 @@ using System;
 [assembly: AssemblyCopyright("Copyright © Michael L Perry 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en")]
 
 [assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
