@@ -71,6 +71,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Silverlight\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Silverlight\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -303,6 +305,16 @@ Global
 		{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}.Release|ARM.ActiveCfg = Release|Any CPU
 		{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}.Release|x64.ActiveCfg = Release|Any CPU
 		{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}.Release|x86.ActiveCfg = Release|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|ARM.ActiveCfg = Release|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|x64.ActiveCfg = Release|Any CPU
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,5 +339,6 @@ Global
 		{B1246571-0BC0-4B06-A5AE-6C3989E8903C} = {D897CF77-AB48-4E8C-A4C9-98E8A676A3EF}
 		{F9D9A782-F06E-48B7-B869-BC8D7913C256} = {4491851F-548B-4953-B919-97D3776DFED4}
 		{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C} = {9E927AEF-AF9F-4A77-8539-808247676655}
+		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7} = {9E927AEF-AF9F-4A77-8539-808247676655}
 	EndGlobalSection
 EndGlobal
