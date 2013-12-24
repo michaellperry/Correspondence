@@ -11,5 +11,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
 
-[assembly: ComVisible(false)]
 [assembly: CLSCompliant(true)]
