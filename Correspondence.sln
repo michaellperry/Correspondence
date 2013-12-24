@@ -73,6 +73,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Silverlight\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage", "Silverlight\UpdateControls.Correspondence.IsolatedStorage\UpdateControls.Correspondence.IsolatedStorage.csproj", "{15D08BBA-292B-48F4-8517-2D5053317ADF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -315,6 +317,16 @@ Global
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|ARM.ActiveCfg = Release|Any CPU
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|x64.ActiveCfg = Release|Any CPU
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Release|ARM.ActiveCfg = Release|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Release|x64.ActiveCfg = Release|Any CPU
+		{15D08BBA-292B-48F4-8517-2D5053317ADF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -340,5 +352,6 @@ Global
 		{F9D9A782-F06E-48B7-B869-BC8D7913C256} = {4491851F-548B-4953-B919-97D3776DFED4}
 		{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C} = {9E927AEF-AF9F-4A77-8539-808247676655}
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7} = {9E927AEF-AF9F-4A77-8539-808247676655}
+		{15D08BBA-292B-48F4-8517-2D5053317ADF} = {9E927AEF-AF9F-4A77-8539-808247676655}
 	EndGlobalSection
 EndGlobal
