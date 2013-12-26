@@ -78,6 +78,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SSCE", "WPF\UpdateControls.Correspondence.SSCE\UpdateControls.Correspondence.SSCE.csproj", "{A418955B-D3B5-4F05-A1A2-7864E92B6C4F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\DeleteAll.bat = NuGet\DeleteAll.bat
+		NuGet\MoveAll.bat = NuGet\MoveAll.bat
+		NuGet\PackAll.bat = NuGet\PackAll.bat
+		NuGet\PushAll.bat = NuGet\PushAll.bat
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllinOne", "AllinOne", "{71A94D95-6B77-4375-A5A0-FEFF1730E622}"
 	ProjectSection(SolutionItems) = preProject
@@ -90,6 +96,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{9C7A3F89-95F
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App.Core", "App.Core", "{D0280BDC-B2C3-452B-9D6E-3B4D22338E87}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App.Core\Correspondence.App.Core.nuspec = NuGet\App.Core\Correspondence.App.Core.nuspec
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{231A284D-2F00-4DE5-A7ED-A0841EDF362E}"
 	ProjectSection(SolutionItems) = preProject
@@ -107,6 +116,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{86
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest.Core", "UnitTest.Core", "{59E3EDE7-94B3-4C6C-9E84-AE186890D8F6}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest.Core\Correspondence.UnitTest.Core.nuspec = NuGet\UnitTest.Core\Correspondence.UnitTest.Core.nuspec
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.App", "Web.App", "{CFBB1426-93A8-49CE-B222-2CE36D8B0FBF}"
 	ProjectSection(SolutionItems) = preProject
@@ -114,6 +126,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.App", "Web.App", "{CFBB
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.App.Core", "Web.App.Core", "{354768F4-31DD-4E9C-838B-EDAFC2CDCC62}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Web.App.Core\Correspondence.Web.App.Core.nuspec = NuGet\Web.App.Core\Correspondence.Web.App.Core.nuspec
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{27D21C4A-CAB7-40CD-867D-DB67CAA15B3C}"
 EndProject

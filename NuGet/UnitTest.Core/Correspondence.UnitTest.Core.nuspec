@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>Correspondence.Web.AllInOne</id>
+    <id>Correspondence.UnitTest.Core</id>
     <version>2.2.0.0</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>
-      MVC application template for the Correspondence collaboration framework. Puts everything in one project. Not good for unit testing.
+      Multiple-client test suite for the Correspondence collaboration framework. Add the package Correspondence.UnitTest for source files.
     </description>
     <summary>
       Correspondence stores data on the mobile device while it is offline. It queues changes to be synchronized when the connection is restored. And when online, it updates in real-time.
@@ -17,10 +17,11 @@
     <iconUrl>http://qedcode.com/images/logo32.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language>en-US</language>
-    <tags>occasionally-connected mobile MVC nosql database synchronize</tags>
+    <tags>occasionally-connected mobile nosql database synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence.Web.App" />
-      <dependency id="Correspondence.Model" />
+      <group>
+        <dependency id="Correspondence" />
+      </group>
     </dependencies>
   </metadata>
 </package>
