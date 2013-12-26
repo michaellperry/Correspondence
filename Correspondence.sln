@@ -77,6 +77,149 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SSCE", "WPF\UpdateControls.Correspondence.SSCE\UpdateControls.Correspondence.SSCE.csproj", "{A418955B-D3B5-4F05-A1A2-7864E92B6C4F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AllinOne", "AllinOne", "{71A94D95-6B77-4375-A5A0-FEFF1730E622}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\AllInOne\Correspondence.AllInOne.nuspec = NuGet\AllInOne\Correspondence.AllInOne.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{9C7A3F89-95F8-4514-83F9-E5E4ED78190F}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\Correspondence.App.nuspec = NuGet\App\Correspondence.App.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App.Core", "App.Core", "{D0280BDC-B2C3-452B-9D6E-3B4D22338E87}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Model", "Model", "{231A284D-2F00-4DE5-A7ED-A0841EDF362E}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Model\Correspondence.Model.nuspec = NuGet\Model\Correspondence.Model.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{A21555E0-4241-41E3-BDBB-B8CC9803BF91}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Core\Correspondence.nuspec = NuGet\Core\Correspondence.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{865B5D13-4810-4244-9C07-12E644D301AA}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\Correspondence.UnitTest.nuspec = NuGet\UnitTest\Correspondence.UnitTest.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest.Core", "UnitTest.Core", "{59E3EDE7-94B3-4C6C-9E84-AE186890D8F6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.App", "Web.App", "{CFBB1426-93A8-49CE-B222-2CE36D8B0FBF}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Web.App\Correspondence.Web.App.nuspec = NuGet\Web.App\Correspondence.Web.App.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.App.Core", "Web.App.Core", "{354768F4-31DD-4E9C-838B-EDAFC2CDCC62}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{27D21C4A-CAB7-40CD-867D-DB67CAA15B3C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{3E9EA755-1C72-4638-BA95-39DBDC384D1E}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\net45\App.xaml.transform = NuGet\App\content\net45\App.xaml.transform
+		NuGet\App\content\net45\HTTPConfigurationProvider.cs.pp = NuGet\App\content\net45\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\net45\MainWindow.xaml.transform = NuGet\App\content\net45\MainWindow.xaml.transform
+		NuGet\App\content\net45\SynchronizationService.cs.pp = NuGet\App\content\net45\SynchronizationService.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl5", "sl5", "{353C8469-BC8B-4362-BCE6-DB43359A73B8}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\sl5\App.xaml.transform = NuGet\App\content\sl5\App.xaml.transform
+		NuGet\App\content\sl5\HTTPConfigurationProvider.cs.pp = NuGet\App\content\sl5\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\sl5\MainPage.xaml.transform = NuGet\App\content\sl5\MainPage.xaml.transform
+		NuGet\App\content\sl5\SynchronizationService.cs.pp = NuGet\App\content\sl5\SynchronizationService.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win81", "win81", "{370E803C-A4C7-4156-9B2B-EACCF86647A4}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\win81\App.xaml.transform = NuGet\App\content\win81\App.xaml.transform
+		NuGet\App\content\win81\HTTPConfigurationProvider.cs.pp = NuGet\App\content\win81\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\win81\MainPage.xaml.transform = NuGet\App\content\win81\MainPage.xaml.transform
+		NuGet\App\content\win81\SynchronizationService.cs.pp = NuGet\App\content\win81\SynchronizationService.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wp8", "wp8", "{6314F072-F9DE-44B8-BA99-A87AD5B36394}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\wp8\App.xaml.transform = NuGet\App\content\wp8\App.xaml.transform
+		NuGet\App\content\wp8\HTTPConfigurationProvider.cs.pp = NuGet\App\content\wp8\HTTPConfigurationProvider.cs.pp
+		NuGet\App\content\wp8\MainPage.xaml.transform = NuGet\App\content\wp8\MainPage.xaml.transform
+		NuGet\App\content\wp8\SynchronizationService.cs.pp = NuGet\App\content\wp8\SynchronizationService.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", "{AC5E8BBB-2188-415B-B17A-D8359ECA1156}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\net45\ViewModels\MainViewModel.cs.pp = NuGet\App\content\net45\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\net45\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\net45\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", "{906A4218-661C-42B0-A9A5-868701322D31}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\sl5\ViewModels\MainViewModel.cs.pp = NuGet\App\content\sl5\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\sl5\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\sl5\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", "{90EA26F0-101D-4D31-978F-33D673A19E7D}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\win81\ViewModels\MainViewModel.cs.pp = NuGet\App\content\win81\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\win81\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\win81\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", "{9D190A3B-D2AE-4368-8B71-008AB0A17860}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\App\content\wp8\ViewModels\MainViewModel.cs.pp = NuGet\App\content\wp8\ViewModels\MainViewModel.cs.pp
+		NuGet\App\content\wp8\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\wp8\ViewModels\ViewModelLocator.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{315C2C7A-5C48-45CF-936D-759957EF1A15}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Model\content\Model.fact.pp = NuGet\Model\content\Model.fact.pp
+		NuGet\Model\content\Model.tt = NuGet\Model\content\Model.tt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl5", "sl5", "{C171B9A1-663F-4F15-A681-88E9A8B7B821}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Model\content\sl5\Model.fact.pp = NuGet\Model\content\sl5\Model.fact.pp
+		NuGet\Model\content\sl5\Model.tt = NuGet\Model\content\sl5\Model.tt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{938F962B-065F-405D-989A-4622A7F07728}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl5", "sl5", "{1F2A73B7-93E5-44D3-801C-FBD245132364}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\sl5\ModelTest.cs.pp = NuGet\UnitTest\content\sl5\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{EB1C8AA1-5377-44D5-AFF3-8598CD9448B7}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\net45\ModelTest.cs.pp = NuGet\UnitTest\content\net45\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win81", "win81", "{B9E16FDC-397A-4E94-A358-F8B31F1A94E8}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\win81\ModelTest.cs.pp = NuGet\UnitTest\content\win81\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wp8", "wp8", "{BA338F07-F48B-4CBF-A674-0E548E896F05}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\wp8\ModelTest.cs.pp = NuGet\UnitTest\content\wp8\ModelTest.cs.pp
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.AllInOne", "Web.AllInOne", "{B4A31979-1337-4528-AA83-675F60BCE777}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Web.AllInOne\Correspondence.Web.AllInOne.nuspec = NuGet\Web.AllInOne\Correspondence.Web.AllInOne.nuspec
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{5703DAA9-89FB-4136-919E-DE3DEA3636C1}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Web.App\content\HTTPConfigurationProvider.cs.pp = NuGet\Web.App\content\HTTPConfigurationProvider.cs.pp
+		NuGet\Web.App\content\Readme_Correspondence.txt.pp = NuGet\Web.App\content\Readme_Correspondence.txt.pp
+		NuGet\Web.App\content\SynchronizationService.cs.pp = NuGet\Web.App\content\SynchronizationService.cs.pp
+		NuGet\Web.App\content\web.config.transform = NuGet\Web.App\content\web.config.transform
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -366,5 +509,32 @@ Global
 		{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C} = {9E927AEF-AF9F-4A77-8539-808247676655}
 		{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7} = {9E927AEF-AF9F-4A77-8539-808247676655}
 		{15D08BBA-292B-48F4-8517-2D5053317ADF} = {9E927AEF-AF9F-4A77-8539-808247676655}
+		{71A94D95-6B77-4375-A5A0-FEFF1730E622} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{9C7A3F89-95F8-4514-83F9-E5E4ED78190F} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{D0280BDC-B2C3-452B-9D6E-3B4D22338E87} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{231A284D-2F00-4DE5-A7ED-A0841EDF362E} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{A21555E0-4241-41E3-BDBB-B8CC9803BF91} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{865B5D13-4810-4244-9C07-12E644D301AA} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{59E3EDE7-94B3-4C6C-9E84-AE186890D8F6} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{CFBB1426-93A8-49CE-B222-2CE36D8B0FBF} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{354768F4-31DD-4E9C-838B-EDAFC2CDCC62} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{B4A31979-1337-4528-AA83-675F60BCE777} = {26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}
+		{27D21C4A-CAB7-40CD-867D-DB67CAA15B3C} = {9C7A3F89-95F8-4514-83F9-E5E4ED78190F}
+		{315C2C7A-5C48-45CF-936D-759957EF1A15} = {231A284D-2F00-4DE5-A7ED-A0841EDF362E}
+		{938F962B-065F-405D-989A-4622A7F07728} = {865B5D13-4810-4244-9C07-12E644D301AA}
+		{5703DAA9-89FB-4136-919E-DE3DEA3636C1} = {CFBB1426-93A8-49CE-B222-2CE36D8B0FBF}
+		{3E9EA755-1C72-4638-BA95-39DBDC384D1E} = {27D21C4A-CAB7-40CD-867D-DB67CAA15B3C}
+		{353C8469-BC8B-4362-BCE6-DB43359A73B8} = {27D21C4A-CAB7-40CD-867D-DB67CAA15B3C}
+		{370E803C-A4C7-4156-9B2B-EACCF86647A4} = {27D21C4A-CAB7-40CD-867D-DB67CAA15B3C}
+		{6314F072-F9DE-44B8-BA99-A87AD5B36394} = {27D21C4A-CAB7-40CD-867D-DB67CAA15B3C}
+		{AC5E8BBB-2188-415B-B17A-D8359ECA1156} = {3E9EA755-1C72-4638-BA95-39DBDC384D1E}
+		{906A4218-661C-42B0-A9A5-868701322D31} = {353C8469-BC8B-4362-BCE6-DB43359A73B8}
+		{90EA26F0-101D-4D31-978F-33D673A19E7D} = {370E803C-A4C7-4156-9B2B-EACCF86647A4}
+		{9D190A3B-D2AE-4368-8B71-008AB0A17860} = {6314F072-F9DE-44B8-BA99-A87AD5B36394}
+		{C171B9A1-663F-4F15-A681-88E9A8B7B821} = {315C2C7A-5C48-45CF-936D-759957EF1A15}
+		{1F2A73B7-93E5-44D3-801C-FBD245132364} = {938F962B-065F-405D-989A-4622A7F07728}
+		{EB1C8AA1-5377-44D5-AFF3-8598CD9448B7} = {938F962B-065F-405D-989A-4622A7F07728}
+		{B9E16FDC-397A-4E94-A358-F8B31F1A94E8} = {938F962B-065F-405D-989A-4622A7F07728}
+		{BA338F07-F48B-4CBF-A674-0E548E896F05} = {938F962B-065F-405D-989A-4622A7F07728}
 	EndGlobalSection
 EndGlobal

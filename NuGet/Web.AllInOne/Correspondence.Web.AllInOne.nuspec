@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Correspondence.Web.AllInOne</id>
+    <version>2.0.0.0</version>
+    <authors>Michael L Perry</authors>
+    <owners>Michael L Perry</owners>
+    <description>Add to an MVC application project. Puts everything in one project. Not good for unit testing.</description>
+    <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>
+    <projectUrl>http://correspondence.codeplex.com/</projectUrl>
+    <iconUrl>http://qedcode.com/images/logo32.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <language>en-US</language>
+    <tags>nosql database MVC synchronize</tags>
+    <dependencies>
+      <dependency id="Correspondence.Web.App" version="2.0.0.0"/>
+      <dependency id="Correspondence.Model" version="2.0.0.0"/>
+    </dependencies>
+  </metadata>
+</package>

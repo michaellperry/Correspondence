@@ -40,13 +40,12 @@ else {
 #>
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
-using UpdateControls.Correspondence.Tasks;
 using System;
 using System.IO;
-using System.Threading;
 
 /**
 / For use with http://graphviz.org/
@@ -151,22 +150,13 @@ namespace <#=targetNamespace.Name#>
             return new <#=c.Name#>((FactMemento)null) { IsNull = true };
         }
 
-        public <#=c.Name#> Ensure()
+        // Ensure
+        public Task<<#=c.Name#>> EnsureAsync()
         {
             if (_loadedTask != null)
-            {
-                ManualResetEvent loaded = new ManualResetEvent(false);
-                <#=c.Name#> fact = null;
-                _loadedTask.ContinueWith(delegate(Task<CorrespondenceFact> t)
-                {
-                    fact = (<#=c.Name#>)t.Result;
-                    loaded.Set();
-                });
-                loaded.WaitOne();
-                return fact;
-            }
+                return _loadedTask.ContinueWith(t => (<#=c.Name#>)t.Result);
             else
-                return this;
+                return Task.FromResult(this);
         }
 
         // Roles
@@ -318,11 +308,15 @@ namespace <#=targetNamespace.Name#>
             get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-				var current = _<#=result.Query.Name#>.Ensure().ToList();
-				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
-				{
-					Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
-				}
+                Action setter = async delegate()
+                {
+                    var current = (await _<#=result.Query.Name#>.EnsureAsync()).ToList();
+                    if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+                    {
+                        await Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+                    }
+                };
+                setter();
 			}
         }
 <#}#>
@@ -333,11 +327,15 @@ namespace <#=targetNamespace.Name#>
             get { return _<#=result.Query.Name#>.AsTransientDisputable(fact => (<#=ResultTypeFact(result)#>)fact.Value); }
 			set
 			{
-				var current = _<#=result.Query.Name#>.Ensure().ToList();
-				if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+				Action setter = async delegate()
 				{
-					Community.AddFact(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
-				}
+					var current = (await _<#=result.Query.Name#>.EnsureAsync()).ToList();
+					if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+					{
+						await Community.AddFactAsync(new <#=result.Type#>(this, _<#=result.Query.Name#>, value.Value));
+					}
+				};
+				setter();
 			}
         }
 <#}#>

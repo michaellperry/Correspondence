@@ -1,0 +1,7 @@
+﻿<configuration>
+  <appSettings>
+    <add key="CorrespondenceAddress" value="https://api.facetedworlds.com/correspondence_server_web/bin" />
+    <add key="CorrespondenceAPIKey" value="Your API key" />
+    <add key="CorrespondencePollingIntervalSeconds" value="120" />
+  </appSettings>
+</configuration>

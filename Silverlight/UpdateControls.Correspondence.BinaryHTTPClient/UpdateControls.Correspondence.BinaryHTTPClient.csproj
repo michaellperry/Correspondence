@@ -98,7 +98,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}</Project>
-      <Name>UpdateControls.Correspondence %28Silverlight 5\UpdateControls.Correspondence%29</Name>
+      <Name>UpdateControls.Correspondence</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +116,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App\lib\SL5\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\SL5\"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

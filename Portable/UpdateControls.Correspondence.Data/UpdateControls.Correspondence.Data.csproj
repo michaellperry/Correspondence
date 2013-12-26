@@ -60,6 +60,11 @@
     <Compile Include="StreamBasedDataStructure.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\portable-net45+sl5+wp80+win\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\sl5\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\net45\"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

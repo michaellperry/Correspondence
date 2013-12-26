@@ -2,10 +2,10 @@ packages/
 NuGet/Core/lib/
 
 $tf/
-NuGet/App/lib/
+NuGet/App.Core/lib/
 NuGet/Model/tools/
-NuGet/UnitTest/lib/
-NuGet/Web/App/lib/
+NuGet/UnitTest.Core/lib/
+NuGet/Web.qApp.Core/lib/
 
 #ignore thumbnails created by windows
 Thumbs.db
