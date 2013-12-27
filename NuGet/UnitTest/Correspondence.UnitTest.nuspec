@@ -20,11 +20,14 @@
     <tags>occasionally-connected mobile nosql database synchronize</tags>
     <dependencies>
       <group>
+        <dependency id="Correspondence.UnitTest.Core" />
       </group>
       <group targetFramework="sl5">
+        <dependency id="Correspondence.UnitTest.Core" />
         <dependency id="Silverlight.UnitTest" />
       </group>
       <group targetFramework="wp8">
+        <dependency id="Correspondence.UnitTest.Core" />
         <dependency id="silverlight.unittest.wp7" />
       </group>
     </dependencies>
