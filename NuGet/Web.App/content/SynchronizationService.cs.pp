@@ -24,7 +24,7 @@ namespace $rootnamespace$
 			// var storage = new SQLStorageStrategy(correspondenceConnectionString).UpgradeDatabase();
 
             string path = HostingEnvironment.MapPath("~/App_Data/Correspondence");
-			var storage = FileStreamStorageStrategy.Load(path);
+			var storage = new FileStreamStorageStrategy(path);
             var http = new HTTPConfigurationProvider();
 			var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
 

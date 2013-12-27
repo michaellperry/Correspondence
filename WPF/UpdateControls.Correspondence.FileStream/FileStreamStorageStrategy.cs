@@ -16,26 +16,57 @@ namespace UpdateControls.Correspondence.FileStream
         private const string FactTreeFileName = "FactTree.bin";
         private const string IndexFileName = "Index.bin";
 
-        private string _filePath;
+        private readonly string _filePath;
 
-        private Table<Guid> _clientGuidTable = new Table<Guid>(
-            "ClientGuid.bin", ReadGuid, WriteGuid);
-        private Table<PeerRecord> _peerTable = new Table<PeerRecord>(
-            "PeerTable.bin", PeerRecord.Read, PeerRecord.Write);
-        private Table<MessageRecord> _messageTable = new Table<MessageRecord>(
-            "MessageTable.bin", MessageRecord.Read, MessageRecord.Write);
-        private Table<SavedFactRecord> _savedFactTable = new Table<SavedFactRecord>(
-            "SavedFact.bin", SavedFactRecord.Read, SavedFactRecord.Write);
-        private Table<OutgoingTimestampRecord> _outgoingTimestampTable = new Table<OutgoingTimestampRecord>(
-            "OutgoingTimestampTable.bin", OutgoingTimestampRecord.Read, OutgoingTimestampRecord.Write);
-        private Table<IncomingTimestampRecord> _incomingTimestampTable = new Table<IncomingTimestampRecord>(
-            "IncomingTimestampTable.bin", IncomingTimestampRecord.Read, IncomingTimestampRecord.Write);
-        private Table<FactTypeRecord> _factTypeTable = new Table<FactTypeRecord>(
-            "FactTypeTable.bin", FactTypeRecord.Read, FactTypeRecord.Write);
-        private Table<RoleRecord> _roleTable = new Table<RoleRecord>(
-            "RoleTable.bin", RoleRecord.Read, RoleRecord.Write);
+        private Table<Guid> _clientGuidTable;
+        private Table<PeerRecord> _peerTable;
+        private Table<MessageRecord> _messageTable;
+        private Table<SavedFactRecord> _savedFactTable;
+        private Table<OutgoingTimestampRecord> _outgoingTimestampTable;
+        private Table<IncomingTimestampRecord> _incomingTimestampTable;
+        private Table<FactTypeRecord> _factTypeTable;
+        private Table<RoleRecord> _roleTable;
 
         private RedBlackTree.NodeCache _nodeCache = new RedBlackTree.NodeCache();
+
+        public FileStreamStorageStrategy(string filePath)
+        {
+            _filePath = filePath;
+            Directory.CreateDirectory(_filePath);
+
+            _clientGuidTable = new Table<Guid>(
+                Path.Combine(_filePath, "ClientGuid.bin"), 
+                ReadGuid, 
+                WriteGuid);
+            _peerTable = new Table<PeerRecord>(
+                Path.Combine(_filePath, "PeerTable.bin"), 
+                PeerRecord.Read, 
+                PeerRecord.Write);
+            _messageTable = new Table<MessageRecord>(
+                Path.Combine(_filePath, "MessageTable.bin"), 
+                MessageRecord.Read, 
+                MessageRecord.Write);
+            _savedFactTable = new Table<SavedFactRecord>(
+                Path.Combine(_filePath, "SavedFact.bin"), 
+                SavedFactRecord.Read, 
+                SavedFactRecord.Write);
+            _outgoingTimestampTable = new Table<OutgoingTimestampRecord>(
+                Path.Combine(_filePath, "OutgoingTimestampTable.bin"), 
+                OutgoingTimestampRecord.Read, 
+                OutgoingTimestampRecord.Write);
+            _incomingTimestampTable = new Table<IncomingTimestampRecord>(
+                Path.Combine(_filePath, "IncomingTimestampTable.bin"), 
+                IncomingTimestampRecord.Read, 
+                IncomingTimestampRecord.Write);
+            _factTypeTable = new Table<FactTypeRecord>(
+                Path.Combine(_filePath, "FactTypeTable.bin"), 
+                FactTypeRecord.Read, 
+                FactTypeRecord.Write);
+            _roleTable = new Table<RoleRecord>(
+                Path.Combine(_filePath, "RoleTable.bin"), 
+                RoleRecord.Read, 
+                RoleRecord.Write);
+        }
 
         public async Task<Guid> GetClientGuidAsync()
         {
