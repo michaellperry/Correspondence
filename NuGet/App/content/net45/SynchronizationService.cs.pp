@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.SSCE;
+using UpdateControls.Fields;
 
 namespace $rootnamespace$
 {
@@ -16,7 +18,7 @@ namespace $rootnamespace$
         private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
         private Community _community;
-        private Individual _individual;
+        private Independent<Individual> _individual = new Independent<Individual>();
 
         public void Initialize()
         {
@@ -28,15 +30,9 @@ namespace $rootnamespace$
             _community = new Community(storage);
             _community.AddAsynchronousCommunicationStrategy(communication);
             _community.Register<CorrespondenceModel>();
-            _community.Subscribe(() => _individual);
+            _community.Subscribe(() => _individual.Value);
 
-            _individual = _community.LoadFact<Individual>(ThisIndividual);
-            if (_individual == null)
-            {
-                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
-                _individual = _community.AddFact(new Individual(randomId));
-                _community.SetFact(ThisIndividual, _individual);
-            }
+            LoadIndividual();
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -66,7 +62,28 @@ namespace $rootnamespace$
 
         public Individual Individual
         {
-            get { return _individual; }
+            get
+            {
+                lock (this)
+                {
+                    return _individual;
+                }
+            }
+        }
+
+        private async void LoadIndividual()
+        {
+            var individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
+            if (individual == null)
+            {
+                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
+                individual = await _community.AddFactAsync(new Individual(randomId));
+                await _community.SetFactAsync(ThisIndividual, individual);
+            }
+			lock (this)
+			{
+				_individual.Value = individual;
+			}
         }
     }
 }
