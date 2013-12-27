@@ -17,7 +17,7 @@ namespace $rootnamespace$
         private Individual _individualAlan;
 
         [TestInitialize]
-        public async Task Initialize()
+        public void Initialize()
         {
             var sharedCommunication = new MemoryCommunicationStrategy();
             _communityFlynn = new Community(new MemoryStorageStrategy())
@@ -30,12 +30,27 @@ namespace $rootnamespace$
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => _individualAlan)
                 ;
-
-            _individualFlynn = await _communityFlynn.AddFactAsync(new Individual("flynn"));
-            _individualAlan = await _communityAlan.AddFactAsync(new Individual("alan"));
         }
 
-        private async Task Synchronize()
+        private async Task CreateIndividualsAsync()
+        {
+            _individualFlynn = await _communityFlynn.AddFactAsync(
+                new Individual("flynn"));
+            _individualAlan = await _communityAlan.AddFactAsync(
+                new Individual("alan"));
+        }
+
+        [TestMethod]
+        public async Task MyTest()
+        {
+            await CreateIndividualsAsync();
+
+            await SynchronizeAsync();
+
+            Assert.Fail();
+        }
+
+        private async Task SynchronizeAsync()
         {
             while (await _communityFlynn.SynchronizeAsync() || await _communityAlan.SynchronizeAsync()) ;
         }
