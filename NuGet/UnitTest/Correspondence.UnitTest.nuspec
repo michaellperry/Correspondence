@@ -26,10 +26,6 @@
         <dependency id="Correspondence.UnitTest.Core" />
         <dependency id="Silverlight.UnitTest" />
       </group>
-      <group targetFramework="wp8">
-        <dependency id="Correspondence.UnitTest.Core" />
-        <dependency id="silverlight.unittest.wp7" />
-      </group>
     </dependencies>
   </metadata>
 </package>

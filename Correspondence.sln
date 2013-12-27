@@ -200,25 +200,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl5", "sl5", "{C171B9A1-663
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{938F962B-065F-405D-989A-4622A7F07728}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\ModelTest.cs.pp = NuGet\UnitTest\content\ModelTest.cs.pp
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sl5", "sl5", "{1F2A73B7-93E5-44D3-801C-FBD245132364}"
 	ProjectSection(SolutionItems) = preProject
 		NuGet\UnitTest\content\sl5\ModelTest.cs.pp = NuGet\UnitTest\content\sl5\ModelTest.cs.pp
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{EB1C8AA1-5377-44D5-AFF3-8598CD9448B7}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\UnitTest\content\net45\ModelTest.cs.pp = NuGet\UnitTest\content\net45\ModelTest.cs.pp
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win81", "win81", "{B9E16FDC-397A-4E94-A358-F8B31F1A94E8}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\UnitTest\content\win81\ModelTest.cs.pp = NuGet\UnitTest\content\win81\ModelTest.cs.pp
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wp8", "wp8", "{BA338F07-F48B-4CBF-A674-0E548E896F05}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet\UnitTest\content\wp8\ModelTest.cs.pp = NuGet\UnitTest\content\wp8\ModelTest.cs.pp
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web.AllInOne", "Web.AllInOne", "{B4A31979-1337-4528-AA83-675F60BCE777}"
@@ -233,6 +221,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{5703
 		NuGet\Web.App\content\SynchronizationService.cs.pp = NuGet\Web.App\content\SynchronizationService.cs.pp
 		NuGet\Web.App\content\web.config.install.xdt = NuGet\Web.App\content\web.config.install.xdt
 		NuGet\Web.App\content\web.config.uninstall.xdt = NuGet\Web.App\content\web.config.uninstall.xdt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{86B391C3-243C-4EA7-B651-2DAEE83770A4}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\UnitTest\content\net45\ModelTest.cs.pp = NuGet\UnitTest\content\net45\ModelTest.cs.pp
 	EndProjectSection
 EndProject
 Global
@@ -548,8 +541,6 @@ Global
 		{9D190A3B-D2AE-4368-8B71-008AB0A17860} = {6314F072-F9DE-44B8-BA99-A87AD5B36394}
 		{C171B9A1-663F-4F15-A681-88E9A8B7B821} = {315C2C7A-5C48-45CF-936D-759957EF1A15}
 		{1F2A73B7-93E5-44D3-801C-FBD245132364} = {938F962B-065F-405D-989A-4622A7F07728}
-		{EB1C8AA1-5377-44D5-AFF3-8598CD9448B7} = {938F962B-065F-405D-989A-4622A7F07728}
-		{B9E16FDC-397A-4E94-A358-F8B31F1A94E8} = {938F962B-065F-405D-989A-4622A7F07728}
-		{BA338F07-F48B-4CBF-A674-0E548E896F05} = {938F962B-065F-405D-989A-4622A7F07728}
+		{86B391C3-243C-4EA7-B651-2DAEE83770A4} = {938F962B-065F-405D-989A-4622A7F07728}
 	EndGlobalSection
 EndGlobal
