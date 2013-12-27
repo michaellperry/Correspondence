@@ -160,7 +160,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wp8", "wp8", "{6314F072-F9D
 	ProjectSection(SolutionItems) = preProject
 		NuGet\App\content\wp8\App.xaml.transform = NuGet\App\content\wp8\App.xaml.transform
 		NuGet\App\content\wp8\HTTPConfigurationProvider.cs.pp = NuGet\App\content\wp8\HTTPConfigurationProvider.cs.pp
-		NuGet\App\content\wp8\MainPage.xaml.transform = NuGet\App\content\wp8\MainPage.xaml.transform
 		NuGet\App\content\wp8\SynchronizationService.cs.pp = NuGet\App\content\wp8\SynchronizationService.cs.pp
 	EndProjectSection
 EndProject
@@ -232,7 +231,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{5703
 		NuGet\Web.App\content\HTTPConfigurationProvider.cs.pp = NuGet\Web.App\content\HTTPConfigurationProvider.cs.pp
 		NuGet\Web.App\content\Readme_Correspondence.txt.pp = NuGet\Web.App\content\Readme_Correspondence.txt.pp
 		NuGet\Web.App\content\SynchronizationService.cs.pp = NuGet\Web.App\content\SynchronizationService.cs.pp
-		NuGet\Web.App\content\web.config.transform = NuGet\Web.App\content\web.config.transform
+		NuGet\Web.App\content\web.config.install.xdt = NuGet\Web.App\content\web.config.install.xdt
+		NuGet\Web.App\content\web.config.uninstall.xdt = NuGet\Web.App\content\web.config.uninstall.xdt
 	EndProjectSection
 EndProject
 Global

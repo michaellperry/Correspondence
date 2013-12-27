@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <appSettings>
+    <add 
+      key="CorrespondenceAddress" 
+      value="https://api.facetedworlds.com/correspondence_server_web/bin"
+      xdt:Transform="Insert" />
+    <add 
+      key="CorrespondenceAPIKey"
+      value="Your API key"
+      xdt:Transform="Insert" />
+    <add 
+      key="CorrespondencePollingIntervalSeconds"
+      value="120"
+      xdt:Transform="Insert" />
+  </appSettings>
+</configuration>
