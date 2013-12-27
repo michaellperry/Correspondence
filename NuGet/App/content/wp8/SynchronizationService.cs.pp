@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.Phone.Info;
 using Microsoft.Phone.Net.NetworkInformation;
 using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.IsolatedStorage;
+using UpdateControls.Correspondence.FileStream;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
 
@@ -17,7 +17,7 @@ namespace $rootnamespace$
 
         public void Initialize()
         {
-            var storage = IsolatedStorageStorageStrategy.Load();
+            var storage = new FileStreamStorageStrategy();
             var http = new HTTPConfigurationProvider();
             var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
             var notification = new WindowsPhoneNotificationStrategy(http);
@@ -28,8 +28,7 @@ namespace $rootnamespace$
             _community.Register<CorrespondenceModel>();
             _community.Subscribe(() => _individual);
 
-            _individual = _community.AddFact(new Individual(GetAnonymousUserId()));
-            http.Individual = _individual;
+            CreateIndividual(http);
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -56,6 +55,12 @@ namespace $rootnamespace$
         public Individual Individual
         {
             get { return _individual; }
+        }
+
+        private async void CreateIndividual(HTTPConfigurationProvider http)
+        {
+            _individual = await _community.AddFactAsync(new Individual(GetAnonymousUserId()));
+            http.Individual = _individual;
         }
 
         public void Synchronize()
