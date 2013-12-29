@@ -1,15 +1,14 @@
 Correspondence
 ==============
 
-Collaboration framework
+The Correspondence Collaboration Framework caches data on the mobile device, and queues changes while offline. When
+a connection becomes available, it synchronizes changes with a central distributor. While online, it updates the
+user interface in real time as other users make changes.
 
-*Project Description*
-{project:description}
+## Set up a distributor
+Go to http://correspondencecloud.com to set up a Correspondence distributor. This is how devices running your app will collaborate with each other. You can use our distributor, or deploy your own to IIS or Azure.
 
-!! Set up a distributor
-Go to [url:http://correspondencecloud.com] to set up a Correspondence distributor. This is how devices running your app will collaborate with each other.
-
-!! Download using NuGet
+## Download using NuGet
 Create a portable class library for your model. Add the package:
 * Correspondence.Model
 
@@ -25,7 +24,7 @@ Create a unit test library and add the package:
 
 See the Readme.txt file for additional instructions.
 
-*Step 1: define a fact*
+### Step 1: define a fact
 You express your model in a language called Factual. A fact looks like this:
 <pre>
 fact Message {
@@ -37,19 +36,19 @@ key:
 }
 </pre>
 
-*Step 2: add a fact to the community*
+### Step 2: add a fact to the community
 Adding a fact stores it in the local database and publishes it for other peers.
 <pre>
 public partial class Conversation
 {
-    public void SendMessage(User sender, string body)
+    public async Task SendMessageAsync(User sender, string body)
     {
-        Community.AddFact(new Message(this, sender, body));
+        await Community.AddFactAsync(new Message(this, sender, body));
     }
 }
 </pre>
 
-*Step 3: query for related facts*
+### Step 3: query for related facts
 A query is expressed in Factual as part of a fact. The colon (:) is pronounced "such that", as in "messages is the set of Message facts m *such that* m.conversation is this Conversation".
 <pre>
 fact Conversation {
@@ -62,7 +61,7 @@ query:
 }
 </pre>
 
-*Step 4: access query results*
+### Step 4: access query results
 Query results appear as an enumerable property of the fact. The results are bindable, even through a view model:
 <pre>
 public class ConversationViewModel
