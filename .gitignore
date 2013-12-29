@@ -5,7 +5,7 @@ $tf/
 NuGet/App.Core/lib/
 NuGet/Model/tools/
 NuGet/UnitTest.Core/lib/
-NuGet/Web.qApp.Core/lib/
+NuGet/Web.App.Core/lib/
 
 #ignore thumbnails created by windows
 Thumbs.db
