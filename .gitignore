@@ -1,6 +1,6 @@
 packages/
 NuGet/Core/lib/
-
+*.nupkg
 $tf/
 NuGet/App.Core/lib/
 NuGet/Model/tools/

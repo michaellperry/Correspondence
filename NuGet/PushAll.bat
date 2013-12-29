@@ -1,1 +1,1 @@
-for %%a in (*.nupkg) do nuget push %%a
+for %%a in (*.nupkg) do ..\.nuget\nuget push %%a

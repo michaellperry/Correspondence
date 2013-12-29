@@ -408,13 +408,13 @@ namespace UpdateControls.Correspondence.Networking
                     return null;
                 });
 
-            Task<GetManyResultMemento> getManyAndThenCancel = getManyTask.ContinueWith(t =>
-            {
-                tokenSource.Cancel();
-                return t.Result;
-            });
             try
             {
+                Task<GetManyResultMemento> getManyAndThenCancel = getManyTask.ContinueWith(t =>
+                {
+                    tokenSource.Cancel();
+                    return t.Result;
+                });
                 GetManyResultMemento[] results = await Task.WhenAll(
                     switchToPollingTask,
                     getManyAndThenCancel);
