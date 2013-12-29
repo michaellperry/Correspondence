@@ -9,20 +9,18 @@ user interface in real time as other users make changes.
 Go to http://correspondencecloud.com to set up a Correspondence distributor. This is how devices running your app will collaborate with each other. You can use our distributor, or deploy your own to IIS or Azure.
 
 ## Download using NuGet
-Create a portable class library for your model. Add the package:
-* Correspondence.Model
+Create a portable class library for your model. Exclude Silverlight; you will need a separate Silverlight-only project if you want to target that platform. Add the package:
+* **Correspondence.Model**
 
-Create another portable class libraries for your domain services, view models, and other shared code. Add the package:
-* Correspondence.Core
+Create another portable class libraries for your domain services, view models, and other shared code. Again, Silverlight (if desired) is separate. Add the package:
+* **Correspondence**
 
 Add the app package that's right for your application:
-* Windows Store, Windows Phone, WPF, or Silverlight - Correspondence.App
-* MVC - Correspondence.Web.App
+* Windows Store, Windows Phone, WPF, or Silverlight - **Correspondence.App**
+* MVC - **Correspondence.Web.App**
 
 Create a unit test library and add the package:
-* Correspondence.UnitTest
-
-See the Readme.txt file for additional instructions.
+* **Correspondence.UnitTest**
 
 ### Step 1: define a fact
 You express your model in a language called Factual. A fact looks like this:
