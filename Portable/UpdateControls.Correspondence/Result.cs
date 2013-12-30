@@ -121,20 +121,27 @@ namespace UpdateControls.Correspondence
             // If the results are not cached, load them.
             if (_state == State.Unloaded && _startingPoint.IsLoaded)
             {
-                // Load the results from storage and cache them.
-                Task<List<CorrespondenceFact>> queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
-                    _query.QueryDefinition, _startingPoint.ID, _options);
-                if (queryTask.IsCompleted)
+                if (_startingPoint.IsNull)
                 {
-                    _results = queryTask.Result
-                        .OfType<TResultType>()
-                        .ToList();
                     SetState(State.Loaded);
                 }
                 else
                 {
-                    SetState(State.Loading);
-                    queryTask.ContinueWith(ExecuteQueryCompleted);
+                    // Load the results from storage and cache them.
+                    Task<List<CorrespondenceFact>> queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
+                        _query.QueryDefinition, _startingPoint.ID, _options);
+                    if (queryTask.IsCompleted)
+                    {
+                        _results = queryTask.Result
+                            .OfType<TResultType>()
+                            .ToList();
+                        SetState(State.Loaded);
+                    }
+                    else
+                    {
+                        SetState(State.Loading);
+                        queryTask.ContinueWith(ExecuteQueryCompleted);
+                    }
                 }
             }
         }

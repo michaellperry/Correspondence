@@ -27,7 +27,9 @@ namespace UpdateControls.Correspondence
         {
             IEnumerable<CorrespondenceFact> pivots = _pivotsFunction() ??
                 Enumerable.Empty<CorrespondenceFact>();
-            _pivots = pivots.ToList();
+            _pivots = pivots
+                .Where(p => p != null && !p.IsNull)
+                .ToList();
 
             if (_pivots.Any(pivot => pivot.InternalCommunity != _community))
                 throw new CorrespondenceException("The facts must come from the same community as the subscription.");

@@ -55,6 +55,7 @@
     <Compile Include="AsyncTest.cs" />
     <Compile Include="CaptureTest.cs" />
     <Compile Include="ChallengeTest.cs" />
+    <Compile Include="Fakes\FakeCommunicationStrategy.cs" />
     <Compile Include="FieldSerializerTest.cs" />
     <Compile Include="MockCommunicationStrategy.cs" />
     <Compile Include="Model\Game.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="RemoteIdTest.cs" />
     <Compile Include="ThreadSafeHashCodeTest.cs" />
     <Compile Include="TwoPlayerGameTest.cs" />
+    <Compile Include="NullInstanceTest.cs" />
     <Compile Include="UnpublishTest.cs" />
     <Compile Include="VersionTest.cs" />
   </ItemGroup>
