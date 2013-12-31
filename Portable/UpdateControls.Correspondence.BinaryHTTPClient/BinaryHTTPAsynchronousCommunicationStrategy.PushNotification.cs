@@ -29,7 +29,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient
 
         public bool IsLongPolling
         {
-            get { return true; }
+            get { return _configuration.TimeoutSeconds > 0; }
         }
 
         public Task<IPushSubscription> SubscribeForPushAsync(FactTreeMemento pivotTree, FactID pivotId, Guid clientGuid)
