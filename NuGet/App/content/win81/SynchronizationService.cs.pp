@@ -20,9 +20,10 @@ namespace $rootnamespace$
         private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
         private Community _community;
-        private Independent<Individual> _individual = new Independent<Individual>();
+        private Independent<Individual> _individual = new Independent<Individual>(
+			Individual.GetNullInstance());
 
-        public async void Initialize()
+        public void Initialize()
         {
             var storage = new FileStreamStorageStrategy();
             var http = new HTTPConfigurationProvider();
@@ -31,7 +32,7 @@ namespace $rootnamespace$
             _community = new Community(storage);
             _community.AddAsynchronousCommunicationStrategy(communication);
             _community.Register<CorrespondenceModel>();
-            _community.Subscribe(() => _individual.Value);
+            _community.Subscribe(() => Individual);
 
             // Synchronize periodically.
             DispatcherTimer timer = new DispatcherTimer();
@@ -43,18 +44,7 @@ namespace $rootnamespace$
             };
             timer.Start();
 
-            Individual individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
-            if (individual == null)
-            {
-                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
-                individual = await _community.AddFactAsync(new Individual(randomId));
-                await _community.SetFactAsync(ThisIndividual, individual);
-            }
-            lock (this)
-            {
-                _individual.Value = individual;
-            }
-            http.Individual = individual;
+            LoadIndividual(http);
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -87,12 +77,32 @@ namespace $rootnamespace$
                     return _individual;
                 }
             }
+            set
+            {
+                lock (this)
+                {
+                    _individual.Value = value;
+                }
+            }
         }
 
         public void Synchronize()
         {
             _community.BeginSending();
             _community.BeginReceiving();
+        }
+
+        private async void LoadIndividual(HTTPConfigurationProvider http)
+        {
+            Individual individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
+            if (individual == null)
+            {
+                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
+                individual = await _community.AddFactAsync(new Individual(randomId));
+                await _community.SetFactAsync(ThisIndividual, individual);
+            }
+            Individual = individual;
+            http.Individual = individual;
         }
     }
 }

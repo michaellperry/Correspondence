@@ -20,11 +20,9 @@ namespace $rootnamespace$.ViewModels
         {
             get
             {
-                return ViewModel(() => _synchronizationService.Individual == null
-                    ? null :
-                    new MainViewModel(
-                        _synchronizationService.Community,
-                        _synchronizationService.Individual));
+                return ViewModel(() => new MainViewModel(
+                    _synchronizationService.Community,
+                    _synchronizationService.Individual));
             }
         }
     }

@@ -7,13 +7,15 @@ using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.FileStream;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
+using UpdateControls.Fields;
 
 namespace $rootnamespace$
 {
     public class SynchronizationService
     {
         private Community _community;
-        private Individual _individual;
+        private Independent<Individual> _individual = new Independent<Individual>(
+            Individual.GetNullInstance());
 
         public void Initialize()
         {
@@ -26,7 +28,7 @@ namespace $rootnamespace$
             _community = new Community(storage);
             _community.AddAsynchronousCommunicationStrategy(communication);
             _community.Register<CorrespondenceModel>();
-            _community.Subscribe(() => _individual);
+            _community.Subscribe(() => Individual);
 
             CreateIndividual(http);
 
@@ -54,13 +56,27 @@ namespace $rootnamespace$
 
         public Individual Individual
         {
-            get { return _individual; }
+            get
+            {
+                lock (this)
+                {
+                    return _individual;
+                }
+            }
+            private set
+            {
+                lock (this)
+                {
+                    _individual.Value = value;
+                }
+            }
         }
 
         private async void CreateIndividual(HTTPConfigurationProvider http)
         {
-            _individual = await _community.AddFactAsync(new Individual(GetAnonymousUserId()));
-            http.Individual = _individual;
+            var individual = await _community.AddFactAsync(new Individual(GetAnonymousUserId()));
+            Individual = individual;
+            http.Individual = individual;
         }
 
         public void Synchronize()

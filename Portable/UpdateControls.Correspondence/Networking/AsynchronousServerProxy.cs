@@ -410,15 +410,10 @@ namespace UpdateControls.Correspondence.Networking
 
             try
             {
-                Task<GetManyResultMemento> getManyAndThenCancel = getManyTask.ContinueWith(t =>
-                {
-                    tokenSource.Cancel();
-                    return t.Result;
-                });
-                GetManyResultMemento[] results = await Task.WhenAll(
+                Task<GetManyResultMemento> task = await Task.WhenAny(
                     switchToPollingTask,
-                    getManyAndThenCancel);
-                GetManyResultMemento result = results[0] ?? results[1];
+                    getManyTask);
+                GetManyResultMemento result = await task;
                 return result;
             }
             catch (AggregateException x)
