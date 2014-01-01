@@ -8,6 +8,7 @@ using UpdateControls.Correspondence.FileStream;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.BinaryHTTPClient.Notification;
 using UpdateControls.Fields;
+using UpdateControls.Correspondence.Memory;
 
 namespace $rootnamespace$
 {
@@ -49,6 +50,14 @@ namespace $rootnamespace$
             Synchronize();
         }
 
+        public void InitializeDesignData()
+        {
+            _community = new Community(new MemoryStorageStrategy());
+            _community.Register<CorrespondenceModel>();
+
+            CreateIndividualDesignData();
+        }
+
         public Community Community
         {
             get { return _community; }
@@ -77,6 +86,12 @@ namespace $rootnamespace$
             var individual = await _community.AddFactAsync(new Individual(GetAnonymousUserId()));
             Individual = individual;
             http.Individual = individual;
+        }
+
+        private async void CreateIndividualDesignData()
+        {
+            var individual = await _community.AddFactAsync(new Individual("design"));
+            Individual = individual;
         }
 
         public void Synchronize()

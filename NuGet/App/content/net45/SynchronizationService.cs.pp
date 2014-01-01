@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
+using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.SSCE;
 using UpdateControls.Fields;
 
@@ -18,7 +19,8 @@ namespace $rootnamespace$
         private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
         private Community _community;
-        private Independent<Individual> _individual = new Independent<Individual>();
+        private Independent<Individual> _individual = new Independent<Individual>(
+            Individual.GetNullInstance());
 
         public void Initialize()
         {
@@ -30,9 +32,9 @@ namespace $rootnamespace$
             _community = new Community(storage);
             _community.AddAsynchronousCommunicationStrategy(communication);
             _community.Register<CorrespondenceModel>();
-            _community.Subscribe(() => _individual.Value);
+            _community.Subscribe(() => Individual);
 
-            LoadIndividual();
+            CreateIndividual();
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -55,6 +57,14 @@ namespace $rootnamespace$
             _community.BeginReceiving();
         }
 
+        public void InitializeDesignMode()
+        {
+            _community = new Community(new MemoryStorageStrategy());
+            _community.Register<CorrespondenceModel>();
+
+            CreateIndividualDesignData();
+        }
+
         public Community Community
         {
             get { return _community; }
@@ -69,9 +79,16 @@ namespace $rootnamespace$
                     return _individual;
                 }
             }
+            private set
+            {
+                lock (this)
+                {
+                    _individual.Value = value;
+                }
+            }
         }
 
-        private async void LoadIndividual()
+        private async void CreateIndividual()
         {
             var individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
             if (individual == null)
@@ -80,10 +97,13 @@ namespace $rootnamespace$
                 individual = await _community.AddFactAsync(new Individual(randomId));
                 await _community.SetFactAsync(ThisIndividual, individual);
             }
-			lock (this)
-			{
-				_individual.Value = individual;
-			}
+            Individual = individual;
+        }
+
+        private async void CreateIndividualDesignData()
+        {
+            var individual = await _community.AddFactAsync(new Individual("design"));
+            Individual = individual;
         }
     }
 }

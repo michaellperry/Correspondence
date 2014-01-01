@@ -12,8 +12,10 @@ namespace $rootnamespace$.ViewModels
         public ViewModelLocator()
         {
             _synchronizationService = new SynchronizationService();
-            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            if (!DesignMode)
                 _synchronizationService.Initialize();
+            else
+                _synchronizationService.InitializeDesignMode();
         }
 
         public object Main

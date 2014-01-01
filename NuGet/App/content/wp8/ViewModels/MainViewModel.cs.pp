@@ -9,8 +9,8 @@ namespace $rootnamespace$.ViewModels
 {
     public class MainViewModel
     {
-        private Community _community;
-        private Individual _individual;
+        private readonly Community _community;
+        private readonly Individual _individual;
 
         public MainViewModel(Community community, Individual individual)
         {

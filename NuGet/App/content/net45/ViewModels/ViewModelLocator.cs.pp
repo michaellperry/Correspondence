@@ -13,19 +13,19 @@ namespace $rootnamespace$.ViewModels
         public ViewModelLocator()
         {
             _synchronizationService = new SynchronizationService();
-            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (!DesignMode)
                 _synchronizationService.Initialize();
+            else
+                _synchronizationService.InitializeDesignMode();
         }
 
         public object Main
         {
             get
             {
-                return ViewModel(() => _synchronizationService.Individual == null
-                    ? null :
-                    new MainViewModel(
-                        _synchronizationService.Community,
-                        _synchronizationService.Individual));
+                return ViewModel(() => new MainViewModel(
+                    _synchronizationService.Community,
+                    _synchronizationService.Individual));
             }
         }
     }

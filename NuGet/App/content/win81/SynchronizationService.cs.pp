@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.BinaryHTTPClient;
 using UpdateControls.Correspondence.FileStream;
+using UpdateControls.Correspondence.Memory;
 using UpdateControls.Fields;
 using Windows.Storage;
 using Windows.UI.Xaml;
@@ -44,7 +45,7 @@ namespace $rootnamespace$
             };
             timer.Start();
 
-            LoadIndividual(http);
+            CreateIndividual(http);
 
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
@@ -63,6 +64,14 @@ namespace $rootnamespace$
             Synchronize();
         }
 
+        public void InitializeDesignMode()
+        {
+            _community = new Community(new MemoryStorageStrategy());
+            _community.Register<CorrespondenceModel>();
+
+            CreateIndividualDesignData();
+        }
+
         public Community Community
         {
             get { return _community; }
@@ -77,7 +86,7 @@ namespace $rootnamespace$
                     return _individual;
                 }
             }
-            set
+            private set
             {
                 lock (this)
                 {
@@ -92,7 +101,7 @@ namespace $rootnamespace$
             _community.BeginReceiving();
         }
 
-        private async void LoadIndividual(HTTPConfigurationProvider http)
+        private async void CreateIndividual(HTTPConfigurationProvider http)
         {
             Individual individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
             if (individual == null)
@@ -103,6 +112,12 @@ namespace $rootnamespace$
             }
             Individual = individual;
             http.Individual = individual;
+        }
+
+        private async void CreateIndividualDesignData()
+        {
+            var individual = await _community.AddFactAsync(new Individual("design"));
+            Individual = individual;
         }
     }
 }

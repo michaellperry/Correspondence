@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using UpdateControls.Correspondence;
 using UpdateControls.Correspondence.IsolatedStorage;
 using UpdateControls.Correspondence.BinaryHTTPClient;
+using UpdateControls.Correspondence.Memory;
 
 namespace $rootnamespace$
 {
@@ -28,14 +29,8 @@ namespace $rootnamespace$
             _community.Register<CorrespondenceModel>();
             _community.Subscribe(() => _individual);
 
-            _individual = _community.LoadFact<Individual>(ThisIndividual);
-            if (_individual == null)
-            {
-                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
-                _individual = _community.AddFact(new Individual(randomId));
-                _community.SetFact(ThisIndividual, _individual);
-            }
-
+            CreateIndividual();
+			
             // Synchronize whenever the user has something to send.
             _community.FactAdded += delegate
             {
@@ -57,6 +52,14 @@ namespace $rootnamespace$
             _community.BeginReceiving();
         }
 
+        public void InitializeDesignMode()
+        {
+            _community = new Community(new MemoryStorageStrategy());
+            _community.Register<CorrespondenceModel>();
+
+            CreateIndidualDesignData();
+        }
+
         public Community Community
         {
             get { return _community; }
@@ -65,6 +68,23 @@ namespace $rootnamespace$
         public Individual Individual
         {
             get { return _individual; }
+        }
+
+        private void CreateIndividual()
+        {
+            _individual = _community.LoadFact<Individual>(ThisIndividual);
+            if (_individual == null)
+            {
+                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
+                _individual = _community.AddFact(new Individual(randomId));
+                _community.SetFact(ThisIndividual, _individual);
+            }
+        }
+
+        private void CreateIndidualDesignData()
+        {
+            var individual = _community.AddFact(new Individual("design"));
+            _individual = individual;
         }
     }
 }

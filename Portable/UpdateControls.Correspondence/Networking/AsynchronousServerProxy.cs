@@ -269,8 +269,7 @@ namespace UpdateControls.Correspondence.Networking
                         pivots,
                         await _model.GetClientDatabaseGuidAsync());
                     GetManyResultMemento result = await ChangeStateAfterDelay(getManyTask);
-                    bool receivedFacts = result.MessageBody.Facts.Any();
-                    if (receivedFacts)
+                    if (result != null && result.MessageBody.Facts.Any())
                         return result;
 
                     // No messages yet, but keep polling.

@@ -59,7 +59,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\Desktop\UpdateControls.Correspondence.Memory\Mallardsoft.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\SolutionItems\Mallardsoft.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -69,52 +69,36 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System.Windows.Browser" />
-    <Reference Include="UpdateControls, Version=2.2.2.1, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\updatecontrols.2.2.2.1\lib\sl5\UpdateControls.dll</HintPath>
+    <Reference Include="UpdateControls">
+      <HintPath>..\..\packages\UpdateControls.2.3.0.1\lib\sl5\UpdateControls.dll</HintPath>
+    </Reference>
+    <Reference Include="UpdateControls.XAML">
+      <HintPath>..\..\packages\UpdateControls.2.3.0.1\lib\sl5\UpdateControls.XAML.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Duration.cs">
-      <Link>Duration.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\FactRecord.cs">
-      <Link>FactRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryCommunicationStrategy.cs">
-      <Link>MemoryCommunicationStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MemoryStorageStrategy.cs">
-      <Link>MemoryStorageStrategy.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\MessageRecord.cs">
-      <Link>MessageRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerIdentifier.cs">
-      <Link>PeerIdentifier.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerPivotIdentifier.cs">
-      <Link>PeerPivotIdentifier.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\PeerRecord.cs">
-      <Link>PeerRecord.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\QueryExecutor.cs">
-      <Link>QueryExecutor.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Desktop\UpdateControls.Correspondence.Memory\ShareRecord.cs">
-      <Link>ShareRecord.cs</Link>
-    </Compile>
     <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="..\..\SolutionItems\UnitTestVersionInfo.cs">
       <Link>Properties\UnitTestVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="ListExtensions.cs" />
+    <Compile Include="AsyncMemoryStorageStrategy.cs" />
+    <Compile Include="Duration.cs" />
+    <Compile Include="FactRecord.cs" />
+    <Compile Include="FutureIdentifiedFactMementoTask.cs" />
+    <Compile Include="MemoryCommunicationStrategy.cs" />
+    <Compile Include="MemoryStorageStrategy.cs" />
+    <Compile Include="MessageRecord.cs" />
+    <Compile Include="PeerIdentifier.cs" />
+    <Compile Include="PeerPivotIdentifier.cs" />
+    <Compile Include="PeerRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryExecutor.cs" />
+    <Compile Include="ShareRecord.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Desktop\UpdateControls.Correspondence.Memory\Mallardsoft.snk">
+    <None Include="..\..\SolutionItems\Mallardsoft.snk">
       <Link>Mallardsoft.snk</Link>
     </None>
     <None Include="packages.config" />
@@ -134,8 +118,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\UnitTest\lib\SL5\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App\lib\SL5\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\UnitTest.Core\lib\SL5\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\SL5\"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

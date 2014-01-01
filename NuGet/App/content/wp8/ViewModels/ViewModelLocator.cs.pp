@@ -12,8 +12,10 @@ namespace $rootnamespace$.ViewModels
         public ViewModelLocator()
         {
             _synchronizationService = new SynchronizationService();
-            if (!DesignerProperties.IsInDesignTool)
+            if (!DesignMode)
                 _synchronizationService.Initialize();
+            else
+                _synchronizationService.InitializeDesignData();
         }
 
         public object Main
