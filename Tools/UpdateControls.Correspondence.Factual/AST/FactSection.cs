@@ -5,6 +5,7 @@ namespace UpdateControls.Correspondence.Factual.AST
     public class FactSection
     {
         private bool _unique;
+        private bool _lock;
         private bool _principal;
         private List<FactMember> _members = new List<FactMember>();
 
@@ -20,6 +21,12 @@ namespace UpdateControls.Correspondence.Factual.AST
             return this;
         }
 
+        public FactSection SetLock()
+        {
+            _lock = true;
+            return this;
+        }
+
         public FactSection SetPrincipal()
         {
             _principal = true;
@@ -32,6 +39,8 @@ namespace UpdateControls.Correspondence.Factual.AST
                 fact.AddMember(member);
             if (_unique)
                 fact.Unique = true;
+            if (_lock)
+                fact.Lock = true;
             if (_principal)
                 fact.Principal = true;
             return fact;

@@ -8,6 +8,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
         private string _name;
         private int _version;
         private bool _publicKey;
+        private bool _sharedKey;
         private bool _unique;
         private List<Field> _fields = new List<Field>();
         private List<Predecessor> _predecessors = new List<Predecessor>();
@@ -92,15 +93,16 @@ namespace UpdateControls.Correspondence.Factual.Metadata
             return this;
         }
 
-        public bool HasPublicKey {
-            get
-            {
-                return _publicKey;
-            } 
-            set 
-            {
-                _publicKey = value;
-            } 
+        public bool HasPublicKey
+        {
+            get { return _publicKey; }
+            set { _publicKey = value; }
+        }
+
+        public bool HasSharedKey
+        {
+            get { return _sharedKey; }
+            set { _sharedKey = value; }
         }
     }
 }

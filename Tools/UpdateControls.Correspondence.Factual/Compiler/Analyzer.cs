@@ -65,6 +65,14 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         {
             if (_root.Facts.Any(f => f != fact && f.Name == fact.Name))
                 throw new CompilerException(string.Format("The fact \"{0}\" is defined more than once.", fact.Name), fact.LineNumber);
+            if (fact.Principal && string.IsNullOrEmpty(_root.Strength))
+                throw new CompilerException(String.Format("The fact \"{0}\" is a principal. The model must have a declared strength.", fact.Name), fact.LineNumber);
+            if (fact.Principal && !fact.Unique)
+                throw new CompilerException(String.Format("The fact \"{0}\" is a principal. It must also be unique.", fact.Name), fact.LineNumber);
+            if (fact.Principal && fact.Lock)
+                throw new CompilerException(string.Format("The fact \"{0}\" is a principal. It cannot also be locked.", fact.Name), fact.LineNumber);
+            if (fact.Lock && !fact.Unique)
+                throw new CompilerException(string.Format("The fact \"{0}\" is locked. It must also be unique.", fact.Name), fact.LineNumber);
 
             Target.Class factClass = new Target.Class(fact.Name);
             result.AddClass(factClass);
@@ -77,6 +85,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
 
             factClass.HasPublicKey = fact.Principal;
+            factClass.HasSharedKey = fact.Lock;
 
             ComputeVersionOfFact(factClass);
         }

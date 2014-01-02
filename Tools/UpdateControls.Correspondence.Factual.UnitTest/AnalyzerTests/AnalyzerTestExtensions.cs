@@ -5,19 +5,59 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 using System;
 using Target = UpdateControls.Correspondence.Factual.Metadata;
+using UpdateControls.Correspondence.Factual.Compiler;
+using System.Text;
+
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 {
     public static class AnalyzerTestExtensions
     {
-        public static Fact SetIdentity(this Fact fact, bool value)
+        public static Fact SetPrincipal(this Fact fact, bool value)
         {
             fact.Principal = value;
             return fact;
         }
 
+        public static Fact SetLock(this Fact fact, bool value)
+        {
+            fact.Lock = value;
+            return fact;
+        }
+
+        public static Fact SetUnique(this Fact fact, bool value)
+        {
+            fact.Unique = value;
+            return fact;
+        }
+
+        public static void AnalyzedHasError(this Namespace root, int lineNumber, string message)
+        {
+            Analyzer analyzer = new Analyzer(root);
+            Analyzed analyzed = analyzer.Analyze();
+            Assert.IsNull(analyzed, "The analyzer should have raised an error.");
+            Assert.AreEqual(1, analyzer.Errors.Count);
+
+            var error = analyzer.Errors.Single();
+            Assert.AreEqual(message, error.Message);
+            Assert.AreEqual(lineNumber, error.LineNumber);
+        }
+
+        public static Analyzed AnalyzedHasNoError(this Namespace root)
+        {
+            Analyzer analyzer = new Analyzer(root);
+            Analyzed analyzed = analyzer.Analyze();
+            if (analyzed == null)
+            {
+                var error = analyzer.Errors.First();
+                Assert.Fail(String.Format("{0}: {1}", error.LineNumber, error.Message));
+            }
+            return analyzed;
+        }
+
         public static Class HasClassNamed(this Analyzed result, string name)
         {
+            Assert.IsNotNull(result, "The analyzer returned an error.");
             IEnumerable<Class> classes = result.Classes.Where(c => c.Name == name);
             if (!classes.Any())
                 Assert.Fail(String.Format("No class named {0} was found.", name));

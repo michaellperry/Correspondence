@@ -9,6 +9,7 @@ namespace UpdateControls.Correspondence.Factual.AST
         private int _lineNumber;
         private string _name;
         private bool _unique;
+        private bool _lock;
         private bool _identity;
         private List<FactMember> _members = new List<FactMember>();
 
@@ -32,6 +33,12 @@ namespace UpdateControls.Correspondence.Factual.AST
         {
             get { return _unique; }
             set { _unique = value; }
+        }
+
+        public bool Lock
+        {
+            get { return _lock; }
+            set { _lock = value; }
         }
 
         public bool Principal

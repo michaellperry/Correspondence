@@ -53,6 +53,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("connect", Symbol.Connect)
                 .AddSymbol("subscribe", Symbol.Subscribe)
                 .AddSymbol("purge", Symbol.Purge)
+                .AddSymbol("lock", Symbol.Lock)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -219,7 +220,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Unique),
                 Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
                 (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetUnique()));
-            var modifierRule = uniqueModifierRule | principalModifierRule;
+            var lockModifierRule = Sequence(
+                Terminal(Symbol.Lock),
+                Terminal(Symbol.Semicolon), "The lock modifier is followed by a semicolon.",
+                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetLock()));
+            var modifierRule = uniqueModifierRule | lockModifierRule | principalModifierRule;
             var keyMemberRule = Reduce(fieldRule, keyMember => (Func<FactSection, FactSection>)(keySection => keySection.AddMember(keyMember)));
             var keySectionRule = Many(
                 Sequence(

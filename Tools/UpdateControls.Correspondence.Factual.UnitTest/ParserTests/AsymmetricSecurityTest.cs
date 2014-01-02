@@ -79,5 +79,21 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             Field sender = result.WithFactNamed("Message").WithFieldNamed("sender");
             Assert.AreEqual(FieldSecurityModifier.From, sender.SecurityModifier);
         }
+
+        [TestMethod]
+        public void WhenLock_LockIsRecognized()
+        {
+            string code =
+                "namespace IM.Model;      " +
+                "fact PrivateBoard {      " +
+                "key:                     " +
+                "    unique;              " +
+                "    lock;                " +
+                "}                        ";
+            Namespace result = AssertNoErrors(code);
+
+            var fact = result.WithFactNamed("PrivateBoard");
+            Assert.IsTrue(fact.Lock);
+        }
     }
 }

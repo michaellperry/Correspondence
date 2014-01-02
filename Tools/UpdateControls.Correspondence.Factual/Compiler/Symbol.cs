@@ -49,6 +49,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Number,
         Connect,
         Subscribe,
-        Purge
+        Purge,
+        Lock
     }
 }
