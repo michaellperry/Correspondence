@@ -3,7 +3,7 @@ using UpdateControls.Correspondence.Strategy;
 
 namespace UpdateControls.Correspondence.FieldSerializer
 {
-	class DecimalFieldSerializer : IFieldSerializer
+	public class DecimalFieldSerializer : IFieldSerializer
 	{
 		public object ReadData(BinaryReader input)
 		{

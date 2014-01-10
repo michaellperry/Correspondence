@@ -28,6 +28,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("this", Symbol.This)
 				.AddSymbol("string", Symbol.String)
                 .AddSymbol("byte", Symbol.Byte)
+                .AddSymbol("binary", Symbol.Binary)
 				.AddSymbol("int", Symbol.Int)
 				.AddSymbol("long", Symbol.Long)
 				.AddSymbol("float", Symbol.Float)
@@ -112,7 +113,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Reduce(Terminal(Symbol.Char), t => new NativeTypeAtLine(NativeType.Char, t.LineNumber)) |
                 Reduce(Terminal(Symbol.Date), t => new NativeTypeAtLine(NativeType.Date, t.LineNumber)) |
                 Reduce(Terminal(Symbol.Time), t => new NativeTypeAtLine(NativeType.Time, t.LineNumber)) |
-                Reduce(Terminal(Symbol.Byte), t => new NativeTypeAtLine(NativeType.Byte, t.LineNumber));
+                Reduce(Terminal(Symbol.Byte), t => new NativeTypeAtLine(NativeType.Byte, t.LineNumber)) |
+                Reduce(Terminal(Symbol.Binary), t => new NativeTypeAtLine(NativeType.Binary, t.LineNumber));
             var cardinalityRule = Optional(
                 Reduce(Terminal(Symbol.Question), t => Cardinality.Optional) |
                 Reduce(Terminal(Symbol.Asterisk), t => Cardinality.Many),

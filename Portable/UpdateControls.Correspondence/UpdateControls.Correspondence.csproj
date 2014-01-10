@@ -62,6 +62,7 @@
     <Compile Include="Debug\TypeDescriptor.cs" />
     <Compile Include="Disputable.cs" />
     <Compile Include="FactMetadata.cs" />
+    <Compile Include="FieldSerializer\BinaryFieldSerializer.cs" />
     <Compile Include="FieldSerializer\BinaryHelper.cs" />
     <Compile Include="FieldSerializer\ByteFieldSerializer.cs" />
     <Compile Include="FieldSerializer\CharFieldSerializer.cs" />

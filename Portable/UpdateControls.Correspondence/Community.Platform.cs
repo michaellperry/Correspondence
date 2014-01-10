@@ -17,7 +17,8 @@ namespace UpdateControls.Correspondence
 				.AddFieldSerializer<double>(new DoubleFieldSerializer())
 				.AddFieldSerializer<long>(new LongFieldSerializer())
 				.AddFieldSerializer<byte>(new ByteFieldSerializer())
-				.AddFieldSerializer<char>(new CharFieldSerializer());
+				.AddFieldSerializer<char>(new CharFieldSerializer())
+                .AddFieldSerializer<byte[]>(new BinaryFieldSerializer());
 		}
 	}
 }

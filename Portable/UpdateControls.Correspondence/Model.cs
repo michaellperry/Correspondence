@@ -581,7 +581,7 @@ namespace UpdateControls.Correspondence
         {
             lock (this)
             {
-                _lastException.Value = exception;
+                _lastException.Value = null;
             }
         }
 

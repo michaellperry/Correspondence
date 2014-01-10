@@ -10,6 +10,7 @@ namespace UpdateControls.Correspondence.Factual.AST
         Char,
         Date,
         Time,
-        Byte
+        Byte,
+        Binary
     }
 }

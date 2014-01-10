@@ -477,6 +477,8 @@ private static string NativeTypeName(NativeType nativeType)
         return "DateTime";
     if (nativeType == NativeType.Byte)
         return "byte";
+	if (nativeType == NativeType.Binary)
+		return "byte[]";
     return "UnknownType";
 }
 

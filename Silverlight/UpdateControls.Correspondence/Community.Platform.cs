@@ -9,7 +9,7 @@ namespace UpdateControls.Correspondence
 		{
 			this
 				.AddFieldSerializer<string>(new StringFieldSerializer())
-				//.AddFieldSerializer<decimal>(new DecimalFieldSerializer())
+				.AddFieldSerializer<decimal>(new DecimalFieldSerializer())
 				.AddFieldSerializer<DateTime>(new DateTimeFieldSerializer())
 				.AddFieldSerializer<Guid>(new GuidFieldSerializer())
 				.AddFieldSerializer<int>(new IntFieldSerializer())
