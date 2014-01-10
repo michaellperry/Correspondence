@@ -122,7 +122,7 @@ namespace UpdateControls.Correspondence.Networking
                         GetResultMemento result = await serverProxy.CommunicationStrategy.GetAsync(pivotTree, pivotId, timestamp);
                         if (result.FactTree.Facts.Any())
                         {
-                            _model.ReceiveMessage(result.FactTree, serverProxy.PeerId);
+                            await _model.ReceiveMessage(result.FactTree, serverProxy.PeerId);
                             await _storageStrategy.SaveIncomingTimestampAsync(serverProxy.PeerId, pivotId, result.Timestamp);
                             any = true;
                         }

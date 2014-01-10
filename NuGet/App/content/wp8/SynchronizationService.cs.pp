@@ -81,17 +81,23 @@ namespace $rootnamespace$
             }
         }
 
-        private async void CreateIndividual(HTTPConfigurationProvider http)
+        private void CreateIndividual(HTTPConfigurationProvider http)
         {
-            var individual = await _community.AddFactAsync(new Individual(GetAnonymousUserId()));
-            Individual = individual;
-            http.Individual = individual;
+			_community.Perform(async delegate
+			{
+				var individual = await _community.AddFactAsync(new Individual(GetAnonymousUserId()));
+				Individual = individual;
+				http.Individual = individual;
+			});
         }
 
-        private async void CreateIndividualDesignData()
+        private void CreateIndividualDesignData()
         {
-            var individual = await _community.AddFactAsync(new Individual("design"));
-            Individual = individual;
+			_community.Perform(async delegate
+			{
+				var individual = await _community.AddFactAsync(new Individual("design"));
+				Individual = individual;
+			});
         }
 
         public void Synchronize()

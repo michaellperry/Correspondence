@@ -272,7 +272,7 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public async void ReceiveMessage(FactTreeMemento messageBody, int peerId)
+        public async Task ReceiveMessage(FactTreeMemento messageBody, int peerId)
         {
             Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries = new Dictionary<InvalidatedQuery, InvalidatedQuery>();
 
@@ -416,6 +416,8 @@ namespace UpdateControls.Correspondence
         {
             try
             {
+                ClearException();
+
                 System.Diagnostics.Debug.Assert(
                     !_factByMemento.ContainsKey(memento),
                     "A memento already in memory is being reloaded");
@@ -538,6 +540,8 @@ namespace UpdateControls.Correspondence
         {
             try
             {
+                ClearException();
+
                 CorrespondenceFact fact;
                 using (await _lock.EnterAsync())
                 {
@@ -573,14 +577,44 @@ namespace UpdateControls.Correspondence
             }
         }
 
+        private void ClearException()
+        {
+            lock (this)
+            {
+                _lastException.Value = exception;
+            }
+        }
+
         private void HandleException(Exception exception)
         {
-            _lastException.Value = exception;
+            lock (this)
+            {
+                _lastException.Value = exception;
+            }
         }
 
         public Exception LastException
         {
-            get { return _lastException; }
+            get
+            {
+                lock (this)
+                {
+                    return _lastException;
+                }
+            }
+        }
+
+        public async void Perform(Func<Task> asyncDelegate)
+        {
+            try
+            {
+                ClearException();
+                await asyncDelegate();
+            }
+            catch (Exception x)
+            {
+                HandleException(x);
+            }
         }
 
         public TypeDescriptor[] TypeDescriptors

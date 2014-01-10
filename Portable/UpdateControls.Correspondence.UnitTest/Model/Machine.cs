@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest.Model
 {
     public partial class Machine
     {
-        public async void LogOnUser(string userName)
+        public async Task LogOnUser(string userName)
         {
             await Community.AddFactAsync(new LogOn(await Community.AddFactAsync(new User(userName)), this));
         }
 
-        public void LogOffUser()
+        public async Task LogOffUser()
         {
             foreach (LogOn logon in ActiveLogOns)
-                Community.AddFactAsync(new LogOff(logon));
+                await Community.AddFactAsync(new LogOff(logon));
         }
     }
 }

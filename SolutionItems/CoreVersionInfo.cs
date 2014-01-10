@@ -4,4 +4,4 @@ using System.Runtime.InteropServices;
 using System;
 
 [assembly: AssemblyVersion("2.2.0.0")]
-[assembly: AssemblyFileVersion("2.2.0.5")]
+[assembly: AssemblyFileVersion("2.2.0.6")]

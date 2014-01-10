@@ -22,16 +22,23 @@ namespace UpdateControls.Correspondence.Networking
 
 		public async void Subscribe()
 		{
-			if (_pushSubscription == null)
-			{
-				FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
-				FactID pivotId = _pivot.ID;
-				await _model.AddToFactTreeAsync(pivotTree, pivotId, _serverProxy.PeerId);
-                _pushSubscription = await _serverProxy.CommunicationStrategy.SubscribeForPushAsync(
-                    pivotTree,
-                    pivotId,
-                    await _model.GetClientDatabaseGuidAsync());
-			}
+            try
+            {
+                if (_pushSubscription == null)
+                {
+                    FactTreeMemento pivotTree = new FactTreeMemento(ClientDatabasId);
+                    FactID pivotId = _pivot.ID;
+                    await _model.AddToFactTreeAsync(pivotTree, pivotId, _serverProxy.PeerId);
+                    _pushSubscription = await _serverProxy.CommunicationStrategy.SubscribeForPushAsync(
+                        pivotTree,
+                        pivotId,
+                        await _model.GetClientDatabaseGuidAsync());
+                }
+            }
+            catch (Exception)
+            {
+                // TODO: Report it.
+            }
 		}
 
 		public override bool Equals(object obj)

@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using UpdateControls.Collections;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence.Networking
 {
 	class AsynchronousNetwork : IUpdatable
 	{
-		private ISubscriptionProvider _subscriptionProvider;
+        private ISubscriptionProvider _subscriptionProvider;
 		private Model _model;
 		private IStorageStrategy _storageStrategy;
 
         private IndependentList<AsynchronousServerProxy> _serverProxies =
             new IndependentList<AsynchronousServerProxy>();
+        private Independent<Exception> _lastException =
+            new Independent<Exception>();
 
 		private Dependent _depPushSubscriptions;
 
@@ -32,25 +35,45 @@ namespace UpdateControls.Correspondence.Networking
 
 		public async void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
 		{
-            int peerId = await _storageStrategy.SavePeerAsync(
-                asynchronousCommunicationStrategy.ProtocolName,
-                asynchronousCommunicationStrategy.PeerName);
-            asynchronousCommunicationStrategy.MessageReceived += messageBody =>
+            try
             {
-                _model.ReceiveMessage(messageBody, peerId);
-                // Trigger a receive on normal channels. This updates the
-                // timestamp and pulls down any messages that were too long
-                // for the push buffer.
-                BeginReceiving();
-            };
-            lock (this)
+                int peerId = await _storageStrategy.SavePeerAsync(
+                    asynchronousCommunicationStrategy.ProtocolName,
+                    asynchronousCommunicationStrategy.PeerName);
+                asynchronousCommunicationStrategy.MessageReceived += async messageBody =>
+                {
+                    try
+                    {
+                        await _model.ReceiveMessage(messageBody, peerId);
+                        // Trigger a receive on normal channels. This updates the
+                        // timestamp and pulls down any messages that were too long
+                        // for the push buffer.
+                        BeginReceiving();
+                    }
+                    catch (Exception x)
+                    {
+                        lock (this)
+                        {
+                            _lastException.Value = x;
+                        }
+                    }
+                };
+                lock (this)
+                {
+                    _serverProxies.Add(new AsynchronousServerProxy(
+                        _subscriptionProvider,
+                        _model,
+                        _storageStrategy,
+                        asynchronousCommunicationStrategy,
+                        peerId));
+                }
+            }
+            catch (Exception x)
             {
-                _serverProxies.Add(new AsynchronousServerProxy(
-                    _subscriptionProvider,
-                    _model,
-                    _storageStrategy,
-                    asynchronousCommunicationStrategy,
-                    peerId));
+                lock (this)
+                {
+                    _lastException.Value = x;
+                }
             }
 		}
 
@@ -71,7 +94,7 @@ namespace UpdateControls.Correspondence.Networking
             {
                 lock (this)
                 {
-                    return _serverProxies
+                    return _lastException.Value ?? _serverProxies
                         .Select(serverProxy => serverProxy.LastException)
                         .FirstOrDefault(exception => exception != null);
                 }

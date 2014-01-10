@@ -170,6 +170,11 @@ namespace UpdateControls.Correspondence
             get { return _network.LastException ?? _model.LastException; }
         }
 
+        public void Perform(Func<Task> asyncDelegate)
+        {
+            _model.Perform(asyncDelegate);
+        }
+
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
         {
             _network.Notify(pivot, text1, text2);

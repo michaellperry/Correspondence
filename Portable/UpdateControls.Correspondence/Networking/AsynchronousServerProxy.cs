@@ -218,7 +218,7 @@ namespace UpdateControls.Correspondence.Networking
                         if (_receiveState.Value == ReceiveState.Polling)
                             _receiveState.Value = ReceiveState.Receiving;
                     }
-                    _model.ReceiveMessage(messagesToReceive.MessageBody, _peerId);
+                    await _model.ReceiveMessage(messagesToReceive.MessageBody, _peerId);
                     foreach (PivotMemento pivot in messagesToReceive.NewTimestamps)
                     {
                         await _storageStrategy.SaveIncomingTimestampAsync(_peerId, pivot.PivotId, pivot.Timestamp);

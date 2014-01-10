@@ -15,5 +15,6 @@ namespace UpdateControls.Correspondence
         void BeginReceiving();
         bool Synchronizing { get; }
         Exception LastException { get; }
+        void Perform(Func<Task> asyncDelegate);
     }
 }
