@@ -107,13 +107,6 @@ namespace UpdateControls.Correspondence
             return await _model.AddFactAsync<T>(prototype);
         }
 
-        [Obsolete]
-        public async Task<T> FindFactAsync<T>(T prototype)
-            where T : CorrespondenceFact
-        {
-            return await _model.FindFactAsync<T>(prototype);
-        }
-
         public T FindFact<T>(T prototype)
             where T : CorrespondenceFact
         {

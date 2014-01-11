@@ -33,49 +33,34 @@ namespace UpdateControls.Correspondence.Networking
             };
         }
 
-		public async void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
-		{
-            try
+        public void AddAsynchronousCommunicationStrategy(IAsynchronousCommunicationStrategy asynchronousCommunicationStrategy)
+        {
+            AsynchronousServerProxy proxy = new AsynchronousServerProxy(
+                _subscriptionProvider,
+                _model,
+                _storageStrategy,
+                asynchronousCommunicationStrategy);
+            _serverProxies.Add(proxy);
+
+            asynchronousCommunicationStrategy.MessageReceived += messageBody =>
             {
-                int peerId = await _storageStrategy.SavePeerAsync(
-                    asynchronousCommunicationStrategy.ProtocolName,
-                    asynchronousCommunicationStrategy.PeerName);
-                asynchronousCommunicationStrategy.MessageReceived += async messageBody =>
+                try
                 {
-                    try
-                    {
-                        await _model.ReceiveMessage(messageBody, peerId);
-                        // Trigger a receive on normal channels. This updates the
-                        // timestamp and pulls down any messages that were too long
-                        // for the push buffer.
-                        BeginReceiving();
-                    }
-                    catch (Exception x)
-                    {
-                        lock (this)
-                        {
-                            _lastException.Value = x;
-                        }
-                    }
-                };
-                lock (this)
-                {
-                    _serverProxies.Add(new AsynchronousServerProxy(
-                        _subscriptionProvider,
-                        _model,
-                        _storageStrategy,
-                        asynchronousCommunicationStrategy,
-                        peerId));
+                    proxy.MessageReceived(messageBody);
+                    // Trigger a receive on normal channels. This updates the
+                    // timestamp and pulls down any messages that were too long
+                    // for the push buffer.
+                    BeginReceiving();
                 }
-            }
-            catch (Exception x)
-            {
-                lock (this)
+                catch (Exception x)
                 {
-                    _lastException.Value = x;
+                    lock (this)
+                    {
+                        _lastException.Value = x;
+                    }
                 }
-            }
-		}
+            };
+        }
 
         public bool Synchronizing
         {

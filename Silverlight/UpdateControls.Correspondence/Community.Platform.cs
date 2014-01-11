@@ -9,7 +9,7 @@ namespace UpdateControls.Correspondence
 		{
 			this
 				.AddFieldSerializer<string>(new StringFieldSerializer())
-				.AddFieldSerializer<decimal>(new DecimalFieldSerializer())
+				//.AddFieldSerializer<decimal>(new DecimalFieldSerializer())
 				.AddFieldSerializer<DateTime>(new DateTimeFieldSerializer())
 				.AddFieldSerializer<Guid>(new GuidFieldSerializer())
 				.AddFieldSerializer<int>(new IntFieldSerializer())
@@ -17,7 +17,8 @@ namespace UpdateControls.Correspondence
 				.AddFieldSerializer<double>(new DoubleFieldSerializer())
 				.AddFieldSerializer<long>(new LongFieldSerializer())
 				.AddFieldSerializer<byte>(new ByteFieldSerializer())
-				.AddFieldSerializer<char>(new CharFieldSerializer());
+				.AddFieldSerializer<char>(new CharFieldSerializer())
+                .AddFieldSerializer<byte[]>(new BinaryFieldSerializer());
 		}
 	}
 }
