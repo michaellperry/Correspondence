@@ -128,6 +128,8 @@
     <Compile Include="Strategy\IStorageStrategy.cs" />
     <Compile Include="Strategy\QueryOptions.cs" />
     <Compile Include="Strategy\SaveResult.cs" />
+    <Compile Include="Streams\ChunkInputStream.cs" />
+    <Compile Include="Streams\ChunkOutputStream.cs" />
     <Compile Include="Subscription.cs" />
   </ItemGroup>
   <ItemGroup>
