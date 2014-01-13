@@ -27,7 +27,12 @@ namespace UpdateControls.Correspondence
         internal abstract IEnumerable<FactID> InternalFactIds { get; }
         protected abstract Task PopulateCacheAsync(Community community);
 
-        protected async void OnGet()
+        protected void OnGet()
+        {
+            Task.Run(() => OnGetAsync());
+        }
+
+        private async Task OnGetAsync()
         {
             if (_state == State.Unloaded && _subject.InternalCommunity != null)
             {

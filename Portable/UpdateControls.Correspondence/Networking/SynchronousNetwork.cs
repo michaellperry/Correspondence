@@ -34,7 +34,12 @@ namespace UpdateControls.Correspondence.Networking
 			_storageStrategy = storageStrategy;
 		}
 
-		public async void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
+        public void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
+        {
+            Task.Run(() => AddCommunicationStrategyAsync(communicationStrategy));
+        }
+
+		private async Task AddCommunicationStrategyAsync(ICommunicationStrategy communicationStrategy)
 		{
             using (await _lock.EnterAsync())
             {

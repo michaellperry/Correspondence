@@ -8,6 +8,7 @@ using System.IO;
 using UpdateControls.Correspondence.FieldSerializer;
 using Windows.Networking.PushNotifications;
 using UpdateControls.Fields;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
 {
@@ -43,7 +44,12 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
             }
         }
 
-        private async void UpdateSubscriptions()
+        private void UpdateSubscriptions()
+        {
+            Task.Run(() => UpdateSubscriptionsAsync());
+        }
+
+        private async Task UpdateSubscriptionsAsync()
         {
             lock (_monitor)
             {

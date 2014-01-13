@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 
@@ -20,7 +21,12 @@ namespace UpdateControls.Correspondence.Networking
             _pivot = pivot;
         }
 
-		public async void Subscribe()
+		public void Subscribe()
+        {
+            Task.Run(() => SubscribeAsync());
+        }
+
+		private async Task SubscribeAsync()
 		{
             try
             {

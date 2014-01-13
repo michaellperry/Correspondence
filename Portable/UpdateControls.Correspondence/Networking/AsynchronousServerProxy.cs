@@ -116,10 +116,10 @@ namespace UpdateControls.Correspondence.Networking
                     return;
                 }
             }
-            Send();
+            Task.Run(() => SendAsync());
         }
 
-        private async void Send()
+        private async Task SendAsync()
         {
             try
             {
@@ -205,10 +205,10 @@ namespace UpdateControls.Correspondence.Networking
                 }
             }
 
-            Receive();
+            Task.Run(() => ReceiveAsync());
         }
 
-        private async void Receive()
+        private async Task ReceiveAsync()
         {
             try
             {
@@ -298,7 +298,12 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        public async void Notify(CorrespondenceFact pivot, string text1, string text2)
+        public void Notify(CorrespondenceFact pivot, string text1, string text2)
+        {
+            Task.Run(() => NotifyAsync(pivot, text1, text2));
+        }
+
+        private async Task NotifyAsync(CorrespondenceFact pivot, string text1, string text2)
         {
             try
             {
@@ -383,7 +388,12 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        public async void AfterTriggerSubscriptionUpdate()
+        public void AfterTriggerSubscriptionUpdate()
+        {
+            Task.Run(() => AfterTriggerSubscriptionUpdateAsync());
+        }
+
+        private async Task AfterTriggerSubscriptionUpdateAsync()
         {
             try
             {
@@ -440,7 +450,12 @@ namespace UpdateControls.Correspondence.Networking
             }
         }
 
-        public async void MessageReceived(FactTreeMemento messageBody)
+        public void MessageReceived(FactTreeMemento messageBody)
+        {
+            Task.Run(() => MessageReceivedAsync(messageBody));
+        }
+        
+        private async Task MessageReceivedAsync(FactTreeMemento messageBody)
         {
             try
             {

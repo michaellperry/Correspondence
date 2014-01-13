@@ -157,7 +157,7 @@ namespace UpdateControls.Correspondence
                     fact.SetLoadedTask(completion.Task);
                     independent = new Independent<CorrespondenceFact>(fact);
                     _findFactByMemento.Add(memento, independent);
-                    FindFactAndStore(memento, prototype, factory, independent, completion);
+                    Task.Run(() => FindFactAndStoreAsync(memento, prototype, factory, independent, completion));
                 }
 
                 return (T)independent.Value;
@@ -502,7 +502,7 @@ namespace UpdateControls.Correspondence
             return id;
         }
 
-        private async void FindFactAndStore(FactMemento memento, CorrespondenceFact prototype, ICorrespondenceFactFactory factory, Independent<CorrespondenceFact> independent, TaskCompletionSource<CorrespondenceFact> completion)
+        private async Task FindFactAndStoreAsync(FactMemento memento, CorrespondenceFact prototype, ICorrespondenceFactFactory factory, Independent<CorrespondenceFact> independent, TaskCompletionSource<CorrespondenceFact> completion)
         {
             try
             {
@@ -570,7 +570,12 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public async void Perform(Func<Task> asyncDelegate)
+        public void Perform(Func<Task> asyncDelegate)
+        {
+            Task.Run(() => PerformAsync(asyncDelegate));
+        }
+
+        private async Task PerformAsync(Func<Task> asyncDelegate)
         {
             try
             {

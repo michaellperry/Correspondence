@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
 
@@ -38,19 +39,19 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
                     if (_subscribedTo != null && (!ShouldBeSubscribed || _subscribedTo != deviceUri))
                     {
                         _callPending = true;
-                        SendUnsubscribe(deviceUri);
+                        Task.Run(() => SendUnsubscribeAsync(deviceUri));
                     }
 
                     else if (_subscribedTo == null && ShouldBeSubscribed)
                     {
                         _callPending = true;
-                        SendSubscribe(deviceUri);
+                        Task.Run(() => SendSubscribeAsync(deviceUri));
                     }
                 }
             }
         }
 
-        private async void SendUnsubscribe(string deviceUri)
+        private async Task SendUnsubscribeAsync(string deviceUri)
         {
             try
             {
@@ -78,7 +79,7 @@ namespace UpdateControls.Correspondence.BinaryHTTPClient.Notification
             }
         }
 
-        private async void SendSubscribe(string deviceUri)
+        private async Task SendSubscribeAsync(string deviceUri)
         {
             try
             {
