@@ -163,6 +163,11 @@ namespace UpdateControls.Correspondence
             get { return _network.LastException ?? _model.LastException; }
         }
 
+        public void SetDesignMode()
+        {
+            _model.SetDesignMode();
+        }
+
         public void Perform(Func<Task> asyncDelegate)
         {
             _model.Perform(asyncDelegate);

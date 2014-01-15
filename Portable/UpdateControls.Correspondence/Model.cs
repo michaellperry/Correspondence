@@ -21,6 +21,7 @@ namespace UpdateControls.Correspondence
 		private Community _community;
 		private IStorageStrategy _storageStrategy;
 
+        private bool _designMode = false;
         private bool _clientApp = true;
         private IDictionary<CorrespondenceFactType, ICorrespondenceFactFactory> _factoryByType =
             new Dictionary<CorrespondenceFactType, ICorrespondenceFactFactory>();
@@ -570,9 +571,17 @@ namespace UpdateControls.Correspondence
             }
         }
 
+        public void SetDesignMode()
+        {
+            _designMode = true;
+        }
+
         public void Perform(Func<Task> asyncDelegate)
         {
-            Task.Run(() => PerformAsync(asyncDelegate));
+            if (_designMode == true)
+                asyncDelegate();
+            else
+                Task.Run(() => PerformAsync(asyncDelegate));
         }
 
         private async Task PerformAsync(Func<Task> asyncDelegate)
