@@ -106,7 +106,13 @@ namespace UpdateControls.Correspondence
         [EditorBrowsable(EditorBrowsableState.Never)]
         public FactDescriptor BrowseTheDataStore
         {
-            get { return _community.BrowseTheDataStoreFromThisPoint(this); }
+            get
+            {
+                if (_community == null)
+                    return null;
+                else
+                    return _community.BrowseTheDataStoreFromThisPoint(this);
+            }
         }
     }
 }
