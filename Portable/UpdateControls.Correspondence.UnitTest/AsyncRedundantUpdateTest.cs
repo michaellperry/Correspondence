@@ -46,6 +46,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             return new AsyncMemoryStorageStrategy();
         }
+
         private Community GivenCommunity(AsyncMemoryStorageStrategy storage)
         {
             return new Community(storage)

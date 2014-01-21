@@ -7,6 +7,42 @@ using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence
 {
+    static class ResultScheduler
+    {
+        private static object _mutex = new object();
+        private static List<IQueryResult> _resultsLoading = new List<IQueryResult>();
+        private static List<IQueryResult> _resultsLoaded = new List<IQueryResult>();
+
+        internal static void BeginLoading(IQueryResult result)
+        {
+            lock (_mutex)
+            {
+                _resultsLoading.Add(result);
+            }
+        }
+
+        internal static void EndLoading(IQueryResult result)
+        {
+            List<IQueryResult> resultsToSignal = null;
+            lock (_mutex)
+            {
+                _resultsLoading.Remove(result);
+                _resultsLoaded.Add(result);
+                if (!_resultsLoading.Any())
+                {
+                    resultsToSignal = _resultsLoaded;
+                    _resultsLoaded = new List<IQueryResult>();
+                }
+            }
+
+            if (resultsToSignal != null)
+            {
+                foreach (var r in resultsToSignal)
+                    r.Signal();
+            }
+        }
+    }
+
     public class Result<TResultType> : IEnumerable<TResultType>, IQueryResult
         where TResultType : CorrespondenceFact
     {
@@ -140,6 +176,7 @@ namespace UpdateControls.Correspondence
                     else
                     {
                         SetState(State.Loading);
+                        ResultScheduler.BeginLoading(this);
                         queryTask.ContinueWith(ExecuteQueryCompleted);
                     }
                 }
@@ -150,7 +187,6 @@ namespace UpdateControls.Correspondence
         {
             lock (this)
             {
-                _indResults.OnSet();
                 _results = queryTask.Result
                     .OfType<TResultType>()
                     .ToList();
@@ -167,7 +203,6 @@ namespace UpdateControls.Correspondence
                             _query.QueryDefinition, _startingPoint.ID, _options);
                         if (queryTask.IsCompleted)
                         {
-                            _indResults.OnSet();
                             _results = queryTask.Result
                                 .OfType<TResultType>()
                                 .ToList();
@@ -185,6 +220,7 @@ namespace UpdateControls.Correspondence
                     }
                 }
             }
+            ResultScheduler.EndLoading(this);
         }
 
         public void Invalidate()
@@ -222,6 +258,14 @@ namespace UpdateControls.Correspondence
                     SetState(State.Invalidated);
                 }
 			}
+        }
+
+        public void Signal()
+        {
+            lock (this)
+            {
+                _indResults.OnSet();
+            }
         }
 
         private void SetState(State newState)

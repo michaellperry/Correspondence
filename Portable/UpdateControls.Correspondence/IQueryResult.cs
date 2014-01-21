@@ -5,5 +5,6 @@ namespace UpdateControls.Correspondence
     public interface IQueryResult
     {
         void Invalidate();
+        void Signal();
     }
 }
