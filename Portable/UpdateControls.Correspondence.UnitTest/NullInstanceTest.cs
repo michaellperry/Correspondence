@@ -65,13 +65,14 @@ namespace UpdateControls.Correspondence.UnitTest
         }
 
         [TestMethod]
-        public void CanSubscribeToANullFact()
+        public async Task CanSubscribeToANullFact()
         {
             var community = new Community(new MemoryStorageStrategy());
             community.AddAsynchronousCommunicationStrategy(new FakeCommunicationStrategy());
             community.Subscribe(() => User.GetNullInstance());
 
             community.BeginReceiving();
+            await Task.Delay(10);
             Assert.IsFalse(community.Synchronizing);
         }
     }

@@ -382,15 +382,14 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _favoriteColor.AsTransientDisputable(fact => fact.Value); }
 			set
 			{
-                Action setter = async delegate()
+                Community.Perform(async delegate()
                 {
                     var current = (await _favoriteColor.EnsureAsync()).ToList();
                     if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
                     {
                         await Community.AddFactAsync(new User__favoriteColor(this, _favoriteColor, value.Value));
                     }
-                };
-                setter();
+                });
 			}
         }
 
@@ -399,15 +398,14 @@ namespace UpdateControls.Correspondence.UnitTest.Model
             get { return _betterFavoriteColor.AsTransientDisputable(fact => (Color)fact.Value); }
 			set
 			{
-				Action setter = async delegate()
+				Community.Perform(async delegate()
 				{
 					var current = (await _betterFavoriteColor.EnsureAsync()).ToList();
 					if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 					{
 						await Community.AddFactAsync(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));
 					}
-				};
-				setter();
+				});
 			}
         }
     }

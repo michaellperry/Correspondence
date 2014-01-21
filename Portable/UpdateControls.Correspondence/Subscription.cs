@@ -28,7 +28,7 @@ namespace UpdateControls.Correspondence
             IEnumerable<CorrespondenceFact> pivots = _pivotsFunction() ??
                 Enumerable.Empty<CorrespondenceFact>();
             _pivots = pivots
-                .Where(p => p != null && !p.IsNull)
+                .Where(p => p != null && !p.IsNull && p.IsLoaded)
                 .ToList();
 
             if (_pivots.Any(pivot => pivot.InternalCommunity != _community))

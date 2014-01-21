@@ -86,7 +86,7 @@ namespace UpdateControls.Correspondence.UnitTest
             await Initialize();
 
             User user = _community.FindFact(new User("dillenger7"));
-            _memory.Quiesce();
+            await _memory.Quiesce();
             user = _community.FindFact(new User("dillenger7"));
 
             Assert.IsTrue(user.IsNull);

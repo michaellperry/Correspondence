@@ -43,7 +43,7 @@ namespace UpdateControls.Correspondence.UnitTest
             // Still empty.
             Assert.AreEqual(0, _alan.ActivePlayers.Count());
 
-            _memory.Quiesce();
+            await _memory.Quiesce();
 
             // Not empty anymore.
             Assert.AreEqual(1, _alan.ActivePlayers.Count());
@@ -79,7 +79,7 @@ namespace UpdateControls.Correspondence.UnitTest
             // Not yet.
             Assert.AreEqual(0, _flynn.ActivePlayers.Count());
 
-            _memory.Quiesce();
+            await _memory.Quiesce();
 
             // Now.
             Assert.AreEqual(1, _flynn.ActivePlayers.Count());
@@ -98,7 +98,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 // It's still blank.
                 Assert.AreEqual(null, _flynn.FavoriteColor.Value);
 
-                _memory.Quiesce();
+                await _memory.Quiesce();
 
                 // Now it's set.
                 Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);

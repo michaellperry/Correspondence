@@ -20,14 +20,26 @@ namespace UpdateControls.Correspondence.Memory
 
         private Guid _clientGuid = Guid.NewGuid();
 
-        private Queue<Task> _futureTasks = new Queue<Task>();
+        private Queue<TaskCompletionSource<bool>> _future = new Queue<TaskCompletionSource<bool>>();
 
         private static Task Done = Task.WhenAll();
 
-        public void Quiesce()
+        public async Task Quiesce()
         {
-            Task.WaitAll(_futureTasks.ToArray());
-            Task.Delay(100).Wait();
+            while (_future.Any())
+            {
+                _future.Dequeue().SetResult(true);
+                await Task.Delay(10);
+            }
+        }
+
+        public async Task RunOneTask()
+        {
+            if (_future.Any())
+            {
+                _future.Dequeue().SetResult(true);
+                await Task.Delay(10);
+            }
         }
 
         public Task<Guid> GetClientGuidAsync()
@@ -52,7 +64,7 @@ namespace UpdateControls.Correspondence.Memory
 
         public Task<FactMemento> LoadAsync(FactID id)
         {
-            Task<FactMemento> task = Task.Run(delegate
+            return QueueTask(delegate
             {
                 FactRecord factRecord = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Id.Equals(id));
                 if (factRecord != null)
@@ -60,8 +72,6 @@ namespace UpdateControls.Correspondence.Memory
                 else
                     throw new CorrespondenceException(string.Format("Fact with id {0} not found.", id));
             });
-            _futureTasks.Enqueue(task);
-            return task;
         }
 
         public Task<SaveResult> SaveAsync(FactMemento memento, int peerId)
@@ -119,33 +129,32 @@ namespace UpdateControls.Correspondence.Memory
 
         public Task<FactID?> FindExistingFactAsync(FactMemento memento)
         {
-            Task<FactID?> task = Task.Run<FactID?>(delegate
+            return QueueTask(delegate
             {
                 // See if the fact already exists.
                 FactRecord fact = _factTable.FirstOrDefault(o => o.IdentifiedFactMemento.Memento.Equals(memento));
                 if (fact == null)
                 {
-                    return null;
+                    return (FactID?)null;
                 }
                 else
                 {
                     return fact.IdentifiedFactMemento.Id;
                 }
             });
-            _futureTasks.Enqueue(task);
-            return task;
         }
 
         public Task<List<IdentifiedFactMemento>> QueryForFactsAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            Task<List<IdentifiedFactMemento>> task = Task.Run(() =>
-                new QueryExecutor(_factTable
+            return QueueTask(delegate
+            {
+                var results = new QueryExecutor(_factTable
                     .Select(f => f.IdentifiedFactMemento))
-                .ExecuteQuery(queryDefinition, startingId, options)
-                .Reverse()
-                .ToList());
-            _futureTasks.Enqueue(task);
-            return task;
+                    .ExecuteQuery(queryDefinition, startingId, options)
+                    .Reverse()
+                    .ToList();
+                return results;
+            });
         }
 
         public Task<List<FactID>> QueryForIdsAsync(QueryDefinition queryDefinition, FactID startingId)
@@ -273,6 +282,31 @@ namespace UpdateControls.Correspondence.Memory
                 .Where(f => f.IdentifiedFactMemento.Memento.Predecessors.Any(p => p.ID.Equals(factId)))
                 .Select(f => f.IdentifiedFactMemento)
                 .ToList();
+        }
+
+        private Task QueueTask(Action action)
+        {
+            TaskCompletionSource<bool> completionSource = new TaskCompletionSource<bool>();
+            _future.Enqueue(completionSource);
+
+            return Task.Run(async delegate
+            {
+                await completionSource.Task;
+                action();
+            });
+        }
+
+        private Task<T> QueueTask<T>(Func<T> func)
+        {
+            TaskCompletionSource<bool> completionSource = new TaskCompletionSource<bool>();
+            _future.Enqueue(completionSource);
+
+            return Task.Run<T>(async delegate
+            {
+                await completionSource.Task;
+                return func();
+            });
+
         }
     }
 }
