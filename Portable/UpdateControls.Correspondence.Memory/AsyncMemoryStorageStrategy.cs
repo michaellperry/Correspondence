@@ -26,6 +26,7 @@ namespace UpdateControls.Correspondence.Memory
 
         public async Task Quiesce()
         {
+            await Task.Delay(10);
             while (_future.Any())
             {
                 _future.Dequeue().SetResult(true);
@@ -40,6 +41,11 @@ namespace UpdateControls.Correspondence.Memory
                 _future.Dequeue().SetResult(true);
                 await Task.Delay(10);
             }
+        }
+
+        public bool TasksRemain
+        {
+            get { return _future.Any(); }
         }
 
         public Task<Guid> GetClientGuidAsync()

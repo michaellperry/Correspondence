@@ -119,6 +119,8 @@ namespace UpdateControls.Correspondence.UnitTest
             {
                 _flynn.FavoriteColor = "Blue";
 
+                await Task.Delay(100);
+
                 // Ensure that the value is loaded.
                 Assert.AreEqual("Blue", (await _flynn.FavoriteColor.EnsureAsync()).Value);
             }

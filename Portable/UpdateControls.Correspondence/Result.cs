@@ -26,12 +26,14 @@ namespace UpdateControls.Correspondence
             List<IQueryResult> resultsToSignal = null;
             lock (_mutex)
             {
-                _resultsLoading.Remove(result);
-                _resultsLoaded.Add(result);
-                if (!_resultsLoading.Any())
+                if (_resultsLoading.Remove(result))
                 {
-                    resultsToSignal = _resultsLoaded;
-                    _resultsLoaded = new List<IQueryResult>();
+                    _resultsLoaded.Add(result);
+                    if (!_resultsLoading.Any())
+                    {
+                        resultsToSignal = _resultsLoaded;
+                        _resultsLoaded = new List<IQueryResult>();
+                    }
                 }
             }
 
@@ -176,7 +178,8 @@ namespace UpdateControls.Correspondence
                     else
                     {
                         SetState(State.Loading);
-                        ResultScheduler.BeginLoading(this);
+                        if (_indResults.HasDependents)
+                            ResultScheduler.BeginLoading(this);
                         queryTask.ContinueWith(ExecuteQueryCompleted);
                     }
                 }

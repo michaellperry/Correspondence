@@ -59,7 +59,6 @@ namespace UpdateControls.Correspondence.UnitTest
         [TestMethod]
         public async Task FlynnSeesAlansMove()
         {
-
             await Initialize();
             _playerAlan.MakeMove(0, 0);
             await Synchronize();
@@ -96,7 +95,9 @@ namespace UpdateControls.Correspondence.UnitTest
             var move = _playerAlan.Game.Moves.ElementAt(0);
             Assert.AreEqual(1, move.Index);
             Assert.AreEqual(42, move.Square);
-            Assert.AreEqual("flynn1", move.Player.User.UserName);
+            var player = await move.Player.EnsureAsync();
+            var user = await player.User.EnsureAsync();
+            Assert.AreEqual("flynn1", user.UserName);
         }
 
         private async Task Synchronize()

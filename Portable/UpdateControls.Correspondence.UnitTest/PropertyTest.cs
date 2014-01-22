@@ -61,6 +61,9 @@ namespace UpdateControls.Correspondence.UnitTest
 
             _alan.FavoriteColor = "Blue";
             _alan.FavoriteColor = "Red";
+
+            await Task.Delay(100);
+
             string favoriteColor = _alan.FavoriteColor;
 
             Assert.AreEqual("Red", favoriteColor);
@@ -145,6 +148,9 @@ namespace UpdateControls.Correspondence.UnitTest
 
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Red"));
+
+            await Task.Delay(100);
+
             Color color = _alan.BetterFavoriteColor;
 
             Assert.AreEqual("Red", color.Name);
