@@ -33,12 +33,14 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(communication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
+            community.SetDesignMode();
             game = await community.AddFactAsync(new Game());
             await storage.SaveShareAsync(1, new FactID { key = 42 }, new FactID { key = 1 });
 
             await community.SynchronizeAsync();
 
-            Outcome outcome = game.Outcomes.Single();
+            var outcomes = await game.Outcomes.EnsureAsync();
+            Outcome outcome = outcomes.Single();
             Assert.IsNotNull(outcome.Winner);
             Assert.IsTrue(outcome.Winner.IsNull);
         }
@@ -62,6 +64,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(communication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
+            community.SetDesignMode();
             game = await community.AddFactAsync(sourceGame);
 
             // On the first synchronize, we get the game memento.

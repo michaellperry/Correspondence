@@ -26,11 +26,11 @@ namespace UpdateControls.Correspondence.Memory
 
         public async Task Quiesce()
         {
-            await Task.Delay(10);
+            await Task.Delay(100);
             while (_future.Any())
             {
                 _future.Dequeue().SetResult(true);
-                await Task.Delay(10);
+                await Task.Delay(100);
             }
         }
 

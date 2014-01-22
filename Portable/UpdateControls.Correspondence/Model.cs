@@ -158,7 +158,7 @@ namespace UpdateControls.Correspondence
                     fact.SetLoadedTask(completion.Task);
                     independent = new Independent<CorrespondenceFact>(fact);
                     _findFactByMemento.Add(memento, independent);
-                    Task.Run(() => FindFactAndStoreAsync(memento, prototype, factory, independent, completion));
+                    Perform(() => FindFactAndStoreAsync(memento, prototype, factory, independent, completion));
                 }
 
                 return (T)independent.Value;

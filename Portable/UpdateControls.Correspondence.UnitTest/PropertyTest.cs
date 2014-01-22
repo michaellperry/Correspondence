@@ -24,10 +24,12 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _alan);
+            _community.SetDesignMode();
             _otherCommunity = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _otherAlan);
+            _otherCommunity.SetDesignMode();
 
             _alan = await _community.AddFactAsync(new User("alan1"));
             _otherAlan = await _otherCommunity.AddFactAsync(new User("alan1"));
@@ -61,8 +63,6 @@ namespace UpdateControls.Correspondence.UnitTest
 
             _alan.FavoriteColor = "Blue";
             _alan.FavoriteColor = "Red";
-
-            await Task.Delay(100);
 
             string favoriteColor = _alan.FavoriteColor;
 
@@ -101,7 +101,8 @@ namespace UpdateControls.Correspondence.UnitTest
             _otherAlan.FavoriteColor = "Red";
             await SynchronizeAsync();
 
-            IEnumerable<string> candidates = _alan.FavoriteColor.Candidates;
+            var fc = await _alan.FavoriteColor.EnsureAsync();
+            IEnumerable<string> candidates = fc.Candidates;
             Assert.IsTrue(candidates.Contains("Blue"));
             Assert.IsTrue(candidates.Contains("Red"));
         }
@@ -149,9 +150,7 @@ namespace UpdateControls.Correspondence.UnitTest
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Blue"));
             _alan.BetterFavoriteColor = await _community.AddFactAsync(new Color("Red"));
 
-            await Task.Delay(100);
-
-            Color color = _alan.BetterFavoriteColor;
+            Color color = await _alan.BetterFavoriteColor.EnsureAsync();
 
             Assert.AreEqual("Red", color.Name);
         }
@@ -201,9 +200,11 @@ namespace UpdateControls.Correspondence.UnitTest
             _otherAlan.BetterFavoriteColor = await _otherCommunity.AddFactAsync(new Color("Red"));
             await SynchronizeAsync();
 
-            IEnumerable<Color> candidates = _alan.BetterFavoriteColor.Candidates;
-            Assert.IsTrue(candidates.Any(color => color.Name == "Blue"));
-            Assert.IsTrue(candidates.Any(color => color.Name == "Red"));
+            var candidates = _alan.BetterFavoriteColor.Candidates;
+            var first = await candidates.ElementAt(0).EnsureAsync();
+            var second = await candidates.ElementAt(1).EnsureAsync();
+            Assert.IsTrue(second.Name == "Blue");
+            Assert.IsTrue(first.Name == "Red");
         }
 
         private async Task SynchronizeAsync()
