@@ -37,6 +37,11 @@ namespace UpdateControls.Correspondence.FileStream
 
         private RedBlackTree.NodeCache _nodeCache = new RedBlackTree.NodeCache();
 
+        public bool IsSynchronous
+        {
+            get { return false; }
+        }
+
         public async Task<Guid> GetClientGuidAsync()
         {
             await _clientGuidTable.LoadAsync();

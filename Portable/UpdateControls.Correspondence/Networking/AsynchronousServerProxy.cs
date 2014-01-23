@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.WorkQueues;
 using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence.Networking
@@ -33,6 +34,7 @@ namespace UpdateControls.Correspondence.Networking
         private readonly ISubscriptionProvider _subscriptionProvider;
         private readonly Model _model;
         private readonly IStorageStrategy _storageStrategy;
+        private readonly IWorkQueue _workQueue;
 
         private int _peerId;
 
@@ -43,17 +45,19 @@ namespace UpdateControls.Correspondence.Networking
 
 		private List<PushSubscriptionProxy> _pushSubscriptions = new List<PushSubscriptionProxy>();
 		private Dependent _depPushSubscriptions;
-
+  
         public AsynchronousServerProxy(
             ISubscriptionProvider subscriptionProvider, 
             Model model, 
             IStorageStrategy storageStrategy,
-            IAsynchronousCommunicationStrategy communicationStrategy)
+            IAsynchronousCommunicationStrategy communicationStrategy,
+            IWorkQueue workQueue)
 		{
-			_subscriptionProvider = subscriptionProvider;
+            _subscriptionProvider = subscriptionProvider;
 			_model = model;
 			_storageStrategy = storageStrategy;
             _communicationStrategy = communicationStrategy;
+            _workQueue = workQueue;
 
 			_depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
 		}
@@ -116,7 +120,7 @@ namespace UpdateControls.Correspondence.Networking
                     return;
                 }
             }
-            Task.Run(() => SendAsync());
+            _workQueue.Perform(() => SendAsync());
         }
 
         private async Task SendAsync()
@@ -205,7 +209,7 @@ namespace UpdateControls.Correspondence.Networking
                 }
             }
 
-            Task.Run(() => ReceiveAsync());
+            _workQueue.Perform(() => ReceiveAsync());
         }
 
         private async Task ReceiveAsync()
@@ -300,7 +304,7 @@ namespace UpdateControls.Correspondence.Networking
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
         {
-            Task.Run(() => NotifyAsync(pivot, text1, text2));
+            _workQueue.Perform(() => NotifyAsync(pivot, text1, text2));
         }
 
         private async Task NotifyAsync(CorrespondenceFact pivot, string text1, string text2)
@@ -332,7 +336,7 @@ namespace UpdateControls.Correspondence.Networking
 					.Where(pivot => pivot != null);
 				var pushSubscriptions =
 					from pivot in pivots
-					select bin.Extract(new PushSubscriptionProxy(_model, this, pivot));
+					select bin.Extract(new PushSubscriptionProxy(_model, this, pivot, _workQueue));
 
 				_pushSubscriptions = pushSubscriptions.ToList();
 
@@ -390,7 +394,7 @@ namespace UpdateControls.Correspondence.Networking
 
         public void AfterTriggerSubscriptionUpdate()
         {
-            Task.Run(() => AfterTriggerSubscriptionUpdateAsync());
+            _workQueue.Perform(() => AfterTriggerSubscriptionUpdateAsync());
         }
 
         private async Task AfterTriggerSubscriptionUpdateAsync()
@@ -452,7 +456,7 @@ namespace UpdateControls.Correspondence.Networking
 
         public void MessageReceived(FactTreeMemento messageBody)
         {
-            Task.Run(() => MessageReceivedAsync(messageBody));
+            _workQueue.Perform(() => MessageReceivedAsync(messageBody));
         }
         
         private async Task MessageReceivedAsync(FactTreeMemento messageBody)

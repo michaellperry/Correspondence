@@ -24,6 +24,11 @@ namespace UpdateControls.Correspondence.Memory
 
         private static Task Done = Task.WhenAll();
 
+        public bool IsSynchronous
+        {
+            get { return false; }
+        }
+
         public async Task Quiesce()
         {
             await Task.Delay(100);

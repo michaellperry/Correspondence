@@ -24,12 +24,10 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _alan);
-            _community.SetDesignMode();
             _otherCommunity = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _otherAlan);
-            _otherCommunity.SetDesignMode();
 
             _alan = await _community.AddFactAsync(new User("alan1"));
             _otherAlan = await _otherCommunity.AddFactAsync(new User("alan1"));

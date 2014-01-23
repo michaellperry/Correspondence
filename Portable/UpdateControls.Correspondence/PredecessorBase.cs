@@ -29,7 +29,7 @@ namespace UpdateControls.Correspondence
 
         protected void OnGet()
         {
-            Task.Run(() => OnGetAsync());
+            Community.Perform(() => OnGetAsync());
         }
 
         private async Task OnGetAsync()

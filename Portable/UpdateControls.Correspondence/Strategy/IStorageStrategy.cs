@@ -10,6 +10,9 @@ namespace UpdateControls.Correspondence.Strategy
 	/// </summary>
 	public interface IStorageStrategy
     {
+        // Capabilities.
+        bool IsSynchronous { get; }
+
         Task<Guid> GetClientGuidAsync();
 
 		// Facts.

@@ -131,6 +131,11 @@
     <Compile Include="Streams\ChunkInputStream.cs" />
     <Compile Include="Streams\ChunkOutputStream.cs" />
     <Compile Include="Subscription.cs" />
+    <Compile Include="Threading\AsyncManualResetEvent.cs" />
+    <Compile Include="WorkQueues\AsynchronousWorkQueue.cs" />
+    <Compile Include="WorkQueues\IWorkQueue.cs" />
+    <Compile Include="WorkQueues\SynchronousWorkQueue.cs" />
+    <Compile Include="WorkQueues\Token.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UpdateControls">

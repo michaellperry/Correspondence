@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.WorkQueues;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -14,14 +15,14 @@ namespace UpdateControls.Correspondence.Networking
 		private SynchronousNetwork _synchronousNetwork;
 		private AsynchronousNetwork _asynchronousNetwork;
 
-		public Network(Model model, IStorageStrategy storageStrategy)
+        public Network(Model model, IStorageStrategy storageStrategy, IWorkQueue workQueue)
         {
             _model = model;
             _storageStrategy = storageStrategy;
 
-			_synchronousNetwork = new SynchronousNetwork(this, _model, _storageStrategy);
-			_asynchronousNetwork = new AsynchronousNetwork(this, _model, _storageStrategy);
-		}
+            _synchronousNetwork = new SynchronousNetwork(this, _model, _storageStrategy, workQueue);
+            _asynchronousNetwork = new AsynchronousNetwork(this, _model, _storageStrategy, workQueue);
+        }
 
         public void Subscribe(Subscription subscription)
         {

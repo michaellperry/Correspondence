@@ -24,13 +24,11 @@ namespace UpdateControls.Correspondence.UnitTest
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _userAlan)
                 .Subscribe(() => _userAlan.ActivePlayers.Select(player => player.Game));
-            _communityAlan.SetDesignMode();
             _communityFlynn = new Community(new MemoryStorageStrategy())
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _userFlynn)
                 .Subscribe(() => _userFlynn.ActivePlayers.Select(player => player.Game));
-            _communityFlynn.SetDesignMode();
 
             _userAlan = await _communityAlan.AddFactAsync(new User("alan1"));
             _userFlynn = await _communityFlynn.AddFactAsync(new User("flynn1"));

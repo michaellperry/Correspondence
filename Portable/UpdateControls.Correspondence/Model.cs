@@ -9,6 +9,7 @@ using UpdateControls.Correspondence.Conditions;
 using System.Threading.Tasks;
 using UpdateControls.Fields;
 using UpdateControls.Correspondence.Debug;
+using UpdateControls.Correspondence.WorkQueues;
 
 namespace UpdateControls.Correspondence
 {
@@ -18,10 +19,10 @@ namespace UpdateControls.Correspondence
 
         private const long ClientDatabaseId = 0;
 
-		private Community _community;
-		private IStorageStrategy _storageStrategy;
+		private readonly Community _community;
+		private readonly IStorageStrategy _storageStrategy;
+        private readonly IWorkQueue _workQueue;
 
-        private bool _designMode = false;
         private bool _clientApp = true;
         private IDictionary<CorrespondenceFactType, ICorrespondenceFactFactory> _factoryByType =
             new Dictionary<CorrespondenceFactType, ICorrespondenceFactFactory>();
@@ -41,12 +42,13 @@ namespace UpdateControls.Correspondence
         public event Action FactReceived;
 
         public AwaitableCriticalSection _lock = new AwaitableCriticalSection();
-
-        public Model(Community community, IStorageStrategy storageStrategy)
+        
+        public Model(Community community, IStorageStrategy storageStrategy, IWorkQueue workQueue)
 		{
             _community = community;
 			_storageStrategy = storageStrategy;
-		}
+            _workQueue = workQueue;
+        }
 
         public bool ClientApp
         {
@@ -158,7 +160,9 @@ namespace UpdateControls.Correspondence
                     fact.SetLoadedTask(completion.Task);
                     independent = new Independent<CorrespondenceFact>(fact);
                     _findFactByMemento.Add(memento, independent);
-                    Perform(() => FindFactAndStoreAsync(memento, prototype, factory, independent, completion));
+                    _workQueue.Perform(() =>
+                        FindFactAndStoreAsync(
+                            memento, prototype, factory, independent, completion));
                 }
 
                 return (T)independent.Value;
@@ -505,43 +509,34 @@ namespace UpdateControls.Correspondence
 
         private async Task FindFactAndStoreAsync(FactMemento memento, CorrespondenceFact prototype, ICorrespondenceFactFactory factory, Independent<CorrespondenceFact> independent, TaskCompletionSource<CorrespondenceFact> completion)
         {
-            try
+            CorrespondenceFact fact;
+            using (await _lock.EnterAsync())
             {
-                ClearException();
-
-                CorrespondenceFact fact;
-                using (await _lock.EnterAsync())
+                // See if we already have the fact in memory.
+                if (!_factByMemento.TryGetValue(memento, out fact))
                 {
-                    // See if we already have the fact in memory.
-                    if (!_factByMemento.TryGetValue(memento, out fact))
+                    // If the object is already in storage, load it.
+                    FactID? existingFactId = await _storageStrategy.FindExistingFactAsync(memento);
+                    if (existingFactId.HasValue)
                     {
-                        // If the object is already in storage, load it.
-                        FactID? existingFactId = await _storageStrategy.FindExistingFactAsync(memento);
-                        if (existingFactId.HasValue)
-                        {
-                            prototype.ID = existingFactId.Value;
-                            prototype.SetCommunity(_community);
-                            _factByID.Add(prototype.ID, prototype);
-                            _factByMemento.Add(memento, prototype);
-                            fact = prototype;
-                        }
-                        else
-                        {
-                            // The object does not exist.
-                            fact = factory.GetNullInstance();
-                        }
+                        prototype.ID = existingFactId.Value;
+                        prototype.SetCommunity(_community);
+                        _factByID.Add(prototype.ID, prototype);
+                        _factByMemento.Add(memento, prototype);
+                        fact = prototype;
+                    }
+                    else
+                    {
+                        // The object does not exist.
+                        fact = factory.GetNullInstance();
                     }
                 }
-                lock (this)
-                {
-                    independent.Value = fact;
-                }
-                completion.SetResult(fact);
             }
-            catch (Exception x)
+            lock (this)
             {
-                HandleException(x);
+                independent.Value = fact;
             }
+            completion.SetResult(fact);
         }
 
         private void ClearException()
@@ -568,32 +563,6 @@ namespace UpdateControls.Correspondence
                 {
                     return _lastException;
                 }
-            }
-        }
-
-        public void SetDesignMode()
-        {
-            _designMode = true;
-        }
-
-        public void Perform(Func<Task> asyncDelegate)
-        {
-            if (_designMode == true)
-                asyncDelegate();
-            else
-                Task.Run(() => PerformAsync(asyncDelegate));
-        }
-
-        private async Task PerformAsync(Func<Task> asyncDelegate)
-        {
-            try
-            {
-                ClearException();
-                await asyncDelegate();
-            }
-            catch (Exception x)
-            {
-                HandleException(x);
             }
         }
 

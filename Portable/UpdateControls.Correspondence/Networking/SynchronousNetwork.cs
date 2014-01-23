@@ -5,6 +5,7 @@ using UpdateControls.Correspondence.Strategy;
 using System;
 using UpdateControls.Fields;
 using System.Threading.Tasks;
+using UpdateControls.Correspondence.WorkQueues;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -26,17 +27,23 @@ namespace UpdateControls.Correspondence.Networking
         private Independent<bool> _synchronizing = new Independent<bool>();
 
         private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
-
-		public SynchronousNetwork(ISubscriptionProvider subscriptionProvider, Model model, IStorageStrategy storageStrategy)
+        private readonly IWorkQueue _workQueue;
+  
+		public SynchronousNetwork(
+            ISubscriptionProvider subscriptionProvider,
+            Model model,
+            IStorageStrategy storageStrategy,
+            IWorkQueue workQueue)
 		{
-			_subscriptionProvider = subscriptionProvider;
+            _subscriptionProvider = subscriptionProvider;
 			_model = model;
 			_storageStrategy = storageStrategy;
-		}
+            _workQueue = workQueue;
+        }
 
         public void AddCommunicationStrategy(ICommunicationStrategy communicationStrategy)
         {
-            Task.Run(() => AddCommunicationStrategyAsync(communicationStrategy));
+            _workQueue.Perform(() => AddCommunicationStrategyAsync(communicationStrategy));
         }
 
 		private async Task AddCommunicationStrategyAsync(ICommunicationStrategy communicationStrategy)

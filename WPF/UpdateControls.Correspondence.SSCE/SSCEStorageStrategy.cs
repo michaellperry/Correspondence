@@ -47,6 +47,11 @@ namespace UpdateControls.Correspondence.SSCE
             _connectionString = string.Format(@"Data Source =""{0}""", correspondenceDatabaseFileName);
         }
 
+        public bool IsSynchronous
+        {
+            get { return true; }
+        }
+
         private void CreateDatabase(string databaseFilename)
         {
             if (!File.Exists(databaseFilename))

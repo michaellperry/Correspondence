@@ -30,14 +30,12 @@ namespace UpdateControls.Correspondence.UnitTest
                 .Register<Model.Version2Model>()
                 .Subscribe(() => _userAlan)
                 .Subscribe(() => _userAlan.ActivePlayers.Select(player => player.Game));
-            _communityAlan.SetDesignMode();
             _storageFlynn = new MemoryStorageStrategy();
             _communityFlynn = new Community(_storageFlynn)
                 .AddCommunicationStrategy(sharedCommunication)
                 .Register<Model.CorrespondenceModel>()
                 .Subscribe(() => _userFlynn)
                 .Subscribe(() => _userFlynn.ActivePlayers.Select(player => player.Game));
-            _communityFlynn.SetDesignMode();
 
             _userAlan = await _communityAlan.AddFactAsync(new User("alan1"));
             _userFlynn = await _communityFlynn.AddFactAsync(new User("flynn1"));

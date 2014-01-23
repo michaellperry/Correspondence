@@ -33,7 +33,6 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(communication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
-            community.SetDesignMode();
             game = await community.AddFactAsync(new Game());
             await storage.SaveShareAsync(1, new FactID { key = 42 }, new FactID { key = 1 });
 
@@ -64,7 +63,6 @@ namespace UpdateControls.Correspondence.UnitTest
                 .AddCommunicationStrategy(communication)
                 .Register<CorrespondenceModel>()
                 .Subscribe(() => game);
-            community.SetDesignMode();
             game = await community.AddFactAsync(sourceGame);
 
             // On the first synchronize, we get the game memento.

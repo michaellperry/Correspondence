@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Strategy;
+using UpdateControls.Correspondence.WorkQueues;
 
 namespace UpdateControls.Correspondence.Networking
 {
@@ -12,18 +13,24 @@ namespace UpdateControls.Correspondence.Networking
 		private readonly Model _model;
         private readonly AsynchronousServerProxy _serverProxy;
         private readonly CorrespondenceFact _pivot;
-		private IPushSubscription _pushSubscription = null;
+        private readonly IWorkQueue _workQueue;
+        private IPushSubscription _pushSubscription = null;
   
-        public PushSubscriptionProxy(Model model, AsynchronousServerProxy serverProxy, CorrespondenceFact pivot)
+        public PushSubscriptionProxy(
+            Model model,
+            AsynchronousServerProxy serverProxy,
+            CorrespondenceFact pivot,
+            IWorkQueue workQueue)
         {
             _model = model;
             _serverProxy = serverProxy;
             _pivot = pivot;
+            _workQueue = workQueue;
         }
 
 		public void Subscribe()
         {
-            Task.Run(() => SubscribeAsync());
+            _workQueue.Perform(() => SubscribeAsync());
         }
 
 		private async Task SubscribeAsync()

@@ -4,14 +4,16 @@ using System.Linq;
 using UpdateControls.Collections;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Fields;
+using UpdateControls.Correspondence.WorkQueues;
 
 namespace UpdateControls.Correspondence.Networking
 {
 	class AsynchronousNetwork : IUpdatable
 	{
-        private ISubscriptionProvider _subscriptionProvider;
-		private Model _model;
-		private IStorageStrategy _storageStrategy;
+        private readonly ISubscriptionProvider _subscriptionProvider;
+		private readonly Model _model;
+		private readonly IStorageStrategy _storageStrategy;
+        private readonly IWorkQueue _workQueue;
 
         private IndependentList<AsynchronousServerProxy> _serverProxies =
             new IndependentList<AsynchronousServerProxy>();
@@ -19,12 +21,17 @@ namespace UpdateControls.Correspondence.Networking
             new Independent<Exception>();
 
 		private Dependent _depPushSubscriptions;
-
-        public AsynchronousNetwork(ISubscriptionProvider subscriptionProvider, Model model, IStorageStrategy storageStrategy)
+  
+        public AsynchronousNetwork(
+            ISubscriptionProvider subscriptionProvider, 
+            Model model, 
+            IStorageStrategy storageStrategy,
+            IWorkQueue workQueue)
         {
             _subscriptionProvider = subscriptionProvider;
             _model = model;
             _storageStrategy = storageStrategy;
+            _workQueue = workQueue;
 
             _depPushSubscriptions = new Dependent(UpdatePushSubscriptions);
             _depPushSubscriptions.Invalidated += delegate
@@ -39,7 +46,8 @@ namespace UpdateControls.Correspondence.Networking
                 _subscriptionProvider,
                 _model,
                 _storageStrategy,
-                asynchronousCommunicationStrategy);
+                asynchronousCommunicationStrategy,
+                _workQueue);
             _serverProxies.Add(proxy);
 
             asynchronousCommunicationStrategy.MessageReceived += messageBody =>

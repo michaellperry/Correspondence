@@ -22,6 +22,11 @@ namespace UpdateControls.Correspondence.Memory
 
         private static Task Done = Task.WhenAll();
 
+        public bool IsSynchronous
+        {
+            get { return true; }
+        }
+
         public Task<Guid> GetClientGuidAsync()
         {
             return Task.FromResult(_clientGuid);

@@ -4,6 +4,7 @@ using System.Linq;
 using UpdateControls.Correspondence.Strategy;
 using System.Threading;
 using System.Threading.Tasks;
+using UpdateControls.Correspondence.Threading;
 
 namespace UpdateControls.Correspondence
 {
@@ -61,7 +62,7 @@ namespace UpdateControls.Correspondence
         private QueryOptions _options;
         private List<TResultType> _results = new List<TResultType>();
         private State _state = State.Unloaded;
-        private ManualResetEvent _loaded = new ManualResetEvent(false);
+        private AsyncManualResetEvent _loaded = new AsyncManualResetEvent();
         private Independent _indResults = new Independent();
         private Func<TResultType> _getUnloadedInstance;
         private Func<TResultType> _getNullInstance;
@@ -92,20 +93,17 @@ namespace UpdateControls.Correspondence
             }
         }
 
-        public Task<Result<TResultType>> EnsureAsync()
+        public async Task<Result<TResultType>> EnsureAsync()
         {
             lock (this)
             {
                 _indResults.OnGet();
                 LoadResults();
                 if (_state == State.Loaded)
-                    return Task.FromResult<Result<TResultType>>(this);
+                    return this;
             }
-            return Task.Run<Result<TResultType>>(() =>
-            {
-                _loaded.WaitOne();
-                return this;
-            });
+            await _loaded.WaitAsync();
+            return this;
         }
 
         public TransientDisputable<TResultType, TValue> AsTransientDisputable<TValue>(Func<TResultType, TValue> selector)

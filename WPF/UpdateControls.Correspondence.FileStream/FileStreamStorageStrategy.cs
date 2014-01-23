@@ -29,6 +29,11 @@ namespace UpdateControls.Correspondence.FileStream
 
         private RedBlackTree.NodeCache _nodeCache = new RedBlackTree.NodeCache();
 
+        public bool IsSynchronous
+        {
+            get { return false; }
+        }
+
         public FileStreamStorageStrategy(string filePath)
         {
             _filePath = filePath;

@@ -42,6 +42,11 @@ namespace UpdateControls.Correspondence.SQL
             _connectionString = connectionString;
         }
 
+        public bool IsSynchronous
+        {
+            get { return true; }
+        }
+
         private static void AddParameter(IDbCommand command, string name, object value)
         {
             SqlParameter param = new SqlParameter();

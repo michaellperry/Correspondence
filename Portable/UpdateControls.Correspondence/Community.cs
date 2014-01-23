@@ -8,6 +8,7 @@ using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Debug;
 using System.ComponentModel;
+using UpdateControls.Correspondence.WorkQueues;
 
 namespace UpdateControls.Correspondence
 {
@@ -15,14 +16,20 @@ namespace UpdateControls.Correspondence
 	/// </summary>
 	public partial class Community : ICommunity
 	{
+        private IWorkQueue _workQueue;
         private Model _model;
         private Network _network;
         private IDictionary<Type, IFieldSerializer> _fieldSerializerByType = new Dictionary<Type, IFieldSerializer>();
 
 		public Community(IStorageStrategy storageStrategy)
         {
-            _model = new Model(this, storageStrategy);
-            _network = new Network(_model, storageStrategy);
+            if (storageStrategy.IsSynchronous)
+                _workQueue = new SynchronousWorkQueue();
+            else
+                _workQueue = new AsynchronousWorkQueue();
+
+            _model = new Model(this, storageStrategy, _workQueue);
+            _network = new Network(_model, storageStrategy, _workQueue);
 
             // Register the default types.
 			RegisterDefaultTypes();
@@ -160,17 +167,18 @@ namespace UpdateControls.Correspondence
 
         public Exception LastException
         {
-            get { return _network.LastException ?? _model.LastException; }
-        }
-
-        public void SetDesignMode()
-        {
-            _model.SetDesignMode();
+            get
+            {
+                return
+                    _network.LastException ??
+                    _model.LastException ??
+                    _workQueue.LastException;
+            }
         }
 
         public void Perform(Func<Task> asyncDelegate)
         {
-            _model.Perform(asyncDelegate);
+            _workQueue.Perform(asyncDelegate);
         }
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
