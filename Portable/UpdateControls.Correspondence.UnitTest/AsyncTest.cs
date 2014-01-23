@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using UpdateControls.Correspondence.Memory;
+using System.Threading.Tasks;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -12,6 +13,7 @@ namespace UpdateControls.Correspondence.UnitTest
         protected AsyncMemoryStorageStrategy _memory;
         private bool _done = false;
         private Thread _background;
+        private Community _community;
 
         protected void InitializeAsyncTest()
         {
@@ -35,6 +37,17 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             _done = true;
             _background.Join();
+        }
+
+        protected Community Community
+        {
+            get { return _community; }
+            set { _community = value; }
+        }
+
+        protected async Task QuiesceAllAsync()
+        {
+            while (_memory.Quiesce() || await _community.QuiesceAsync()) ;
         }
     }
 }

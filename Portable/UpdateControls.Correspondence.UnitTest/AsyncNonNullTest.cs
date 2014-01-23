@@ -10,7 +10,6 @@ namespace UpdateControls.Correspondence.UnitTest
     [TestClass]
     public class AsyncNonNullTest : AsyncTest
     {
-        private Community _community;
         private User _alan;
         private User _flynn;
 
@@ -25,11 +24,11 @@ namespace UpdateControls.Correspondence.UnitTest
             await initializingCommunity.AddFactAsync(new Player(alan, game, 0));
             await initializingCommunity.AddFactAsync(new Player(flynn, game, 1));
 
-            _community = new Community(_memory)
+            Community = new Community(_memory)
                 .Register<Model.CorrespondenceModel>();
 
-            _alan = await _community.AddFactAsync(new User("alan1"));
-            _flynn = await _community.AddFactAsync(new User("flynn1"));
+            _alan = await Community.AddFactAsync(new User("alan1"));
+            _flynn = await Community.AddFactAsync(new User("flynn1"));
         }
 
         [TestMethod]
@@ -77,7 +76,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             await Initialize();
 
-            User user = _community.FindFact(new User("dillenger7"));
+            User user = Community.FindFact(new User("dillenger7"));
 
             Assert.IsFalse(user.IsLoaded);
         }
@@ -86,12 +85,20 @@ namespace UpdateControls.Correspondence.UnitTest
         public async Task FindFactEventuallyBecomesANullObject()
         {
             await Initialize();
+            QuiescePeriodically();
 
-            User user = _community.FindFact(new User("dillenger7"));
-            _memory.Quiesce();
-            user = _community.FindFact(new User("dillenger7"));
+            try
+            {
+                User user = Community.FindFact(new User("dillenger7"));
+                await QuiesceAllAsync();
+                user = Community.FindFact(new User("dillenger7"));
 
-            Assert.IsTrue(user.IsNull);
+                Assert.IsTrue(user.IsNull);
+            }
+            finally
+            {
+                Done();
+            }
         }
 
         [TestMethod]
@@ -103,7 +110,7 @@ namespace UpdateControls.Correspondence.UnitTest
 
             try
             {
-                User user = await _community.FindFact(new User("dillenger7")).EnsureAsync();
+                User user = await Community.FindFact(new User("dillenger7")).EnsureAsync();
                 Assert.IsTrue(user.IsLoaded);
                 Assert.IsTrue(user.IsNull);
             }

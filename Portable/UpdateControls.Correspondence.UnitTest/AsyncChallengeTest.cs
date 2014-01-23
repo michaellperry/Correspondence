@@ -13,18 +13,17 @@ namespace UpdateControls.Correspondence.UnitTest
     [TestClass]
     public class AsyncChallengeTest : AsyncTest
     {
-        private Community _community;
         private User _alan;
         private User _flynn;
 
         public async Task Initialize()
         {
             InitializeAsyncTest();
-            _community = new Community(_memory)
+            Community = new Community(_memory)
                 .Register<Model.CorrespondenceModel>();
 
-            _alan = await _community.AddFactAsync(new User("alan1"));
-            _flynn = await _community.AddFactAsync(new User("flynn1"));
+            _alan = await Community.AddFactAsync(new User("alan1"));
+            _flynn = await Community.AddFactAsync(new User("flynn1"));
         }
 
         [TestMethod]
@@ -128,11 +127,6 @@ namespace UpdateControls.Correspondence.UnitTest
             {
                 Done();
             }
-        }
-
-        private async Task QuiesceAllAsync()
-        {
-            while (_memory.Quiesce() || await _community.QuiesceAsync()) ;
         }
     }
 }
