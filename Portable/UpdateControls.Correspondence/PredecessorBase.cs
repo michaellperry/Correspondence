@@ -29,7 +29,8 @@ namespace UpdateControls.Correspondence
 
         protected void OnGet()
         {
-            Community.Perform(() => OnGetAsync());
+            if (_subject != null && _subject.InternalCommunity != null)
+                _subject.InternalCommunity.Perform(() => OnGetAsync());
         }
 
         private async Task OnGetAsync()

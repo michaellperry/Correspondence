@@ -15,13 +15,13 @@ namespace UpdateControls.Correspondence.Networking
 		private SynchronousNetwork _synchronousNetwork;
 		private AsynchronousNetwork _asynchronousNetwork;
 
-        public Network(Model model, IStorageStrategy storageStrategy, IWorkQueue workQueue)
+        public Network(Model model, IStorageStrategy storageStrategy, IWorkQueue workQueue, IWorkQueue asyncNetworkWorkQueue)
         {
             _model = model;
             _storageStrategy = storageStrategy;
 
             _synchronousNetwork = new SynchronousNetwork(this, _model, _storageStrategy, workQueue);
-            _asynchronousNetwork = new AsynchronousNetwork(this, _model, _storageStrategy, workQueue);
+            _asynchronousNetwork = new AsynchronousNetwork(this, _model, _storageStrategy, asyncNetworkWorkQueue);
         }
 
         public void Subscribe(Subscription subscription)

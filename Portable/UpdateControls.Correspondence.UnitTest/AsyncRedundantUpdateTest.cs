@@ -35,7 +35,7 @@ namespace UpdateControls.Correspondence.UnitTest
             while (!counter.IsUpToDate || storage.TasksRemain)
             {
                 counter.OnGet();
-                await storage.RunOneTask();
+                storage.RunOneTask();
             }
 
             Assert.AreEqual(3, passes);

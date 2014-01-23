@@ -43,7 +43,7 @@ namespace UpdateControls.Correspondence.UnitTest
             // Still empty.
             Assert.AreEqual(0, _alan.ActivePlayers.Count());
 
-            await _memory.Quiesce();
+            await QuiesceAllAsync();
 
             // Not empty anymore.
             Assert.AreEqual(1, _alan.ActivePlayers.Count());
@@ -79,7 +79,7 @@ namespace UpdateControls.Correspondence.UnitTest
             // Not yet.
             Assert.AreEqual(0, _flynn.ActivePlayers.Count());
 
-            await _memory.Quiesce();
+            await QuiesceAllAsync();
 
             // Now.
             Assert.AreEqual(1, _flynn.ActivePlayers.Count());
@@ -98,7 +98,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 // It's still blank.
                 Assert.AreEqual(null, _flynn.FavoriteColor.Value);
 
-                await _memory.Quiesce();
+                await QuiesceAllAsync();
 
                 // Now it's set.
                 Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);
@@ -119,7 +119,7 @@ namespace UpdateControls.Correspondence.UnitTest
             {
                 _flynn.FavoriteColor = "Blue";
 
-                await Task.Delay(100);
+                await QuiesceAllAsync();
 
                 // Ensure that the value is loaded.
                 Assert.AreEqual("Blue", (await _flynn.FavoriteColor.EnsureAsync()).Value);
@@ -128,6 +128,11 @@ namespace UpdateControls.Correspondence.UnitTest
             {
                 Done();
             }
+        }
+
+        private async Task QuiesceAllAsync()
+        {
+            while (_memory.Quiesce() || await _community.QuiesceAsync()) ;
         }
     }
 }

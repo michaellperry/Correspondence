@@ -63,14 +63,10 @@ namespace UpdateControls.Correspondence.UnitTest
             _playerAlan.MakeMove(0, 0);
             await Synchronize();
 
-            var game = _playerFlynn.Game;
-            var moves = await game.Moves.EnsureAsync();
-            var move = moves.Single();
+            var move = _playerFlynn.Game.Moves.Single();
             Assert.AreEqual(0, move.Index);
             Assert.AreEqual(0, move.Square);
-            var player = await move.Player.EnsureAsync();
-            var user = await player.User.EnsureAsync();
-            Assert.AreEqual("alan1", user.UserName);
+            Assert.AreEqual("alan1", move.Player.User.UserName);
         }
 
         [TestMethod]

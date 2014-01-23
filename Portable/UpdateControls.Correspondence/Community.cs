@@ -16,7 +16,8 @@ namespace UpdateControls.Correspondence
 	/// </summary>
 	public partial class Community : ICommunity
 	{
-        private IWorkQueue _workQueue;
+        private IWorkQueue _storageWorkQueue;
+        private IWorkQueue _asyncNetworkWorkQueue;
         private Model _model;
         private Network _network;
         private IDictionary<Type, IFieldSerializer> _fieldSerializerByType = new Dictionary<Type, IFieldSerializer>();
@@ -24,12 +25,13 @@ namespace UpdateControls.Correspondence
 		public Community(IStorageStrategy storageStrategy)
         {
             if (storageStrategy.IsSynchronous)
-                _workQueue = new SynchronousWorkQueue();
+                _storageWorkQueue = new SynchronousWorkQueue();
             else
-                _workQueue = new AsynchronousWorkQueue();
+                _storageWorkQueue = new AsynchronousWorkQueue();
+            _asyncNetworkWorkQueue = new AsynchronousWorkQueue();
 
-            _model = new Model(this, storageStrategy, _workQueue);
-            _network = new Network(_model, storageStrategy, _workQueue);
+            _model = new Model(this, storageStrategy, _storageWorkQueue);
+            _network = new Network(_model, storageStrategy, _storageWorkQueue, _asyncNetworkWorkQueue);
 
             // Register the default types.
 			RegisterDefaultTypes();
@@ -172,13 +174,27 @@ namespace UpdateControls.Correspondence
                 return
                     _network.LastException ??
                     _model.LastException ??
-                    _workQueue.LastException;
+                    _storageWorkQueue.LastException;
             }
         }
 
         public void Perform(Func<Task> asyncDelegate)
         {
-            _workQueue.Perform(asyncDelegate);
+            _storageWorkQueue.Perform(asyncDelegate);
+        }
+
+        public async Task<bool> QuiesceAsync()
+        {
+            var tasks = _storageWorkQueue.Tasks
+                .Union(_asyncNetworkWorkQueue.Tasks)
+                .ToArray();
+            if (tasks.Any())
+            {
+                await Task.WhenAll(tasks);
+                return true;
+            }
+
+            return false;
         }
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)

@@ -32,14 +32,15 @@ namespace UpdateControls.Correspondence.WorkQueues
             });
         }
 
-        public async Task WhenAllAsync()
+        public Task[] Tasks
         {
-            Task[] tasks;
-            lock (this)
+            get
             {
-                tasks = _tokens.Select(t => t.Task).ToArray();
+                lock (this)
+                {
+                    return _tokens.Select(t => t.Task).ToArray();
+                }
             }
-            await Task.WhenAll(tasks);
         }
 
         private Token CreateToken()

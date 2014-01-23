@@ -26,8 +26,7 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             var user = User.GetNullInstance();
 
-            var players = await user.ActivePlayers.EnsureAsync();
-            bool any = players.Any();
+            bool any = user.ActivePlayers.Any();
 
             Assert.IsFalse(any);
         }

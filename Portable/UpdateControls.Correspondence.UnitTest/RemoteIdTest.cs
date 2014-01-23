@@ -38,8 +38,7 @@ namespace UpdateControls.Correspondence.UnitTest
 
             await community.SynchronizeAsync();
 
-            var outcomes = await game.Outcomes.EnsureAsync();
-            Outcome outcome = outcomes.Single();
+            Outcome outcome = game.Outcomes.Single();
             Assert.IsNotNull(outcome.Winner);
             Assert.IsTrue(outcome.Winner.IsNull);
         }

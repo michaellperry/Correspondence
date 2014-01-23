@@ -25,7 +25,7 @@ namespace UpdateControls.Correspondence.UnitTest
                 while (!_done)
                 {
                     Thread.Sleep(10);
-                    _memory.Quiesce().Wait();
+                    _memory.Quiesce();
                 }
             });
             _background.Start();

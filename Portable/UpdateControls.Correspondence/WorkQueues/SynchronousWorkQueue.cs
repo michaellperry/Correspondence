@@ -13,9 +13,9 @@ namespace UpdateControls.Correspondence.WorkQueues
             work();
         }
 
-        public Task WhenAllAsync()
+        public Task[] Tasks
         {
-            return Task.WhenAll();
+            get { return new Task[0]; }
         }
 
         public Exception LastException

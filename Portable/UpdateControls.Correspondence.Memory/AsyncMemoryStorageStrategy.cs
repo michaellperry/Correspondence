@@ -29,23 +29,26 @@ namespace UpdateControls.Correspondence.Memory
             get { return false; }
         }
 
-        public async Task Quiesce()
+        public bool Quiesce()
         {
-            await Task.Delay(100);
+            if (!_future.Any())
+                return false;
+
             while (_future.Any())
             {
                 _future.Dequeue().SetResult(true);
-                await Task.Delay(100);
             }
+            return true;
         }
 
-        public async Task RunOneTask()
+        public bool RunOneTask()
         {
             if (_future.Any())
             {
                 _future.Dequeue().SetResult(true);
-                await Task.Delay(10);
+                return true;
             }
+            return false;
         }
 
         public bool TasksRemain
