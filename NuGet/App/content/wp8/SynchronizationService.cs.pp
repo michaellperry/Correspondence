@@ -54,7 +54,6 @@ namespace $rootnamespace$
         {
             _community = new Community(new MemoryStorageStrategy());
             _community.Register<CorrespondenceModel>();
-			_community.SetDesignMode();
 
             CreateIndividualDesignData();
         }
