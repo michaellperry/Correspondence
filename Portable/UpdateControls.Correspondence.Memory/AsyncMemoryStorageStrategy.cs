@@ -20,40 +20,11 @@ namespace UpdateControls.Correspondence.Memory
 
         private Guid _clientGuid = Guid.NewGuid();
 
-        private Queue<TaskCompletionSource<bool>> _future = new Queue<TaskCompletionSource<bool>>();
-
         private static Task Done = Task.WhenAll();
 
         public bool IsSynchronous
         {
             get { return false; }
-        }
-
-        public bool Quiesce()
-        {
-            if (!_future.Any())
-                return false;
-
-            while (_future.Any())
-            {
-                _future.Dequeue().SetResult(true);
-            }
-            return true;
-        }
-
-        public bool RunOneTask()
-        {
-            if (_future.Any())
-            {
-                _future.Dequeue().SetResult(true);
-                return true;
-            }
-            return false;
-        }
-
-        public bool TasksRemain
-        {
-            get { return _future.Any(); }
         }
 
         public Task<Guid> GetClientGuidAsync()
@@ -300,24 +271,18 @@ namespace UpdateControls.Correspondence.Memory
 
         private Task QueueTask(Action action)
         {
-            TaskCompletionSource<bool> completionSource = new TaskCompletionSource<bool>();
-            _future.Enqueue(completionSource);
-
             return Task.Run(async delegate
             {
-                await completionSource.Task;
+                await Task.Delay(10);
                 action();
             });
         }
 
         private Task<T> QueueTask<T>(Func<T> func)
         {
-            TaskCompletionSource<bool> completionSource = new TaskCompletionSource<bool>();
-            _future.Enqueue(completionSource);
-
             return Task.Run<T>(async delegate
             {
-                await completionSource.Task;
+                await Task.Delay(10);
                 return func();
             });
 

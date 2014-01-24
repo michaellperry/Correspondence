@@ -7,6 +7,7 @@ using UpdateControls.Correspondence.Memory;
 using UpdateControls.Correspondence.UnitTest.Model;
 using System.Threading;
 using System.Threading.Tasks;
+using UpdateControls.Fields;
 
 namespace UpdateControls.Correspondence.UnitTest
 {
@@ -52,21 +53,13 @@ namespace UpdateControls.Correspondence.UnitTest
         public async Task UserStartsAGame_Ensured()
         {
             await Initialize();
-            QuiescePeriodically();
 
-            try
-            {
-                Player player = await _alan.ChallengeAsync(_flynn);
+            Player player = await _alan.ChallengeAsync(_flynn);
 
-                // Ensure that we have loaded the players.
-                var players = await _alan.ActivePlayers.EnsureAsync();
-                Assert.IsTrue(players.Any(), "The collection is still empty.");
-                Assert.IsTrue(players.Contains(player));
-            }
-            finally
-            {
-                Done();
-            }
+            // Ensure that we have loaded the players.
+            var players = await _alan.ActivePlayers.EnsureAsync();
+            Assert.IsTrue(players.Any(), "The collection is still empty.");
+            Assert.IsTrue(players.Contains(player));
         }
 
         [TestMethod]
@@ -88,45 +81,35 @@ namespace UpdateControls.Correspondence.UnitTest
         public async Task PropertyIsInconsistent()
         {
             await Initialize();
-            QuiescePeriodically();
 
-            try
-            {
-                _flynn.FavoriteColor = "Blue";
+            var dependent = new Dependent<string>(() =>_flynn.FavoriteColor);
 
-                // It's still blank.
-                Assert.AreEqual(null, _flynn.FavoriteColor.Value);
+            _flynn.FavoriteColor = "Blue";
 
-                await QuiesceAllAsync();
+            await QuiesceAllAsync();
 
-                // Now it's set.
-                Assert.AreEqual("Blue", _flynn.FavoriteColor.Value);
-            }
-            finally
-            {
-                Done();
-            }
+            // Bringing the dependent up-to-date starts the background loader,
+            // and returns the default value.
+            Assert.AreEqual(null, dependent.Value);
+
+            await QuiesceAllAsync();
+
+            // When the background loader finishes, bringing the dependent back
+            // up-to-date returns the loaded value.
+            Assert.AreEqual("Blue", dependent.Value);
         }
 
         [TestMethod]
         public async Task EnsuredPropertyIsConsistent()
         {
             await Initialize();
-            QuiescePeriodically();
 
-            try
-            {
-                _flynn.FavoriteColor = "Blue";
+            _flynn.FavoriteColor = "Blue";
 
-                await QuiesceAllAsync();
+            await QuiesceAllAsync();
 
-                // Ensure that the value is loaded.
-                Assert.AreEqual("Blue", (await _flynn.FavoriteColor.EnsureAsync()).Value);
-            }
-            finally
-            {
-                Done();
-            }
+            // Ensure that the value is loaded.
+            Assert.AreEqual("Blue", (await _flynn.FavoriteColor.EnsureAsync()).Value);
         }
     }
 }

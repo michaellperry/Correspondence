@@ -36,19 +36,10 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             await Initialize();
 
-            QuiescePeriodically();
+            Color favoriteColor = _alan.BetterFavoriteColor;
 
-            try
-            {
-                Color favoriteColor = _alan.BetterFavoriteColor;
-
-                Assert.IsNotNull(favoriteColor);
-                Assert.IsFalse(favoriteColor.IsLoaded);
-            }
-            finally
-            {
-                Done();
-            }
+            Assert.IsNotNull(favoriteColor);
+            Assert.IsFalse(favoriteColor.IsLoaded);
         }
 
         [TestMethod]
@@ -56,19 +47,10 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             await Initialize();
 
-            QuiescePeriodically();
+            Color favoriteColor = await _alan.BetterFavoriteColor.EnsureAsync();
 
-            try
-            {
-                Color favoriteColor = await _alan.BetterFavoriteColor.EnsureAsync();
-
-                Assert.IsNotNull(favoriteColor);
-                Assert.IsTrue(favoriteColor.IsNull);
-            }
-            finally
-            {
-                Done();
-            }
+            Assert.IsNotNull(favoriteColor);
+            Assert.IsTrue(favoriteColor.IsNull);
         }
 
         [TestMethod]
@@ -85,20 +67,12 @@ namespace UpdateControls.Correspondence.UnitTest
         public async Task FindFactEventuallyBecomesANullObject()
         {
             await Initialize();
-            QuiescePeriodically();
 
-            try
-            {
-                User user = Community.FindFact(new User("dillenger7"));
-                await QuiesceAllAsync();
-                user = Community.FindFact(new User("dillenger7"));
+            User user = Community.FindFact(new User("dillenger7"));
+            await QuiesceAllAsync();
+            user = Community.FindFact(new User("dillenger7"));
 
-                Assert.IsTrue(user.IsNull);
-            }
-            finally
-            {
-                Done();
-            }
+            Assert.IsTrue(user.IsNull);
         }
 
         [TestMethod]
@@ -106,18 +80,9 @@ namespace UpdateControls.Correspondence.UnitTest
         {
             await Initialize();
 
-            QuiescePeriodically();
-
-            try
-            {
-                User user = await Community.FindFact(new User("dillenger7")).EnsureAsync();
-                Assert.IsTrue(user.IsLoaded);
-                Assert.IsTrue(user.IsNull);
-            }
-            finally
-            {
-                Done();
-            }
+            User user = await Community.FindFact(new User("dillenger7")).EnsureAsync();
+            Assert.IsTrue(user.IsLoaded);
+            Assert.IsTrue(user.IsNull);
         }
     }
 }

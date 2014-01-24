@@ -163,65 +163,11 @@ namespace UpdateControls.Correspondence
                 }
                 else
                 {
-                    // Load the results from storage and cache them.
-                    Task<List<CorrespondenceFact>> queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
-                        _query.QueryDefinition, _startingPoint.ID, _options);
-                    if (queryTask.IsCompleted)
-                    {
-                        _results = queryTask.Result
-                            .OfType<TResultType>()
-                            .ToList();
-                        SetState(State.Loaded);
-                    }
-                    else
-                    {
-                        SetState(State.Loading);
-                        if (_indResults.HasDependents)
-                            ResultScheduler.BeginLoading(this);
-                        queryTask.ContinueWith(ExecuteQueryCompleted);
-                    }
-                }
-            }
-        }
-
-        private void ExecuteQueryCompleted(Task<List<CorrespondenceFact>> queryTask)
-        {
-            lock (this)
-            {
-                _results = queryTask.Result
-                    .OfType<TResultType>()
-                    .ToList();
-                if (_state == State.Loading)
-                {
-                    SetState(State.Loaded);
-                }
-                else if (_state == State.Invalidated)
-                {
                     if (_indResults.HasDependents)
-                    {
-                        // Load the results from storage and cache them.
-                        queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
-                            _query.QueryDefinition, _startingPoint.ID, _options);
-                        if (queryTask.IsCompleted)
-                        {
-                            _results = queryTask.Result
-                                .OfType<TResultType>()
-                                .ToList();
-                            SetState(State.Loaded);
-                        }
-                        else
-                        {
-                            SetState(State.Loading);
-                            queryTask.ContinueWith(ExecuteQueryCompleted);
-                        }
-                    }
-                    else
-                    {
-                        SetState(State.Unloaded);
-                    }
+                        ResultScheduler.BeginLoading(this);
+                    StartLoading();
                 }
             }
-            ResultScheduler.EndLoading(this);
         }
 
         public void Invalidate()
@@ -232,22 +178,7 @@ namespace UpdateControls.Correspondence
                 {
                     if (_indResults.HasDependents)
                     {
-                        // Load the results from storage and cache them.
-                        Task<List<CorrespondenceFact>> queryTask = _startingPoint.InternalCommunity.ExecuteQueryAsync(
-                            _query.QueryDefinition, _startingPoint.ID, _options);
-                        if (queryTask.IsCompleted)
-                        {
-                            _indResults.OnSet();
-                            _results = queryTask.Result
-                                .OfType<TResultType>()
-                                .ToList();
-                            SetState(State.Loaded);
-                        }
-                        else
-                        {
-                            SetState(State.Loading);
-                            queryTask.ContinueWith(ExecuteQueryCompleted);
-                        }
+                        StartLoading();
                     }
                     else
                     {
@@ -279,6 +210,45 @@ namespace UpdateControls.Correspondence
                 _loaded.Reset();
             else if (!wasLoaded && isLoaded)
                 _loaded.Set();
+        }
+
+        private void StartLoading()
+        {
+            // Load the results from storage and cache them.
+            _startingPoint.Community.Perform(async delegate
+            {
+                lock (this)
+                {
+                    SetState(State.Loading);
+                }
+
+                var facts = await _startingPoint.InternalCommunity.ExecuteQueryAsync(
+                    _query.QueryDefinition, _startingPoint.ID, _options);
+
+                lock (this)
+                {
+                    _results = facts
+                        .OfType<TResultType>()
+                        .ToList();
+
+                    if (_state == State.Loading)
+                    {
+                        SetState(State.Loaded);
+                    }
+                    else if (_state == State.Invalidated)
+                    {
+                        if (_indResults.HasDependents)
+                        {
+                            StartLoading();
+                        }
+                        else
+                        {
+                            SetState(State.Unloaded);
+                        }
+                    }
+                }
+                ResultScheduler.EndLoading(this);
+            });
         }
     }
 

@@ -32,10 +32,10 @@ namespace UpdateControls.Correspondence.UnitTest
                 return likes;
             });
 
-            while (!counter.IsUpToDate || storage.TasksRemain)
+            while (!counter.IsUpToDate)
             {
                 counter.OnGet();
-                storage.RunOneTask();
+                while (await community.QuiesceAsync());
             }
 
             Assert.AreEqual(3, passes);
