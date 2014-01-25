@@ -163,8 +163,6 @@ namespace UpdateControls.Correspondence
                 }
                 else
                 {
-                    if (_indResults.HasDependents)
-                        ResultScheduler.BeginLoading(this);
                     StartLoading();
                 }
             }
@@ -220,6 +218,7 @@ namespace UpdateControls.Correspondence
                 lock (this)
                 {
                     SetState(State.Loading);
+                    ResultScheduler.BeginLoading(this);
                 }
 
                 var facts = await _startingPoint.InternalCommunity.ExecuteQueryAsync(
@@ -227,6 +226,7 @@ namespace UpdateControls.Correspondence
 
                 lock (this)
                 {
+                    ResultScheduler.EndLoading(this);
                     _results = facts
                         .OfType<TResultType>()
                         .ToList();
@@ -247,7 +247,6 @@ namespace UpdateControls.Correspondence
                         }
                     }
                 }
-                ResultScheduler.EndLoading(this);
             });
         }
     }
