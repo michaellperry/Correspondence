@@ -64,6 +64,7 @@ namespace UpdateControls.Correspondence
         {
             lock (this)
             {
+                OnGet();
                 if (_loaded != null)
                     return _loaded.Task;
                 else
