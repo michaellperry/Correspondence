@@ -22,16 +22,13 @@ namespace UpdateControls.Correspondence
 			TFact obj ) :
             base(subject, true)
 		{
-            if (obj != null && obj.IsNull)
-                obj = null;
-
-            if (obj!=null && obj.InternalCommunity == null)
+            if (!obj.IsNull && obj.InternalCommunity == null)
                 throw new CorrespondenceException("A fact's predecessors must be added to the community first.");
 
 			_role = role.RoleMemento;
-            _factId = obj == null ? new FactID() : obj.ID;
+            _factId = obj.IsNull ? new FactID() : obj.ID;
 			_fact = new Independent<TFact>(obj);
-            _community = obj == null ? null : obj.InternalCommunity;
+            _community = obj.IsNull ? null : obj.InternalCommunity;
 
             subject.SetPredecessor(_role, this);
 		}

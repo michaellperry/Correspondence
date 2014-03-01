@@ -2013,7 +2013,8 @@ namespace UpdateControls.Correspondence.UnitTest.Model
         {
             InitializeResults();
             _game = new PredecessorObj<Game>(this, GetRoleGame(), game);
-            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), winner);
+            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), winner
+                ?? Player.GetNullInstance());
         }
 
         // Hydration constructor
