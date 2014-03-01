@@ -22,6 +22,8 @@ namespace UpdateControls.Correspondence
 			TFact obj ) :
             base(subject, true)
 		{
+            if (obj != null && obj.IsNull)
+                obj = null;
 
             if (obj!=null && obj.InternalCommunity == null)
                 throw new CorrespondenceException("A fact's predecessors must be added to the community first.");
