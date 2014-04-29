@@ -106,7 +106,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
       <Project>{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}</Project>
-      <Name>UpdateControls.Correspondence %28Silverlight 5\UpdateControls.Correspondence%29</Name>
+      <Name>UpdateControls.Correspondence</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
