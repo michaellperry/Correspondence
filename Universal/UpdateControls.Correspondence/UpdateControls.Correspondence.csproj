@@ -1,0 +1,335 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5FD836BD-9674-47C2-A93C-78290D8949DB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UpdateControls.Correspondence</RootNamespace>
+    <AssemblyName>UpdateControls.Correspondence</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile32</TargetFrameworkProfile>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
+    <TargetPlatform Include="Windows, Version=8.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\AwaitableCriticalSection.cs">
+      <Link>AwaitableCriticalSection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Community.cs">
+      <Link>Community.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Community.Platform.cs">
+      <Link>Community.Platform.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Condition.cs">
+      <Link>Condition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Conditions\AndConditionBuilder.cs">
+      <Link>Conditions\AndConditionBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Conditions\Clause.cs">
+      <Link>Conditions\Clause.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Conditions\ConditionEvaluator.cs">
+      <Link>Conditions\ConditionEvaluator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\CorrespondenceException.cs">
+      <Link>CorrespondenceException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\CorrespondenceFact.cs">
+      <Link>CorrespondenceFact.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\FactDescriptor.cs">
+      <Link>Debug\FactDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\PageDescriptor.cs">
+      <Link>Debug\PageDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\PredecessorDescriptor.cs">
+      <Link>Debug\PredecessorDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\TypeDescriptor.cs">
+      <Link>Debug\TypeDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Disputable.cs">
+      <Link>Disputable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FactMetadata.cs">
+      <Link>FactMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\BinaryFieldSerializer.cs">
+      <Link>FieldSerializer\BinaryFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\BinaryHelper.cs">
+      <Link>FieldSerializer\BinaryHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\ByteFieldSerializer.cs">
+      <Link>FieldSerializer\ByteFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\CharFieldSerializer.cs">
+      <Link>FieldSerializer\CharFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\DateTimeFieldSerializer.cs">
+      <Link>FieldSerializer\DateTimeFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\DecimalFieldSerializer.cs">
+      <Link>FieldSerializer\DecimalFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\DoubleFieldSerializer.cs">
+      <Link>FieldSerializer\DoubleFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\FloatFieldSerializer.cs">
+      <Link>FieldSerializer\FloatFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\GuidFieldSerializer.cs">
+      <Link>FieldSerializer\GuidFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\IntFieldSerializer.cs">
+      <Link>FieldSerializer\IntFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\LongFieldSerializer.cs">
+      <Link>FieldSerializer\LongFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\FieldSerializer\StringFieldSerializer.cs">
+      <Link>FieldSerializer\StringFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\ICommunity.cs">
+      <Link>ICommunity.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\IQueryResult.cs">
+      <Link>IQueryResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\CorrespondenceFactType.cs">
+      <Link>Mementos\CorrespondenceFactType.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\Crc32.cs">
+      <Link>Mementos\Crc32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\FactID.cs">
+      <Link>Mementos\FactID.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\FactMemento.cs">
+      <Link>Mementos\FactMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\FactTreeMemento.cs">
+      <Link>Mementos\FactTreeMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\GetManyResultMemento.cs">
+      <Link>Mementos\GetManyResultMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\GetResultMemento.cs">
+      <Link>Mementos\GetResultMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\IdentifiedFactBase.cs">
+      <Link>Mementos\IdentifiedFactBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\IdentifiedFactMemento.cs">
+      <Link>Mementos\IdentifiedFactMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\IdentifiedFactRemote.cs">
+      <Link>Mementos\IdentifiedFactRemote.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\MessageMemento.cs">
+      <Link>Mementos\MessageMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\NamedFactMemento.cs">
+      <Link>Mementos\NamedFactMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\PivotMemento.cs">
+      <Link>Mementos\PivotMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\PredecessorMemento.cs">
+      <Link>Mementos\PredecessorMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\RoleMemento.cs">
+      <Link>Mementos\RoleMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\TimestampID.cs">
+      <Link>Mementos\TimestampID.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Mementos\UnpublishMemento.cs">
+      <Link>Mementos\UnpublishMemento.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Model.cs">
+      <Link>Model.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\AsynchronousNetwork.cs">
+      <Link>Networking\AsynchronousNetwork.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\AsynchronousServerProxy.cs">
+      <Link>Networking\AsynchronousServerProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\ISubscriptionProvider.cs">
+      <Link>Networking\ISubscriptionProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\MessagesToSend.cs">
+      <Link>Networking\MessagesToSend.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\Network.cs">
+      <Link>Networking\Network.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\PushSubscriptionProxy.cs">
+      <Link>Networking\PushSubscriptionProxy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\SynchronizeResult.cs">
+      <Link>Networking\SynchronizeResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Networking\SynchronousNetwork.cs">
+      <Link>Networking\SynchronousNetwork.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\PredecessorBase.cs">
+      <Link>PredecessorBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\PredecessorList.cs">
+      <Link>PredecessorList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\PredecessorObj.cs">
+      <Link>PredecessorObj.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\PredecessorOpt.cs">
+      <Link>PredecessorOpt.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Queries\InvalidatedQuery.cs">
+      <Link>Queries\InvalidatedQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Queries\Join.cs">
+      <Link>Queries\Join.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Queries\QueryDefinition.cs">
+      <Link>Queries\QueryDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Queries\QueryInvalidator.cs">
+      <Link>Queries\QueryInvalidator.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Queries\Unpublisher.cs">
+      <Link>Queries\Unpublisher.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Query.cs">
+      <Link>Query.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\QueryInverter.cs">
+      <Link>QueryInverter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\QueryTask.cs">
+      <Link>QueryTask.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Result.cs">
+      <Link>Result.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\RoleBase.cs">
+      <Link>RoleBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\RoleRelationship.cs">
+      <Link>RoleRelationship.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Service\IService.cs">
+      <Link>Service\IService.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\IAsynchronousCommunicationStrategy.cs">
+      <Link>Strategy\IAsynchronousCommunicationStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\ICommunicationStrategy.cs">
+      <Link>Strategy\ICommunicationStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\ICorrespondenceFactFactory.cs">
+      <Link>Strategy\ICorrespondenceFactFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\ICorrespondenceModel.cs">
+      <Link>Strategy\ICorrespondenceModel.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\IFieldSerializer.cs">
+      <Link>Strategy\IFieldSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\IPushSubscription.cs">
+      <Link>Strategy\IPushSubscription.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\IStorageStrategy.cs">
+      <Link>Strategy\IStorageStrategy.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\QueryOptions.cs">
+      <Link>Strategy\QueryOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Strategy\SaveResult.cs">
+      <Link>Strategy\SaveResult.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Streams\ChunkInputStream.cs">
+      <Link>Streams\ChunkInputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Streams\ChunkOutputStream.cs">
+      <Link>Streams\ChunkOutputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Subscription.cs">
+      <Link>Subscription.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Threading\AsyncManualResetEvent.cs">
+      <Link>Threading\AsyncManualResetEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\WorkQueues\AsynchronousWorkQueue.cs">
+      <Link>WorkQueues\AsynchronousWorkQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\WorkQueues\IWorkQueue.cs">
+      <Link>WorkQueues\IWorkQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\WorkQueues\SynchronousWorkQueue.cs">
+      <Link>WorkQueues\SynchronousWorkQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\WorkQueues\Token.cs">
+      <Link>WorkQueues\Token.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="UpdateControls">
+      <HintPath>..\..\packages\UpdateControls.2.3.1.0\lib\portable-wpa81+win81\UpdateControls.dll</HintPath>
+    </Reference>
+    <Reference Include="UpdateControls.XAML">
+      <HintPath>..\..\packages\UpdateControls.2.3.1.0\lib\portable-wpa81+win81\UpdateControls.XAML.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

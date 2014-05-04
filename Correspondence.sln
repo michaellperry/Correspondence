@@ -243,6 +243,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", 
 		NuGet\App\content\wpa81\ViewModels\ViewModelLocator.cs.pp = NuGet\App\content\wpa81\ViewModels\ViewModelLocator.cs.pp
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Universal", "Universal", "{96130F9D-597C-4DC6-AA65-5A5AF35FFBE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Universal\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{5FD836BD-9674-47C2-A93C-78290D8949DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -515,6 +519,16 @@ Global
 		{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1}.Release|ARM.ActiveCfg = Release|Any CPU
 		{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1}.Release|x64.ActiveCfg = Release|Any CPU
 		{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1}.Release|x86.ActiveCfg = Release|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Release|ARM.ActiveCfg = Release|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Release|x64.ActiveCfg = Release|Any CPU
+		{5FD836BD-9674-47C2-A93C-78290D8949DB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -570,5 +584,6 @@ Global
 		{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1} = {9E927AEF-AF9F-4A77-8539-808247676655}
 		{FD6FDB4D-C2D3-4196-85AA-ADCEF0C543F3} = {27D21C4A-CAB7-40CD-867D-DB67CAA15B3C}
 		{6C4C87C4-E8C6-426E-8C12-3825ADD0B08E} = {FD6FDB4D-C2D3-4196-85AA-ADCEF0C543F3}
+		{5FD836BD-9674-47C2-A93C-78290D8949DB} = {96130F9D-597C-4DC6-AA65-5A5AF35FFBE4}
 	EndGlobalSection
 EndGlobal

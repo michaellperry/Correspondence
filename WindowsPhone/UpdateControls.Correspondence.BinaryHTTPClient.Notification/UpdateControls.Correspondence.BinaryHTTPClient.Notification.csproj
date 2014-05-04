@@ -107,11 +107,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="UpdateControls">
-      <HintPath>..\..\packages\UpdateControls.2.3.0.1\lib\wp8\UpdateControls.dll</HintPath>
+    <Reference Include="UpdateControls, Version=2.3.0.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\UpdateControls.2.3.1.0\lib\wp80\UpdateControls.dll</HintPath>
     </Reference>
-    <Reference Include="UpdateControls.XAML">
-      <HintPath>..\..\packages\UpdateControls.2.3.0.1\lib\wp8\UpdateControls.XAML.dll</HintPath>
+    <Reference Include="UpdateControls.XAML, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\UpdateControls.2.3.1.0\lib\wp80\UpdateControls.XAML.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
