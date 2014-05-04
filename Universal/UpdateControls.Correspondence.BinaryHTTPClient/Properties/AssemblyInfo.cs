@@ -4,4 +4,4 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("UpdateControls.Correspondence.BinaryHTTPClient")]
-[assembly: AssemblyProduct("UpdateControls.Correspondence.BinaryHTTPClient")]
+[assembly: AssemblyDescription("")]

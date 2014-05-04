@@ -103,17 +103,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\..\Portable\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
-      <Project>{8a77436e-f210-44cc-8005-b6f607d2845c}</Project>
-      <Name>UpdateControls.Correspondence</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj">
-      <Project>{8d66c8b3-6c9b-4e19-8151-5a88888e83f4}</Project>
-      <Name>UpdateControls.Correspondence.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\SolutionItems\AppVersionInfo.cs">
       <Link>Properties\AppVersionInfo.cs</Link>
     </Compile>
@@ -149,6 +138,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\UpdateControls.2.3.1.0\lib\win81\UpdateControls.XAML.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Universal\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj">
+      <Project>{073a0cc5-f3f4-485d-bccb-9cd630aea4a9}</Project>
+      <Name>UpdateControls.Correspondence.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Universal\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj">
+      <Project>{5fd836bd-9674-47c2-a93c-78290d8949db}</Project>
+      <Name>UpdateControls.Correspondence</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

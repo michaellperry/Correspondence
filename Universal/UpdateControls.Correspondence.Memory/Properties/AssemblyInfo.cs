@@ -4,4 +4,4 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("UpdateControls.Correspondence.Memory")]
-[assembly: AssemblyProduct("UpdateControls.Correspondence.Memory")]
+[assembly: AssemblyDescription("")]
