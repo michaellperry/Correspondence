@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B144693D-EB00-476A-B5BB-713A84F5021D}</ProjectGuid>
+    <ProjectGuid>{2E107292-4DCE-4F96-8FA8-1390F76A3919}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UpdateControls.Correspondence.FileStream</RootNamespace>
