@@ -49,6 +49,8 @@ namespace UpdateControls.Correspondence.Factual.AST
 
         public Condition PurgeCondition { get; set; }
 
+        public Path FromPath { get; set; }
+
         public IEnumerable<FactMember> Members
         {
             get { return _members; }

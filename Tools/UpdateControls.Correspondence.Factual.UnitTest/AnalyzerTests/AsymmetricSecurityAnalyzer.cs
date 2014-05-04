@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using UpdateControls.Correspondence.Factual.AST;
 using UpdateControls.Correspondence.Factual.Compiler;
 using UpdateControls.Correspondence.Factual.Metadata;
+using AST = UpdateControls.Correspondence.Factual.AST;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 {
@@ -84,6 +85,17 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                 .AnalyzedHasNoError()
                 .HasClassNamed("PrivateBoard");
             Assert.IsTrue(user.HasSharedKey);
+        }
+
+        [TestMethod]
+        public void WhenFrom_HasSignedByQuery()
+        {
+            Fact message = new Fact("Message", 4);
+            AST.Field sender = new AST.Field(6, "sender", new DataTypeFact("Individual", AST.Cardinality.One, 6), false, null);
+            message.AddMember(sender);
+            message.FromPath = new AST.Path(true, "sender");
+            Namespace root = new Namespace("IM.Model", 1, new List<Header>(), "us_1_1")
+                .AddFact(message);
         }
     }
 }
