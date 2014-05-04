@@ -5,20 +5,9 @@ VisualStudioVersion = 12.0.30324.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{89730772-EEEA-4D00-99C9-70F8270110B1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{24482362-CCBD-43EF-8892-8ABE12BC6912}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Portable\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{8A77436E-F210-44CC-8005-B6F607D2845C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Portable\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{49541974-2B82-493E-B17F-5EA54EFC87AB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.Notifications", "WindowsStore\UpdateControls.Correspondence.BinaryHTTPClient.Notifications\UpdateControls.Correspondence.BinaryHTTPClient.Notifications.csproj", "{31BAF759-C314-4040-AB96-A180CAFB2541}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "WindowsStore\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{B144693D-EB00-476A-B5BB-713A84F5021D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsPhone", "WindowsPhone", "{5D1B1070-E97F-4949-967A-C41EA1D06595}"
 EndProject

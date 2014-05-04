@@ -80,11 +80,12 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\portable-net45+wp80+wpa81+win\"
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\portable-net45+wp80+win80+MonoAndroid+MonTouch\"
 xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\net45\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\wp8\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\wpa81\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\win81\"</PostBuildEvent>
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\wp80\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\win80\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\MonoAndroid\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\App.Core\lib\MonTouch\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

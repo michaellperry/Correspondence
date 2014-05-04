@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Correspondence</id>
-    <version>2.2.0.11</version>
+    <version>2.2.1.0</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <description>
@@ -13,7 +13,7 @@
       Configure all clients to use a common distributor. The distributor is available at http://github.com/michaellperry/correspondencedistributor.
     </summary>
     <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>
-    <projectUrl>http://correspondence.codeplex.com/</projectUrl>
+    <projectUrl>http://correspondencecloud.com/</projectUrl>
     <iconUrl>http://qedcode.com/images/logo32.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <language>en-US</language>
