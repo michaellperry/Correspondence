@@ -16,14 +16,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Corresponden
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Portable\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{49541974-2B82-493E-B17F-5EA54EFC87AB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsStore", "WindowsStore", "{B8A7198E-C84D-41CA-AAFC-EBF0DC07CD4E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.Notifications", "WindowsStore\UpdateControls.Correspondence.BinaryHTTPClient.Notifications\UpdateControls.Correspondence.BinaryHTTPClient.Notifications.csproj", "{31BAF759-C314-4040-AB96-A180CAFB2541}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "WindowsStore\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{B144693D-EB00-476A-B5BB-713A84F5021D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsPhone", "WindowsPhone", "{5D1B1070-E97F-4949-967A-C41EA1D06595}"
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsPhone8", "WindowsPhone8", "{5D1B1070-E97F-4949-967A-C41EA1D06595}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Portable\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{04367BF4-1277-4674-B851-3606AB457039}"
 EndProject
