@@ -26,8 +26,6 @@ namespace $rootnamespace$
             var storage = new FileStreamStorageStrategy();
             var http = new HTTPConfigurationProvider();
             var communication = new BinaryHTTPAsynchronousCommunicationStrategy(http);
-            var notification = new WindowsPhoneNotificationStrategy(http);
-            communication.SetNotificationStrategy(notification);
 
             _community = new Community(storage);
             _community.AddAsynchronousCommunicationStrategy(communication);
@@ -40,13 +38,6 @@ namespace $rootnamespace$
             _community.FactAdded += delegate
             {
                 Synchronize();
-            };
-
-            // Synchronize when the network becomes available.
-            System.Net.NetworkInformation.NetworkChange.NetworkAddressChanged += (sender, e) =>
-            {
-                if (NetworkInterface.GetIsNetworkAvailable())
-                    Synchronize();
             };
 
             // And synchronize on startup or resume.
