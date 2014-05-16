@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 using UpdateControls.Correspondence.Factual.AST;
 
 namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
@@ -48,8 +49,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "    Tag tag;        " +
                 "}                   ";
             Namespace result = ParseToNamespace(source);
-            Field tag = result.WithFactNamed("Message").WithFieldNamed("tag");
-            Assert.AreEqual(FieldSecurityModifier.None, tag.SecurityModifier);
+            Fact message = result.WithFactNamed("Message");
+            Assert.IsNull(message.ToPath);
         }
 
         [TestMethod]
@@ -58,12 +59,18 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             string code =
                 "namespace IM.Model;    " +
                 "fact Message {         " +
-                "key:               " +
-                "    to User recipient; " +
+                "key:                   " +
+                "    User recipient;    " +
+                "    to recipient;      " +
                 "}                      ";
             Namespace result = ParseToNamespace(code);
-            Field recipient = result.WithFactNamed("Message").WithFieldNamed("recipient");
-            Assert.AreEqual(FieldSecurityModifier.To, recipient.SecurityModifier);
+            Fact message = result.WithFactNamed("Message");
+            Path path = message.ToPath;
+            Assert.IsNotNull(path);
+            Assert.IsTrue(path.Absolute, "The collaborator path should be absolute.");
+            Assert.AreEqual(1, path.Segments.Count());
+            string segment = path.Segments.Single();
+            Assert.AreEqual("recipient", segment);
         }
 
         [TestMethod]
@@ -77,7 +84,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "}                     ";
             Namespace result = ParseToNamespace(code);
             Field sender = result.WithFactNamed("Message").WithFieldNamed("sender");
-            Assert.AreEqual(FieldSecurityModifier.From, sender.SecurityModifier);
+            Assert.Fail();
         }
 
         [TestMethod]

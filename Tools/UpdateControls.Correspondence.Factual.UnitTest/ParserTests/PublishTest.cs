@@ -58,29 +58,6 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         }
 
         [TestMethod]
-        public void CanConditionallyPublishToAPrincipal()
-        {
-            string code =
-                "namespace IM.Model;               " +
-                "fact Message {                    " +
-                "key:                              " +
-                "    publish to User recipient     " +
-                "        where not this.isDeleted; " +
-                "}                                 ";
-            Namespace result = ParseToNamespace(code);
-            Field recipient = result.WithFactNamed("Message").WithFieldNamed("recipient");
-            Assert.AreEqual(FieldSecurityModifier.To, recipient.SecurityModifier);
-            Assert.IsTrue(recipient.Publish, "The recipient field is not a pivot.");
-            Condition condition = recipient.PublishCondition;
-            Assert.IsNotNull(condition);
-            Assert.AreEqual(1, condition.Clauses.Count());
-            Clause clause = condition.Clauses.Single();
-            Assert.AreEqual(ConditionModifier.Negative, clause.Existence);
-            Assert.AreEqual("this", clause.Name);
-            Assert.AreEqual("isDeleted", clause.PredicateName);
-        }
-
-        [TestMethod]
         public void MutableFieldsMayNotHavePublishConditions()
         {
             string code =

@@ -14,8 +14,6 @@ namespace UpdateControls.Correspondence.Factual.AST
             _publishCondition = publishCondition;
         }
 
-        public FieldSecurityModifier SecurityModifier { get; set; }
-
         public bool Publish
         {
             get { return _publish; }

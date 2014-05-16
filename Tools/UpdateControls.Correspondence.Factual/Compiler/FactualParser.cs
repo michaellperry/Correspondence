@@ -149,7 +149,25 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.CloseBracket), "A predicate must contain sets.",
                 (predicate, closeBracket) => (FactMember)predicate);
 
-            // field -> "publish"? ("from" | "to")? type identifier publish_condition? ";"
+            // collaborator -> ("from" | "to") local_path ";"
+            // local_path -> identifier ("." identifier)*
+            var localPathRule = Many(
+                Reduce(
+                    Terminal(Symbol.Identifier),
+                    (id) => new Path(true, null).AddSegment(id.Value)),
+                Sequence(
+                    Terminal(Symbol.Dot),
+                    Terminal(Symbol.Identifier), "Provide a predecessor after the dot.",
+                    (dot, segment) => segment.Value),
+                (path, segment) => path.AddSegment(segment));
+            var collaboratorRule = Sequence(
+                Terminal(Symbol.To),
+                localPathRule, "Specify a path for the collaborator.",
+                Terminal(Symbol.Semicolon), "Terminate the path with a semicolon.",
+                (modifier, path, semi) => (Func<FactSection, FactSection>)(keySection =>
+                    keySection.SetToPath(path)));
+
+            // field -> "publish"? type identifier publish_condition? ";"
             // publish_clause -> "not"? "this" "." identifier
             // publish_condition -> "where" clause ("and" clause)*
             var publishClauseRule = Sequence(
@@ -169,19 +187,17 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (and, clause) => clause),
                 (condition, clause) => condition.AddClause(clause));
             var simpleFieldRule = Sequence(
-                Optional(Terminal(Symbol.To) | Terminal(Symbol.From), null),
-                typeRule, "Defect.",
+                typeRule,
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Terminal(Symbol.Semicolon), "Missing semicolon after field.",
-                (modifierToken, type, nameToken, semicolon) => CreateField(modifierToken, type, nameToken.Value, false, null));
+                (type, nameToken, semicolon) => CreateField(type, nameToken.Value, false, null));
             var publishFieldRule = Sequence(
                 Terminal(Symbol.Publish),
-                Optional(Terminal(Symbol.To) | Terminal(Symbol.From), null), "Defect.",
                 typeRule, "Provide a field type.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
                 Optional(publishConditionRule, new Condition()), "Defect.",
                 Terminal(Symbol.Semicolon), "Missing semicolon after field.",
-                (publish, modifierToken, type, nameToken, condition, semicolon) => CreateField(modifierToken, type, nameToken.Value, true, condition));
+                (publish, type, nameToken, condition, semicolon) => CreateField(type, nameToken.Value, true, condition));
             var fieldRule = simpleFieldRule | publishFieldRule;
 
             // query -> type identifier "{" set* "}"
@@ -212,7 +228,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Terminal(Symbol.Semicolon), "Terminate a purge condition with a semicolon.",
                 (condition, semicolonToken) => condition);
 
-            // key_member -> modifier | field
+            // key_member -> modifier | field | collaborator
             // key_section -> "key" ":" key_member*
             var principalModifierRule = Sequence(
                 Terminal(Symbol.Principal),
@@ -233,7 +249,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     Terminal(Symbol.Key),
                     Terminal(Symbol.Colon), "Missing \":\" after \"key\".",
                     (key, colon) => new FactSection()),
-                keyMemberRule | modifierRule, (keySection, keyMember) => keyMember(keySection));
+                keyMemberRule | modifierRule | collaboratorRule, (keySection, keyMember) => keyMember(keySection));
 
             // mutable_member -> "publish"? type identifier ";"
             // mutable_section -> "mutable" ":" mutable_member*
@@ -357,16 +373,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             return new Query(nameToken.Value, factType.FactName, factType.LineNumber);
         }
 
-        private static FactMember CreateField(Token<Symbol> modifierToken, DataType dataType, string name, bool publish, Condition publishCondition)
+        private static FactMember CreateField(DataType dataType, string name, bool publish, Condition publishCondition)
         {
             Field field = new Field(dataType.LineNumber, name, dataType, publish, publishCondition);
-            if (modifierToken != null)
-            {
-                if (modifierToken.Symbol == Symbol.From)
-                    field.SecurityModifier = FieldSecurityModifier.From;
-                else if (modifierToken.Symbol == Symbol.To)
-                    field.SecurityModifier = FieldSecurityModifier.To;
-            }
             return field;
         }
     }
