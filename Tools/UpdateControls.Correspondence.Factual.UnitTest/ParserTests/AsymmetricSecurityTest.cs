@@ -79,12 +79,17 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             string code =
                 "namespace IM.Model;   " +
                 "fact Message {        " +
-                "key:               " +
-                "    from User sender; " +
+                "key:                  " +
+                "    User sender;      " +
+                "    from sender;      " +
                 "}                     ";
             Namespace result = ParseToNamespace(code);
-            Field sender = result.WithFactNamed("Message").WithFieldNamed("sender");
-            Assert.Fail();
+            Fact message = result.WithFactNamed("Message");
+            Field sender = message.WithFieldNamed("sender");
+            Path fromPath = message.FromPath;
+            Assert.IsTrue(fromPath.Absolute, "The collaborator path should be absolute.");
+            Assert.AreEqual(1, fromPath.Segments.Count());
+            Assert.AreEqual("sender", fromPath.Segments.Single());
         }
 
         [TestMethod]

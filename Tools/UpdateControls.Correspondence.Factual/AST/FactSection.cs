@@ -8,6 +8,7 @@ namespace UpdateControls.Correspondence.Factual.AST
         private bool _lock;
         private bool _principal;
         private Path _toPath;
+        private Path _fromPath;
         private List<FactMember> _members = new List<FactMember>();
 
         public FactSection AddMember(FactMember keyMember)
@@ -40,6 +41,12 @@ namespace UpdateControls.Correspondence.Factual.AST
             return this;
         }
 
+        public FactSection SetFromPath(Path path)
+        {
+            _fromPath = path;
+            return this;
+        }
+
         public Fact AddTo(Fact fact)
         {
             foreach (FactMember member in _members)
@@ -52,6 +59,8 @@ namespace UpdateControls.Correspondence.Factual.AST
                 fact.Principal = true;
             if (_toPath != null)
                 fact.ToPath = _toPath;
+            if (_fromPath != null)
+                fact.FromPath = _fromPath;
             return fact;
         }
     }

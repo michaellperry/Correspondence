@@ -161,11 +161,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (dot, segment) => segment.Value),
                 (path, segment) => path.AddSegment(segment));
             var collaboratorRule = Sequence(
-                Terminal(Symbol.To),
+                Terminal(Symbol.To) | Terminal(Symbol.From),
                 localPathRule, "Specify a path for the collaborator.",
                 Terminal(Symbol.Semicolon), "Terminate the path with a semicolon.",
                 (modifier, path, semi) => (Func<FactSection, FactSection>)(keySection =>
-                    keySection.SetToPath(path)));
+                    modifier.Value == "to" ? keySection.SetToPath(path) : keySection.SetFromPath(path)));
 
             // field -> "publish"? type identifier publish_condition? ";"
             // publish_clause -> "not"? "this" "." identifier
