@@ -107,5 +107,25 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             var fact = result.WithFactNamed("PrivateBoard");
             Assert.IsTrue(fact.Lock);
         }
+
+        [TestMethod]
+        public void WhenUnlock_PathIsRecognized()
+        {
+            string code =
+                "namespace IM.Model;  " +
+                "fact Membership {    " +
+                "key:                 " +
+                "    Project project; " +
+                "    unlock project;  " +
+                "}                    ";
+            Namespace result = AssertNoErrors(code);
+
+            var fact = result.WithFactNamed("Membership");
+            Path unlockPath = fact.UnlockPath;
+            Assert.IsNotNull(unlockPath, "The unlock path should be recognized.");
+            Assert.IsTrue(unlockPath.Absolute, "The unlock path should be absolute.");
+            Assert.AreEqual(1, unlockPath.Segments.Count());
+            Assert.AreEqual("project", unlockPath.Segments.Single());
+        }
     }
 }

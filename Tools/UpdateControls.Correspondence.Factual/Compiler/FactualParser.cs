@@ -55,6 +55,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 .AddSymbol("subscribe", Symbol.Subscribe)
                 .AddSymbol("purge", Symbol.Purge)
                 .AddSymbol("lock", Symbol.Lock)
+                .AddSymbol("unlock", Symbol.Unlock)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)

@@ -51,6 +51,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
         Subscribe,
         Purge,
         Lock,
-        Binary
+        Binary,
+        Unlock
     }
 }

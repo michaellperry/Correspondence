@@ -53,6 +53,8 @@ namespace UpdateControls.Correspondence.Factual.AST
 
         public Path ToPath { get; set; }
 
+        public Path UnlockPath { get; set; }
+
         public IEnumerable<FactMember> Members
         {
             get { return _members; }
