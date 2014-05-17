@@ -30,11 +30,11 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         public void WhenIdentity_IdentityIsRecognizes()
         {
             Namespace result = ParseToNamespace(
-                "namespace IM.Model; " +
-                "fact User {         " +
-                "key:                " +
-                "    principal;      " +
-                "}                   ");
+                "namespace IM.Model;\n" +
+                "fact User {        \n" +
+                "key:               \n" +
+                "    principal;     \n" +
+                "}                  \n");
             Fact user = result.WithFactNamed("User");
             Assert.IsTrue(user.Principal);
         }
@@ -43,12 +43,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         public void WhenTwoIdentities_SyntaxError()
         {
             var error = ParseToError(
-                "namespace IM.Model; " +
-                "fact User {         " +
-                "key:                " +
-                "    principal;      " +
-                "    principal;      " +
-                "}                   ");
+                "namespace IM.Model;\n" +
+                "fact User {        \n" +
+                "key:               \n" +
+                "    principal;     \n" +
+                "    principal;     \n" +
+                "}                  \n");
             Assert.AreEqual("The principal keyword can only be applied once.", error.Message);
             Assert.AreEqual(5, error.LineNumber);
         }
