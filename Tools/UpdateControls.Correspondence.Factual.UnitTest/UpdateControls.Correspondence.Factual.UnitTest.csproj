@@ -73,7 +73,7 @@
   <ItemGroup>
     <Compile Include="AcceptanceTests\AsymmetricSecurityAcceptanceTest.cs" />
     <Compile Include="AnalyzerTests\AnalyzerTestExtensions.cs" />
-    <Compile Include="AnalyzerTests\AsymmetricSecurityAnalyzer.cs" />
+    <Compile Include="AnalyzerTests\AsymmetricSecurityAnalyzerTest.cs" />
     <Compile Include="AnalyzerTests\MutableTest.cs" />
     <Compile Include="AnalyzerTests\PredicateTest.cs" />
     <Compile Include="AnalyzerTests\FactTest.cs" />

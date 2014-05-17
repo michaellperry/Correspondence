@@ -11,7 +11,7 @@ using AST = UpdateControls.Correspondence.Factual.AST;
 namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
 {
     [TestClass]
-    public class AsymmetricSecurityAnalyzer
+    public class AsymmetricSecurityAnalyzerTest
     {
         [TestMethod]
         public void WhenPrincipal_MustHaveAStrength()
@@ -90,12 +90,62 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         [TestMethod]
         public void WhenFrom_HasSignedByQuery()
         {
-            Fact message = new Fact("Message", 4);
-            AST.Field sender = new AST.Field(6, "sender", new DataTypeFact("Individual", AST.Cardinality.One, 6), false, null);
-            message.AddMember(sender);
-            message.FromPath = new AST.Path(true, "sender");
-            Namespace root = new Namespace("IM.Model", 1, new List<Header>(), "us_1_1")
-                .AddFact(message);
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 3))
+                .AddFact(new Fact("Message", 4)
+                    .AddMember(PredecessorField(
+                        One("Individual"),
+                        "sender"))
+                    .SetFromPath(AbsolutePath()
+                        .AddSegment("sender")
+                    )
+                );
+
+            var message = root
+                .AnalyzedHasNoError()
+                .HasClassNamed("Message");
+            Metadata.Join signedBy = message.SignedBy;
+            Assert.IsNotNull(signedBy, "The signer shold be set.");
+            Assert.AreEqual(Direction.Predecessors, signedBy.Direction);
+            Assert.IsFalse(signedBy.Conditions.Any(), "The signer should be unconditional.");
+            Assert.AreEqual("sender", signedBy.Name);
+            Assert.AreEqual("Individual", signedBy.Type);
+        }
+
+        [TestMethod]
+        public void WhenTo_HasEncryptedForQuery()
+        {
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Message", 4)
+                    .AddMember(PredecessorField(
+                        One("Individual"),
+                        "recipient"))
+                    .SetFromPath(AbsolutePath()
+                        .AddSegment("recipient")
+                    )
+                );
+
+            Assert.Fail();
+        }
+
+        private static Namespace SecureNamespace()
+        {
+            return new Namespace("IM.Model", 1, new List<Header>(), "us_1_1");
+        }
+
+        private static DataTypeFact One(string factName)
+        {
+            return new DataTypeFact(factName, AST.Cardinality.One, 6);
+        }
+
+        private static AST.Path AbsolutePath()
+        {
+            return new AST.Path(absolute: true, relativeTo: null);
+        }
+
+        private static AST.Field PredecessorField(DataType dataType, string name)
+        {
+            return new AST.Field(6, name, dataType, false, null);
         }
     }
 }

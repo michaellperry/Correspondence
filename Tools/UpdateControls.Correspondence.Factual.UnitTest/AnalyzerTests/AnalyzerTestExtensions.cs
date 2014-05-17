@@ -31,6 +31,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             return fact;
         }
 
+        public static Fact SetFromPath(this Fact fact, Path path)
+        {
+            fact.FromPath = path;
+            return fact;
+        }
+
         public static void AnalyzedHasError(this Namespace root, int lineNumber, string message)
         {
             Analyzer analyzer = new Analyzer(root);

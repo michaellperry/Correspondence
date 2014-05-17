@@ -6,10 +6,8 @@ namespace UpdateControls.Correspondence.Factual.Metadata
     public class Class
     {
         private string _name;
-        private int _version;
         private bool _publicKey;
         private bool _sharedKey;
-        private bool _unique;
         private List<Field> _fields = new List<Field>();
         private List<Predecessor> _predecessors = new List<Predecessor>();
         private List<Query> _queries = new List<Query>();
@@ -26,17 +24,11 @@ namespace UpdateControls.Correspondence.Factual.Metadata
             get { return _name; }
         }
 
-        public int Version
-        {
-            get { return _version; }
-            set { _version = value; }
-        }
+        public int Version { get; set; }
 
-        public bool Unique
-        {
-            get { return _unique; }
-            set { _unique = value; }
-        }
+        public bool Unique { get; set; }
+
+        public Join SignedBy { get; set; }
 
         public IEnumerable<Field> Fields
         {
