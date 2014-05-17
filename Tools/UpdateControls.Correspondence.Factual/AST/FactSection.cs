@@ -19,14 +19,18 @@ namespace UpdateControls.Correspondence.Factual.AST
             return this;
         }
 
-        public FactSection SetUnique()
+        public FactSection SetUnique(int lineNumber)
         {
+            if (_unique)
+                throw new ParserException("The unique modifier can only be applied once.", lineNumber);
             _unique = true;
             return this;
         }
 
-        public FactSection SetLock()
+        public FactSection SetLock(int lineNumber)
         {
+            if (_lock)
+                throw new ParserException("The lock modifier can only be applied once.", lineNumber);
             _lock = true;
             return this;
         }
@@ -34,25 +38,31 @@ namespace UpdateControls.Correspondence.Factual.AST
         public FactSection SetPrincipal(int lineNumber)
         {
             if (_principal)
-                throw new ParserException("The principal keyword can only be applied once.", lineNumber);
+                throw new ParserException("The principal modifier can only be applied once.", lineNumber);
             _principal = true;
             return this;
         }
 
-        public FactSection SetToPath(Path path)
+        public FactSection SetToPath(Path path, int lineNumber)
         {
+            if (_toPath != null)
+                throw new ParserException("The to path can only be defined once.", lineNumber);
             _toPath = path;
             return this;
         }
 
-        public FactSection SetFromPath(Path path)
+        public FactSection SetFromPath(Path path, int lineNumber)
         {
+            if (_fromPath != null)
+                throw new ParserException("The from path can only be defined once.", lineNumber);
             _fromPath = path;
             return this;
         }
 
-        public FactSection SetUnlockPath(Path path)
+        public FactSection SetUnlockPath(Path path, int lineNumber)
         {
+            if (_unlockPath != null)
+                throw new ParserException("The unlock path can only be defined once.", lineNumber);
             _unlockPath = path;
             return this;
         }

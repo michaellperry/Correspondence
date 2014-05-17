@@ -166,9 +166,9 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 localPathRule, "Specify a path for the collaborator.",
                 Terminal(Symbol.Semicolon), "Terminate the path with a semicolon.",
                 (modifier, path, semi) => (Func<FactSection, FactSection>)(keySection =>
-                    modifier.Value == "to"   ? keySection.SetToPath(path) :
-                    modifier.Value == "from" ? keySection.SetFromPath(path) :
-                        keySection.SetUnlockPath(path)));
+                    modifier.Value == "to"   ? keySection.SetToPath(path, modifier.LineNumber) :
+                    modifier.Value == "from" ? keySection.SetFromPath(path, modifier.LineNumber) :
+                        keySection.SetUnlockPath(path, modifier.LineNumber)));
 
             // field -> "publish"? type identifier publish_condition? ";"
             // publish_clause -> "not"? "this" "." identifier
@@ -240,11 +240,11 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             var uniqueModifierRule = Sequence(
                 Terminal(Symbol.Unique),
                 Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
-                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetUnique()));
+                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetUnique(modifier.LineNumber)));
             var lockModifierRule = Sequence(
                 Terminal(Symbol.Lock),
                 Terminal(Symbol.Semicolon), "The lock modifier is followed by a semicolon.",
-                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetLock()));
+                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetLock(modifier.LineNumber)));
             var modifierRule = uniqueModifierRule | lockModifierRule | principalModifierRule;
             var keyMemberRule = Reduce(fieldRule, keyMember => (Func<FactSection, FactSection>)(keySection => keySection.AddMember(keyMember)));
             var keySectionRule = Many(

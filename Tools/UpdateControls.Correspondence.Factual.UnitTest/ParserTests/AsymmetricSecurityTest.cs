@@ -27,7 +27,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         }
 
         [TestMethod]
-        public void WhenIdentity_IdentityIsRecognizes()
+        public void WhenPrincipal_IdentityIsRecognizes()
         {
             Namespace result = ParseToNamespace(
                 "namespace IM.Model;\n" +
@@ -40,7 +40,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         }
 
         [TestMethod]
-        public void WhenTwoIdentities_SyntaxError()
+        public void WhenTwoPrincipals_SyntaxError()
         {
             var error = ParseToError(
                 "namespace IM.Model;\n" +
@@ -49,7 +49,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
                 "    principal;     \n" +
                 "    principal;     \n" +
                 "}                  \n");
-            Assert.AreEqual("The principal keyword can only be applied once.", error.Message);
+            Assert.AreEqual("The principal modifier can only be applied once.", error.Message);
             Assert.AreEqual(5, error.LineNumber);
         }
 
@@ -71,12 +71,12 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         public void WhenTo_ToIsRecognized()
         {
             string code =
-                "namespace IM.Model;    " +
-                "fact Message {         " +
-                "key:                   " +
-                "    User recipient;    " +
-                "    to recipient;      " +
-                "}                      ";
+                "namespace IM.Model;\n" +
+                "fact Message {     \n" +
+                "key:               \n" +
+                "    User recipient;\n" +
+                "    to recipient;  \n" +
+                "}                  \n";
             Namespace result = ParseToNamespace(code);
             Fact message = result.WithFactNamed("Message");
             Path path = message.ToPath;
@@ -88,15 +88,31 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         }
 
         [TestMethod]
+        public void WhenTwoTos_SyntaxError()
+        {
+            string code =
+                "namespace IM.Model;\n" +
+                "fact Message {     \n" +
+                "key:               \n" +
+                "    User recipient;\n" +
+                "    to recipient;  \n" +
+                "    to recipient;  \n" +
+                "}                  \n";
+            var error = ParseToError(code);
+            Assert.AreEqual(6, error.LineNumber);
+            Assert.AreEqual("The to path can only be defined once.", error.Message);
+        }
+
+        [TestMethod]
         public void WhenFrom_FromIsRecognized()
         {
             string code =
-                "namespace IM.Model;   " +
-                "fact Message {        " +
-                "key:                  " +
-                "    User sender;      " +
-                "    from sender;      " +
-                "}                     ";
+                "namespace IM.Model;\n" +
+                "fact Message {     \n" +
+                "key:               \n" +
+                "    User sender;   \n" +
+                "    from sender;   \n" +
+                "}                  \n";
             Namespace result = ParseToNamespace(code);
             Fact message = result.WithFactNamed("Message");
             Field sender = message.WithFieldNamed("sender");
@@ -107,15 +123,31 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         }
 
         [TestMethod]
+        public void WhenTwoFroms_SyntaxError()
+        {
+            string code =
+                "namespace IM.Model;\n" +
+                "fact Message {     \n" +
+                "key:               \n" +
+                "    User sender;   \n" +
+                "    from sender;   \n" +
+                "    from sender;   \n" +
+                "}                  \n";
+            var error = ParseToError(code);
+            Assert.AreEqual(6, error.LineNumber);
+            Assert.AreEqual("The from path can only be defined once.", error.Message);
+        }
+
+        [TestMethod]
         public void WhenLock_LockIsRecognized()
         {
             string code =
-                "namespace IM.Model;      " +
-                "fact PrivateBoard {      " +
-                "key:                     " +
-                "    unique;              " +
-                "    lock;                " +
-                "}                        ";
+                "namespace IM.Model;\n" +
+                "fact PrivateBoard {\n" +
+                "key:               \n" +
+                "    unique;        \n" +
+                "    lock;          \n" +
+                "}                  \n";
             Namespace result = AssertNoErrors(code);
 
             var fact = result.WithFactNamed("PrivateBoard");
@@ -123,15 +155,32 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
         }
 
         [TestMethod]
+        public void WhenLockTwice_SyntaxError()
+        {
+            string code =
+                "namespace IM.Model;\n" +
+                "fact PrivateBoard {\n" +
+                "key:               \n" +
+                "    unique;        \n" +
+                "    lock;          \n" +
+                "    lock;          \n" +
+                "}                  \n";
+
+            var error = ParseToError(code);
+            Assert.AreEqual(6, error.LineNumber);
+            Assert.AreEqual("The lock modifier can only be applied once.", error.Message);
+        }
+
+        [TestMethod]
         public void WhenUnlock_PathIsRecognized()
         {
             string code =
-                "namespace IM.Model;  " +
-                "fact Membership {    " +
-                "key:                 " +
-                "    Project project; " +
-                "    unlock project;  " +
-                "}                    ";
+                "namespace IM.Model; \n" +
+                "fact Membership {   \n" +
+                "key:                \n" +
+                "    Project project;\n" +
+                "    unlock project; \n" +
+                "}                   \n";
             Namespace result = AssertNoErrors(code);
 
             var fact = result.WithFactNamed("Membership");
@@ -140,6 +189,23 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.ParserTests
             Assert.IsTrue(unlockPath.Absolute, "The unlock path should be absolute.");
             Assert.AreEqual(1, unlockPath.Segments.Count());
             Assert.AreEqual("project", unlockPath.Segments.Single());
+        }
+
+        [TestMethod]
+        public void WhenUnlockTwice_SyntaxError()
+        {
+            string code =
+                "namespace IM.Model; \n" +
+                "fact Membership {   \n" +
+                "key:                \n" +
+                "    Project project;\n" +
+                "    unlock project; \n" +
+                "    unlock project; \n" +
+                "}                   \n";
+
+            var error = ParseToError(code);
+            Assert.AreEqual(6, error.LineNumber);
+            Assert.AreEqual("The unlock path can only be defined once.", error.Message);
         }
     }
 }
