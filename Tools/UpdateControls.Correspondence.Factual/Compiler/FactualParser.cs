@@ -162,11 +162,13 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                     (dot, segment) => segment.Value),
                 (path, segment) => path.AddSegment(segment));
             var collaboratorRule = Sequence(
-                Terminal(Symbol.To) | Terminal(Symbol.From),
+                Terminal(Symbol.To) | Terminal(Symbol.From) | Terminal(Symbol.Unlock),
                 localPathRule, "Specify a path for the collaborator.",
                 Terminal(Symbol.Semicolon), "Terminate the path with a semicolon.",
                 (modifier, path, semi) => (Func<FactSection, FactSection>)(keySection =>
-                    modifier.Value == "to" ? keySection.SetToPath(path) : keySection.SetFromPath(path)));
+                    modifier.Value == "to"   ? keySection.SetToPath(path) :
+                    modifier.Value == "from" ? keySection.SetFromPath(path) :
+                        keySection.SetUnlockPath(path)));
 
             // field -> "publish"? type identifier publish_condition? ";"
             // publish_clause -> "not"? "this" "." identifier
@@ -234,7 +236,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             var principalModifierRule = Sequence(
                 Terminal(Symbol.Principal),
                 Terminal(Symbol.Semicolon), "The principal modifier is followed by a semicolon.",
-                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetPrincipal()));
+                (modifier, semicolon) => (Func<FactSection, FactSection>)(keySection => keySection.SetPrincipal(modifier.LineNumber)));
             var uniqueModifierRule = Sequence(
                 Terminal(Symbol.Unique),
                 Terminal(Symbol.Semicolon), "The unique modifier is followed by a semicolon.",
