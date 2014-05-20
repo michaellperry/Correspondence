@@ -88,6 +88,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             factClass.HasPublicKey = fact.Principal;
             factClass.HasSharedKey = fact.Lock;
 
+            factClass.SignedBy = AnalyzePath(fact, fact.FromPath);
+
             ComputeVersionOfFact(factClass);
         }
 
@@ -390,6 +392,21 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                         setType.Name));
                 }
             }
+        }
+
+        private Target.Path AnalyzePath(Source.Fact fact, Source.Path sourcePath)
+        {
+            if (sourcePath == null)
+                return null;
+
+            var newPath = new Target.Path();
+            AST.Fact walkingFact = fact;
+            foreach (var predecessorInfo in WalkSegments(ref walkingFact, sourcePath.Segments, sourcePath.LineNumber))
+            {
+                AST.DataTypeFact type = predecessorInfo.Field.Type as AST.DataTypeFact;
+                newPath.AddSegment(predecessorInfo.Field.Name, type.FactName);
+            }
+            return newPath;
         }
 
         private List<PredecessorInfo> WalkSegments(ref Source.Fact fact, IEnumerable<string> segments, int lineNumber)

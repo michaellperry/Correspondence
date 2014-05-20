@@ -96,7 +96,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                     .AddMember(PredecessorField(
                         One("Individual"),
                         "sender"))
-                    .SetFromPath(AbsolutePath()
+                    .SetFromPath(AbsolutePath(6)
                         .AddSegment("sender")
                     )
                 );
@@ -104,12 +104,52 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             var message = root
                 .AnalyzedHasNoError()
                 .HasClassNamed("Message");
-            Metadata.Join signedBy = message.SignedBy;
-            Assert.IsNotNull(signedBy, "The signer shold be set.");
-            Assert.AreEqual(Direction.Predecessors, signedBy.Direction);
-            Assert.IsFalse(signedBy.Conditions.Any(), "The signer should be unconditional.");
-            Assert.AreEqual("sender", signedBy.Name);
-            Assert.AreEqual("Individual", signedBy.Type);
+            Metadata.Path signedBy = message.SignedBy;
+            Assert.IsNotNull(signedBy, "The signer should be set.");
+            IEnumerable<Metadata.Segment> segments = signedBy.Segments;
+            Assert.AreEqual(1, segments.Count());
+            var segment = segments.Single();
+            Assert.AreEqual("sender", segment.Name);
+            Assert.AreEqual("Individual", segment.Type);
+        }
+
+        [TestMethod]
+        public void WhenFromNotAMember_Error()
+        {
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 3))
+                .AddFact(new Fact("Message", 4)
+                    .SetFromPath(AbsolutePath(6)
+                        .AddSegment("sender")
+                    )
+                );
+
+            root.AnalyzedHasError(6, "The member \"Message.sender\" is not defined.");
+        }
+
+        [TestMethod]
+        public void WhenFromNotAPredecessor_Error()
+        {
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 3))
+                .AddFact(new Fact("Message", 4)
+                    .AddMember(PredecessorField(
+                        One("Individual"),
+                        "sentBy"))
+                    .SetFromPath(AbsolutePath(6)
+                        .AddSegment("sender")
+                    )
+                    .AddMember(new AST.Query("sender", "Individual", 8)
+                        .AddSet(new AST.Set("i", "Individual",
+                            new AST.Path(true, null, 9)
+                                .AddSegment("sentBy"),
+                            new AST.Path(false, "i", 10),
+                            null, 9)
+                        )
+                    )
+                );
+
+            root.AnalyzedHasError(6, "The member \"Message.sender\" is not a field.");
         }
 
         [TestMethod]
@@ -120,7 +160,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
                     .AddMember(PredecessorField(
                         One("Individual"),
                         "recipient"))
-                    .SetFromPath(AbsolutePath()
+                    .SetFromPath(AbsolutePath(6)
                         .AddSegment("recipient")
                     )
                 );
@@ -138,9 +178,9 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             return new DataTypeFact(factName, AST.Cardinality.One, 6);
         }
 
-        private static AST.Path AbsolutePath()
+        private static AST.Path AbsolutePath(int lineNumber)
         {
-            return new AST.Path(absolute: true, relativeTo: null);
+            return new AST.Path(absolute: true, relativeTo: null, lineNumber: lineNumber);
         }
 
         private static AST.Field PredecessorField(DataType dataType, string name)

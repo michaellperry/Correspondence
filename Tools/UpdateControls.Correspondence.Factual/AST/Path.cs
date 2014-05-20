@@ -8,11 +8,13 @@ namespace UpdateControls.Correspondence.Factual.AST
         private bool _absolute;
         private string _relativeTo;
         private List<string> _segments = new List<string>();
+        private int _lineNumber;
 
-        public Path(bool absolute, string relativeTo)
+        public Path(bool absolute, string relativeTo, int lineNumber)
         {
             _absolute = absolute;
             _relativeTo = relativeTo;
+            _lineNumber = lineNumber;
         }
 
         public bool Absolute
@@ -34,6 +36,11 @@ namespace UpdateControls.Correspondence.Factual.AST
         {
             _segments.Add(segment);
             return this;
+        }
+
+        public int LineNumber
+        {
+            get { return _lineNumber; }
         }
     }
 }

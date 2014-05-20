@@ -113,6 +113,7 @@
     <Compile Include="Metadata\Cardinality.cs" />
     <Compile Include="Metadata\Class.cs" />
     <Compile Include="Metadata\Condition.cs" />
+    <Compile Include="Metadata\Path.cs" />
     <Compile Include="Metadata\ResultDirect.cs" />
     <Compile Include="Metadata\ResultValue.cs" />
     <Compile Include="Metadata\ResultValueFact.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="Metadata\Predecessor.cs" />
     <Compile Include="Metadata\Query.cs" />
     <Compile Include="Metadata\Result.cs" />
+    <Compile Include="Metadata\Segment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Compiler\Symbol.cs" />
   </ItemGroup>

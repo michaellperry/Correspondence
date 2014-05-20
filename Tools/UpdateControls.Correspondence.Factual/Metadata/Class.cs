@@ -28,7 +28,7 @@ namespace UpdateControls.Correspondence.Factual.Metadata
 
         public bool Unique { get; set; }
 
-        public Join SignedBy { get; set; }
+        public Path SignedBy { get; set; }
 
         public IEnumerable<Field> Fields
         {

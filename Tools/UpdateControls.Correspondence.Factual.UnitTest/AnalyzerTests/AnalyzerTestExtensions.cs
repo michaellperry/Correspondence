@@ -31,7 +31,7 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             return fact;
         }
 
-        public static Fact SetFromPath(this Fact fact, Path path)
+        public static Fact SetFromPath(this Fact fact, AST.Path path)
         {
             fact.FromPath = path;
             return fact;
@@ -42,6 +42,8 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             Analyzer analyzer = new Analyzer(root);
             Analyzed analyzed = analyzer.Analyze();
             Assert.IsNull(analyzed, "The analyzer should have raised an error.");
+            if (analyzer.Errors.Count != 1)
+                Assert.Fail(string.Join(", ", analyzer.Errors.Select(e => e.Message).ToArray()));
             Assert.AreEqual(1, analyzer.Errors.Count);
 
             var error = analyzer.Errors.Single();

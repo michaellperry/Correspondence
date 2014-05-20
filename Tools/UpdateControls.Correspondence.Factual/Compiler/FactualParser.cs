@@ -155,7 +155,7 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             var localPathRule = Many(
                 Reduce(
                     Terminal(Symbol.Identifier),
-                    (id) => new Path(true, null).AddSegment(id.Value)),
+                    (id) => new Path(true, null, 1).AddSegment(id.Value)),
                 Sequence(
                     Terminal(Symbol.Dot),
                     Terminal(Symbol.Identifier), "Provide a predecessor after the dot.",
@@ -309,8 +309,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             // path -> (identifier | "this") ("." identifier)*
             var pathRule =
                 Many(
-                    Reduce(Terminal(Symbol.Identifier), t => new Path(false, t.Value)) |
-                    Reduce(Terminal(Symbol.This), t => new Path(true, null)),
+                    Reduce(Terminal(Symbol.Identifier), t => new Path(false, t.Value, t.LineNumber)) |
+                    Reduce(Terminal(Symbol.This), t => new Path(true, null, t.LineNumber)),
                     Sequence(
                         Terminal(Symbol.Dot),
                         Terminal(Symbol.Identifier),
