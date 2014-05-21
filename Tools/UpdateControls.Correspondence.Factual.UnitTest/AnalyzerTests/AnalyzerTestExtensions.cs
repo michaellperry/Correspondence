@@ -37,6 +37,18 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
             return fact;
         }
 
+        public static Fact SetToPath(this Fact fact, AST.Path path)
+        {
+            fact.ToPath = path;
+            return fact;
+        }
+
+        public static Fact SetUnlockPath(this Fact fact, AST.Path path)
+        {
+            fact.UnlockPath = path;
+            return fact;
+        }
+
         public static void AnalyzedHasError(this Namespace root, int lineNumber, string message)
         {
             Analyzer analyzer = new Analyzer(root);

@@ -89,6 +89,10 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             factClass.HasSharedKey = fact.Lock;
 
             factClass.SignedBy = AnalyzePath(fact, fact.FromPath);
+            factClass.EncryptedFor = AnalyzePath(fact, fact.ToPath);
+            factClass.KeyFor = AnalyzePath(fact, fact.UnlockPath, requireLocked: true);
+            if (factClass.KeyFor != null && factClass.EncryptedFor == null)
+                throw new CompilerException(String.Format("The fact \"{0}\" is not encrypted.", fact.Name), fact.UnlockPath.LineNumber);
 
             ComputeVersionOfFact(factClass);
         }
@@ -394,22 +398,24 @@ namespace UpdateControls.Correspondence.Factual.Compiler
             }
         }
 
-        private Target.Path AnalyzePath(Source.Fact fact, Source.Path sourcePath)
+        private Target.Path AnalyzePath(Source.Fact fact, Source.Path sourcePath, bool requireLocked = false)
         {
             if (sourcePath == null)
                 return null;
 
             var newPath = new Target.Path();
             AST.Fact walkingFact = fact;
-            foreach (var predecessorInfo in WalkSegments(ref walkingFact, sourcePath.Segments, sourcePath.LineNumber))
+            foreach (var predecessorInfo in WalkSegments(ref walkingFact, sourcePath.Segments, sourcePath.LineNumber, requireSingle: true))
             {
                 AST.DataTypeFact type = predecessorInfo.Field.Type as AST.DataTypeFact;
                 newPath.AddSegment(predecessorInfo.Field.Name, type.FactName);
             }
+            if (requireLocked && !walkingFact.Lock)
+                throw new CompilerException(String.Format("The fact \"{0}\" is not locked.", walkingFact.Name), sourcePath.LineNumber);
             return newPath;
         }
 
-        private List<PredecessorInfo> WalkSegments(ref Source.Fact fact, IEnumerable<string> segments, int lineNumber)
+        private List<PredecessorInfo> WalkSegments(ref Source.Fact fact, IEnumerable<string> segments, int lineNumber, bool requireSingle = false)
         {
             List<PredecessorInfo> predecessors = new List<PredecessorInfo>();
             foreach (string segment in segments)
@@ -423,6 +429,8 @@ namespace UpdateControls.Correspondence.Factual.Compiler
                 Source.DataTypeFact predecessor = field.Type as Source.DataTypeFact;
                 if (predecessor == null)
                     throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a fact.", fact.Name, segment), lineNumber);
+                if (requireSingle && predecessor.Cardinality != Source.Cardinality.One)
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a single fact.", fact.Name, segment), lineNumber);
                 predecessors.Add(new PredecessorInfo
                 {
                     Fact = fact,

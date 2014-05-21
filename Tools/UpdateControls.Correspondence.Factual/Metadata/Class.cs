@@ -30,6 +30,10 @@ namespace UpdateControls.Correspondence.Factual.Metadata
 
         public Path SignedBy { get; set; }
 
+        public Path EncryptedFor { get; set; }
+
+        public Path KeyFor { get; set; }
+
         public IEnumerable<Field> Fields
         {
             get { return _fields; }

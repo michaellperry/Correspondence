@@ -153,19 +153,126 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         }
 
         [TestMethod]
+        public void WhenFromMany_Error()
+        {
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 3))
+                .AddFact(new Fact("Message", 4)
+                    .AddMember(PredecessorField(
+                        Many("Individual"),
+                        "sender"))
+                    .SetFromPath(AbsolutePath(6)
+                        .AddSegment("sender")
+                    )
+                );
+
+            root.AnalyzedHasError(6, "The member \"Message.sender\" is not a single fact.");
+        }
+
+        [TestMethod]
         public void WhenTo_HasEncryptedForQuery()
         {
             Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 3))
                 .AddFact(new Fact("Message", 4)
                     .AddMember(PredecessorField(
                         One("Individual"),
                         "recipient"))
-                    .SetFromPath(AbsolutePath(6)
+                    .SetToPath(AbsolutePath(6)
                         .AddSegment("recipient")
                     )
                 );
 
-            Assert.Fail();
+            var message = root
+                .AnalyzedHasNoError()
+                .HasClassNamed("Message");
+            Metadata.Path encryptedFor = message.EncryptedFor;
+            Assert.IsNotNull(encryptedFor, "The encrypted for path should be set.");
+            IEnumerable<Metadata.Segment> segments = encryptedFor.Segments;
+            Assert.AreEqual(1, segments.Count());
+            var segment = segments.Single();
+            Assert.AreEqual("recipient", segment.Name);
+            Assert.AreEqual("Individual", segment.Type);
+        }
+
+        [TestMethod]
+        public void WhenUnlock_HasKeyForQuery()
+        {
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 2))
+                .AddFact(new Fact("MessageBoard", 3)
+                    .SetUnique(true)
+                    .SetLock(true)
+                )
+                .AddFact(new Fact("Membership", 4)
+                    .AddMember(PredecessorField(
+                        One("Individual"),
+                        "recipient"))
+                    .AddMember(PredecessorField(
+                        One("MessageBoard"),
+                        "messageBoard"))
+                    .SetToPath(AbsolutePath(5)
+                        .AddSegment("recipient"))
+                    .SetUnlockPath(AbsolutePath(6)
+                        .AddSegment("messageBoard"))
+                );
+
+            var membership = root.AnalyzedHasNoError()
+                .HasClassNamed("Membership");
+            Metadata.Path keyFor = membership.KeyFor;
+            Assert.IsNotNull(keyFor, "The key for path should be set.");
+            var segments = keyFor.Segments;
+            Assert.AreEqual(1, segments.Count());
+            var segment = segments.Single();
+            Assert.AreEqual("messageBoard", segment.Name);
+            Assert.AreEqual("MessageBoard", segment.Type);
+        }
+
+        [TestMethod]
+        public void WhenUnlockIsNotLocked_Error()
+        {
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 2))
+                .AddFact(new Fact("MessageBoard", 3)
+                    .SetUnique(true)
+                )
+                .AddFact(new Fact("Membership", 4)
+                    .AddMember(PredecessorField(
+                        One("Individual"),
+                        "recipient"))
+                    .AddMember(PredecessorField(
+                        One("MessageBoard"),
+                        "messageBoard"))
+                    .SetToPath(AbsolutePath(5)
+                        .AddSegment("recipient"))
+                    .SetUnlockPath(AbsolutePath(6)
+                        .AddSegment("messageBoard"))
+                );
+
+            root.AnalyzedHasError(6, "The fact \"MessageBoard\" is not locked.");
+        }
+
+        [TestMethod]
+        public void WhenUnlockedAndNotEncrypted_Error()
+        {
+            Namespace root = SecureNamespace()
+                .AddFact(new Fact("Individual", 2))
+                .AddFact(new Fact("MessageBoard", 3)
+                    .SetUnique(true)
+                    .SetLock(true)
+                )
+                .AddFact(new Fact("Membership", 4)
+                    .AddMember(PredecessorField(
+                        One("Individual"),
+                        "recipient"))
+                    .AddMember(PredecessorField(
+                        One("MessageBoard"),
+                        "messageBoard"))
+                    .SetUnlockPath(AbsolutePath(6)
+                        .AddSegment("messageBoard"))
+                );
+
+            root.AnalyzedHasError(6, "The fact \"Membership\" is not encrypted.");
         }
 
         private static Namespace SecureNamespace()
@@ -176,6 +283,11 @@ namespace UpdateControls.Correspondence.Factual.UnitTest.AnalyzerTests
         private static DataTypeFact One(string factName)
         {
             return new DataTypeFact(factName, AST.Cardinality.One, 6);
+        }
+
+        private static DataTypeFact Many(string factName)
+        {
+            return new DataTypeFact(factName, AST.Cardinality.Many, 6);
         }
 
         private static AST.Path AbsolutePath(int lineNumber)
