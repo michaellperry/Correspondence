@@ -55,6 +55,10 @@
     <Compile Include="RedBlackTreeTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\UpdateControls.Correspondence.Data.Spec\UpdateControls.Correspondence.Data.Spec.csproj">
+      <Project>{53c72b3d-35b2-42e3-b6f7-ed094d85e189}</Project>
+      <Name>UpdateControls.Correspondence.Data.Spec</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj">
       <Project>{d8f2cb6a-287e-4c3c-925c-afa169a09558}</Project>
       <Name>UpdateControls.Correspondence.Data</Name>

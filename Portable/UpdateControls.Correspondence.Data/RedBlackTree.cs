@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace UpdateControls.Correspondence.Data
 {
@@ -48,40 +49,40 @@ namespace UpdateControls.Correspondence.Data
             if (_stream.Length > 0)
             {
                 long current = ReadRoot();
-                Node node;
-
-                // Search for the beginning of the hash code.
-                do
-                {
-                    node = ReadNode(current);
-                    if (hashCode == node.HashCode)
-                    {
-                        // Walk through all nodes with this hash code.
-                        yield return node.FactId;
-                        current = node.Right;
-                        while (current != 0)
-                        {
-                            node = ReadNode(current);
-                            if (hashCode == node.HashCode)
-                            {
-                                yield return node.FactId;
-                                current = node.Right;
-                            }
-                            else
-                            {
-                                current = node.Left;
-                            }
-                        }
-                        break;
-                    }
-
-                    if (hashCode > node.HashCode)
-                        current = node.Right;
-                    else
-                        current = node.Left;
-                }
-                while (current != 0);
+                return FindFactsFrom(hashCode, current);
             }
+            else
+                return Enumerable.Empty<long>();
+        }
+
+        private IEnumerable<long> FindFactsFrom(int hashCode, long current)
+        {
+            if (current == 0)
+                yield break;
+
+            Node node;
+
+            // Search for the beginning of the hash code.
+            do
+            {
+                node = ReadNode(current);
+                if (hashCode == node.HashCode)
+                {
+                    // Walk through all nodes with this hash code.
+                    yield return node.FactId;
+                    foreach (long leftId in FindFactsFrom(hashCode, node.Left))
+                        yield return leftId;
+                    foreach (long rightId in FindFactsFrom(hashCode, node.Right))
+                        yield return rightId;
+                    break;
+                }
+
+                if (hashCode > node.HashCode)
+                    current = node.Right;
+                else
+                    current = node.Left;
+            }
+            while (current != 0);
         }
 
 		public void AddFact(int hashCode, long factId)
@@ -319,10 +320,10 @@ namespace UpdateControls.Correspondence.Data
             if (parentColor == NodeColor.Red && node.Color != NodeColor.Black)
                 throw new InvariantException("Invariant violated: both children of every red node are black.");
 
-			if (leftChild && node.HashCode >= parentHashCode)
+			if (leftChild && node.HashCode > parentHashCode)
 				throw new InvariantException("Invariant violated: left hash code is less than parent hash code.");
 			if (!leftChild && node.HashCode < parentHashCode)
-				throw new InvariantException("Invariant violated: right hash code is greater than or equal to parent hash code.");
+				throw new InvariantException("Invariant violated: right hash code is greater than parent hash code.");
 
             int leftCount = CheckInvariantNode(node.Color, node.Left, ref count, node.HashCode, true);
 			int rightCount = CheckInvariantNode(node.Color, node.Right, ref count, node.HashCode, false);

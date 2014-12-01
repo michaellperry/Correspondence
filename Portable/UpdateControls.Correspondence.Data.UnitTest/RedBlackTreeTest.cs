@@ -254,6 +254,20 @@ namespace UpdateControls.Correspondence.Data.UnitTest
 			}
 		}
 
+        [TestMethod]
+        public void ThreeZeros()
+        {
+            _redBlackTree.AddFact(0, 1);
+            _redBlackTree.AddFact(0, 2);
+            _redBlackTree.AddFact(0, 3);
+            _redBlackTree.CheckInvariant();
+            var ids = _redBlackTree.FindFacts(0).OrderBy(id => id).ToArray();
+            Assert.AreEqual(3, ids.Length);
+            Assert.AreEqual(1, ids[0]);
+            Assert.AreEqual(2, ids[1]);
+            Assert.AreEqual(3, ids[2]);
+        }
+
 		private void WriteNode(int i)
 		{
 			//System.Diagnostics.Debug.WriteLine(String.Format("Write node {0}.", i));
