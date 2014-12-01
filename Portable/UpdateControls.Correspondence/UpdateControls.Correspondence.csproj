@@ -56,10 +56,10 @@
     <Compile Include="Conditions\ConditionEvaluator.cs" />
     <Compile Include="CorrespondenceException.cs" />
     <Compile Include="CorrespondenceFact.cs" />
-    <Compile Include="Debug\FactDescriptor.cs" />
-    <Compile Include="Debug\PageDescriptor.cs" />
-    <Compile Include="Debug\PredecessorDescriptor.cs" />
-    <Compile Include="Debug\TypeDescriptor.cs" />
+    <Compile Include="Debugging\FactDescriptor.cs" />
+    <Compile Include="Debugging\PageDescriptor.cs" />
+    <Compile Include="Debugging\PredecessorDescriptor.cs" />
+    <Compile Include="Debugging\TypeDescriptor.cs" />
     <Compile Include="Disputable.cs" />
     <Compile Include="FactMetadata.cs" />
     <Compile Include="FieldSerializer\BinaryFieldSerializer.cs" />

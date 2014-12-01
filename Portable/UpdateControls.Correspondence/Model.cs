@@ -8,7 +8,7 @@ using UpdateControls.Correspondence.Strategy;
 using UpdateControls.Correspondence.Conditions;
 using System.Threading.Tasks;
 using UpdateControls.Fields;
-using UpdateControls.Correspondence.Debug;
+using UpdateControls.Correspondence.Debugging;
 using UpdateControls.Correspondence.WorkQueues;
 
 namespace UpdateControls.Correspondence

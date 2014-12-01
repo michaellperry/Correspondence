@@ -73,17 +73,17 @@
     <Compile Include="..\..\Portable\UpdateControls.Correspondence\CorrespondenceFact.cs">
       <Link>CorrespondenceFact.cs</Link>
     </Compile>
-    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\FactDescriptor.cs">
-      <Link>Debug\FactDescriptor.cs</Link>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debugging\FactDescriptor.cs">
+      <Link>Debugging\FactDescriptor.cs</Link>
     </Compile>
-    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\PageDescriptor.cs">
-      <Link>Debug\PageDescriptor.cs</Link>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debugging\PageDescriptor.cs">
+      <Link>Debugging\PageDescriptor.cs</Link>
     </Compile>
-    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\PredecessorDescriptor.cs">
-      <Link>Debug\PredecessorDescriptor.cs</Link>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debugging\PredecessorDescriptor.cs">
+      <Link>Debugging\PredecessorDescriptor.cs</Link>
     </Compile>
-    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debug\TypeDescriptor.cs">
-      <Link>Debug\TypeDescriptor.cs</Link>
+    <Compile Include="..\..\Portable\UpdateControls.Correspondence\Debugging\TypeDescriptor.cs">
+      <Link>Debugging\TypeDescriptor.cs</Link>
     </Compile>
     <Compile Include="..\..\Portable\UpdateControls.Correspondence\Disputable.cs">
       <Link>Disputable.cs</Link>

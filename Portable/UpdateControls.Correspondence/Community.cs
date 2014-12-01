@@ -6,7 +6,7 @@ using UpdateControls.Correspondence.Mementos;
 using UpdateControls.Correspondence.Networking;
 using UpdateControls.Correspondence.Queries;
 using UpdateControls.Correspondence.Strategy;
-using UpdateControls.Correspondence.Debug;
+using UpdateControls.Correspondence.Debugging;
 using System.ComponentModel;
 using UpdateControls.Correspondence.WorkQueues;
 

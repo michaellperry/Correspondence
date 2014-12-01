@@ -4,7 +4,7 @@ using System;
 using UpdateControls.Correspondence.Queries;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using UpdateControls.Correspondence.Debug;
+using UpdateControls.Correspondence.Debugging;
 
 namespace UpdateControls.Correspondence
 {
