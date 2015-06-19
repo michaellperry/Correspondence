@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8A77436E-F210-44CC-8005-B6F607D2845C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Correspondence</RootNamespace>
+    <AssemblyName>Correspondence</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\SolutionItems\Mallardsoft.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SolutionItems\CoreVersionInfo.cs">
+      <Link>Properties\CoreVersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="AwaitableCriticalSection.cs" />
+    <Compile Include="Community.cs" />
+    <Compile Include="Community.Platform.cs" />
+    <Compile Include="Condition.cs" />
+    <Compile Include="Conditions\AndConditionBuilder.cs" />
+    <Compile Include="Conditions\Clause.cs" />
+    <Compile Include="Conditions\ConditionEvaluator.cs" />
+    <Compile Include="CorrespondenceException.cs" />
+    <Compile Include="CorrespondenceFact.cs" />
+    <Compile Include="Debugging\FactDescriptor.cs" />
+    <Compile Include="Debugging\PageDescriptor.cs" />
+    <Compile Include="Debugging\PredecessorDescriptor.cs" />
+    <Compile Include="Debugging\TypeDescriptor.cs" />
+    <Compile Include="Disputable.cs" />
+    <Compile Include="FactMetadata.cs" />
+    <Compile Include="FieldSerializer\BinaryFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\BinaryHelper.cs" />
+    <Compile Include="FieldSerializer\ByteFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\CharFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DateTimeFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DecimalFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DoubleFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\FloatFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\IntFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\LongFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
+    <Compile Include="ICommunity.cs" />
+    <Compile Include="IQueryResult.cs" />
+    <Compile Include="Mementos\CorrespondenceFactType.cs" />
+    <Compile Include="Mementos\Crc32.cs" />
+    <Compile Include="Mementos\FactID.cs" />
+    <Compile Include="Mementos\FactMemento.cs" />
+    <Compile Include="Mementos\FactTreeMemento.cs" />
+    <Compile Include="Mementos\GetManyResultMemento.cs" />
+    <Compile Include="Mementos\GetResultMemento.cs" />
+    <Compile Include="Mementos\IdentifiedFactBase.cs" />
+    <Compile Include="Mementos\IdentifiedFactMemento.cs" />
+    <Compile Include="Mementos\IdentifiedFactRemote.cs" />
+    <Compile Include="Mementos\MessageMemento.cs" />
+    <Compile Include="Mementos\NamedFactMemento.cs" />
+    <Compile Include="Mementos\PivotMemento.cs" />
+    <Compile Include="Mementos\PredecessorMemento.cs" />
+    <Compile Include="Mementos\RoleMemento.cs" />
+    <Compile Include="Mementos\TimestampID.cs" />
+    <Compile Include="Mementos\UnpublishMemento.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Networking\AsynchronousNetwork.cs" />
+    <Compile Include="Networking\AsynchronousServerProxy.cs" />
+    <Compile Include="Networking\ISubscriptionProvider.cs" />
+    <Compile Include="Networking\MessagesToSend.cs" />
+    <Compile Include="Networking\Network.cs" />
+    <Compile Include="Networking\PushSubscriptionProxy.cs" />
+    <Compile Include="Networking\SynchronizeResult.cs" />
+    <Compile Include="Networking\SynchronousNetwork.cs" />
+    <Compile Include="PredecessorBase.cs" />
+    <Compile Include="PredecessorList.cs" />
+    <Compile Include="PredecessorObj.cs" />
+    <Compile Include="PredecessorOpt.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\InvalidatedQuery.cs" />
+    <Compile Include="Queries\Join.cs" />
+    <Compile Include="Queries\QueryDefinition.cs" />
+    <Compile Include="Queries\QueryInvalidator.cs" />
+    <Compile Include="Queries\Unpublisher.cs" />
+    <Compile Include="Query.cs" />
+    <Compile Include="QueryInverter.cs" />
+    <Compile Include="QueryTask.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="RoleBase.cs" />
+    <Compile Include="RoleRelationship.cs" />
+    <Compile Include="Service\IService.cs" />
+    <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
+    <Compile Include="Strategy\ICorrespondenceModel.cs" />
+    <Compile Include="Strategy\IFieldSerializer.cs" />
+    <Compile Include="Strategy\IPushSubscription.cs" />
+    <Compile Include="Strategy\IStorageStrategy.cs" />
+    <Compile Include="Strategy\QueryOptions.cs" />
+    <Compile Include="Strategy\SaveResult.cs" />
+    <Compile Include="Streams\ChunkInputStream.cs" />
+    <Compile Include="Streams\ChunkOutputStream.cs" />
+    <Compile Include="Subscription.cs" />
+    <Compile Include="Threading\AsyncManualResetEvent.cs" />
+    <Compile Include="WorkQueues\AsynchronousWorkQueue.cs" />
+    <Compile Include="WorkQueues\IWorkQueue.cs" />
+    <Compile Include="WorkQueues\SynchronousWorkQueue.cs" />
+    <Compile Include="WorkQueues\Token.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SolutionItems\Mallardsoft.snk">
+      <Link>Mallardsoft.snk</Link>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Assisticant">
+      <HintPath>..\..\packages\Assisticant.1.1.4.1\lib\portable-net45+sl50+wp80+win80\Assisticant.dll</HintPath>
+    </Reference>
+    <Reference Include="UpdateControls">
+      <HintPath>..\..\packages\2.3.1.0\lib\portable-net45+sl50+wp80+win80\dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\portable-net45+wp80+win80+MonoAndroid+MonoTouch\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\net45\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\wp80\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\win80\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\MonoAndroid\"
+xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\MonoTouch\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

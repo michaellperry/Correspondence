@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Correspondence.App.Core</id>
-    <version>2.2.1.0</version>
+    <version>3.0.0.0</version>
     <authors>Michael L Perry</authors>
     <owners>Michael L Perry</owners>
     <licenseUrl>http://correspondence.codeplex.com/license</licenseUrl>

@@ -5,43 +5,43 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{89730772-EEEA-4D00-99C9-70F8270110B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Portable\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{8A77436E-F210-44CC-8005-B6F607D2845C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence", "Portable\Correspondence\Correspondence.csproj", "{8A77436E-F210-44CC-8005-B6F607D2845C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Portable\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{49541974-2B82-493E-B17F-5EA54EFC87AB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Memory", "Portable\Correspondence.Memory\Correspondence.Memory.csproj", "{49541974-2B82-493E-B17F-5EA54EFC87AB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WindowsPhone", "WindowsPhone", "{5D1B1070-E97F-4949-967A-C41EA1D06595}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Portable\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{04367BF4-1277-4674-B851-3606AB457039}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.BinaryHTTPClient", "Portable\Correspondence.BinaryHTTPClient\Correspondence.BinaryHTTPClient.csproj", "{04367BF4-1277-4674-B851-3606AB457039}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.Notification", "WindowsPhone\UpdateControls.Correspondence.BinaryHTTPClient.Notification\UpdateControls.Correspondence.BinaryHTTPClient.Notification.csproj", "{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.BinaryHTTPClient.Notification", "WindowsPhone\Correspondence.BinaryHTTPClient.Notification\Correspondence.BinaryHTTPClient.Notification.csproj", "{DDB03DD9-3EFE-425C-8364-8C68FD0FA850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "Portable\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{D8F2CB6A-287E-4C3C-925C-AFA169A09558}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Data", "Portable\Correspondence.Data\Correspondence.Data.csproj", "{D8F2CB6A-287E-4C3C-925C-AFA169A09558}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "WindowsPhone\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{4A076F16-FE12-4B60-9563-46B9414B0802}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Data", "WindowsPhone\Correspondence.Data\Correspondence.Data.csproj", "{4A076F16-FE12-4B60-9563-46B9414B0802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "WindowsPhone\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{434CDEA4-3658-4367-90C7-455CCEBEFD17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.FileStream", "WindowsPhone\Correspondence.FileStream\Correspondence.FileStream.csproj", "{434CDEA4-3658-4367-90C7-455CCEBEFD17}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{312B2630-A96F-40E4-A4FA-51254860A034}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "WPF\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.FileStream", "WPF\Correspondence.FileStream\Correspondence.FileStream.csproj", "{081C55B8-7E8E-406B-8BB2-2ECA8E72BADD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.UnitTest", "Portable\UpdateControls.Correspondence.UnitTest\UpdateControls.Correspondence.UnitTest.csproj", "{AAEF5F72-32F7-4F99-878D-79C008D3FC42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.UnitTest", "Portable\Correspondence.UnitTest\Correspondence.UnitTest.csproj", "{AAEF5F72-32F7-4F99-878D-79C008D3FC42}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{D897CF77-AB48-4E8C-A4C9-98E8A676A3EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QEDCode.LLOne", "Tools\QEDCode.LLOne\QEDCode.LLOne.csproj", "{8F73580C-32E8-4AE6-BAAC-469DE4FEDF8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual", "Tools\UpdateControls.Correspondence.Factual\UpdateControls.Correspondence.Factual.csproj", "{5DE5E950-C19C-4588-80EC-5C60A50D352C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Factual", "Tools\Correspondence.Factual\Correspondence.Factual.csproj", "{5DE5E950-C19C-4588-80EC-5C60A50D352C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Factual.UnitTest", "Tools\UpdateControls.Correspondence.Factual.UnitTest\UpdateControls.Correspondence.Factual.UnitTest.csproj", "{B1246571-0BC0-4B06-A5AE-6C3989E8903C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Factual.UnitTest", "Tools\Correspondence.Factual.UnitTest\Correspondence.Factual.UnitTest.csproj", "{B1246571-0BC0-4B06-A5AE-6C3989E8903C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.UnitTest", "Portable\UpdateControls.Correspondence.BinaryHTTPClient.UnitTest\UpdateControls.Correspondence.BinaryHTTPClient.UnitTest.csproj", "{07E0ADAF-45F2-4C8D-ADEC-44A9A4C5634D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.BinaryHTTPClient.UnitTest", "Portable\Correspondence.BinaryHTTPClient.UnitTest\Correspondence.BinaryHTTPClient.UnitTest.csproj", "{07E0ADAF-45F2-4C8D-ADEC-44A9A4C5634D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data.UnitTest", "Portable\UpdateControls.Correspondence.Data.UnitTest\UpdateControls.Correspondence.Data.UnitTest.csproj", "{220D76D8-6FE9-4642-B908-BFB68D27C880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Data.UnitTest", "Portable\Correspondence.Data.UnitTest\Correspondence.Data.UnitTest.csproj", "{220D76D8-6FE9-4642-B908-BFB68D27C880}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{4491851F-548B-4953-B919-97D3776DFED4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SQL", "Web\UpdateControls.Correspondence.SQL\UpdateControls.Correspondence.SQL.csproj", "{F9D9A782-F06E-48B7-B869-BC8D7913C256}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.SQL", "Web\Correspondence.SQL\Correspondence.SQL.csproj", "{F9D9A782-F06E-48B7-B869-BC8D7913C256}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{CD89FB49-3626-46C8-8E7A-497FB9C78AB8}"
 	ProjectSection(SolutionItems) = preProject
@@ -54,13 +54,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{9E927AEF-AF9F-4A77-8539-808247676655}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Silverlight\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence", "Silverlight\Correspondence\Correspondence.csproj", "{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Silverlight\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.BinaryHTTPClient", "Silverlight\Correspondence.BinaryHTTPClient\Correspondence.BinaryHTTPClient.csproj", "{EB2F02B3-2E78-4361-B066-04FFDEDBFFC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.IsolatedStorage", "Silverlight\UpdateControls.Correspondence.IsolatedStorage\UpdateControls.Correspondence.IsolatedStorage.csproj", "{15D08BBA-292B-48F4-8517-2D5053317ADF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.IsolatedStorage", "Silverlight\Correspondence.IsolatedStorage\Correspondence.IsolatedStorage.csproj", "{15D08BBA-292B-48F4-8517-2D5053317ADF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.SSCE", "WPF\UpdateControls.Correspondence.SSCE\UpdateControls.Correspondence.SSCE.csproj", "{A418955B-D3B5-4F05-A1A2-7864E92B6C4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.SSCE", "WPF\Correspondence.SSCE\Correspondence.SSCE.csproj", "{A418955B-D3B5-4F05-A1A2-7864E92B6C4F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{26CC9C03-2D31-4CAF-B03D-5E35DC4AC07A}"
 	ProjectSection(SolutionItems) = preProject
@@ -213,7 +213,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "net45", "net45", "{86B391C3
 		NuGet\UnitTest\content\net45\ModelTest.cs.pp = NuGet\UnitTest\content\net45\ModelTest.cs.pp
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Silverlight\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Memory", "Silverlight\Correspondence.Memory\Correspondence.Memory.csproj", "{90D6FBCC-9E22-4B2C-A3E2-759A39E3B3E1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wpa81", "wpa81", "{FD6FDB4D-C2D3-4196-85AA-ADCEF0C543F3}"
 	ProjectSection(SolutionItems) = preProject
@@ -230,19 +230,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModels", "ViewModels", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Universal", "Universal", "{96130F9D-597C-4DC6-AA65-5A5AF35FFBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence", "Universal\UpdateControls.Correspondence\UpdateControls.Correspondence.csproj", "{5FD836BD-9674-47C2-A93C-78290D8949DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence", "Universal\Correspondence\Correspondence.csproj", "{5FD836BD-9674-47C2-A93C-78290D8949DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient", "Universal\UpdateControls.Correspondence.BinaryHTTPClient\UpdateControls.Correspondence.BinaryHTTPClient.csproj", "{CAAD8C7F-AF39-4400-9E4F-13259E3CD51C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.BinaryHTTPClient", "Universal\Correspondence.BinaryHTTPClient\Correspondence.BinaryHTTPClient.csproj", "{CAAD8C7F-AF39-4400-9E4F-13259E3CD51C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data", "Universal\UpdateControls.Correspondence.Data\UpdateControls.Correspondence.Data.csproj", "{073A0CC5-F3F4-485D-BCCB-9CD630AEA4A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Data", "Universal\Correspondence.Data\Correspondence.Data.csproj", "{073A0CC5-F3F4-485D-BCCB-9CD630AEA4A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Memory", "Universal\UpdateControls.Correspondence.Memory\UpdateControls.Correspondence.Memory.csproj", "{10C282DC-185A-4DB2-96B3-8A230C24C217}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Memory", "Universal\Correspondence.Memory\Correspondence.Memory.csproj", "{10C282DC-185A-4DB2-96B3-8A230C24C217}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.FileStream", "Universal\UpdateControls.Correspondence.FileStream\UpdateControls.Correspondence.FileStream.csproj", "{2E107292-4DCE-4F96-8FA8-1390F76A3919}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.FileStream", "Universal\Correspondence.FileStream\Correspondence.FileStream.csproj", "{2E107292-4DCE-4F96-8FA8-1390F76A3919}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.BinaryHTTPClient.Notifications", "Universal\UpdateControls.Correspondence.BinaryHTTPClient.Notifications\UpdateControls.Correspondence.BinaryHTTPClient.Notifications.csproj", "{2E0403C0-E2D0-4DC0-BDED-54F7CA5FE611}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.BinaryHTTPClient.Notifications", "Universal\Correspondence.BinaryHTTPClient.Notifications\Correspondence.BinaryHTTPClient.Notifications.csproj", "{2E0403C0-E2D0-4DC0-BDED-54F7CA5FE611}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateControls.Correspondence.Data.Spec", "Portable\UpdateControls.Correspondence.Data.Spec\UpdateControls.Correspondence.Data.Spec.csproj", "{53C72B3D-35B2-42E3-B6F7-ED094D85E189}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Correspondence.Data.Spec", "Portable\Correspondence.Data.Spec\Correspondence.Data.Spec.csproj", "{53C72B3D-35B2-42E3-B6F7-ED094D85E189}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

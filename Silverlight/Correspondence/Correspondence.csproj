@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2BBB7502-EDDB-46CE-8DAF-680D0172AD0C}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Correspondence</RootNamespace>
+    <AssemblyName>Correspondence</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\SolutionItems\Mallardsoft.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Assisticant">
+      <HintPath>..\..\packages\Assisticant.1.1.4.1\lib\sl5\Assisticant.dll</HintPath>
+    </Reference>
+    <Reference Include="Assisticant.XAML">
+      <HintPath>..\..\packages\Assisticant.1.1.4.1\lib\sl5\Assisticant.XAML.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\SolutionItems\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\SolutionItems\CoreVersionInfo.cs">
+      <Link>Properties\CoreVersionInfo.cs</Link>
+    </Compile>
+    <Compile Include="Community.cs" />
+    <Compile Include="Community.Platform.cs" />
+    <Compile Include="Condition.cs" />
+    <Compile Include="Conditions\AndCondition.cs" />
+    <Compile Include="Conditions\AndConditionBuilder.cs" />
+    <Compile Include="Conditions\ConditionEvaluator.cs" />
+    <Compile Include="Conditions\IConditionVisitor.cs" />
+    <Compile Include="Conditions\SimpleCondition.cs" />
+    <Compile Include="CorrespondenceException.cs" />
+    <Compile Include="CorrespondenceFact.cs" />
+    <Compile Include="Disputable.cs" />
+    <Compile Include="FactMetadata.cs" />
+    <Compile Include="FieldSerializer\BinaryFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\BinaryHelper.cs" />
+    <Compile Include="FieldSerializer\ByteFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\CharFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DateTimeFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\DoubleFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\FloatFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\GuidFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\IntFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\LongFieldSerializer.cs" />
+    <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
+    <Compile Include="ICommunity.cs" />
+    <Compile Include="IQueryResult.cs" />
+    <Compile Include="Mementos\CorrespondenceFactType.cs" />
+    <Compile Include="Mementos\Crc32.cs" />
+    <Compile Include="Mementos\FactID.cs" />
+    <Compile Include="Mementos\FactMemento.cs" />
+    <Compile Include="Mementos\FactTreeMemento.cs" />
+    <Compile Include="Mementos\GetResultMemento.cs" />
+    <Compile Include="Mementos\IdentifiedFactBase.cs" />
+    <Compile Include="Mementos\IdentifiedFactMemento.cs" />
+    <Compile Include="Mementos\IdentifiedFactRemote.cs" />
+    <Compile Include="Mementos\MessageMemento.cs" />
+    <Compile Include="Mementos\NamedFactMemento.cs" />
+    <Compile Include="Mementos\PivotMemento.cs" />
+    <Compile Include="Mementos\PredecessorMemento.cs" />
+    <Compile Include="Mementos\RoleMemento.cs" />
+    <Compile Include="Mementos\TimestampID.cs" />
+    <Compile Include="Mementos\UnpublishMemento.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Networking\AsynchronousNetwork.cs" />
+    <Compile Include="Networking\AsynchronousNetwork.GetDispatcher.cs" />
+    <Compile Include="Networking\AsynchronousServerProxy.cs" />
+    <Compile Include="Networking\ISubscriptionProvider.cs" />
+    <Compile Include="Networking\Network.cs" />
+    <Compile Include="Networking\PushSubscriptionProxy.cs" />
+    <Compile Include="Networking\ResultAggregate.cs" />
+    <Compile Include="Networking\SynchronizeResult.cs" />
+    <Compile Include="Networking\SynchronousNetwork.cs" />
+    <Compile Include="PredecessorBase.cs" />
+    <Compile Include="PredecessorList.cs" />
+    <Compile Include="PredecessorObj.cs" />
+    <Compile Include="PredecessorOpt.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\InvalidatedQuery.cs" />
+    <Compile Include="Queries\Join.cs" />
+    <Compile Include="Queries\QueryDefinition.cs" />
+    <Compile Include="Queries\QueryInvalidator.cs" />
+    <Compile Include="Queries\Unpublisher.cs" />
+    <Compile Include="Query.cs" />
+    <Compile Include="QueryInverter.cs" />
+    <Compile Include="Result.cs" />
+    <Compile Include="RoleBase.cs" />
+    <Compile Include="RoleRelationship.cs" />
+    <Compile Include="Service\IService.cs" />
+    <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICommunicationStrategy.cs" />
+    <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />
+    <Compile Include="Strategy\ICorrespondenceModel.cs" />
+    <Compile Include="Strategy\IFieldSerializer.cs" />
+    <Compile Include="Strategy\IPushSubscription.cs" />
+    <Compile Include="Strategy\IStorageStrategy.cs" />
+    <Compile Include="Strategy\ITransform.cs" />
+    <Compile Include="Strategy\QueryOptions.cs" />
+    <Compile Include="Subscription.cs" />
+    <Compile Include="Tasks\Task.cs" />
+    <Compile Include="Tasks\TaskCompletionSource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SolutionItems\Mallardsoft.snk">
+      <Link>Mallardsoft.snk</Link>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\SL5\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

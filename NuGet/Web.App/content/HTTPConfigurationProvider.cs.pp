@@ -1,7 +1,7 @@
 using System.Configuration;
 using System.Linq;
-using UpdateControls.Fields;
-using UpdateControls.Correspondence.BinaryHTTPClient;
+using Assisticant.Fields;
+using Correspondence.BinaryHTTPClient;
 
 namespace $rootnamespace$
 {

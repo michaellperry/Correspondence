@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using UpdateControls.XAML;
+using Assisticant;
 
 namespace $rootnamespace$.ViewModels
 {

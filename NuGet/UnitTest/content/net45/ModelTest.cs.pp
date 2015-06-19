@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.Memory;
+using Correspondence;
+using Correspondence.Memory;
 
 namespace $rootnamespace$
 {

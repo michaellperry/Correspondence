@@ -3,11 +3,11 @@ using System.Configuration;
 using System.IO;
 using System.Timers;
 using System.Web.Hosting;
-using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.BinaryHTTPClient;
-using UpdateControls.Correspondence.FileStream;
-using UpdateControls.Correspondence.SQL;
-using UpdateControls.Collections;
+using Correspondence;
+using Correspondence.BinaryHTTPClient;
+using Correspondence.FileStream;
+using Correspondence.SQL;
+using Assisticant.Collections;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Threading;
-using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.IsolatedStorage;
-using UpdateControls.Correspondence.BinaryHTTPClient;
-using UpdateControls.Correspondence.Memory;
+using Correspondence;
+using Correspondence.IsolatedStorage;
+using Correspondence.BinaryHTTPClient;
+using Correspondence.Memory;
 
 namespace $rootnamespace$
 {
     public class SynchronizationService
     {
         private const string ThisIndividual = "$rootnamespace$.Individual.this";
-        private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
         private Community _community;
         private Individual _individual;
@@ -75,15 +74,14 @@ namespace $rootnamespace$
             _individual = _community.LoadFact<Individual>(ThisIndividual);
             if (_individual == null)
             {
-                string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
-                _individual = _community.AddFact(new Individual(randomId));
+                _individual = _community.AddFact(new Individual());
                 _community.SetFact(ThisIndividual, _individual);
             }
         }
 
         private void CreateIndidualDesignData()
         {
-            var individual = _community.AddFact(new Individual("design"));
+            var individual = _community.AddFact(new Individual());
             _individual = individual;
         }
     }

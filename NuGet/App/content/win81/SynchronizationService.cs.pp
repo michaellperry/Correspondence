@@ -5,11 +5,11 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using UpdateControls.Correspondence;
-using UpdateControls.Correspondence.BinaryHTTPClient;
-using UpdateControls.Correspondence.FileStream;
-using UpdateControls.Correspondence.Memory;
-using UpdateControls.Fields;
+using Correspondence;
+using Correspondence.BinaryHTTPClient;
+using Correspondence.FileStream;
+using Correspondence.Memory;
+using Assisticant.Fields;
 using Windows.Storage;
 using Windows.UI.Xaml;
 
@@ -18,10 +18,9 @@ namespace $rootnamespace$
     public class SynchronizationService
     {
         private const string ThisIndividual = "$rootnamespace$.Individual.this";
-        private static readonly Regex Punctuation = new Regex(@"[{}\-]");
 
         private Community _community;
-        private Independent<Individual> _individual = new Independent<Individual>(
+        private Observable<Individual> _individual = new Observable<Individual>(
 			Individual.GetNullInstance());
 
         public void Initialize()
@@ -108,8 +107,7 @@ namespace $rootnamespace$
 				Individual individual = await _community.LoadFactAsync<Individual>(ThisIndividual);
 				if (individual == null)
 				{
-					string randomId = Punctuation.Replace(Guid.NewGuid().ToString(), String.Empty).ToLower();
-					individual = await _community.AddFactAsync(new Individual(randomId));
+					individual = await _community.AddFactAsync(new Individual());
 					await _community.SetFactAsync(ThisIndividual, individual);
 				}
 				Individual = individual;
@@ -121,7 +119,7 @@ namespace $rootnamespace$
         {
 			_community.Perform(async delegate
 			{
-				var individual = await _community.AddFactAsync(new Individual("design"));
+				var individual = await _community.AddFactAsync(new Individual());
 				Individual = individual;
 			});
         }
