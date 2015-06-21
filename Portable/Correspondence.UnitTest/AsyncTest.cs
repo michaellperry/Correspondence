@@ -26,7 +26,7 @@ namespace Correspondence.UnitTest
 
         protected async Task QuiesceAllAsync()
         {
-            while (await _community.QuiesceAsync()) ;
+            await _community.QuiesceAsync();
         }
     }
 }

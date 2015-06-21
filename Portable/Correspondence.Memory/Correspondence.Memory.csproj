@@ -76,9 +76,6 @@
     <Reference Include="Assisticant">
       <HintPath>..\..\packages\Assisticant.1.1.4.1\lib\portable-net45+sl50+wp80+win80\Assisticant.dll</HintPath>
     </Reference>
-    <Reference Include="UpdateControls">
-      <HintPath>..\..\packages\2.3.1.0\lib\portable-net45+sl50+wp80+win80\dll</HintPath>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

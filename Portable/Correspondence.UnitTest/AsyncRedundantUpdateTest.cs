@@ -34,7 +34,7 @@ namespace Correspondence.UnitTest
             while (!counter.IsUpToDate)
             {
                 counter.OnGet();
-                while (await community.QuiesceAsync());
+                await community.QuiesceAsync();
             }
 
             Assert.AreEqual(3, passes);

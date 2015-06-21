@@ -46,9 +46,6 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Portable\Correspondence\AwaitableCriticalSection.cs">
-      <Link>AwaitableCriticalSection.cs</Link>
-    </Compile>
     <Compile Include="..\..\Portable\Correspondence\Community.cs">
       <Link>Community.cs</Link>
     </Compile>
@@ -297,6 +294,12 @@
     </Compile>
     <Compile Include="..\..\Portable\Correspondence\Threading\AsyncManualResetEvent.cs">
       <Link>Threading\AsyncManualResetEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\Correspondence\Threading\AsyncSemaphore.cs">
+      <Link>Threading\AsyncSemaphore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\Correspondence\Threading\Process.cs">
+      <Link>Threading\Process.cs</Link>
     </Compile>
     <Compile Include="..\..\Portable\Correspondence\WorkQueues\AsynchronousWorkQueue.cs">
       <Link>WorkQueues\AsynchronousWorkQueue.cs</Link>

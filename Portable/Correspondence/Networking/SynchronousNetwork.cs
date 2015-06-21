@@ -26,7 +26,6 @@ namespace Correspondence.Networking
 
         private Observable<bool> _synchronizing = new Observable<bool>();
 
-        private AwaitableCriticalSection _lock = new AwaitableCriticalSection();
         private readonly IWorkQueue _workQueue;
   
 		public SynchronousNetwork(
@@ -48,14 +47,15 @@ namespace Correspondence.Networking
 
 		private async Task AddCommunicationStrategyAsync(ICommunicationStrategy communicationStrategy)
 		{
-            using (await _lock.EnterAsync())
+            int peerId = await _storageStrategy.SavePeerAsync(
+                communicationStrategy.ProtocolName,
+                communicationStrategy.PeerName);
+
+            _serverProxies.Add(new ServerProxy
             {
-                _serverProxies.Add(new ServerProxy
-                {
-                    CommunicationStrategy = communicationStrategy,
-                    PeerId = await _storageStrategy.SavePeerAsync(communicationStrategy.ProtocolName, communicationStrategy.PeerName)
-                });
-            }
+                CommunicationStrategy = communicationStrategy,
+                PeerId = peerId
+            });
 		}
 
 		public async Task<bool> SynchronizeAsync()

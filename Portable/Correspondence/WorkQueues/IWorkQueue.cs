@@ -6,7 +6,7 @@ namespace Correspondence.WorkQueues
     internal interface IWorkQueue
     {
         void Perform(Func<Task> work);
-        Task[] Tasks { get; }
+        Task JoinAsync();
         Exception LastException { get; }
     }
 }

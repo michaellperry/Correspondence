@@ -47,7 +47,6 @@
     <Compile Include="..\..\SolutionItems\CoreVersionInfo.cs">
       <Link>Properties\CoreVersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AwaitableCriticalSection.cs" />
     <Compile Include="Community.cs" />
     <Compile Include="Community.Platform.cs" />
     <Compile Include="Condition.cs" />
@@ -133,7 +132,9 @@
     <Compile Include="Subscription.cs" />
     <Compile Include="Threading\AsyncManualResetEvent.cs" />
     <Compile Include="WorkQueues\AsynchronousWorkQueue.cs" />
+    <Compile Include="Threading\AsyncSemaphore.cs" />
     <Compile Include="WorkQueues\IWorkQueue.cs" />
+    <Compile Include="Threading\Process.cs" />
     <Compile Include="WorkQueues\SynchronousWorkQueue.cs" />
     <Compile Include="WorkQueues\Token.cs" />
   </ItemGroup>
@@ -146,9 +147,6 @@
   <ItemGroup>
     <Reference Include="Assisticant">
       <HintPath>..\..\packages\Assisticant.1.1.4.1\lib\portable-net45+sl50+wp80+win80\Assisticant.dll</HintPath>
-    </Reference>
-    <Reference Include="UpdateControls">
-      <HintPath>..\..\packages\2.3.1.0\lib\portable-net45+sl50+wp80+win80\dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

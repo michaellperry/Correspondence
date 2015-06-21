@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Assisticant.Fields;
 using Correspondence.Debugging;
 using Correspondence.WorkQueues;
+using Correspondence.Threading;
 
 namespace Correspondence
 {
@@ -41,7 +42,7 @@ namespace Correspondence
         public event Action<CorrespondenceFact> FactAdded;
         public event Action FactReceived;
 
-        public AwaitableCriticalSection _lock = new AwaitableCriticalSection();
+        public AsyncSemaphore _lock = new AsyncSemaphore();
         
         public Model(Community community, IStorageStrategy storageStrategy, IWorkQueue workQueue)
 		{
@@ -107,7 +108,8 @@ namespace Correspondence
             // because they reenter if a fact is removed.
             Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries = new Dictionary<InvalidatedQuery, InvalidatedQuery>();
 
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 if (prototype.InternalCommunity != null)
                     throw new CorrespondenceException("A fact may only belong to one community");
@@ -133,6 +135,10 @@ namespace Correspondence
                 prototype.SetCommunity(_community);
                 _factByID.Add(prototype.ID, prototype);
                 _factByMemento.Add(memento, prototype);
+            }
+            finally
+            {
+                _lock.Release();
             }
 
             foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries.Keys)
@@ -171,7 +177,8 @@ namespace Correspondence
 
         public async Task<CorrespondenceFact> LoadFactAsync(string factName)
         {
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 FactID? id = await _storageStrategy.GetIDAsync(factName);
                 if (id.HasValue)
@@ -179,19 +186,29 @@ namespace Correspondence
                 else
                     return null;
             }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
         public async Task SetFactAsync(string factName, CorrespondenceFact obj)
         {
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 await _storageStrategy.SetIDAsync(factName, obj.ID);
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 
         public async Task<GetResultMemento> GetMessageBodiesAsync(TimestampID timestamp, int peerId, List<UnpublishMemento> unpublishedMessages)
         {
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 FactTreeMemento result = new FactTreeMemento(ClientDatabaseId);
                 IEnumerable<MessageMemento> recentMessages = await _storageStrategy.LoadRecentMessagesForServerAsync(peerId, timestamp);
@@ -232,14 +249,23 @@ namespace Correspondence
                 }
                 return new GetResultMemento(result, timestamp);
             }
+            finally
+            {
+                _lock.Release();
+            }
         }
 
 
         public async Task<FactMemento> AddToFactTreeAsync(FactTreeMemento messageBody, FactID factId, int peerId)
         {
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 return await AddToFactTreeInternalAsync(messageBody, factId, peerId);
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 
@@ -247,7 +273,8 @@ namespace Correspondence
         {
             Dictionary<InvalidatedQuery, InvalidatedQuery> invalidatedQueries = new Dictionary<InvalidatedQuery, InvalidatedQuery>();
 
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 IDictionary<FactID, FactID> localIdByRemoteId = new Dictionary<FactID, FactID>();
                 foreach (IdentifiedFactBase identifiedFact in messageBody.Facts)
@@ -256,6 +283,10 @@ namespace Correspondence
                     FactID remoteId = identifiedFact.Id;
                     localIdByRemoteId.Add(remoteId, localId);
                 }
+            }
+            finally
+            {
+                _lock.Release();
             }
 
             foreach (InvalidatedQuery invalidatedQuery in invalidatedQueries.Keys)
@@ -293,29 +324,44 @@ namespace Correspondence
 
         public async Task<CorrespondenceFact> GetFactByIDAsync(FactID id)
         {
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 return await GetFactByIDInternalAsync(id);
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 
         public async Task<Guid> GetClientDatabaseGuidAsync()
         {
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 return await _storageStrategy.GetClientGuidAsync();
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 
         internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
         {
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 List<IdentifiedFactMemento> facts = await _storageStrategy.QueryForFactsAsync(queryDefinition, startingId, options);
                 return facts
                     .Select(m => GetFactByIdAndMemento(m.Id, m.Memento))
                     .Where(m => m != null)
                     .ToList();
+            }
+            finally
+            {
+                _lock.Release();
             }
         }
 
@@ -510,7 +556,8 @@ namespace Correspondence
         private async Task FindFactAndStoreAsync(FactMemento memento, CorrespondenceFact prototype, ICorrespondenceFactFactory factory, Observable<CorrespondenceFact> independent, TaskCompletionSource<CorrespondenceFact> completion)
         {
             CorrespondenceFact fact;
-            using (await _lock.EnterAsync())
+            await _lock.WaitAsync();
+            try
             {
                 // See if we already have the fact in memory.
                 if (!_factByMemento.TryGetValue(memento, out fact))
@@ -532,6 +579,11 @@ namespace Correspondence
                     }
                 }
             }
+            finally
+            {
+                _lock.Release();
+            }
+
             lock (this)
             {
                 independent.Value = fact;

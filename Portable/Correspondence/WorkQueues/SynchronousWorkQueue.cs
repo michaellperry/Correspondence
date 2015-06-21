@@ -13,9 +13,9 @@ namespace Correspondence.WorkQueues
             work();
         }
 
-        public Task[] Tasks
+        public Task JoinAsync()
         {
-            get { return new Task[0]; }
+            return Task.FromResult(0);
         }
 
         public Exception LastException

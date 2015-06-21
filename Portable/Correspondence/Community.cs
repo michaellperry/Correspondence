@@ -16,8 +16,10 @@ namespace Correspondence
 	/// </summary>
 	public partial class Community : ICommunity
 	{
+        private IWorkQueue _userWorkQueue;
         private IWorkQueue _storageWorkQueue;
-        private IWorkQueue _asyncNetworkWorkQueue;
+        private IWorkQueue _outgoingNetworkWorkQueue;
+        private IWorkQueue _incomingNetworkWorkQueue;
         private Model _model;
         private Network _network;
         private IDictionary<Type, IFieldSerializer> _fieldSerializerByType = new Dictionary<Type, IFieldSerializer>();
@@ -25,13 +27,20 @@ namespace Correspondence
 		public Community(IStorageStrategy storageStrategy)
         {
             if (storageStrategy.IsSynchronous)
+            {
+                _userWorkQueue = new SynchronousWorkQueue();
                 _storageWorkQueue = new SynchronousWorkQueue();
+            }
             else
+            {
+                _userWorkQueue = new AsynchronousWorkQueue();
                 _storageWorkQueue = new AsynchronousWorkQueue();
-            _asyncNetworkWorkQueue = new AsynchronousWorkQueue();
+            }
+            _outgoingNetworkWorkQueue = new AsynchronousWorkQueue();
+            _incomingNetworkWorkQueue = new AsynchronousWorkQueue();
 
             _model = new Model(this, storageStrategy, _storageWorkQueue);
-            _network = new Network(_model, storageStrategy, _storageWorkQueue, _asyncNetworkWorkQueue);
+            _network = new Network(_model, storageStrategy, _storageWorkQueue, _outgoingNetworkWorkQueue, _incomingNetworkWorkQueue);
 
             // Register the default types.
 			RegisterDefaultTypes();
@@ -174,27 +183,23 @@ namespace Correspondence
                 return
                     _network.LastException ??
                     _model.LastException ??
-                    _storageWorkQueue.LastException;
+                    _storageWorkQueue.LastException ??
+                    _userWorkQueue.LastException;
             }
         }
 
         public void Perform(Func<Task> asyncDelegate)
         {
-            _storageWorkQueue.Perform(asyncDelegate);
+            _userWorkQueue.Perform(asyncDelegate);
         }
 
-        public async Task<bool> QuiesceAsync()
+        public async Task QuiesceAsync()
         {
-            var tasks = _storageWorkQueue.Tasks
-                .Union(_asyncNetworkWorkQueue.Tasks)
-                .ToArray();
-            if (tasks.Any())
-            {
-                await Task.WhenAll(tasks);
-                return true;
-            }
-
-            return false;
+            await Task.WhenAll(
+                _storageWorkQueue.JoinAsync(),
+                _outgoingNetworkWorkQueue.JoinAsync(),
+                _incomingNetworkWorkQueue.JoinAsync(),
+                _userWorkQueue.JoinAsync());
         }
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
@@ -212,9 +217,19 @@ namespace Correspondence
             return await _model.GetFactByIDAsync(id);
 		}
 
-        internal async Task<List<CorrespondenceFact>> ExecuteQueryAsync(QueryDefinition queryDefinition, FactID startingId, QueryOptions options)
+        internal void ExecuteQuery(
+            FactID startingId,
+            QueryDefinition queryDefinition,
+            QueryOptions options,
+            Action<List<CorrespondenceFact>> doneLoading)
         {
-            return await _model.ExecuteQueryAsync(queryDefinition, startingId, options);
+            _storageWorkQueue.Perform(async delegate
+            {
+                var facts = await _model.ExecuteQueryAsync(
+                    queryDefinition, startingId, options);
+
+                doneLoading(facts);
+            });
         }
 
         [Obsolete("This property is only for debugging. Do not code against it.")]

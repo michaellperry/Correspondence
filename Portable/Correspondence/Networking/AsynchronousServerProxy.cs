@@ -35,7 +35,8 @@ namespace Correspondence.Networking
         private readonly ISubscriptionProvider _subscriptionProvider;
         private readonly Model _model;
         private readonly IStorageStrategy _storageStrategy;
-        private readonly IWorkQueue _workQueue;
+        private readonly IWorkQueue _outgoingWorkQueue;
+        private readonly IWorkQueue _incomingWorkQueue;
 
         private int _peerId;
 
@@ -52,13 +53,15 @@ namespace Correspondence.Networking
             Model model, 
             IStorageStrategy storageStrategy,
             IAsynchronousCommunicationStrategy communicationStrategy,
-            IWorkQueue workQueue)
+            IWorkQueue outgoingWorkQueue,
+            IWorkQueue incomingWorkQueue)
 		{
             _subscriptionProvider = subscriptionProvider;
 			_model = model;
 			_storageStrategy = storageStrategy;
             _communicationStrategy = communicationStrategy;
-            _workQueue = workQueue;
+            _outgoingWorkQueue = outgoingWorkQueue;
+            _incomingWorkQueue = incomingWorkQueue;
 
 			_depPushSubscriptions = new Computed(UpdatePushSubscriptions);
 		}
@@ -121,7 +124,7 @@ namespace Correspondence.Networking
                     return;
                 }
             }
-            _workQueue.Perform(() => SendAsync());
+            _outgoingWorkQueue.Perform(() => SendAsync());
         }
 
         private async Task SendAsync()
@@ -210,7 +213,7 @@ namespace Correspondence.Networking
                 }
             }
 
-            _workQueue.Perform(() => ReceiveAsync());
+            _incomingWorkQueue.Perform(() => ReceiveAsync());
         }
 
         private async Task ReceiveAsync()
@@ -305,7 +308,7 @@ namespace Correspondence.Networking
 
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
         {
-            _workQueue.Perform(() => NotifyAsync(pivot, text1, text2));
+            _outgoingWorkQueue.Perform(() => NotifyAsync(pivot, text1, text2));
         }
 
         private async Task NotifyAsync(CorrespondenceFact pivot, string text1, string text2)
@@ -337,7 +340,7 @@ namespace Correspondence.Networking
 					.Where(pivot => pivot != null);
 				var pushSubscriptions =
 					from pivot in pivots
-					select bin.Extract(new PushSubscriptionProxy(_model, this, pivot, _workQueue));
+					select bin.Extract(new PushSubscriptionProxy(_model, this, pivot, _outgoingWorkQueue));
 
 				_pushSubscriptions = pushSubscriptions.ToList();
 
@@ -395,7 +398,7 @@ namespace Correspondence.Networking
 
         public void AfterTriggerSubscriptionUpdate()
         {
-            _workQueue.Perform(() => AfterTriggerSubscriptionUpdateAsync());
+            _outgoingWorkQueue.Perform(() => AfterTriggerSubscriptionUpdateAsync());
         }
 
         private async Task AfterTriggerSubscriptionUpdateAsync()
@@ -457,7 +460,7 @@ namespace Correspondence.Networking
 
         public void MessageReceived(FactTreeMemento messageBody)
         {
-            _workQueue.Perform(() => MessageReceivedAsync(messageBody));
+            _incomingWorkQueue.Perform(() => MessageReceivedAsync(messageBody));
         }
         
         private async Task MessageReceivedAsync(FactTreeMemento messageBody)

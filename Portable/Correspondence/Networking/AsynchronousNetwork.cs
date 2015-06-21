@@ -14,7 +14,8 @@ namespace Correspondence.Networking
         private readonly ISubscriptionProvider _subscriptionProvider;
 		private readonly Model _model;
 		private readonly IStorageStrategy _storageStrategy;
-        private readonly IWorkQueue _workQueue;
+        private readonly IWorkQueue _outgoingWorkQueue;
+        private readonly IWorkQueue _incomingWorkQueue;
 
         private ObservableList<AsynchronousServerProxy> _serverProxies =
             new ObservableList<AsynchronousServerProxy>();
@@ -27,12 +28,14 @@ namespace Correspondence.Networking
             ISubscriptionProvider subscriptionProvider, 
             Model model, 
             IStorageStrategy storageStrategy,
-            IWorkQueue workQueue)
+            IWorkQueue outgoingWorkQueue,
+            IWorkQueue incomingWorkQueue)
         {
             _subscriptionProvider = subscriptionProvider;
             _model = model;
             _storageStrategy = storageStrategy;
-            _workQueue = workQueue;
+            _outgoingWorkQueue = outgoingWorkQueue;
+            _incomingWorkQueue = incomingWorkQueue;
 
             _depPushSubscriptions = new Computed(UpdatePushSubscriptions);
             _depPushSubscriptions.Invalidated += delegate
@@ -48,7 +51,8 @@ namespace Correspondence.Networking
                 _model,
                 _storageStrategy,
                 asynchronousCommunicationStrategy,
-                _workQueue);
+                _outgoingWorkQueue,
+                _incomingWorkQueue);
             _serverProxies.Add(proxy);
 
             asynchronousCommunicationStrategy.MessageReceived += messageBody =>

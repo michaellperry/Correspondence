@@ -213,42 +213,45 @@ namespace Correspondence
 
         private void StartLoading()
         {
-            // Load the results from storage and cache them.
-            _startingPoint.Community.Perform(async delegate
+            lock (this)
             {
-                lock (this)
+                SetState(State.Loading);
+                ResultScheduler.BeginLoading(this);
+            }
+
+            // Load the results from storage and cache them.
+            _startingPoint.InternalCommunity.ExecuteQuery(
+                _startingPoint.ID,
+                _query.QueryDefinition,
+                _options,
+                DoneLoading);
+        }
+
+        private void DoneLoading(List<CorrespondenceFact> facts)
+        {
+            lock (this)
+            {
+                ResultScheduler.EndLoading(this);
+                _results = facts
+                    .OfType<TResultType>()
+                    .ToList();
+
+                if (_state == State.Loading)
                 {
-                    SetState(State.Loading);
-                    ResultScheduler.BeginLoading(this);
+                    SetState(State.Loaded);
                 }
-
-                var facts = await _startingPoint.InternalCommunity.ExecuteQueryAsync(
-                    _query.QueryDefinition, _startingPoint.ID, _options);
-
-                lock (this)
+                else if (_state == State.Invalidated)
                 {
-                    ResultScheduler.EndLoading(this);
-                    _results = facts
-                        .OfType<TResultType>()
-                        .ToList();
-
-                    if (_state == State.Loading)
+                    if (_indResults.HasDependents)
                     {
-                        SetState(State.Loaded);
+                        StartLoading();
                     }
-                    else if (_state == State.Invalidated)
+                    else
                     {
-                        if (_indResults.HasDependents)
-                        {
-                            StartLoading();
-                        }
-                        else
-                        {
-                            SetState(State.Unloaded);
-                        }
+                        SetState(State.Unloaded);
                     }
                 }
-            });
+            }
         }
     }
 
