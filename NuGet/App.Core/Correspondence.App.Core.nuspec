@@ -19,7 +19,66 @@
     <copyright>Copyright 2014</copyright>
     <tags>occasionally-connected mobile nosql database synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence"/>
+      <dependency id="Correspondence" version="3.0.0" />
     </dependencies>
   </metadata>
+  <files>
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\portable-net45+wp80+win80+MonoAndroid+MonoTouch" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\net45" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\wp80" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\win80" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\MonoAndroid" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\MonoTouch" />
+
+    <file src="..\..\Silverlight\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\sl5" />
+
+    <file src="..\..\Portable\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\portable-net45+sl5+wp80+win80+MonoAndroid+MonoTouch" />
+    <file src="..\..\Portable\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\net45" />
+    <file src="..\..\Portable\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\sl5" />
+    <file src="..\..\Portable\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\wp80" />
+    <file src="..\..\Portable\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\win80" />
+    <file src="..\..\Portable\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\MonoAndroid" />
+    <file src="..\..\Portable\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\MonoTouch" />
+
+    <file src="..\..\Silverlight\Correspondence.IsolatedStorage\bin\Release\Correspondence.IsolatedStorage.dll" target="lib\sl5" />
+
+    <file src="..\..\Portable\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\portable-net45+wp80+win80+MonoAndroid+MonoTouch" />
+    <file src="..\..\Portable\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\net45" />
+    <file src="..\..\Portable\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\wp80" />
+    <file src="..\..\Portable\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\win80" />
+    <file src="..\..\Portable\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\MonoAndroid" />
+    <file src="..\..\Portable\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\MonoTouch" />
+
+    <file src="..\..\Silverlight\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\sl5" />
+
+    <file src="..\..\Universal\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\portable-wpa81+win81" />
+    <file src="..\..\Universal\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\wpa81" />
+    <file src="..\..\Universal\Correspondence.BinaryHTTPClient\bin\Release\Correspondence.BinaryHTTPClient.dll" target="lib\win81" />
+
+    <file src="..\..\Universal\Correspondence.BinaryHTTPClient.Notifications\bin\Release\Correspondence.BinaryHTTPClient.Notifications.dll" target="lib\portable-wpa81+win81" />
+    <file src="..\..\Universal\Correspondence.BinaryHTTPClient.Notifications\bin\Release\Correspondence.BinaryHTTPClient.Notifications.dll" target="lib\wpa81" />
+    <file src="..\..\Universal\Correspondence.BinaryHTTPClient.Notifications\bin\Release\Correspondence.BinaryHTTPClient.Notifications.dll" target="lib\win81" />
+
+    <file src="..\..\Universal\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\portable-wpa81+win81" />
+    <file src="..\..\Universal\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\wpa81" />
+    <file src="..\..\Universal\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\win81" />
+
+    <file src="..\..\Universal\Correspondence.FileStream\bin\Release\Correspondence.FileStream.dll" target="lib\portable-wpa81+win81" />
+    <file src="..\..\Universal\Correspondence.FileStream\bin\Release\Correspondence.FileStream.dll" target="lib\wpa81" />
+    <file src="..\..\Universal\Correspondence.FileStream\bin\Release\Correspondence.FileStream.dll" target="lib\win81" />
+
+    <file src="..\..\Universal\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\portable-wpa81+win81" />
+    <file src="..\..\Universal\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\wpa81" />
+    <file src="..\..\Universal\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\win81" />
+
+    <file src="..\..\WindowsPhone\Correspondence.BinaryHTTPClient.Notification\bin\Release\Correspondence.BinaryHTTPClient.Notification.dll" target="lib\wp8" />
+
+    <file src="..\..\WindowsPhone\Correspondence.Data\bin\Release\Correspondence.Data.dll" target="lib\wp8" />
+
+    <file src="..\..\WindowsPhone\Correspondence.FileStream\bin\Release\Correspondence.FileStream.dll" target="lib\wp8" />
+
+    <file src="..\..\WPF\Correspondence.FileStream\bin\Release\Correspondence.FileStream.dll" target="lib\net45" />
+
+    <file src="..\..\WPF\Correspondence.SSCE\bin\Release\Correspondence.SSCE.dll" target="lib\net45" />
+  </files>
 </package>

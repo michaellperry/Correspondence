@@ -19,7 +19,10 @@
     <language>en-US</language>
     <tags>occasionally-connected mobile MVC nosql database synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence.Web.App.Core" />
+      <dependency id="Correspondence.Web.App.Core" version="3.0.0" />
     </dependencies>
   </metadata>
+  <files>
+    <file src="Content\**" target="Content" />
+  </files>
 </package>

@@ -95,7 +95,4 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Web.App.Core\lib\net45\"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

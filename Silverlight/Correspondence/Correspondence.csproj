@@ -177,7 +177,4 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\SL5\"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

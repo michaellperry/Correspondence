@@ -19,7 +19,13 @@
     <language>en-US</language>
     <tags>occasionally-connected windows-phone wp7 mobile nosql database synchronize</tags>
     <dependencies>
-      <dependency id="Correspondence" />
+      <dependency id="Correspondence" version="3.0.0" />
     </dependencies>
   </metadata>
+  <files>
+    <file src="..\..\Tools\Correspondence.Factual\bin\Release\Correspondence.Factual.dll" target="tools" />
+    <file src="..\..\Tools\QEDCode.LLOne\bin\Release\QEDCode.LLOne.dll" target="tools" />
+
+    <file src="Content\**" target="Content" />
+  </files>
 </package>

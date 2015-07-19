@@ -20,8 +20,22 @@
     <tags>occasionally-connected mobile nosql database synchronize</tags>
     <dependencies>
       <group>
-        <dependency id="Correspondence" />
+        <dependency id="Correspondence" version="3.0.0" />
       </group>
     </dependencies>
   </metadata>
+  <files>
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\portable-net45+wp80+win80+MonoAndroid+MonoTouch" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\net45" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\wp80" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\win80" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\MonoAndroid" />
+    <file src="..\..\Portable\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\MonoTouch" />
+
+    <file src="..\..\Silverlight\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\sl5" />
+
+    <file src="..\..\Universal\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\portable-wpa81+win81" />
+    <file src="..\..\Universal\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\wpa81" />
+    <file src="..\..\Universal\Correspondence.Memory\bin\Release\Correspondence.Memory.dll" target="lib\win81" />
+  </files>
 </package>

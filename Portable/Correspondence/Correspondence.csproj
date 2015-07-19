@@ -152,12 +152,8 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\portable-net45+wp80+win80+MonoAndroid+MonoTouch\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\net45\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\wp80\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\win80\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\MonoAndroid\"
-xcopy /Y "$(TargetPath)" "$(SolutionDir)NuGet\Core\lib\MonoTouch\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
