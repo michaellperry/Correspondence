@@ -1,4 +1,4 @@
-﻿namespace UpdateControls.Correspondence.UnitTest.Model;
+﻿namespace Correspondence.UnitTest.Model;
 
 fact Machine {
 key:

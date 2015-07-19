@@ -331,11 +331,11 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public User(
-            string userName
+            string @userName
             )
         {
             InitializeResults();
-            _userName = userName;
+            _userName = @userName;
         }
 
         // Hydration constructor
@@ -540,15 +540,15 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public User__favoriteColor(
-            User user
-            ,IEnumerable<User__favoriteColor> prior
-            ,string value
+            User @user
+            ,IEnumerable<User__favoriteColor> @prior
+            ,string @value
             )
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
-            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), prior);
-            _value = value;
+            _user = new PredecessorObj<User>(this, GetRoleUser(), @user);
+            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), @prior);
+            _value = @value;
         }
 
         // Hydration constructor
@@ -720,15 +720,15 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public User__betterFavoriteColor(
-            User user
-            ,IEnumerable<User__betterFavoriteColor> prior
-            ,Color value
+            User @user
+            ,IEnumerable<User__betterFavoriteColor> @prior
+            ,Color @value
             )
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
-            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), prior);
-            _value = new PredecessorObj<Color>(this, GetRoleValue(), value);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), @user);
+            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), @prior);
+            _value = new PredecessorObj<Color>(this, GetRoleValue(), @value);
         }
 
         // Hydration constructor
@@ -856,11 +856,11 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public Color(
-            string name
+            string @name
             )
         {
             InitializeResults();
-            _name = name;
+            _name = @name;
         }
 
         // Hydration constructor
@@ -1020,14 +1020,14 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public LogOn(
-            User user
-            ,Machine machine
+            User @user
+            ,Machine @machine
             )
         {
             _unique = Guid.NewGuid();
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
-            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), machine);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), @user);
+            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), @machine);
         }
 
         // Hydration constructor
@@ -1156,11 +1156,11 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public LogOff(
-            LogOn logOn
+            LogOn @logOn
             )
         {
             InitializeResults();
-            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), logOn);
+            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), @logOn);
         }
 
         // Hydration constructor
@@ -1494,15 +1494,15 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public GameName(
-            Game game
-            ,IEnumerable<GameName> prior
-            ,string name
+            Game @game
+            ,IEnumerable<GameName> @prior
+            ,string @name
             )
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), game);
-            _prior = new PredecessorList<GameName>(this, GetRolePrior(), prior);
-            _name = name;
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), @game);
+            _prior = new PredecessorList<GameName>(this, GetRolePrior(), @prior);
+            _name = @name;
         }
 
         // Hydration constructor
@@ -1698,15 +1698,15 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public Player(
-            User user
-            ,Game game
-            ,int index
+            User @user
+            ,Game @game
+            ,int @index
             )
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), user);
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), game);
-            _index = index;
+            _user = new PredecessorObj<User>(this, GetRoleUser(), @user);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), @game);
+            _index = @index;
         }
 
         // Hydration constructor
@@ -1855,15 +1855,15 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public Move(
-            Player player
-            ,int index
-            ,int square
+            Player @player
+            ,int @index
+            ,int @square
             )
         {
             InitializeResults();
-            _player = new PredecessorObj<Player>(this, GetRolePlayer(), player);
-            _index = index;
-            _square = square;
+            _player = new PredecessorObj<Player>(this, GetRolePlayer(), @player);
+            _index = @index;
+            _square = @square;
         }
 
         // Hydration constructor
@@ -2007,13 +2007,13 @@ namespace Correspondence.UnitTest.Model
 
         // Business constructor
         public Outcome(
-            Game game
-            ,Player winner
+            Game @game
+            ,Player @winner
             )
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), game);
-            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), winner
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), @game);
+            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), @winner
                 ?? Player.GetNullInstance());
         }
 
