@@ -9,7 +9,7 @@ namespace Correspondence.Factual.UnitTest.ParserTests
     {
         public static Fact WithFactNamed(this Namespace result, string name)
         {
-            var facts = result.Facts.Where(fact => fact.Name == name);
+            var facts = result.Facts.Where(fact => fact.Alias == name);
             if (!facts.Any())
                 Assert.Fail(String.Format("No fact named {0} was found.", name));
             if (facts.Count() > 1)
@@ -21,9 +21,9 @@ namespace Correspondence.Factual.UnitTest.ParserTests
         {
             var fields = fact.Members.OfType<Field>().Where(field => field.Name == name);
             if (!fields.Any())
-                Assert.Fail(string.Format("The fact {0} contains no field named {1}.", fact.Name, name));
+                Assert.Fail(string.Format("The fact {0} contains no field named {1}.", fact.Alias, name));
             if (fields.Count() > 1)
-                Assert.Fail(String.Format("The fact {0} contains more than one field named {1}.", fact.Name, name));
+                Assert.Fail(String.Format("The fact {0} contains more than one field named {1}.", fact.Alias, name));
             return fields.Single();
         }
 
@@ -31,9 +31,9 @@ namespace Correspondence.Factual.UnitTest.ParserTests
         {
             var queries = fact.Members.OfType<Query>().Where(field => field.Name == name);
             if (!queries.Any())
-                Assert.Fail(string.Format("The fact {0} contains no query named {1}.", fact.Name, name));
+                Assert.Fail(string.Format("The fact {0} contains no query named {1}.", fact.Alias, name));
             if (queries.Count() > 1)
-                Assert.Fail(String.Format("The fact {0} contains more than one query named {1}.", fact.Name, name));
+                Assert.Fail(String.Format("The fact {0} contains more than one query named {1}.", fact.Alias, name));
             return queries.Single();
         }
 
@@ -41,9 +41,9 @@ namespace Correspondence.Factual.UnitTest.ParserTests
         {
             var predicates = fact.Members.OfType<Predicate>().Where(field => field.Name == name);
             if (!predicates.Any())
-                Assert.Fail(string.Format("The fact {0} contains no predicate named {1}.", fact.Name, name));
+                Assert.Fail(string.Format("The fact {0} contains no predicate named {1}.", fact.Alias, name));
             if (predicates.Count() > 1)
-                Assert.Fail(String.Format("The fact {0} contains more than one predicate named {1}.", fact.Name, name));
+                Assert.Fail(String.Format("The fact {0} contains more than one predicate named {1}.", fact.Alias, name));
             return predicates.Single();
         }
 
@@ -51,9 +51,9 @@ namespace Correspondence.Factual.UnitTest.ParserTests
         {
             var properties = fact.Members.OfType<Property>().Where(field => field.Name == name);
             if (!properties.Any())
-                Assert.Fail(string.Format("The fact {0} contains no property named {1}.", fact.Name, name));
+                Assert.Fail(string.Format("The fact {0} contains no property named {1}.", fact.Alias, name));
             if (properties.Count() > 1)
-                Assert.Fail(String.Format("The fact {0} contains more than one property named {1}.", fact.Name, name));
+                Assert.Fail(String.Format("The fact {0} contains more than one property named {1}.", fact.Alias, name));
             return properties.Single();
         }
 

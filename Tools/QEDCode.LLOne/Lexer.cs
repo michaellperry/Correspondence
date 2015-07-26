@@ -66,17 +66,23 @@ namespace QEDCode.LLOne
                     return new Token<TSymbol>(_identifier, identifier.ToString(), _lineNumber);
             }
 
+            if (nextCharacter == '-')
+            {
+                _input.Read();
+                nextCharacter = _input.Peek();
+                if ('0' <= nextCharacter && nextCharacter <= '9')
+                {
+                    return MatchNumber("-");
+                }
+                else
+                {
+                    return MatchPunctuation("-");
+                }
+            }
+
             if ('0' <= nextCharacter && nextCharacter <= '9')
             {
-                StringBuilder number = new StringBuilder();
-                number.Append((char)_input.Read());
-                nextCharacter = _input.Peek();
-                while ('0' <= nextCharacter && nextCharacter <= '9')
-                {
-                    number.Append((char)_input.Read());
-                    nextCharacter = _input.Peek();
-                }
-                return new Token<TSymbol>(_number, number.ToString(), _lineNumber);
+                return MatchNumber("");
             }
 
             if (nextCharacter == '\"')
@@ -94,6 +100,25 @@ namespace QEDCode.LLOne
             }
 
             string punctuationText = ((char)_input.Read()).ToString();
+            return MatchPunctuation(punctuationText);
+        }
+
+        private Token<TSymbol> MatchNumber(string prefix)
+        {
+            StringBuilder number = new StringBuilder();
+            number.Append(prefix);
+            number.Append((char)_input.Read());
+            int nextCharacter = _input.Peek();
+            while ('0' <= nextCharacter && nextCharacter <= '9')
+            {
+                number.Append((char)_input.Read());
+                nextCharacter = _input.Peek();
+            }
+            return new Token<TSymbol>(_number, number.ToString(), _lineNumber);
+        }
+
+        private Token<TSymbol> MatchPunctuation(string punctuationText)
+        {
             TSymbol punctuationSymbol;
             if (_punctuation.TryGetValue(punctuationText, out punctuationSymbol))
                 return new Token<TSymbol>(punctuationSymbol, punctuationText, _lineNumber);

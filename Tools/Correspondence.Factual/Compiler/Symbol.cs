@@ -51,6 +51,7 @@ namespace Correspondence.Factual.Compiler
         Subscribe,
         Purge,
         Lock,
-        Binary
+        Binary,
+        As
     }
 }

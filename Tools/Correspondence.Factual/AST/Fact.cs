@@ -8,15 +8,19 @@ namespace Correspondence.Factual.AST
     {
         private int _lineNumber;
         private string _name;
+        private readonly int? _version;
+        private readonly Alias _alias;
         private bool _unique;
         private bool _lock;
         private bool _identity;
         private List<FactMember> _members = new List<FactMember>();
-
-        public Fact(string name, int lineNumber)
+        
+        public Fact(string name, int lineNumber, int? version = null, Alias alias = null)
         {
             _name = name;
             _lineNumber = lineNumber;
+            _version = version;
+            _alias = alias;
         }
 
         public int LineNumber
@@ -27,6 +31,16 @@ namespace Correspondence.Factual.AST
         public string Name
         {
             get { return _name; }
+        }
+
+        public string Alias
+        {
+            get { return _alias != null ? _alias.Identifier : _name; }
+        }
+
+        public int? Version
+        {
+            get { return _version; }
         }
 
         public bool Unique

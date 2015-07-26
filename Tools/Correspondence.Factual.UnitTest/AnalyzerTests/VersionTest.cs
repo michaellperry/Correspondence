@@ -161,5 +161,40 @@ namespace Correspondence.Factual.UnitTest.AnalyzerTests
 
             Assert.AreEqual(-1936144882, version);
         }
+
+        [TestMethod]
+        public void FactInFileWithHeaderHasVersion1()
+        {
+            string code =
+                "namespace model; " +
+                "version legacy;  " +
+                "fact Fact { key: }";
+            var analyzed = AssertNoError(code);
+            var fact = analyzed.HasClassNamed("Fact");
+            Assert.AreEqual(1, fact.Version);
+        }
+
+        [TestMethod]
+        public void ExplicitVersionNumberOverridesHeader()
+        {
+            string code =
+                "namespace model; " +
+                "version legacy;  " +
+                "fact Fact -42 { key: }";
+            var analyzed = AssertNoError(code);
+            var fact = analyzed.HasClassNamed("Fact");
+            Assert.AreEqual(-42, fact.Version);
+        }
+
+        [TestMethod]
+        public void ExplicitVersionNumberOverridesComputedVersionNumber()
+        {
+            string code =
+                "namespace model; " +
+                "fact Fact -42 { key: }";
+            var analyzed = AssertNoError(code);
+            var fact = analyzed.HasClassNamed("Fact");
+            Assert.AreEqual(-42, fact.Version);
+        }
     }
 }

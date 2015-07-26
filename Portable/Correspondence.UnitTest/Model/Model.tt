@@ -132,7 +132,7 @@ namespace <#=targetNamespace.Name#>
 
 		// Type
 		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
-			"<#=targetNamespace.Name#>.<#=c.Name#>", <#=c.Version#>);
+			"<#=targetNamespace.Name#>.<#=c.SerializedName#>", <#=c.Version#>);
 
 		protected override CorrespondenceFactType GetCorrespondenceFactType()
 		{

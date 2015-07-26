@@ -17,6 +17,9 @@ digraph "Correspondence.UnitTest.Model"
     User__betterFavoriteColor -> User [color="red"]
     User__betterFavoriteColor -> User__betterFavoriteColor [label="  *"]
     User__betterFavoriteColor -> Color
+    User__oldFavoriteColor -> User [color="red"]
+    User__oldFavoriteColor -> User__oldFavoriteColor [label="  *"]
+    User__oldFavoriteColor -> ColorV1
     LogOn -> User
     LogOn -> Machine
     LogOff -> LogOn
@@ -274,6 +277,19 @@ namespace Correspondence.UnitTest.Model
             }
             return _cacheQueryBetterFavoriteColor;
 		}
+        private static Query _cacheQueryOldFavoriteColor;
+
+        public static Query GetQueryOldFavoriteColor()
+		{
+            if (_cacheQueryOldFavoriteColor == null)
+            {
+			    _cacheQueryOldFavoriteColor = new Query()
+    				.JoinSuccessors(User__oldFavoriteColor.GetRoleUser(), Condition.WhereIsEmpty(User__oldFavoriteColor.GetQueryIsCurrent())
+				)
+                ;
+            }
+            return _cacheQueryOldFavoriteColor;
+		}
         private static Query _cacheQueryActivePlayers;
 
         public static Query GetQueryActivePlayers()
@@ -325,6 +341,7 @@ namespace Correspondence.UnitTest.Model
         // Results
         private Result<User__favoriteColor> _favoriteColor;
         private Result<User__betterFavoriteColor> _betterFavoriteColor;
+        private Result<User__oldFavoriteColor> _oldFavoriteColor;
         private Result<Player> _activePlayers;
         private Result<Player> _finishedPlayers;
         private Result<Game> _finishedGames;
@@ -349,6 +366,7 @@ namespace Correspondence.UnitTest.Model
         {
             _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor(), User__favoriteColor.GetUnloadedInstance, User__favoriteColor.GetNullInstance);
             _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor(), User__betterFavoriteColor.GetUnloadedInstance, User__betterFavoriteColor.GetNullInstance);
+            _oldFavoriteColor = new Result<User__oldFavoriteColor>(this, GetQueryOldFavoriteColor(), User__oldFavoriteColor.GetUnloadedInstance, User__oldFavoriteColor.GetNullInstance);
             _activePlayers = new Result<Player>(this, GetQueryActivePlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
             _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
             _finishedGames = new Result<Game>(this, GetQueryFinishedGames(), Game.GetUnloadedInstance, Game.GetNullInstance);
@@ -404,6 +422,21 @@ namespace Correspondence.UnitTest.Model
 					if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
 					{
 						await Community.AddFactAsync(new User__betterFavoriteColor(this, _betterFavoriteColor, value.Value));
+					}
+				});
+			}
+        }
+        public TransientDisputable<User__oldFavoriteColor, ColorV1> OldFavoriteColor
+        {
+            get { return _oldFavoriteColor.AsTransientDisputable(fact => (ColorV1)fact.Value); }
+			set
+			{
+				Community.Perform(async delegate()
+				{
+					var current = (await _oldFavoriteColor.EnsureAsync()).ToList();
+					if (current.Count != 1 || !object.Equals(current[0].Value, value.Value))
+					{
+						await Community.AddFactAsync(new User__oldFavoriteColor(this, _oldFavoriteColor, value.Value));
 					}
 				});
 			}
@@ -767,6 +800,187 @@ namespace Correspondence.UnitTest.Model
 
     }
     
+    public partial class User__oldFavoriteColor : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				User__oldFavoriteColor newFact = new User__oldFavoriteColor(memento);
+
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				User__oldFavoriteColor fact = (User__oldFavoriteColor)obj;
+			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return User__oldFavoriteColor.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return User__oldFavoriteColor.GetNullInstance();
+            }
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"Correspondence.UnitTest.Model.User__oldFavoriteColor", 266066068);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Null and unloaded instances
+        public static User__oldFavoriteColor GetUnloadedInstance()
+        {
+            return new User__oldFavoriteColor((FactMemento)null) { IsLoaded = false };
+        }
+
+        public static User__oldFavoriteColor GetNullInstance()
+        {
+            return new User__oldFavoriteColor((FactMemento)null) { IsNull = true };
+        }
+
+        // Ensure
+        public Task<User__oldFavoriteColor> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (User__oldFavoriteColor)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
+        // Roles
+        private static Role _cacheRoleUser;
+        public static Role GetRoleUser()
+        {
+            if (_cacheRoleUser == null)
+            {
+                _cacheRoleUser = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "user",
+			        User._correspondenceFactType,
+			        true));
+            }
+            return _cacheRoleUser;
+        }
+        private static Role _cacheRolePrior;
+        public static Role GetRolePrior()
+        {
+            if (_cacheRolePrior == null)
+            {
+                _cacheRolePrior = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "prior",
+			        User__oldFavoriteColor._correspondenceFactType,
+			        false));
+            }
+            return _cacheRolePrior;
+        }
+        private static Role _cacheRoleValue;
+        public static Role GetRoleValue()
+        {
+            if (_cacheRoleValue == null)
+            {
+                _cacheRoleValue = new Role(new RoleMemento(
+			        _correspondenceFactType,
+			        "value",
+			        ColorV1._correspondenceFactType,
+			        false));
+            }
+            return _cacheRoleValue;
+        }
+
+        // Queries
+        private static Query _cacheQueryIsCurrent;
+
+        public static Query GetQueryIsCurrent()
+		{
+            if (_cacheQueryIsCurrent == null)
+            {
+			    _cacheQueryIsCurrent = new Query()
+		    		.JoinSuccessors(User__oldFavoriteColor.GetRolePrior())
+                ;
+            }
+            return _cacheQueryIsCurrent;
+		}
+
+        // Predicates
+        public static Condition IsCurrent = Condition.WhereIsEmpty(GetQueryIsCurrent());
+
+        // Predecessors
+        private PredecessorObj<User> _user;
+        private PredecessorList<User__oldFavoriteColor> _prior;
+        private PredecessorObj<ColorV1> _value;
+
+        // Fields
+
+        // Results
+
+        // Business constructor
+        public User__oldFavoriteColor(
+            User @user
+            ,IEnumerable<User__oldFavoriteColor> @prior
+            ,ColorV1 @value
+            )
+        {
+            InitializeResults();
+            _user = new PredecessorObj<User>(this, GetRoleUser(), @user);
+            _prior = new PredecessorList<User__oldFavoriteColor>(this, GetRolePrior(), @prior);
+            _value = new PredecessorObj<ColorV1>(this, GetRoleValue(), @value);
+        }
+
+        // Hydration constructor
+        private User__oldFavoriteColor(FactMemento memento)
+        {
+            InitializeResults();
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
+            _prior = new PredecessorList<User__oldFavoriteColor>(this, GetRolePrior(), memento, User__oldFavoriteColor.GetUnloadedInstance, User__oldFavoriteColor.GetNullInstance);
+            _value = new PredecessorObj<ColorV1>(this, GetRoleValue(), memento, ColorV1.GetUnloadedInstance, ColorV1.GetNullInstance);
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+        public User User
+        {
+            get { return IsNull ? User.GetNullInstance() : _user.Fact; }
+        }
+        public PredecessorList<User__oldFavoriteColor> Prior
+        {
+            get { return _prior; }
+        }
+        public ColorV1 Value
+        {
+            get { return IsNull ? ColorV1.GetNullInstance() : _value.Fact; }
+        }
+
+        // Field access
+
+        // Query result access
+
+        // Mutable property access
+
+    }
+    
     public partial class Color : CorrespondenceFact
     {
 		// Factory
@@ -880,6 +1094,145 @@ namespace Correspondence.UnitTest.Model
         public string Name
         {
             get { return _name; }
+        }
+
+        // Query result access
+
+        // Mutable property access
+
+    }
+    
+    public partial class ColorV1 : CorrespondenceFact
+    {
+		// Factory
+		internal class CorrespondenceFactFactory : ICorrespondenceFactFactory
+		{
+			private IDictionary<Type, IFieldSerializer> _fieldSerializerByType;
+
+			public CorrespondenceFactFactory(IDictionary<Type, IFieldSerializer> fieldSerializerByType)
+			{
+				_fieldSerializerByType = fieldSerializerByType;
+			}
+
+			public CorrespondenceFact CreateFact(FactMemento memento)
+			{
+				ColorV1 newFact = new ColorV1(memento);
+
+				// Create a memory stream from the memento data.
+				using (MemoryStream data = new MemoryStream(memento.Data))
+				{
+					using (BinaryReader output = new BinaryReader(data))
+					{
+						newFact._red = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
+						newFact._green = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
+						newFact._blue = (int)_fieldSerializerByType[typeof(int)].ReadData(output);
+					}
+				}
+
+				return newFact;
+			}
+
+			public void WriteFactData(CorrespondenceFact obj, BinaryWriter output)
+			{
+				ColorV1 fact = (ColorV1)obj;
+				_fieldSerializerByType[typeof(int)].WriteData(output, fact._red);
+				_fieldSerializerByType[typeof(int)].WriteData(output, fact._green);
+				_fieldSerializerByType[typeof(int)].WriteData(output, fact._blue);
+			}
+
+            public CorrespondenceFact GetUnloadedInstance()
+            {
+                return ColorV1.GetUnloadedInstance();
+            }
+
+            public CorrespondenceFact GetNullInstance()
+            {
+                return ColorV1.GetNullInstance();
+            }
+		}
+
+		// Type
+		internal static CorrespondenceFactType _correspondenceFactType = new CorrespondenceFactType(
+			"Correspondence.UnitTest.Model.Color", 28140);
+
+		protected override CorrespondenceFactType GetCorrespondenceFactType()
+		{
+			return _correspondenceFactType;
+		}
+
+        // Null and unloaded instances
+        public static ColorV1 GetUnloadedInstance()
+        {
+            return new ColorV1((FactMemento)null) { IsLoaded = false };
+        }
+
+        public static ColorV1 GetNullInstance()
+        {
+            return new ColorV1((FactMemento)null) { IsNull = true };
+        }
+
+        // Ensure
+        public Task<ColorV1> EnsureAsync()
+        {
+            if (_loadedTask != null)
+                return _loadedTask.ContinueWith(t => (ColorV1)t.Result);
+            else
+                return Task.FromResult(this);
+        }
+
+        // Roles
+
+        // Queries
+
+        // Predicates
+
+        // Predecessors
+
+        // Fields
+        private int _red;
+        private int _green;
+        private int _blue;
+
+        // Results
+
+        // Business constructor
+        public ColorV1(
+            int @red
+            ,int @green
+            ,int @blue
+            )
+        {
+            InitializeResults();
+            _red = @red;
+            _green = @green;
+            _blue = @blue;
+        }
+
+        // Hydration constructor
+        private ColorV1(FactMemento memento)
+        {
+            InitializeResults();
+        }
+
+        // Result initializer
+        private void InitializeResults()
+        {
+        }
+
+        // Predecessor access
+
+        // Field access
+        public int Red
+        {
+            get { return _red; }
+        }
+        public int Green
+        {
+            get { return _green; }
+        }
+        public int Blue
+        {
+            get { return _blue; }
         }
 
         // Query result access
@@ -2072,6 +2425,9 @@ namespace Correspondence.UnitTest.Model
 				User.GetQueryBetterFavoriteColor().QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
+				User.GetQueryOldFavoriteColor().QueryDefinition);
+			community.AddQuery(
+				User._correspondenceFactType,
 				User.GetQueryActivePlayers().QueryDefinition);
 			community.AddQuery(
 				User._correspondenceFactType,
@@ -2094,9 +2450,20 @@ namespace Correspondence.UnitTest.Model
 				User__betterFavoriteColor._correspondenceFactType,
 				User__betterFavoriteColor.GetQueryIsCurrent().QueryDefinition);
 			community.AddType(
+				User__oldFavoriteColor._correspondenceFactType,
+				new User__oldFavoriteColor.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { User__oldFavoriteColor._correspondenceFactType }));
+			community.AddQuery(
+				User__oldFavoriteColor._correspondenceFactType,
+				User__oldFavoriteColor.GetQueryIsCurrent().QueryDefinition);
+			community.AddType(
 				Color._correspondenceFactType,
 				new Color.CorrespondenceFactFactory(fieldSerializerByType),
 				new FactMetadata(new List<CorrespondenceFactType> { Color._correspondenceFactType }));
+			community.AddType(
+				ColorV1._correspondenceFactType,
+				new ColorV1.CorrespondenceFactFactory(fieldSerializerByType),
+				new FactMetadata(new List<CorrespondenceFactType> { ColorV1._correspondenceFactType }));
 			community.AddType(
 				LogOn._correspondenceFactType,
 				new LogOn.CorrespondenceFactFactory(fieldSerializerByType),

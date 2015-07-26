@@ -7,6 +7,7 @@ namespace Correspondence.Factual.Metadata
     {
         private string _name;
         private int _version;
+        private readonly string _serializedName;
         private bool _publicKey;
         private bool _sharedKey;
         private bool _unique;
@@ -16,14 +17,20 @@ namespace Correspondence.Factual.Metadata
         private List<Result> _results = new List<Result>();
         private List<Predicate> _predicates = new List<Predicate>();
 
-        public Class(string name)
+        public Class(string name, string serializedName)
         {
             _name = name;
+            _serializedName = serializedName;
         }
 
         public string Name
         {
             get { return _name; }
+        }
+
+        public string SerializedName
+        {
+            get { return _serializedName; }
         }
 
         public int Version

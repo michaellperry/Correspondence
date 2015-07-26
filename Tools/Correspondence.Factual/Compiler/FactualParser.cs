@@ -55,6 +55,7 @@ namespace Correspondence.Factual.Compiler
                 .AddSymbol("subscribe", Symbol.Subscribe)
                 .AddSymbol("purge", Symbol.Purge)
                 .AddSymbol("lock", Symbol.Lock)
+                .AddSymbol("as",Symbol.As)
                 .AddSymbol(".", Symbol.Dot)
                 .AddSymbol(";", Symbol.Semicolon)
                 .AddSymbol("{", Symbol.OpenBracket)
@@ -261,12 +262,20 @@ namespace Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
 
-            // fact -> "fact" identifier "{" purge_section? key_section? mutable_section? query_section? "}"
+            // alias -> "as" identifier
+            var aliasRule = Sequence(
+                Terminal(Symbol.As),
+                Terminal(Symbol.Identifier), "Provide an alias for the fact.",
+                (_, identifier) => new Alias(identifier.Value));
+
+            // fact -> "fact" identifier number? alias? "{" purge_section? key_section? mutable_section? query_section? "}"
             var factHeader = Sequence(
                 Terminal(Symbol.Fact),
                 Terminal(Symbol.Identifier), "Provide a name for the fact.",
+                Optional(Terminal(Symbol.Number), (Token<Symbol>)null), "Defect.",
+                Optional(aliasRule, (Alias)null), "Defect.",
                 Terminal(Symbol.OpenBracket), "Declare members of a fact within brackets.",
-                (fact, identifier, openBracket) => new Fact(identifier.Value, fact.LineNumber));
+                (fact, identifier, version, alias, openBracket) => new Fact(identifier.Value, fact.LineNumber, version != null ? (int?)int.Parse(version.Value) : null, alias));
             var factRule = Sequence(
                 factHeader,
                 Optional(purgeSectionRule, (Condition)null), "Defect.",

@@ -26,7 +26,7 @@ namespace Correspondence.Factual.UnitTest.ParserTests
                 "  }                                         \r\n" +
                 "}";
             Namespace result = ParseToNamespace(code);
-            Assert.IsFalse(result.Facts.Any(fact => fact.Name == "Ignored"), "The commented out fact was found.");
+            Assert.IsFalse(result.Facts.Any(fact => fact.Alias == "Ignored"), "The commented out fact was found.");
         }
 
         [TestMethod]

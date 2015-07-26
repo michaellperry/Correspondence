@@ -18,6 +18,7 @@ key:
 mutable:
 	publish string favoriteColor;
 	publish Color betterFavoriteColor;
+    publish ColorV1 oldFavoriteColor;
 
 query:
 	Player* activePlayers {
@@ -40,6 +41,13 @@ query:
 fact Color {
 key:
 	string name;
+}
+
+fact Color as ColorV1 {
+key:
+    int red;
+    int green;
+    int blue;
 }
 
 fact LogOn {

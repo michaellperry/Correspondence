@@ -64,18 +64,18 @@ namespace Correspondence.Factual.Compiler
 
         private void EmbelishAnalyzedFromFact(Target.Analyzed result, Source.Fact fact)
         {
-            if (_root.Facts.Any(f => f != fact && f.Name == fact.Name))
-                throw new CompilerException(string.Format("The fact \"{0}\" is defined more than once.", fact.Name), fact.LineNumber);
+            if (_root.Facts.Any(f => f != fact && f.Alias == fact.Alias))
+                throw new CompilerException(string.Format("The fact \"{0}\" is defined more than once.", fact.Alias), fact.LineNumber);
             if (fact.Principal && string.IsNullOrEmpty(_root.Strength))
-                throw new CompilerException(String.Format("The fact \"{0}\" is a principal. The model must have a declared strength.", fact.Name), fact.LineNumber);
+                throw new CompilerException(String.Format("The fact \"{0}\" is a principal. The model must have a declared strength.", fact.Alias), fact.LineNumber);
             if (fact.Principal && !fact.Unique)
-                throw new CompilerException(String.Format("The fact \"{0}\" is a principal. It must also be unique.", fact.Name), fact.LineNumber);
+                throw new CompilerException(String.Format("The fact \"{0}\" is a principal. It must also be unique.", fact.Alias), fact.LineNumber);
             if (fact.Principal && fact.Lock)
-                throw new CompilerException(string.Format("The fact \"{0}\" is a principal. It cannot also be locked.", fact.Name), fact.LineNumber);
+                throw new CompilerException(string.Format("The fact \"{0}\" is a principal. It cannot also be locked.", fact.Alias), fact.LineNumber);
             if (fact.Lock && !fact.Unique)
-                throw new CompilerException(string.Format("The fact \"{0}\" is locked. It must also be unique.", fact.Name), fact.LineNumber);
+                throw new CompilerException(string.Format("The fact \"{0}\" is locked. It must also be unique.", fact.Alias), fact.LineNumber);
 
-            Target.Class factClass = new Target.Class(fact.Name);
+            Target.Class factClass = new Target.Class(fact.Alias, fact.Name);
             result.AddClass(factClass);
 
             factClass.Unique = fact.Unique;
@@ -88,7 +88,10 @@ namespace Correspondence.Factual.Compiler
             factClass.HasPublicKey = fact.Principal;
             factClass.HasSharedKey = fact.Lock;
 
-            ComputeVersionOfFact(factClass);
+            if (fact.Version != null)
+                factClass.Version = fact.Version.Value;
+            else
+                factClass.Version = ComputeVersionOfFact(factClass);
         }
 
         private void AnalyzeMember(Target.Analyzed result, Source.Fact fact, Target.Class factClass, Source.FactMember member)
@@ -96,7 +99,7 @@ namespace Correspondence.Factual.Compiler
             try
             {
                 if (fact.Members.Any(m => m != member && m.Name == member.Name))
-                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Name, member.Name), member.LineNumber);
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is defined more than once.", fact.Alias, member.Name), member.LineNumber);
                 var field = member as Source.Field;
                 if (field != null)
                     AnalyzeField(factClass, fact, field);
@@ -148,7 +151,7 @@ namespace Correspondence.Factual.Compiler
 
         private void AnalyzeFieldFact(Source.Field field, Source.Fact fact, Source.DataTypeFact dataTypeFact, Target.Class factClass)
         {
-            if (!_root.Facts.Any(f => f.Name == dataTypeFact.FactName))
+            if (!_root.Facts.Any(f => f.Alias == dataTypeFact.FactName))
                 throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", dataTypeFact.FactName), field.LineNumber);
 
             Target.Predecessor predecessor = new Target.Predecessor(field.Name, _cardinalityMap[dataTypeFact.Cardinality], dataTypeFact.FactName, field.Publish);
@@ -160,10 +163,10 @@ namespace Correspondence.Factual.Compiler
                 {
                     Source.FactMember member = fact.GetMemberByName(clause.PredicateName);
                     if (member == null)
-                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", fact.Name, clause.PredicateName), clause.LineNumber);
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", fact.Alias, clause.PredicateName), clause.LineNumber);
                     Source.Predicate predicate = member as Source.Predicate;
                     if (predicate == null)
-                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", fact.Name, clause.PredicateName), clause.LineNumber);
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", fact.Alias, clause.PredicateName), clause.LineNumber);
 
                     Source.ConditionModifier modifier = clause.Existence;
                     if (predicate.Existence == Source.ConditionModifier.Negative)
@@ -179,21 +182,21 @@ namespace Correspondence.Factual.Compiler
                             Target.ConditionModifier.Positive :
                             Target.ConditionModifier.Negative,
                         clause.PredicateName,
-                        fact.Name));
+                        fact.Alias));
                 }
             }
         }
 
         private void AnalyzeQuery(Target.Class factClass, Source.Fact fact, Source.Query sourceQuery)
         {
-            if (!_root.Facts.Any(f => f.Name == sourceQuery.FactName))
+            if (!_root.Facts.Any(f => f.Alias == sourceQuery.FactName))
                 throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", sourceQuery.FactName), sourceQuery.LineNumber);
             Source.Fact resultType;
             Target.Query targetQuery = GenerateTargetQuery(factClass, fact, sourceQuery.Name, sourceQuery.Sets, sourceQuery.LineNumber, out resultType);
-            if (sourceQuery.FactName != resultType.Name)
+            if (sourceQuery.FactName != resultType.Alias)
                 throw new CompilerException(
                     String.Format("The query results in \"{0}\", not \"{1}\".",
-                        resultType.Name,
+                        resultType.Alias,
                         sourceQuery.FactName),
                     sourceQuery.LineNumber);
             factClass.AddResult(new Target.ResultDirect(sourceQuery.FactName, targetQuery));
@@ -212,10 +215,11 @@ namespace Correspondence.Factual.Compiler
 
         private void AnalyzeProperty(Target.Analyzed result, Target.Class factClass, Source.Fact fact, Source.Property property)
         {
-            Target.Class childClass = new Target.Class(String.Format("{0}__{1}", fact.Name, property.Name));
+            string name = String.Format("{0}__{1}", fact.Alias, property.Name);
+            Target.Class childClass = new Target.Class(name, name);
             result.AddClass(childClass);
 
-            childClass.AddPredecessor(new Target.Predecessor(fact.Name.ToCamelCase(), Target.Cardinality.One, fact.Name, property.Publish));
+            childClass.AddPredecessor(new Target.Predecessor(fact.Alias.ToCamelCase(), Target.Cardinality.One, fact.Alias, property.Publish));
             childClass.AddPredecessor(new Target.Predecessor("prior", Target.Cardinality.Many, childClass.Name, false));
 
             Target.Query query = new Target.Query("isCurrent")
@@ -224,7 +228,7 @@ namespace Correspondence.Factual.Compiler
             childClass.AddPredicate(new Target.Predicate(Target.ConditionModifier.Negative, query));
 
             Target.Query valueQuery = new Target.Query(property.Name)
-                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, fact.Name.ToCamelCase())
+                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, fact.Alias.ToCamelCase())
                     .AddCondition(new Target.Condition(Target.ConditionModifier.Negative, "isCurrent", childClass.Name)));
             factClass.AddQuery(valueQuery);
 
@@ -258,7 +262,7 @@ namespace Correspondence.Factual.Compiler
                 }
             }
 
-            ComputeVersionOfFact(childClass);
+            childClass.Version = ComputeVersionOfFact(childClass);
         }
 
         private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, int lineNumber, out Source.Fact resultType)
@@ -334,19 +338,19 @@ namespace Correspondence.Factual.Compiler
                 throw new CompilerException(string.Format("The fact \"{0}\" is not defined.", sourceSet.FactName), lineNumber);
             List<PredecessorInfo> childPredecessors = WalkSegments(ref childEnd, childPath.Segments, lineNumber);
             if (parentEnd != childEnd)
-                throw new CompilerException(string.Format("A query cannot join \"{0}\" to \"{1}\".", childEnd.Name, parentEnd.Name), lineNumber);
+                throw new CompilerException(string.Format("A query cannot join \"{0}\" to \"{1}\".", childEnd.Alias, parentEnd.Alias), lineNumber);
 
             Target.Join lastJoin = null;
             foreach (PredecessorInfo parentPredecessor in parentPredecessors)
             {
-                lastJoin = new Target.Join(Target.Direction.Predecessors, parentPredecessor.Fact.Name, parentPredecessor.Field.Name);
+                lastJoin = new Target.Join(Target.Direction.Predecessors, parentPredecessor.Fact.Alias, parentPredecessor.Field.Name);
                 targetQuery.AddJoin(lastJoin);
                 ApplyCondition("this", sourceSet.LineNumber, parentPredecessor.Fact, lastJoin, parentPredecessor.Fact.PurgeCondition, inverse: true);
             }
             childPredecessors.Reverse();
             foreach (PredecessorInfo childPredecessor in childPredecessors)
             {
-                lastJoin = new Target.Join(Target.Direction.Successors, childPredecessor.Fact.Name, childPredecessor.Field.Name);
+                lastJoin = new Target.Join(Target.Direction.Successors, childPredecessor.Fact.Alias, childPredecessor.Field.Name);
                 targetQuery.AddJoin(lastJoin);
                 ApplyCondition("this", sourceSet.LineNumber, childPredecessor.Fact, lastJoin, childPredecessor.Fact.PurgeCondition, inverse: true);
             }
@@ -368,10 +372,10 @@ namespace Correspondence.Factual.Compiler
                         throw new CompilerException(string.Format("The condition must relate to {0}.", sourceSetName), clause.LineNumber);
                     Source.FactMember member = setType.GetMemberByName(clause.PredicateName);
                     if (member == null)
-                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", setType.Name, clause.PredicateName), clause.LineNumber);
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", setType.Alias, clause.PredicateName), clause.LineNumber);
                     Source.Predicate predicate = member as Source.Predicate;
                     if (predicate == null)
-                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", setType.Name, clause.PredicateName), clause.LineNumber);
+                        throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a predicate.", setType.Alias, clause.PredicateName), clause.LineNumber);
 
                     Source.ConditionModifier modifier = clause.Existence;
                     if (predicate.Existence == Source.ConditionModifier.Negative ^ inverse)
@@ -387,7 +391,7 @@ namespace Correspondence.Factual.Compiler
                             Target.ConditionModifier.Positive :
                             Target.ConditionModifier.Negative,
                         clause.PredicateName,
-                        setType.Name));
+                        setType.Alias));
                 }
             }
         }
@@ -399,13 +403,13 @@ namespace Correspondence.Factual.Compiler
             {
                 Source.FactMember member = fact.GetMemberByName(segment);
                 if (member == null)
-                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", fact.Name, segment), lineNumber);
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not defined.", fact.Alias, segment), lineNumber);
                 Source.Field field = member as Source.Field;
                 if (field == null)
-                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a field.", fact.Name, segment), lineNumber);
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a field.", fact.Alias, segment), lineNumber);
                 Source.DataTypeFact predecessor = field.Type as Source.DataTypeFact;
                 if (predecessor == null)
-                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a fact.", fact.Name, segment), lineNumber);
+                    throw new CompilerException(string.Format("The member \"{0}.{1}\" is not a fact.", fact.Alias, segment), lineNumber);
                 predecessors.Add(new PredecessorInfo
                 {
                     Fact = fact,
@@ -418,16 +422,16 @@ namespace Correspondence.Factual.Compiler
 
         private Source.Fact GetFactByName(string factName, int lineNumber)
         {
-            Source.Fact fact = _root.Facts.FirstOrDefault(f => f.Name == factName);
+            Source.Fact fact = _root.Facts.FirstOrDefault(f => f.Alias == factName);
             if (fact == null)
                 throw new CompilerException(string.Format("The fact type \"{0}\" is not defined.", factName), lineNumber);
             return fact;
         }
 
-        private void ComputeVersionOfFact(Target.Class factClass)
+        private int ComputeVersionOfFact(Target.Class factClass)
         {
             if (_root.Version == "legacy")
-                factClass.Version = 1;
+                return 1;
             else
                 unchecked
                 {
@@ -438,7 +442,7 @@ namespace Correspondence.Factual.Compiler
                         hash = hash * 37 + field.ComputeHash();
                     hash = hash * 2 + (factClass.Unique ? 1 : 0);
                     hash = hash * 2 + (factClass.HasPublicKey ? 1 : 0);
-                    factClass.Version = hash;
+                    return hash;
                 }
         }
     }
