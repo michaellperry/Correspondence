@@ -17,7 +17,8 @@ namespace Correspondence
             return new Disputable<T>(candidates, getNullInstance);
         }
     }
-    public class Disputable<T>
+
+    public class Disputable<T> : IComparable<Disputable<T>>, IComparable
     {
         private readonly List<T> _candidates;
         private readonly Func<T> _getNullInstance;
@@ -56,6 +57,30 @@ namespace Correspondence
         public static implicit operator Disputable<T>(T value)
         {
             return Enumerable.Repeat(value, 1).AsDisputable();
+        }
+
+        public int CompareTo(Disputable<T> other)
+        {
+            var strictComparable = Value as IComparable<T>;
+            if (strictComparable != null)
+                return strictComparable.CompareTo(other.Value);
+
+            var looseComparable = Value as IComparable;
+            if (looseComparable != null)
+                return looseComparable.CompareTo(other.Value);
+
+            return
+                (Value != null ? Value.GetHashCode() : 0) -
+                (other.Value != null ? other.Value.GetHashCode() : 0);
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = obj as Disputable<T>;
+            if (other != null)
+                return CompareTo(other);
+            else
+                return -1;
         }
     }
 }
