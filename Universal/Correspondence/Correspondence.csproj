@@ -253,8 +253,8 @@
     <Compile Include="..\..\Portable\Correspondence\RoleRelationship.cs">
       <Link>RoleRelationship.cs</Link>
     </Compile>
-    <Compile Include="..\..\Portable\Correspondence\Service\IService.cs">
-      <Link>Service\IService.cs</Link>
+    <Compile Include="..\..\Portable\Correspondence\Service\FactService.cs">
+      <Link>Service\FactService.cs</Link>
     </Compile>
     <Compile Include="..\..\Portable\Correspondence\Strategy\IAsynchronousCommunicationStrategy.cs">
       <Link>Strategy\IAsynchronousCommunicationStrategy.cs</Link>

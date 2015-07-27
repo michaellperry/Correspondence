@@ -117,7 +117,7 @@
     <Compile Include="Result.cs" />
     <Compile Include="RoleBase.cs" />
     <Compile Include="RoleRelationship.cs" />
-    <Compile Include="Service\IService.cs" />
+    <Compile Include="Service\FactService.cs" />
     <Compile Include="Strategy\IAsynchronousCommunicationStrategy.cs" />
     <Compile Include="Strategy\ICommunicationStrategy.cs" />
     <Compile Include="Strategy\ICorrespondenceFactFactory.cs" />

@@ -9,6 +9,8 @@ using Correspondence.Strategy;
 using Correspondence.Debugging;
 using System.ComponentModel;
 using Correspondence.WorkQueues;
+using Correspondence.Threading;
+using Correspondence.Service;
 
 namespace Correspondence
 {
@@ -23,6 +25,7 @@ namespace Correspondence
         private Model _model;
         private Network _network;
         private IDictionary<Type, IFieldSerializer> _fieldSerializerByType = new Dictionary<Type, IFieldSerializer>();
+        private List<Process> _services = new List<Process>();
 
 		public Community(IStorageStrategy storageStrategy)
         {
@@ -205,6 +208,19 @@ namespace Correspondence
         public void Notify(CorrespondenceFact pivot, string text1, string text2)
         {
             _network.Notify(pivot, text1, text2);
+        }
+
+        public Community AddService<TFact>(
+            Func<IEnumerable<TFact>> queue,
+            Func<TFact, Task> asyncAction)
+            where TFact: CorrespondenceFact
+        {
+            _services.Add(new FactService<TFact>(
+                () => (!Synchronizing && LastException == null)
+                    ? queue().LastOrDefault()
+                    : null,
+                asyncAction));
+            return this;
         }
 
         internal IDictionary<Type, IFieldSerializer> FieldSerializerByType
