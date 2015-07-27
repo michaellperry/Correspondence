@@ -130,6 +130,12 @@
     <Compile Include="..\..\Portable\Correspondence\IQueryResult.cs">
       <Link>IQueryResult.cs</Link>
     </Compile>
+    <Compile Include="..\..\Portable\Correspondence\Linq\CorrespondenceTaskExtensions.cs">
+      <Link>Linq\CorrespondenceTaskExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Portable\Correspondence\Linq\TaskExtensions.cs">
+      <Link>Linq\TaskExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\Portable\Correspondence\Mementos\CorrespondenceFactType.cs">
       <Link>Mementos\CorrespondenceFactType.cs</Link>
     </Compile>

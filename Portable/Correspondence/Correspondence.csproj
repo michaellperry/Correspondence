@@ -75,6 +75,8 @@
     <Compile Include="FieldSerializer\StringFieldSerializer.cs" />
     <Compile Include="ICommunity.cs" />
     <Compile Include="IQueryResult.cs" />
+    <Compile Include="Linq\CorrespondenceTaskExtensions.cs" />
+    <Compile Include="Linq\TaskExtensions.cs" />
     <Compile Include="Mementos\CorrespondenceFactType.cs" />
     <Compile Include="Mementos\Crc32.cs" />
     <Compile Include="Mementos\FactID.cs" />
