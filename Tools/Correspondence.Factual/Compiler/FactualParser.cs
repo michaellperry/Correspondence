@@ -236,15 +236,23 @@ namespace Correspondence.Factual.Compiler
                     (key, colon) => new FactSection()),
                 keyMemberRule | modifierRule, (keySection, keyMember) => keyMember(keySection));
 
-            // mutable_member -> "publish"? type identifier ";"
+            // alias -> "as" identifier
+            var aliasRule = Sequence(
+                Terminal(Symbol.As),
+                Terminal(Symbol.Identifier), "Provide an alias for the fact.",
+                (_, identifier) => new Alias(identifier.Value));
+
+            // mutable_member -> "publish"? type identifier number? alias? ";"
             // mutable_section -> "mutable" ":" mutable_member*
             var mutableMemberRule = Sequence(
                 publishOptRule,
                 typeRule, "Provide a field type.",
                 Terminal(Symbol.Identifier), "Provide a name for the field.",
+                Optional(Terminal(Symbol.Number), (Token<Symbol>)null), "Defect.",
+                Optional(aliasRule, (Alias)null), "Defect.",
                 Error(Symbol.Where, "A mutable field may not have a publish condition."), "Defect.",
                 Terminal(Symbol.Semicolon), "Terminate a field with a semicolon.",
-                (publish, dataType, propertyNameToken, error, semicolonToken) => (FactMember)new Property(dataType.LineNumber, propertyNameToken.Value, dataType, publish));
+                (publish, dataType, propertyNameToken, version, alias, error, semicolonToken) => (FactMember)new Property(dataType.LineNumber, propertyNameToken.Value, dataType, publish, version != null ? (int?)int.Parse(version.Value) : null, alias));
             var mutableSectionRule = Many(
                 Sequence(
                     Terminal(Symbol.Mutable),
@@ -261,12 +269,6 @@ namespace Correspondence.Factual.Compiler
                     Terminal(Symbol.Colon), "Missing \":\" after \"query\".",
                     (key, colon) => new FactSection()),
                 queryMemberRule, (querySection, queryMember) => querySection.AddMember(queryMember));
-
-            // alias -> "as" identifier
-            var aliasRule = Sequence(
-                Terminal(Symbol.As),
-                Terminal(Symbol.Identifier), "Provide an alias for the fact.",
-                (_, identifier) => new Alias(identifier.Value));
 
             // fact -> "fact" identifier number? alias? "{" purge_section? key_section? mutable_section? query_section? "}"
             var factHeader = Sequence(

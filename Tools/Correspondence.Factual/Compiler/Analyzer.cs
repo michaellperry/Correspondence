@@ -88,10 +88,9 @@ namespace Correspondence.Factual.Compiler
             factClass.HasPublicKey = fact.Principal;
             factClass.HasSharedKey = fact.Lock;
 
-            if (fact.Version != null)
-                factClass.Version = fact.Version.Value;
-            else
-                factClass.Version = ComputeVersionOfFact(factClass);
+            factClass.Version = fact.Version != null
+                ? fact.Version.Value
+                : ComputeVersionOfFact(factClass);
         }
 
         private void AnalyzeMember(Target.Analyzed result, Source.Fact fact, Target.Class factClass, Source.FactMember member)
@@ -215,8 +214,11 @@ namespace Correspondence.Factual.Compiler
 
         private void AnalyzeProperty(Target.Analyzed result, Target.Class factClass, Source.Fact fact, Source.Property property)
         {
-            string name = String.Format("{0}__{1}", fact.Alias, property.Name);
-            Target.Class childClass = new Target.Class(name, name);
+            Target.Class childClass = new Target.Class(
+                property.Alias != null
+                    ? property.Alias.Identifier
+                    : String.Format("{0}__{1}", fact.Alias, property.Name),
+                String.Format("{0}__{1}", fact.Name, property.Name));
             result.AddClass(childClass);
 
             childClass.AddPredecessor(new Target.Predecessor(fact.Alias.ToCamelCase(), Target.Cardinality.One, fact.Alias, property.Publish));
@@ -262,7 +264,9 @@ namespace Correspondence.Factual.Compiler
                 }
             }
 
-            childClass.Version = ComputeVersionOfFact(childClass);
+            childClass.Version = property.Version != null
+                ? property.Version.Value
+                : ComputeVersionOfFact(childClass);
         }
 
         private Target.Query GenerateTargetQuery(Target.Class factClass, Source.Fact fact, string queryName, IEnumerable<Source.Set> sets, int lineNumber, out Source.Fact resultType)
