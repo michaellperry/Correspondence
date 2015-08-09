@@ -155,7 +155,7 @@ namespace Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _activeLogOns = new Result<LogOn>(this, GetQueryActiveLogOns(), LogOn.GetUnloadedInstance, LogOn.GetNullInstance);
+            _activeLogOns = new Result<LogOn>(this, GetQueryActiveLogOns(), global::Correspondence.UnitTest.Model.LogOn.GetUnloadedInstance, global::Correspondence.UnitTest.Model.LogOn.GetNullInstance);
         }
 
         // Predecessor access
@@ -364,12 +364,12 @@ namespace Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor(), User__favoriteColor.GetUnloadedInstance, User__favoriteColor.GetNullInstance);
-            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor(), User__betterFavoriteColor.GetUnloadedInstance, User__betterFavoriteColor.GetNullInstance);
-            _oldFavoriteColor = new Result<User__oldFavoriteColor>(this, GetQueryOldFavoriteColor(), User__oldFavoriteColor.GetUnloadedInstance, User__oldFavoriteColor.GetNullInstance);
-            _activePlayers = new Result<Player>(this, GetQueryActivePlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
-            _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
-            _finishedGames = new Result<Game>(this, GetQueryFinishedGames(), Game.GetUnloadedInstance, Game.GetNullInstance);
+            _favoriteColor = new Result<User__favoriteColor>(this, GetQueryFavoriteColor(), global::Correspondence.UnitTest.Model.User__favoriteColor.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User__favoriteColor.GetNullInstance);
+            _betterFavoriteColor = new Result<User__betterFavoriteColor>(this, GetQueryBetterFavoriteColor(), global::Correspondence.UnitTest.Model.User__betterFavoriteColor.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User__betterFavoriteColor.GetNullInstance);
+            _oldFavoriteColor = new Result<User__oldFavoriteColor>(this, GetQueryOldFavoriteColor(), global::Correspondence.UnitTest.Model.User__oldFavoriteColor.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User__oldFavoriteColor.GetNullInstance);
+            _activePlayers = new Result<Player>(this, GetQueryActivePlayers(), global::Correspondence.UnitTest.Model.Player.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Player.GetNullInstance);
+            _finishedPlayers = new Result<Player>(this, GetQueryFinishedPlayers(), global::Correspondence.UnitTest.Model.Player.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Player.GetNullInstance);
+            _finishedGames = new Result<Game>(this, GetQueryFinishedGames(), global::Correspondence.UnitTest.Model.Game.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Game.GetNullInstance);
         }
 
         // Predecessor access
@@ -588,8 +588,8 @@ namespace Correspondence.UnitTest.Model
         private User__favoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
-            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), memento, User__favoriteColor.GetUnloadedInstance, User__favoriteColor.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, global::Correspondence.UnitTest.Model.User.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User.GetNullInstance);
+            _prior = new PredecessorList<User__favoriteColor>(this, GetRolePrior(), memento, global::Correspondence.UnitTest.Model.User__favoriteColor.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User__favoriteColor.GetNullInstance);
         }
 
         // Result initializer
@@ -768,9 +768,9 @@ namespace Correspondence.UnitTest.Model
         private User__betterFavoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
-            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), memento, User__betterFavoriteColor.GetUnloadedInstance, User__betterFavoriteColor.GetNullInstance);
-            _value = new PredecessorObj<Color>(this, GetRoleValue(), memento, Color.GetUnloadedInstance, Color.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, global::Correspondence.UnitTest.Model.User.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User.GetNullInstance);
+            _prior = new PredecessorList<User__betterFavoriteColor>(this, GetRolePrior(), memento, global::Correspondence.UnitTest.Model.User__betterFavoriteColor.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User__betterFavoriteColor.GetNullInstance);
+            _value = new PredecessorObj<Color>(this, GetRoleValue(), memento, global::Correspondence.UnitTest.Model.Color.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Color.GetNullInstance);
         }
 
         // Result initializer
@@ -949,9 +949,9 @@ namespace Correspondence.UnitTest.Model
         private User__oldFavoriteColor(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
-            _prior = new PredecessorList<User__oldFavoriteColor>(this, GetRolePrior(), memento, User__oldFavoriteColor.GetUnloadedInstance, User__oldFavoriteColor.GetNullInstance);
-            _value = new PredecessorObj<ColorV1>(this, GetRoleValue(), memento, ColorV1.GetUnloadedInstance, ColorV1.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, global::Correspondence.UnitTest.Model.User.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User.GetNullInstance);
+            _prior = new PredecessorList<User__oldFavoriteColor>(this, GetRolePrior(), memento, global::Correspondence.UnitTest.Model.User__oldFavoriteColor.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User__oldFavoriteColor.GetNullInstance);
+            _value = new PredecessorObj<ColorV1>(this, GetRoleValue(), memento, global::Correspondence.UnitTest.Model.ColorV1.GetUnloadedInstance, global::Correspondence.UnitTest.Model.ColorV1.GetNullInstance);
         }
 
         // Result initializer
@@ -1387,8 +1387,8 @@ namespace Correspondence.UnitTest.Model
         private LogOn(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
-            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), memento, Machine.GetUnloadedInstance, Machine.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, global::Correspondence.UnitTest.Model.User.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User.GetNullInstance);
+            _machine = new PredecessorObj<Machine>(this, GetRoleMachine(), memento, global::Correspondence.UnitTest.Model.Machine.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Machine.GetNullInstance);
         }
 
         // Result initializer
@@ -1520,7 +1520,7 @@ namespace Correspondence.UnitTest.Model
         private LogOff(FactMemento memento)
         {
             InitializeResults();
-            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), memento, LogOn.GetUnloadedInstance, LogOn.GetNullInstance);
+            _logOn = new PredecessorObj<LogOn>(this, GetRoleLogOn(), memento, global::Correspondence.UnitTest.Model.LogOn.GetUnloadedInstance, global::Correspondence.UnitTest.Model.LogOn.GetNullInstance);
         }
 
         // Result initializer
@@ -1701,9 +1701,9 @@ namespace Correspondence.UnitTest.Model
         // Result initializer
         private void InitializeResults()
         {
-            _players = new Result<Player>(this, GetQueryPlayers(), Player.GetUnloadedInstance, Player.GetNullInstance);
-            _moves = new Result<Move>(this, GetQueryMoves(), Move.GetUnloadedInstance, Move.GetNullInstance);
-            _outcomes = new Result<Outcome>(this, GetQueryOutcomes(), Outcome.GetUnloadedInstance, Outcome.GetNullInstance);
+            _players = new Result<Player>(this, GetQueryPlayers(), global::Correspondence.UnitTest.Model.Player.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Player.GetNullInstance);
+            _moves = new Result<Move>(this, GetQueryMoves(), global::Correspondence.UnitTest.Model.Move.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Move.GetNullInstance);
+            _outcomes = new Result<Outcome>(this, GetQueryOutcomes(), global::Correspondence.UnitTest.Model.Outcome.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Outcome.GetNullInstance);
         }
 
         // Predecessor access
@@ -1862,8 +1862,8 @@ namespace Correspondence.UnitTest.Model
         private GameName(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
-            _prior = new PredecessorList<GameName>(this, GetRolePrior(), memento, GameName.GetUnloadedInstance, GameName.GetNullInstance);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, global::Correspondence.UnitTest.Model.Game.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Game.GetNullInstance);
+            _prior = new PredecessorList<GameName>(this, GetRolePrior(), memento, global::Correspondence.UnitTest.Model.GameName.GetUnloadedInstance, global::Correspondence.UnitTest.Model.GameName.GetNullInstance);
         }
 
         // Result initializer
@@ -2066,14 +2066,14 @@ namespace Correspondence.UnitTest.Model
         private Player(FactMemento memento)
         {
             InitializeResults();
-            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, User.GetUnloadedInstance, User.GetNullInstance);
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
+            _user = new PredecessorObj<User>(this, GetRoleUser(), memento, global::Correspondence.UnitTest.Model.User.GetUnloadedInstance, global::Correspondence.UnitTest.Model.User.GetNullInstance);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, global::Correspondence.UnitTest.Model.Game.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Game.GetNullInstance);
         }
 
         // Result initializer
         private void InitializeResults()
         {
-            _moves = new Result<Move>(this, GetQueryMoves(), Move.GetUnloadedInstance, Move.GetNullInstance);
+            _moves = new Result<Move>(this, GetQueryMoves(), global::Correspondence.UnitTest.Model.Move.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Move.GetNullInstance);
         }
 
         // Predecessor access
@@ -2223,7 +2223,7 @@ namespace Correspondence.UnitTest.Model
         private Move(FactMemento memento)
         {
             InitializeResults();
-            _player = new PredecessorObj<Player>(this, GetRolePlayer(), memento, Player.GetUnloadedInstance, Player.GetNullInstance);
+            _player = new PredecessorObj<Player>(this, GetRolePlayer(), memento, global::Correspondence.UnitTest.Model.Player.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Player.GetNullInstance);
         }
 
         // Result initializer
@@ -2374,8 +2374,8 @@ namespace Correspondence.UnitTest.Model
         private Outcome(FactMemento memento)
         {
             InitializeResults();
-            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, Game.GetUnloadedInstance, Game.GetNullInstance);
-            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), memento, Player.GetUnloadedInstance, Player.GetNullInstance);
+            _game = new PredecessorObj<Game>(this, GetRoleGame(), memento, global::Correspondence.UnitTest.Model.Game.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Game.GetNullInstance);
+            _winner = new PredecessorOpt<Player>(this, GetRoleWinner(), memento, global::Correspondence.UnitTest.Model.Player.GetUnloadedInstance, global::Correspondence.UnitTest.Model.Player.GetNullInstance);
         }
 
         // Result initializer
