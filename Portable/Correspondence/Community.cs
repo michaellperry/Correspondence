@@ -217,7 +217,7 @@ namespace Correspondence
         {
             _services.Add(new FactService<TFact>(
                 () => (!Synchronizing && LastException == null)
-                    ? queue().LastOrDefault()
+                    ? queue()
                     : null,
                 asyncAction));
             return this;
