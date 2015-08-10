@@ -221,7 +221,7 @@ namespace Correspondence.Factual.Compiler
                 String.Format("{0}__{1}", fact.Name, property.Name));
             result.AddClass(childClass);
 
-            childClass.AddPredecessor(new Target.Predecessor(fact.Alias.ToCamelCase(), Target.Cardinality.One, fact.Alias, property.Publish));
+            childClass.AddPredecessor(new Target.Predecessor(fact.Name.ToCamelCase(), Target.Cardinality.One, fact.Alias, property.Publish));
             childClass.AddPredecessor(new Target.Predecessor("prior", Target.Cardinality.Many, childClass.Name, false));
 
             Target.Query query = new Target.Query("isCurrent")
@@ -230,7 +230,7 @@ namespace Correspondence.Factual.Compiler
             childClass.AddPredicate(new Target.Predicate(Target.ConditionModifier.Negative, query));
 
             Target.Query valueQuery = new Target.Query(property.Name)
-                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, fact.Alias.ToCamelCase())
+                .AddJoin(new Target.Join(Target.Direction.Successors, childClass.Name, fact.Name.ToCamelCase())
                     .AddCondition(new Target.Condition(Target.ConditionModifier.Negative, "isCurrent", childClass.Name)));
             factClass.AddQuery(valueQuery);
 

@@ -62,6 +62,7 @@ namespace Correspondence.Factual.UnitTest.AnalyzerTests
 
             var fact = analyzed.HasClassNamed("MyProperty");
             Assert.AreEqual("Fact__property", fact.SerializedName);
+            fact.HasPredecessorNamed("fact");
         }
 
         [TestMethod]
@@ -93,6 +94,7 @@ namespace Correspondence.Factual.UnitTest.AnalyzerTests
 
             var fact = analyzed.HasClassNamed("MyFact__property");
             Assert.AreEqual("Fact__property", fact.SerializedName);
+            fact.HasPredecessorNamed("fact");
         }
     }
 }
